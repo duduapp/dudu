@@ -2,6 +2,7 @@ import 'package:fastodon/untils/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fastodon/public.dart';
+import 'package:nav_router/nav_router.dart';
 
 import 'pages/root_page.dart';
 import 'pages/login/login.dart';
@@ -75,6 +76,7 @@ class MyApp extends StatelessWidget {
       title: 'fastondon',
       theme: defaultTheme,
       debugShowCheckedModeBanner: false,
+      navigatorKey: navGK,
       home: Scaffold(
         body: Builder(
           builder: (context) => RootPage(
