@@ -9,13 +9,9 @@ import 'metion/metion.dart';
 import 'setting/setting.dart';
 
 class RootPage extends StatefulWidget {
-
-  const RootPage({
-    Key key,
-    this.showLogin,
-    this.hideWidget,
-    this.showNewArtical
-  }) : super(key: key);
+  const RootPage(
+      {Key key, this.showLogin, this.hideWidget, this.showNewArtical})
+      : super(key: key);
 
   final Function showLogin;
   final Function hideWidget;
@@ -28,7 +24,8 @@ class RootPage extends StatefulWidget {
 class _RootPageState extends State<RootPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _tabIndex = 0;
-  
+  bool _canLoadWidget = false;
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +41,12 @@ class _RootPageState extends State<RootPage> {
     // 弹出发送嘟文页面
     eventBus.on(EventBusKey.ShowNewArticalWidget, (arg) {
       widget.showNewArtical();
+    });
+
+    eventBus.on(EventBusKey.LoadLoginMegSuccess, (arg) {
+      setState(() {
+        _canLoadWidget = true;
+      });
     });
   }
 
@@ -68,41 +71,88 @@ class _RootPageState extends State<RootPage> {
     Icon(Icons.settings, color: MyColor.mainColor),
   ];
 
-  Icon getTabIcon(int index) {
-    if(index == _tabIndex) {
-      return _tabSelectedImages[index];
-    }else {
-      return _tabImages[index];
+  List<IconData> _tabIcons = [
+    Icons.home,
+    Icons.people,
+    Icons.notifications,
+    Icons.settings
+  ];
+
+  List<String> _tabTitles = ['首页', '本站', '消息', '设置'];
+
+  Icon getTabIcon(int index, Color activeColor) {
+    if (index == _tabIndex) {
+      return Icon(_tabIcons[index],
+          color: activeColor); //_tabSelectedImages[index];
+    } else {
+      return Icon(_tabIcons[index]); //_tabImages[index];
     }
+  }
+
+  Text getTabTitle(int index, Color activeColor) {
+    if (index == _tabIndex) {
+      return Text(
+        _tabTitles[index],
+        style: TextStyle(color: activeColor, fontWeight: FontWeight.bold),
+      );
+    } else {
+      return Text(_tabTitles[index]);
+    }
+  }
+
+  void showNewArtical() {
+    eventBus.emit(EventBusKey.ShowNewArticalWidget);
   }
 
   @override
   Widget build(BuildContext context) {
+    Color activeColor = Theme.of(context).toggleableActiveColor;
+
     return Scaffold(
-      key: _scaffoldKey,
-      body: IndexedStack(
-        children: <Widget>[
-          Home(),
-          Local(),
-          Metion(),
-          Setting()
-        ],
-        index: _tabIndex,
-      ),
-      bottomNavigationBar: CupertinoTabBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: getTabIcon(0)),
-          BottomNavigationBarItem(icon: getTabIcon(1)),
-          BottomNavigationBarItem(icon: getTabIcon(2)),
-          BottomNavigationBarItem(icon: getTabIcon(3)),
-        ],
-        currentIndex: _tabIndex,
-        onTap: (index) {
-          setState(() {
-            _tabIndex = index;
-          });
-        },
-      ),
-    );
+        key: _scaffoldKey,
+        body: IndexedStack(
+          children: <Widget>[Home(), Local(), Metion(), Setting()],
+          index: _tabIndex,
+        ),
+        bottomNavigationBar: CupertinoTabBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+                icon: getTabIcon(0, activeColor),
+                title: getTabTitle(0, activeColor)),
+            BottomNavigationBarItem(
+                icon: getTabIcon(1, activeColor),
+                title: getTabTitle(1, activeColor)),
+            BottomNavigationBarItem(
+                icon: getTabIcon(2, activeColor),
+                title: getTabTitle(2, activeColor)),
+            BottomNavigationBarItem(
+                icon: getTabIcon(3, activeColor),
+                title: getTabTitle(3, activeColor)),
+          ],
+          currentIndex: _tabIndex,
+          onTap: (index) {
+            setState(() {
+              _tabIndex = index;
+            });
+          },
+        ),
+        floatingActionButton: _canLoadWidget == true
+            ? Builder(builder: (BuildContext context) {
+                return FloatingActionButton(
+                  child: Icon(Icons.mode_edit),
+                  foregroundColor: Colors.white,
+                  backgroundColor: activeColor,
+                  heroTag: null,
+                  elevation: 7.0,
+                  highlightElevation: 14.0,
+                  onPressed: () {
+                    showNewArtical();
+                  },
+                  mini: false,
+                  shape: new CircleBorder(),
+                  isExtended: false,
+                );
+              })
+            : Container());
   }
 }

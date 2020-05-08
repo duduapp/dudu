@@ -1,3 +1,4 @@
+import 'package:fastodon/untils/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fastodon/public.dart';
@@ -72,6 +73,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'fastondon',
+      theme: defaultTheme,
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Builder(
           builder: (context) => RootPage(

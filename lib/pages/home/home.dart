@@ -46,7 +46,6 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
       appBar: AppBar(
         title: Text('首页'),
         centerTitle: true,
-        backgroundColor: MyColor.mainColor,
       ),
       body: LoadingWidget(
         endLoading: _canLoadWidget,
@@ -55,23 +54,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
           buildRow: row,
         )
       ),
-      floatingActionButton: _canLoadWidget == true ? 
-        Builder(builder: (BuildContext context) {
-        return FloatingActionButton(
-          child: Icon(Icons.mode_edit),
-          foregroundColor: Colors.white,
-          backgroundColor: MyColor.mainColor,
-          heroTag: null,
-          elevation: 7.0,
-          highlightElevation: 14.0,
-          onPressed: () {
-            showNewArtical();
-          },
-          mini: false,
-          shape: new CircleBorder(),
-          isExtended: false,
-        );
-      }) : Container()
+
     );
   }
 }
