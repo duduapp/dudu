@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:fastodon/public.dart';
+import 'package:popup_menu/popup_menu.dart';
 
 import 'home/home.dart';
+import 'home/new_article.dart';
 import 'local/local.dart';
 import 'metion/metion.dart';
 import 'setting/setting.dart';
@@ -101,7 +103,8 @@ class _RootPageState extends State<RootPage> {
   }
 
   void showNewArtical() {
-    eventBus.emit(EventBusKey.ShowNewArticalWidget);
+    AppNavigate.push(context, NewArticle());
+   // eventBus.emit(EventBusKey.ShowNewArticalWidget);
   }
 
   @override
