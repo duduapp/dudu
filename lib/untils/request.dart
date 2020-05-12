@@ -32,32 +32,33 @@ class Request {
     }
   }
 
-  static Future post({String url, Map params}) async {
+  static Future post({String url, Object params}) async {
     var dio = Request.createDio();
-    try {
-      Response response = await dio.post(url, data: params);
-      if (response.statusCode != 200) {
-        var errorMsg = "网络请求错误,状态码:" + response.statusCode.toString();
-        showTotast(errorMsg);
-      } else if (response.statusCode == 200 && response != null) {
-        return response.data;
-      }
-    } catch (exception) {
-      showTotast(exception.toString());
+
+    Response response = await dio.post(url, data: params);
+    if (response.statusCode != 200) {
+      var errorMsg = "网络请求错误,状态码:" + response.statusCode.toString();
+      showTotast(errorMsg);
+    } else if (response.statusCode == 200 && response != null) {
+      return response.data;
     }
+  }
+
+  static Future put({String url, Object params}) async {
+    var dio = Request.createDio();
+    return await dio.put(url,data:params);
   }
 
   static void showTotast(String errorMsg) {
     Fluttertoast.showToast(
-      msg: errorMsg,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIos: 1,
-      backgroundColor: MyColor.error,
-      textColor: MyColor.loginWhite,
-      fontSize: 16.0
-    );
-    throw(errorMsg);
+        msg: errorMsg,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        backgroundColor: MyColor.error,
+        textColor: MyColor.loginWhite,
+        fontSize: 16.0);
+    throw (errorMsg);
   }
 
   static Dio createDio() {
@@ -67,28 +68,23 @@ class Request {
     String userHeader = user.getToken();
     String urlHost = user.getHost();
 
-    if (userHeader !=null || urlHost !=null) {
-      dio.options.headers = {
-        'Authorization' : userHeader
-      };
+    if (userHeader != null || urlHost != null) {
+      dio.options.headers = {'Authorization': userHeader};
       dio.options.baseUrl = urlHost;
     }
     // dio拦截器
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest:(RequestOptions options){
-        print(options.uri);
-        return options; //continue
-      },
-      onResponse:(Response response) {
-        print('收到了json信息');
-        // print(response);
-        return response; // continue
-      },
-      onError: (DioError e) {
-        // 当请求失败时做一些预处理
-        return e;//continue
-      }
-    ));
+    dio.interceptors
+        .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
+      print(options.uri);
+      return options; //continue
+    }, onResponse: (Response response) {
+      print('收到了json信息');
+      // print(response);
+      return response; // continue
+    }, onError: (DioError e) {
+      // 当请求失败时做一些预处理
+      return e; //continue
+    }));
 
     return dio;
   }

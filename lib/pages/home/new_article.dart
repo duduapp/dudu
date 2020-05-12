@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,6 +12,7 @@ import 'package:fastodon/models/my_account.dart';
 import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/models/article_item.dart';
 import 'package:popup_menu/popup_menu.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 import 'new_article_cell.dart';
 
 class NewArticle extends StatefulWidget {
@@ -27,6 +29,7 @@ class _NewArticleState extends State<NewArticle> {
   String _visibility = 'public';
   List<File> images = [];
   Map<File, String> imageTitles = {};
+  Map<File, String> imageIds = {};
 
   @override
   void initState() {
@@ -61,21 +64,73 @@ class _NewArticleState extends State<NewArticle> {
     });
   }
 
+  showToast(String str) {
+    Fluttertoast.showToast(
+        msg: str,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        backgroundColor: MyColor.error,
+        textColor: MyColor.loginWhite,
+        fontSize: 16.0);
+  }
+
   Future<void> _pushNewToot() async {
+    var mediaIds = [];
+    for (File file in images) {
+      var id = imageIds[file];
+      if (id != null) {
+        mediaIds.add(id);
+      }
+    }
     Map<String, dynamic> paramsMap = Map();
     paramsMap['in_reply_to_id'] = null;
-    paramsMap['media_ids'] = [];
+    paramsMap['media_ids'] = mediaIds;
     paramsMap['sensitive'] = false;
     paramsMap['spoiler_text'] = _wornController.text;
     paramsMap['status'] = _controller.text;
     paramsMap['visibility'] = _visibility;
 
-    Request.post(url: Api.PushNewTooT, params: paramsMap).then((data) {
-      ArticleItem newItem = ArticleItem.fromJson(data);
-      if (newItem != null) {
-        eventBus.emit(EventBusKey.HidePresentWidegt, true);
-      }
+    try {
+      Request.post(url: Api.PushNewTooT, params: paramsMap).then((data) {
+        ArticleItem newItem = ArticleItem.fromJson(data);
+        if (newItem != null) {
+          eventBus.emit(EventBusKey.HidePresentWidegt, true);
+        }
+      });
+    } on DioError catch (e) {
+      showToast('发送嘟嘟失败！');
+    }
+  }
+
+  uoloadImage(File file) async {
+    String fileName = file.path.split('/').last;
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(file.path, filename: fileName),
     });
+    var response;
+    try {
+      response = await Request.post(url: Api.attachMedia, params: formData);
+    } on DioError catch (e) {
+      images.remove(file);
+      Fluttertoast.showToast(msg: '文件上传失败');
+      return;
+    }
+    String fileId = response['id'];
+    if (fileId.isNotEmpty) {
+      imageIds[file] = fileId;
+      setState(() {});
+    }
+  }
+
+  updateImageTitle(File file,String title) async{
+    var fileId = imageIds[file];
+    if (fileId != null) {
+      Map<String, dynamic> paramsMap = Map();
+      paramsMap['description'] = title;
+      var response = await Request.put(url: Api.attachMedia+'/'+fileId,params: paramsMap);
+      print(response);
+    }
   }
 
   Future getImage() async {
@@ -87,6 +142,7 @@ class _NewArticleState extends State<NewArticle> {
   addImage(File file) {
     images.add(file);
     setState(() {});
+    uoloadImage(file);
   }
 
   removeImage(File file) {
@@ -291,16 +347,16 @@ class _NewArticleState extends State<NewArticle> {
                     ),
                     RaisedButton(
                       onPressed: () {
-                        if (_controller.text.length == 0) {
-                          Fluttertoast.showToast(
-                              msg: "说点什么吧",
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIos: 1,
-                              backgroundColor: MyColor.error,
-                              textColor: MyColor.loginWhite,
-                              fontSize: 16.0);
+                        if (_controller.text.length == 0 &&
+                            images.length == 0) {
+                          showToast("说点什么吧");
                         } else {
+                          for (File image in images) {
+                            if (imageIds[image] == null) {
+                              showToast("请等待图片上传完毕");
+                              return;
+                            }
+                          }
                           _pushNewToot();
                         }
                       },
@@ -365,18 +421,30 @@ class _NewArticleState extends State<NewArticle> {
           widgetKey: btnKey,
         );
       },
-      child: Container(
-          width: 100,
-          height: 100,
-          child: FittedBox(
-            child: Image.file(path),
-            fit: BoxFit.fitWidth,
-          )),
+      child: Stack(
+        children: [
+          Container(
+              width: 100,
+              height: 100,
+              child: FittedBox(
+                child: Image.file(path),
+                fit: BoxFit.fitWidth,
+              )),
+          if (imageIds[path] == null)
+            Center(
+              widthFactor: 1.5,
+              child: JumpingText(
+                '上传中...',
+                style: TextStyle(color: Colors.white),
+              ),
+            )
+        ],
+      ),
     );
   }
 
   openImageTitleDialog(File file) {
-    var imageTitle = imageTitles[file]; 
+    var imageTitle = imageTitles[file];
     TextEditingController controller = TextEditingController(text: imageTitle);
     var color = Theme.of(context).toggleableActiveColor;
     showDialog(
@@ -411,6 +479,7 @@ class _NewArticleState extends State<NewArticle> {
                   ),
                   onPressed: () {
                     imageTitles[file] = controller.text;
+                    updateImageTitle(file, controller.text);
                     AppNavigate.pop(context);
                   },
                 )

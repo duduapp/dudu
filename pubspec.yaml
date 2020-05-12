@@ -32,6 +32,7 @@ dependencies:
   image_picker: ^0.6.6+1
   nav_router: ^0.0.5
   popup_menu: ^1.0.5
+  progress_indicators: ^0.1.5
 
 dev_dependencies:
   flutter_test:
