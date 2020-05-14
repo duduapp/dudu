@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:fastodon/models/vote.dart';
+import 'package:fastodon/widget/publish/vote_display.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,6 +32,8 @@ class _NewArticleState extends State<NewArticle> {
   List<File> images = [];
   Map<File, String> imageTitles = {};
   Map<File, String> imageIds = {};
+  Vote vote;
+  bool showVote = false;
 
   @override
   void initState() {
@@ -85,7 +89,17 @@ class _NewArticleState extends State<NewArticle> {
     }
     Map<String, dynamic> paramsMap = Map();
     paramsMap['in_reply_to_id'] = null;
-    paramsMap['media_ids'] = mediaIds;
+    if (vote != null) {
+      var poll = {
+        'options':vote.getOptions(),
+        'expires_in': vote.expiresIn,
+        'multiple':vote.multiChoice
+
+      };
+      paramsMap['poll'] = poll;
+    } else {
+      paramsMap['media_ids'] = mediaIds;
+    }
     paramsMap['sensitive'] = false;
     paramsMap['spoiler_text'] = _wornController.text;
     paramsMap['status'] = _controller.text;
@@ -123,18 +137,22 @@ class _NewArticleState extends State<NewArticle> {
     }
   }
 
-  updateImageTitle(File file,String title) async{
+  updateImageTitle(File file, String title) async {
     var fileId = imageIds[file];
     if (fileId != null) {
       Map<String, dynamic> paramsMap = Map();
       paramsMap['description'] = title;
-      var response = await Request.put(url: Api.attachMedia+'/'+fileId,params: paramsMap);
+      var response = await Request.put(
+          url: Api.attachMedia + '/' + fileId, params: paramsMap);
       print(response);
     }
   }
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (image == null) {
+      return;
+    }
     if (images.length < 4) addImage(image);
     print(image);
   }
@@ -237,6 +255,216 @@ class _NewArticleState extends State<NewArticle> {
         });
   }
 
+  showVoteDialog() {
+    Vote newVote = Vote.create();
+    if (vote != null) {
+      newVote = vote.clone();
+    }
+    var color = Theme.of(context).toggleableActiveColor;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return SingleChildScrollView(
+                child: AlertDialog(
+                  insetPadding: EdgeInsets.only(top: 30, left: 0, right: 0),
+                  title: Text('创建投票'),
+                  content: Theme(
+                    data: ThemeData(primaryColor: color),
+                    child: Container(
+                      width: Screen.width(context) * 0.75,
+                      padding: EdgeInsets.all(0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            width: Screen.width(context) * 0.6,
+                            child: TextField(
+                              maxLines: null,
+                              maxLength: 25,
+                              controller: newVote.option1Controller,
+                              decoration: InputDecoration(
+                                  contentPadding:
+                                      EdgeInsets.only(left: 10, right: 10),
+                                  hintText: '选择1',
+                                  counterText: '',
+                                  border: new OutlineInputBorder(
+                                      borderSide:
+                                          new BorderSide(color: Colors.teal)),
+                                  labelText: '选择1'),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            width: Screen.width(context) * 0.6,
+                            child: TextField(
+                              maxLength: 25,
+                              maxLines: null,
+                              controller: newVote.option2Controller,
+                              decoration: InputDecoration(
+                                  contentPadding:
+                                      EdgeInsets.only(left: 10, right: 10),
+                                  hintText: '选择2',
+                                  counterText: "",
+                                  border: new OutlineInputBorder(
+                                      borderSide:
+                                          new BorderSide(color: Colors.teal)),
+                                  labelText: '选择2'),
+                            ),
+                          ),
+                          if (newVote.option3Enabled)
+                            SizedBox(
+                              height: 10,
+                            ),
+                          if (newVote.option3Enabled)
+                            Row(children: <Widget>[
+                              Container(
+                                width: Screen.width(context) * 0.6,
+                                child: TextField(
+                                  maxLength: 25,
+                                  maxLines: null,
+                                  controller: newVote.option3Controller,
+                                  decoration: InputDecoration(
+                                      contentPadding:
+                                          EdgeInsets.only(left: 10, right: 10),
+                                      hintText: '选择3',
+                                      counterText: "",
+                                      border: new OutlineInputBorder(
+                                          borderSide: new BorderSide(
+                                              color: Colors.teal)),
+                                      labelText: '选择3'),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(0),
+                                child: IconButton(
+                                  icon: Icon(Icons.clear),
+                                  onPressed: () {
+                                    newVote.removeOption3();
+                                    setState(() {});
+                                  },
+                                ),
+                              )
+                            ]),
+                          if (newVote.option4Enabled)
+                            SizedBox(
+                              height: 10,
+                            ),
+                          if (newVote.option4Enabled)
+                            Row(children: <Widget>[
+                              Container(
+                                width: Screen.width(context) * 0.6,
+                                child: TextField(
+                                  maxLength: 25,
+                                  maxLines: null,
+                                  controller: newVote.option4Controller,
+                                  decoration: InputDecoration(
+                                      contentPadding:
+                                          EdgeInsets.only(left: 10, right: 10),
+                                      hintText: '选择4',
+                                      counterText: '',
+                                      border: new OutlineInputBorder(
+                                          borderSide: new BorderSide(
+                                              color: Colors.teal)),
+                                      labelText: '选择4'),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(0),
+                                child: IconButton(
+                                  icon: Icon(Icons.clear),
+                                  onPressed: () {
+                                    newVote.removeOption4();
+                                    setState(() {});
+                                  },
+                                ),
+                              )
+                            ]),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              OutlineButton(
+                                onPressed: () {
+                                  newVote.addOption();
+                                  setState(() {});
+                                },
+                                child: Text('添加选择'),
+                              ),
+                              SizedBox(
+                                width: 30,
+                              ),
+                              DropdownButton(
+                                value: newVote.expiresInString,
+                                onChanged: (String newValue) {
+                                  newVote.expiresIn =
+                                      Vote.voteOptionsInSeconds[newValue];
+
+                                  setState(() {
+                                    newVote.expiresInString = newValue;
+                                  });
+                                },
+                                items: Vote.voteOptions
+                                    .map<DropdownMenuItem<String>>(
+                                        (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              )
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(0),
+                                child: Checkbox(
+                                  value: newVote.multiChoice,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      newVote.multiChoice = value;
+                                    });
+                                  },
+                                ),
+                              ),
+                              Text('多个选择')
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('取消'),
+                      onPressed: () {
+                        //vote = null;
+                        AppNavigate.pop(context);
+                      },
+                    ),
+                    FlatButton(
+                      child: Text('确定'),
+                      onPressed: () {
+                        if (newVote.canCreate()) {
+                          vote = newVote;
+                          AppNavigate.pop(context);
+                        }
+                      },
+                    )
+                  ],
+                ),
+              );
+            },
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     PopupMenu.context = context;
@@ -307,6 +535,11 @@ class _NewArticleState extends State<NewArticle> {
                       labelStyle: TextStyle(fontSize: 16)),
                 ),
               ),
+              if (vote != null)
+                SizedBox(
+                  height: 20,
+                ),
+              if (vote != null) voteView(),
               imagesList(),
               Padding(
                 padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
@@ -315,12 +548,22 @@ class _NewArticleState extends State<NewArticle> {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            getImage();
-                          },
-                          child: Icon(Icons.photo, size: 30),
+                        IconButton(
+                          icon: Icon(Icons.photo, size: 30),
+                          onPressed: vote != null
+                              ? null
+                              : () {
+                                  getImage();
+                                },
+                          disabledColor: Colors.grey,
                         ),
+
+                        // GestureDetector(
+                        //   onTap: () => {
+                        //     vote != null ? null :getImage()
+                        //   },
+                        //   child: Icon(Icons.photo, size: 30),
+                        // ),
                         SizedBox(
                           width: 10,
                         ),
@@ -330,6 +573,26 @@ class _NewArticleState extends State<NewArticle> {
                           },
                           child: _articleRange,
                         ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.list),
+                          onPressed: images.length > 0
+                              ? null
+                              : () {
+                                  showVoteDialog();
+                                },
+                        ),
+                        // InkWell(
+                        //   onTap: () => {
+                        //     images.length > 0 ? null : showVoteDialog()
+                        //   },
+                        //   child: Icon(
+                        //     Icons.list,
+                        //     size: 30,
+                        //   ),
+                        // ),
                         SizedBox(
                           width: 10,
                         ),
@@ -369,6 +632,32 @@ class _NewArticleState extends State<NewArticle> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget voteView() {
+    var color = Theme.of(context).popupMenuTheme.color;
+    var btnKey = GlobalKey();
+    PopupMenu menu = PopupMenu(
+      backgroundColor: color,
+      lineColor: color,
+      items: [
+        MenuItem(title: '编辑', image: Icon(Icons.edit)),
+        MenuItem(title: '删除', image: Icon(Icons.delete))
+      ],
+      onClickMenu: (item) {
+        if (item.menuTitle == '删除') {
+          vote = null;
+          setState(() {});
+        } else if (item.menuTitle == '编辑') {
+          showVoteDialog();
+        }
+      },
+    );
+    return InkWell(
+      key: btnKey,
+      onTap: () => menu.show(widgetKey: btnKey),
+      child: VoteDisplay(vote),
     );
   }
 
