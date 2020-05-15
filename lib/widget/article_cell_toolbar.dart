@@ -1,3 +1,4 @@
+import 'package:fastodon/pages/home/new_article.dart';
 import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/models/article_item.dart';
@@ -53,7 +54,7 @@ class _ArticleCellToolbarState extends State<ArticleCellToolbar> {
       children: <Widget>[
         GestureDetector(
           onTap: () {
-
+            AppNavigate.push(context, NewArticle(replyTo: widget.item));
           },
           child: Row(
             children: <Widget>[

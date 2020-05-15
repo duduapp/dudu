@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fastodon/models/vote.dart';
+import 'package:fastodon/widget/publish/status_reply_info.dart';
 import 'package:fastodon/widget/publish/vote_display.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -18,6 +19,10 @@ import 'package:progress_indicators/progress_indicators.dart';
 import 'new_article_cell.dart';
 
 class NewArticle extends StatefulWidget {
+  ArticleItem replyTo;
+
+  NewArticle({this.replyTo});
+
   @override
   _NewArticleState createState() => _NewArticleState();
 }
@@ -34,6 +39,7 @@ class _NewArticleState extends State<NewArticle> {
   Map<File, String> imageIds = {};
   Vote vote;
   bool showVote = false;
+  int counter = 0;
 
   @override
   void initState() {
@@ -49,6 +55,10 @@ class _NewArticleState extends State<NewArticle> {
       });
     }
     _getEmojis();
+
+    if (widget.replyTo != null) {
+      _controller.text = getMentionString();
+    }
   }
 
   Future<void> _getEmojis() async {
@@ -91,14 +101,16 @@ class _NewArticleState extends State<NewArticle> {
     paramsMap['in_reply_to_id'] = null;
     if (vote != null) {
       var poll = {
-        'options':vote.getOptions(),
+        'options': vote.getOptions(),
         'expires_in': vote.expiresIn,
-        'multiple':vote.multiChoice
-
+        'multiple': vote.multiChoice
       };
       paramsMap['poll'] = poll;
     } else {
       paramsMap['media_ids'] = mediaIds;
+    }
+    if (widget.replyTo != null) {
+      paramsMap['in_reply_to_id'] = widget.replyTo.id;
     }
     paramsMap['sensitive'] = false;
     paramsMap['spoiler_text'] = _wornController.text;
@@ -176,7 +188,7 @@ class _NewArticleState extends State<NewArticle> {
       children: <Widget>[
         Container(
           height: 50,
-          width: Screen.width(context) - 60,
+          //    width: Screen.width(context) - 60,
           color: MyColor.newArticalTextFieldColor,
           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
           child: TextField(
@@ -188,6 +200,10 @@ class _NewArticleState extends State<NewArticle> {
                 focusedBorder: InputBorder.none,
                 labelStyle: TextStyle(fontSize: 16)),
           ),
+        ),
+        new Container(
+          height: 1,
+          color: Colors.grey[300],
         ),
         SizedBox(height: 10)
       ],
@@ -453,6 +469,7 @@ class _NewArticleState extends State<NewArticle> {
                       onPressed: () {
                         if (newVote.canCreate()) {
                           vote = newVote;
+                          createVote();
                           AppNavigate.pop(context);
                         }
                       },
@@ -465,171 +482,181 @@ class _NewArticleState extends State<NewArticle> {
         });
   }
 
+  // statefulbuild 里面的setstate是更新自己组件的，外层组件用这个方法
+  createVote() {
+    setState(() {});
+  }
+
+  Widget replyInfo() {
+    if (widget.replyTo == null) {
+      return Container();
+    } else {
+      return StatusReplyInfo(widget.replyTo);
+    }
+  }
+
+  // 转发时需要填的mention list
+  getMentionString() {
+    var mentionStr = '@' + widget.replyTo.account.acct + ' ';
+    for (Map mention in widget.replyTo.mentions) {
+      mentionStr += '@' + mention['acct'] + ' ';
+    }
+    return mentionStr;
+  }
+
   @override
   Widget build(BuildContext context) {
     PopupMenu.context = context;
-    return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      body: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: Container(
-          color: MyColor.widgetDefaultColor,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.fromLTRB(30, 50, 30, 30),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        ClipRRect(
-                          child: CachedNetworkImage(
-                            imageUrl: _myAcc.avatarStatic,
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(StringUntil.displayName(_myAcc),
-                                style: TextStyle(fontSize: 16)),
-                            Text('@' + _myAcc.acct,
-                                style: TextStyle(
-                                    fontSize: 13, color: MyColor.greyText))
-                          ],
-                        ),
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        eventBus.emit(EventBusKey.HidePresentWidegt);
-                      },
-                      child: Icon(Icons.close),
-                    ),
-                  ],
-                ),
-              ),
-              worningWidge(),
-              Container(
-                color: MyColor.newArticalTextFieldColor,
-                height: 250,
-                width: Screen.width(context) - 60,
-                padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                child: TextField(
-                  controller: _controller,
-                  maxLength: 500,
-                  maxLines: 10,
-                  decoration: InputDecoration(
-                      hintText: '有什么新鲜事',
-                      disabledBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      labelStyle: TextStyle(fontSize: 16)),
-                ),
-              ),
-              if (vote != null)
-                SizedBox(
-                  height: 20,
-                ),
-              if (vote != null) voteView(),
-              imagesList(),
-              Padding(
-                padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.photo, size: 30),
-                          onPressed: vote != null
-                              ? null
-                              : () {
-                                  getImage();
-                                },
-                          disabledColor: Colors.grey,
-                        ),
+    var inputFilledColor = Theme.of(context).inputDecorationTheme.fillColor;
+    var primaryColor = Theme.of(context).primaryColor;
 
-                        // GestureDetector(
-                        //   onTap: () => {
-                        //     vote != null ? null :getImage()
-                        //   },
-                        //   child: Icon(Icons.photo, size: 30),
-                        // ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            showBottomSheet();
-                          },
-                          child: _articleRange,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.list),
-                          onPressed: images.length > 0
-                              ? null
-                              : () {
-                                  showVoteDialog();
-                                },
-                        ),
-                        // InkWell(
-                        //   onTap: () => {
-                        //     images.length > 0 ? null : showVoteDialog()
-                        //   },
-                        //   child: Icon(
-                        //     Icons.list,
-                        //     size: 30,
-                        //   ),
-                        // ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        GestureDetector(
-                          onTap: () {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.replyTo == null ? '发嘟' : '回复'),
+        centerTitle: true,
+        actions: <Widget>[
+          Container(
+            child: Text(StringUntil.displayName(_myAcc)),
+            padding: EdgeInsets.only(top: 20, right: 10),
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 5, bottom: 5, right: 10),
+            child: ClipRRect(
+              child: CachedNetworkImage(
+                imageUrl: _myAcc.avatarStatic,
+                width: 50,
+                height: 50,
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+          ),
+        ],
+      ),
+      resizeToAvoidBottomInset: true,
+      body: Container(
+        child: Stack(
+          alignment: AlignmentDirectional.bottomEnd,
+          children: <Widget>[
+            Container(
+              height: double.infinity,
+              color: inputFilledColor,
+              padding: EdgeInsets.only(bottom: 50),
+              child: SingleChildScrollView(
+                child: Container(
+                  child: Column(
+                    //   mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      worningWidge(),
+                      Container(
+                        // width: Screen.width(context) - 60,
+                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        child: TextField(
+                          controller: _controller,
+                          onChanged: (value) {
                             setState(() {
-                              _worningWords = !_worningWords;
+                              counter = value.length > 500
+                                  ? 500
+                                  : value.length; //当500时可能值会变成501
                             });
                           },
-                          child: Text('cw',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20)),
-                        )
-                      ],
-                    ),
-                    RaisedButton(
-                      onPressed: () {
-                        if (_controller.text.length == 0 &&
-                            images.length == 0) {
-                          showToast("说点什么吧");
-                        } else {
-                          for (File image in images) {
-                            if (imageIds[image] == null) {
-                              showToast("请等待图片上传完毕");
-                              return;
-                            }
-                          }
-                          _pushNewToot();
-                        }
-                      },
-                      child: Text('TooT!'),
-                    )
-                  ],
+                          autofocus: true,
+                          maxLength: 500,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                              hintText: '有什么新鲜事',
+                              counterText: '',
+                              disabledBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              labelStyle: TextStyle(fontSize: 16)),
+                        ),
+                      ),
+                      if (vote != null)
+                        SizedBox(
+                          height: 20,
+                        ),
+                      if (vote != null) voteView(),
+                      imagesList(),
+                      replyInfo(),
+                    ],
+                  ),
                 ),
               ),
-            ],
-          ),
+            ),
+            Container(
+              color: primaryColor,
+              padding: EdgeInsets.fromLTRB(10, 5, 15, 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.photo, size: 30),
+                        onPressed: vote != null
+                            ? null
+                            : () {
+                                getImage();
+                              },
+                        disabledColor: Colors.grey,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          showBottomSheet();
+                        },
+                        child: _articleRange,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.list),
+                        onPressed: images.length > 0
+                            ? null
+                            : () {
+                                showVoteDialog();
+                              },
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            _worningWords = !_worningWords;
+                          });
+                        },
+                        child: Text('cw',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20)),
+                      ),
+                    ],
+                  ),
+                  Text(counter.toString()),
+                  RaisedButton(
+                    onPressed: () {
+                      if (_controller.text.length == 0 && images.length == 0) {
+                        showToast("说点什么吧");
+                      } else {
+                        for (File image in images) {
+                          if (imageIds[image] == null) {
+                            showToast("请等待图片上传完毕");
+                            return;
+                          }
+                        }
+                        _pushNewToot();
+                      }
+                    },
+                    child: Text('嘟嘟!'),
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -675,8 +702,8 @@ class _NewArticleState extends State<NewArticle> {
     }
 
     return Container(
-      width: Screen.width(context) - 60,
-      padding: EdgeInsets.only(top: 10),
+      //width: Screen.width(context) - 60,
+      padding: EdgeInsets.only(left: 15, right: 10),
       height: 110,
       child: ListView(
         scrollDirection: Axis.horizontal,

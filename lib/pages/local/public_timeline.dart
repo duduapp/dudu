@@ -21,7 +21,7 @@ class _PublicTimelineState extends State<PublicTimeline> with AutomaticKeepAlive
   @override
   Widget build(BuildContext context) {
     return RefreshLoadListView(
-      requestUrl: Api.LocalTimeLine,
+      requestUrl: Api.FederatedTimeLine,
       buildRow: row,
     );
   }

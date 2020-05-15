@@ -6,7 +6,8 @@ import 'package:popup_menu/popup_menu.dart';
 
 import 'home/home.dart';
 import 'home/new_article.dart';
-import 'local/local.dart';
+import 'local/timeline.dart';
+import 'local/public_timeline.dart';
 import 'metion/metion.dart';
 import 'setting/setting.dart';
 
@@ -76,11 +77,12 @@ class _RootPageState extends State<RootPage> {
   List<IconData> _tabIcons = [
     Icons.home,
     Icons.people,
+    Icons.public,
     Icons.notifications,
     Icons.settings
   ];
 
-  List<String> _tabTitles = ['首页', '本站', '消息', '设置'];
+  List<String> _tabTitles = ['首页', '本站', '跨站', '消息', '设置'];
 
   Icon getTabIcon(int index, Color activeColor) {
     if (index == _tabIndex) {
@@ -104,7 +106,7 @@ class _RootPageState extends State<RootPage> {
 
   void showNewArtical() {
     AppNavigate.push(context, NewArticle());
-   // eventBus.emit(EventBusKey.ShowNewArticalWidget);
+    // eventBus.emit(EventBusKey.ShowNewArticalWidget);
   }
 
   @override
@@ -114,7 +116,7 @@ class _RootPageState extends State<RootPage> {
     return Scaffold(
         key: _scaffoldKey,
         body: IndexedStack(
-          children: <Widget>[Home(), Local(), Metion(), Setting()],
+          children: <Widget>[Timeline(TimelineType.home), Timeline(TimelineType.local), Timeline(TimelineType.federated),Metion(), Setting()],
           index: _tabIndex,
         ),
         bottomNavigationBar: CupertinoTabBar(
@@ -131,6 +133,9 @@ class _RootPageState extends State<RootPage> {
             BottomNavigationBarItem(
                 icon: getTabIcon(3, activeColor),
                 title: getTabTitle(3, activeColor)),
+            BottomNavigationBarItem(
+                icon: getTabIcon(4, activeColor),
+                title: getTabTitle(4, activeColor)),
           ],
           currentIndex: _tabIndex,
           onTap: (index) {
