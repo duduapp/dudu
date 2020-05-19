@@ -7,19 +7,19 @@ import 'package:fastodon/public.dart';
 import 'package:fastodon/pages/setting/user_message.dart';
 import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/pages/home/article_detail.dart';
-import 'avatar.dart';
+import '../avatar.dart';
 import 'article_cell_toolbar.dart';
 import 'article_media.dart';
 
-class ArticleCell extends StatefulWidget {
-  ArticleCell({Key key, this.item}) : super(key: key);
+class StatusItem extends StatefulWidget {
+  StatusItem({Key key, this.item}) : super(key: key);
   final ArticleItem item;
 
   @override
-  _ArticleCellState createState() => _ArticleCellState();
+  _StatusItemState createState() => _StatusItemState();
 }
 
-class _ArticleCellState extends State<ArticleCell> {
+class _StatusItemState extends State<StatusItem> {
   Widget articleMedia() {
     if (widget.item.card != null && widget.item.card.image != null) {
       return Container(

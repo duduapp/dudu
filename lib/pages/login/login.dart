@@ -42,7 +42,8 @@ class _LoginState extends State<Login> {
       setState(() {
         _clickButton = false;
       });
-      AppNavigate.push(context, WebLogin(serverItem: model, hostUrl: hostUrl), callBack: (code) {
+      AppNavigate.push(context, WebLogin(serverItem: model, hostUrl: hostUrl),
+          callBack: (code) {
         _getToken(code, model, hostUrl);
       });
     }).catchError(() {
@@ -53,30 +54,34 @@ class _LoginState extends State<Login> {
   }
 
 // 获取token，此后的每次请求都需带上此token
-  Future<void> _getToken(String code, AppCredential serverItem, String hostUrl) async {
+  Future<void> _getToken(
+      String code, AppCredential serverItem, String hostUrl) async {
     Map<String, dynamic> paramsMap = Map();
     paramsMap['client_id'] = serverItem.clientId;
     paramsMap['client_secret'] = serverItem.clientSecret;
     paramsMap['grant_type'] = 'authorization_code';
     paramsMap['code'] = code;
     paramsMap['redirect_uri'] = serverItem.redirectUri;
+    try {
+      Request.post(url: '$hostUrl' + Api.Token, params: paramsMap).then((data) {
+        Token getToken = Token.fromJson(data);
+        String token = '${getToken.tokenType} ${getToken.accessToken}';
+        // 这里的存储是异步的，需要将token保存至单例中实时更新页面
+        Storage.save(StorageKey.Token, token);
+        Storage.save(StorageKey.HostUrl, hostUrl);
 
-    Request.post(url: '$hostUrl' + Api.Token, params: paramsMap).then((data) {
-      Token getToken = Token.fromJson(data);      
-      String token = '${getToken.tokenType} ${getToken.accessToken}';
-      // 这里的存储是异步的，需要将token保存至单例中实时更新页面
-      Storage.save(StorageKey.Token, token);
-      Storage.save(StorageKey.HostUrl, hostUrl);
-
-      User user = new User();
-      user.setHost(hostUrl);
-      user.setToken(token);
-      eventBus.emit(EventBusKey.HidePresentWidegt);
-    });
+        User user = new User();
+        user.setHost(hostUrl);
+        user.setToken(token);
+        eventBus.emit(EventBusKey.HidePresentWidegt);
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   void _checkInputText() {
-    if(_controller.text == null || _controller.text.length == 0) {
+    if (_controller.text == null || _controller.text.length == 0) {
       return;
     }
     String hostUrl = 'https://${_controller.text}';
@@ -86,7 +91,7 @@ class _LoginState extends State<Login> {
 // 跳转到选择节点页面
   void _chooseServer(BuildContext context) {
     AppNavigate.push(context, ServerList(), callBack: (ServerItem item) {
-      if(item !=null) {
+      if (item != null) {
         _controller.text = item.name;
         _checkInputText();
       }
@@ -100,145 +105,148 @@ class _LoginState extends State<Login> {
         size: 23,
       );
     }
-    return Text('登录Mastodon账号', style:TextStyle(fontSize: 16, color:  MyColor.loginPrimary));
+    return Text('登录Mastodon账号',
+        style: TextStyle(fontSize: 16, color: MyColor.loginPrimary));
   }
 
   void _showAboutSheet(BuildContext context) {
     showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 200,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                width: 50,
-                height: 8,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4)),
-                  color: Colors.grey[300],
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 200,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  width: 50,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                    color: Colors.grey[300],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Text('Mastodon（官方中文译万象，网民又称长毛象）是一个免费开源的去中心化的分布式微博客社交网络。它的用户界面和操作方式跟推特类似，但是整个网络并非由单一机构运作，却是由多个由不同营运者独立运作的服务器以联邦方式交换数据而组成的去中心化社交网络。'),
-              )
-            ],
-          ),
-        );
-      }
-    );
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                      'Mastodon（官方中文译万象，网民又称长毛象）是一个免费开源的去中心化的分布式微博客社交网络。它的用户界面和操作方式跟推特类似，但是整个网络并非由单一机构运作，却是由多个由不同营运者独立运作的服务器以联邦方式交换数据而组成的去中心化社交网络。'),
+                )
+              ],
+            ),
+          );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding:false,
-      backgroundColor: MyColor.loginPrimary,
-      body: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: () {
+        resizeToAvoidBottomPadding: false,
+        backgroundColor: MyColor.loginPrimary,
+        body: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
             FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: 60,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Center(
-                      child: Text('Mastodon', style: TextStyle(fontSize: 20, color: MyColor.loginWhite)),
-                    ),
-                )
-              ),
-              Image.asset('image/wallpaper.png'),
-              Card(
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(2))),
-                elevation: 5,
-                color: MyColor.loginWhite,
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text('域名', style: TextStyle(fontSize: 16))
-                        ],
+          },
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                Container(
+                    height: 60,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 20),
+                      child: Center(
+                        child: Text('Mastodon',
+                            style: TextStyle(
+                                fontSize: 20, color: MyColor.loginWhite)),
                       ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        child: TextField(
-                          controller: _controller,
-                          decoration: new InputDecoration(
-                            hintText: '例如：cmx.im',
-                            disabledBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            labelStyle: TextStyle(fontSize: 16)
+                    )),
+                Image.asset('image/wallpaper.png'),
+                Card(
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(2))),
+                  elevation: 5,
+                  color: MyColor.loginWhite,
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text('域名', style: TextStyle(fontSize: 16))
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          child: TextField(
+                            controller: _controller,
+                            decoration: new InputDecoration(
+                                hintText: '例如：cmx.im',
+                                disabledBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                labelStyle: TextStyle(fontSize: 16)),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: RaisedButton(
+                          onPressed: () {
+                            _checkInputText();
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: _showButtonLoading(context),
+                          ),
+                          color: MyColor.loginWhite,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          _showAboutSheet(context);
+                        },
+                        child: Container(
+                          child: Center(
+                            child: Text('关于Mastodon',
+                                style: TextStyle(color: MyColor.loginWhite)),
                           ),
                         ),
                       ),
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(child:
-                      RaisedButton(
-                        onPressed: (){
-                          _checkInputText();
+                      GestureDetector(
+                        onTap: () {
+                          _chooseServer(context);
                         },
-                        child: Padding(
-                          padding: EdgeInsets.all(10),
-                          child: _showButtonLoading(context), 
+                        child: Container(
+                          child: Center(
+                            child: Text('选择域名',
+                                style: TextStyle(color: MyColor.loginWhite)),
+                          ),
                         ),
-                        color: MyColor.loginWhite,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        _showAboutSheet(context);
-                      },
-                      child: Container(
-                        child: Center(
-                          child: Text('关于Mastodon', style: TextStyle(color: MyColor.loginWhite)),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        _chooseServer(context);
-                      },
-                      child: Container(
-                        child: Center(
-                          child: Text('选择域名', style: TextStyle(color: MyColor.loginWhite)),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      )
-    );
+        ));
   }
 }

@@ -3,7 +3,7 @@ import 'package:fastodon/public.dart';
 import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/widget/avatar.dart';
 import 'package:fastodon/pages/setting/user_message.dart';
-import 'package:fastodon/widget/article_cell_toolbar.dart';
+import 'package:fastodon/widget/status/article_cell_toolbar.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 

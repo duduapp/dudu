@@ -11,10 +11,13 @@ class AppNavigate {
     // ).then((data) {
     //   callBack(data);
     // });
-    router.routePush(scene).then((data) => callBack(data));
+    router.routePush(scene).then((data) {
+      callBack(data);
+    });
   }
+
   static pop(BuildContext context, {dynamic param}) {
-    router.pop();
+    router.pop(param);
     //Navigator.of(context).pop(param);
   }
 }
