@@ -16,7 +16,7 @@ NotificateItem _$NotificateItemFromJson(Map<String, dynamic> json) {
           : OwnerAccount.fromJson(json['account'] as Map<String, dynamic>),
       json['status'] == null
           ? null
-          : ArticleItem.fromJson(json['status'] as Map<String, dynamic>));
+          : StatusItemData.fromJson(json['status'] as Map<String, dynamic>));
 }
 
 Map<String, dynamic> _$NotificateItemToJson(NotificateItem instance) =>

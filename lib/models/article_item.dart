@@ -5,7 +5,7 @@ part 'article_item.g.dart';
 
 
 @JsonSerializable()
-  class ArticleItem extends Object {
+  class StatusItemData extends Object {
 
   @JsonKey(name: 'id')
   String id;
@@ -73,9 +73,9 @@ part 'article_item.g.dart';
   @JsonKey(name: 'card')
   Card card;
 
-  ArticleItem(this.id,this.createdAt,this.sensitive,this.spoilerText,this.visibility,this.language,this.uri,this.content,this.url,this.repliesCount,this.reblogsCount,this.favouritesCount,this.favourited,this.reblogged,this.muted,this.application,this.account,this.mediaAttachments,this.mentions,this.tags,this.emojis,this.card,);
+  StatusItemData(this.id,this.createdAt,this.sensitive,this.spoilerText,this.visibility,this.language,this.uri,this.content,this.url,this.repliesCount,this.reblogsCount,this.favouritesCount,this.favourited,this.reblogged,this.muted,this.application,this.account,this.mediaAttachments,this.mentions,this.tags,this.emojis,this.card,);
 
-  factory ArticleItem.fromJson(Map<String, dynamic> srcJson) => _$ArticleItemFromJson(srcJson);
+  factory StatusItemData.fromJson(Map<String, dynamic> srcJson) => _$ArticleItemFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$ArticleItemToJson(this);
 

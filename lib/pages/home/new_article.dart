@@ -19,7 +19,7 @@ import 'package:progress_indicators/progress_indicators.dart';
 import 'new_article_cell.dart';
 
 class NewArticle extends StatefulWidget {
-  ArticleItem replyTo;
+  StatusItemData replyTo;
 
   NewArticle({this.replyTo});
 
@@ -119,7 +119,7 @@ class _NewArticleState extends State<NewArticle> {
 
     try {
       Request.post(url: Api.PushNewTooT, params: paramsMap).then((data) {
-        ArticleItem newItem = ArticleItem.fromJson(data);
+        StatusItemData newItem = StatusItemData.fromJson(data);
         if (newItem != null) {
           eventBus.emit(EventBusKey.HidePresentWidegt, true);
         }

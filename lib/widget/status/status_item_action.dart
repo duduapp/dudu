@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/models/article_item.dart';
 
-class ArticleCellToolbar extends StatefulWidget {
-  ArticleCellToolbar({
+class StatusItemAction extends StatefulWidget {
+  StatusItemAction({
     Key key, 
     this.item,
   }) : super(key: key);
-  final ArticleItem item;
+  final StatusItemData item;
 
   @override
-  _ArticleCellToolbarState createState() => _ArticleCellToolbarState();
+  _StatusItemActionState createState() => _StatusItemActionState();
 }
 
-class _ArticleCellToolbarState extends State<ArticleCellToolbar> {
+class _StatusItemActionState extends State<StatusItemAction> {
   bool _favourite;
 
   @override
@@ -28,7 +28,7 @@ class _ArticleCellToolbarState extends State<ArticleCellToolbar> {
       _favourite = !_favourite;
     });
     Request.post(url: url).then((data) {
-      ArticleItem newItem = ArticleItem.fromJson(data);
+      StatusItemData newItem = StatusItemData.fromJson(data);
       setState(() {
         _favourite = newItem.favourited;
       });

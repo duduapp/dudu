@@ -33,6 +33,10 @@ dependencies:
   nav_router: ^0.0.5
   popup_menu: ^1.0.5
   progress_indicators: ^0.1.5
+  photo_view: ^0.9.2
+  flutter_statusbarcolor: ^0.2.3
+  image_gallery_saver: ^1.2.2
+
 
 dev_dependencies:
   flutter_test:

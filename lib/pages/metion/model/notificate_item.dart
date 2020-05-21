@@ -21,7 +21,7 @@ part 'notificate_item.g.dart';
   OwnerAccount account;
 
   @JsonKey(name: 'status')
-  ArticleItem status;
+  StatusItemData status;
 
   NotificateItem(this.id,this.type,this.createdAt,this.account,this.status,);
 

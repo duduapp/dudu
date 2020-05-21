@@ -66,7 +66,6 @@ class _TimelineState extends State<Timeline>
     }
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: MyColor.mainColor,
         title: Text(title),
         centerTitle: true,
         actions: <Widget>[],
@@ -81,7 +80,7 @@ class _TimelineState extends State<Timeline>
   }
 
   Widget row(int index, List data) {
-    ArticleItem lineItem = ArticleItem.fromJson(data[index]);
+    StatusItemData lineItem = StatusItemData.fromJson(data[index]);
     return StatusItem(item: lineItem);
   }
 }

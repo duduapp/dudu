@@ -14,7 +14,7 @@ class _PublicTimelineState extends State<PublicTimeline> with AutomaticKeepAlive
   bool get wantKeepAlive => true;
 
   Widget row(int index, List data) {
-    ArticleItem lineItem = ArticleItem.fromJson(data[index]);
+    StatusItemData lineItem = StatusItemData.fromJson(data[index]);
     return StatusItem(item: lineItem);
   }
 

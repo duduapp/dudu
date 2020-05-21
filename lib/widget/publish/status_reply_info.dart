@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../avatar.dart';
 
 class StatusReplyInfo extends StatelessWidget {
-  ArticleItem item;
+  StatusItemData item;
 
   StatusReplyInfo(this.item);
 

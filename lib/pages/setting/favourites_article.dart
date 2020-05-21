@@ -21,7 +21,7 @@ class _FavoutitesArticleState extends State<FavoutitesArticle> {
   }
 
   Widget row(int index, List data) {
-    ArticleItem lineItem = ArticleItem.fromJson(data[index]);
+    StatusItemData lineItem = StatusItemData.fromJson(data[index]);
     return StatusItem(item: lineItem);
   }
 

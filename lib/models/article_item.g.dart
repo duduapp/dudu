@@ -6,8 +6,8 @@ part of 'article_item.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ArticleItem _$ArticleItemFromJson(Map<String, dynamic> json) {
-  return ArticleItem(
+StatusItemData _$ArticleItemFromJson(Map<String, dynamic> json) {
+  return StatusItemData(
       json['id'] as String,
       json['created_at'] as String,
       json['sensitive'] as bool,
@@ -38,7 +38,7 @@ ArticleItem _$ArticleItemFromJson(Map<String, dynamic> json) {
           : Card.fromJson(json['card'] as Map<String, dynamic>));
 }
 
-Map<String, dynamic> _$ArticleItemToJson(ArticleItem instance) =>
+Map<String, dynamic> _$ArticleItemToJson(StatusItemData instance) =>
     <String, dynamic>{
       'id': instance.id,
       'created_at': instance.createdAt,
