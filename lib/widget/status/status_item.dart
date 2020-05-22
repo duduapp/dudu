@@ -71,23 +71,18 @@ class _StatusItemState extends State<StatusItem> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        AppNavigate.push(context, ArticleDetail(item: widget.item));
-      },
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            StatusItemHeader(widget.item),
-            StatusItemContent(widget.item),
-            StatusItemAction(
-              item: widget.item,
-            ),
-            SizedBox(height: 10)
-          ],
-        ),
-      )
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          StatusItemHeader(widget.item),
+          StatusItemContent(widget.item),
+          StatusItemAction(
+            item: widget.item,
+          ),
+          SizedBox(height: 10)
+        ],
+      ),
     );
   }
 }
