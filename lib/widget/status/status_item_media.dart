@@ -1,11 +1,15 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chewie/chewie.dart';
 import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/models/media_attachment.dart';
 import 'package:fastodon/pages/common/photo_gallery.dart';
+import 'package:fastodon/pages/common/video_play.dart';
+import 'package:fastodon/public.dart';
 import 'package:fastodon/untils/screen.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
 class StatusItemMedia extends StatefulWidget {
   @override
@@ -25,6 +29,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   bool sensitive;
   bool hideImage;
 
+
   @override
   void initState() {
     sensitive = widget.data.sensitive;
@@ -39,12 +44,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   Widget build(BuildContext context) {
     var mediaLength = widget.data.mediaAttachments.length;
     if (mediaLength == 1) {
-      var type = widget.data.mediaAttachments[0]['type'];
-      if (type == 'image') {
-        return imageWrapper(singleImage());
-      } else if (type == 'video') {
-        return singleVideo();
-      }
+      return imageWrapper(singleImage());
     } else if (mediaLength == 2) {
       return imageWrapper(twoImages());
     } else if (mediaLength == 3) {
@@ -66,6 +66,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
       },
     );
   }
+
 
   Widget twoImages() {
     return LayoutBuilder(
@@ -198,6 +199,13 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   Widget image(
       MediaAttachment image, int idx, double width, double height, BoxFit fit) {
     var indicatorSize = width > height ? height / 2.5 : width / 2.5;
+    var imageUrl;
+    var type = image.type;
+    if (type == 'video' || type == 'gifv') {
+      imageUrl = image.previewUrl;
+    } else {
+      imageUrl = image.url;
+    }
     return InkWell(
       onTap: () {
         if (sensitive && hideImage == true) {
@@ -216,28 +224,35 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
       child: Hero(
         tag: image.id,
         child: CachedNetworkImage(
-            imageUrl: image.url,
+            imageUrl: imageUrl,
             imageBuilder: (context, imageProvider) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Container(
-                  width: width,
-                  height: height,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
+              return Stack(
+                children :[ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Container(
+                    width: width,
+                    height: height,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
                     ),
+                    child: hideImage == true
+                        ? BackdropFilter(
+                            filter: ImageFilter.blur(sigmaY: 20, sigmaX: 20),
+                            child: Container(
+                              color: Colors.black.withOpacity(0.1),
+                            ),
+                          )
+                        : Container(),
                   ),
-                  child: hideImage == true
-                      ? BackdropFilter(
-                          filter: ImageFilter.blur(sigmaY: 20, sigmaX: 20),
-                          child: Container(
-                            color: Colors.black.withOpacity(0.1),
-                          ),
-                        )
-                      : Container(),
                 ),
+                  if ((image.type == 'video' || image.type == 'gifv') && hideImage == false)
+                    Positioned.fill(
+                      child: Center(child: Icon(Icons.play_circle_filled,size: 65,color: Colors.white,)),
+                    )
+                ]
               );
             },
             progressIndicatorBuilder: (context, url, downloadProgress) =>
@@ -259,22 +274,45 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   }
 
   Widget singleVideo() {
-    return Container();
+
   }
 
   void open(BuildContext context, final int index) {
+    var image = widget.images[index];
+    var type = image.type;
+    Widget to;
+    if (type == 'video' || type == 'gifv') {
+      to = VideoPlay(widget.images[index]);
+    } else {
+       to = PhotoGallery(
+        galleryItems: widget.images,
+        backgroundDecoration: const BoxDecoration(
+          color: Colors.black,
+        ),
+        initialIndex: index,
+        scrollDirection: Axis.horizontal,
+      );
+    }
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PhotoGallery(
-          galleryItems: widget.images,
-          backgroundDecoration: const BoxDecoration(
-            color: Colors.black,
-          ),
-          initialIndex: index,
-          scrollDirection: Axis.horizontal,
-        ),
+        builder: (context) => to,
       ),
     );
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }
+
+class VideoPlayer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+
+
+}
+

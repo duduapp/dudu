@@ -66,7 +66,16 @@ class _PhotoGalleryState extends State<PhotoGallery> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          leading: IconButton(icon: Icon(Icons.arrow_back,color: Colors.white,),onPressed: (){revertStatusBar();AppNavigate.pop(context);},),
+          title: Text('${currentIndex+1}/${widget.galleryItems.length}',style: TextStyle(color: Colors.white),),
+          backgroundColor: Colors.transparent,
+          actions: <Widget>[
+            IconButton(icon: Icon(Icons.file_download,color: Colors.white,),onPressed: (){downloadMedia();},),
+         //   IconButton(icon: Icon(Icons.share,color: Colors.white,))
+          ],
+        ),
         body: InkWell(
         onTap: (){   revertStatusBar();AppNavigate.pop(context);},
         child: Container(
@@ -89,11 +98,8 @@ class _PhotoGalleryState extends State<PhotoGallery> {
               ),
               Container(
                 padding: const EdgeInsets.all(20.0),
-                child: IconButton(icon: Icon(Icons.save_alt,color: Colors.white,),onPressed: () async {
-                    var item = widget.galleryItems[currentIndex];
-                    var response = await Dio().get(item.url, options: Options(responseType: ResponseType.bytes));
-                    final result = await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
-                    showToast('图片已保存');
+                child: IconButton(icon: Icon(Icons.save_alt,color: Colors.white,),onPressed: () {
+                  downloadMedia();
                 },),
               )
             ],
@@ -107,6 +113,14 @@ class _PhotoGalleryState extends State<PhotoGallery> {
 
   }
 
+  downloadMedia() async{
+    var item = widget.galleryItems[currentIndex];
+    showToast('正在下载中...');
+    var response = await Dio().get(item.url, options: Options(responseType: ResponseType.bytes));
+    final result = await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
+
+  }
+
   showToast(String msg) {
     Fluttertoast.showToast(
 
@@ -116,7 +130,7 @@ class _PhotoGalleryState extends State<PhotoGallery> {
         timeInSecForIos: 1,
         backgroundColor: Colors.black,
         textColor: Colors.white,
-        fontSize: 16.0);
+        fontSize: 14.0);
   }
 
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
