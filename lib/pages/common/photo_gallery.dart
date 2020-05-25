@@ -104,6 +104,17 @@ class _PhotoGalleryState extends State<PhotoGallery> {
         height: 300,
         child: CachedNetworkImage(
           imageUrl: item.url,
+          progressIndicatorBuilder: (context, url, downloadProgress) =>
+              Container(
+                child: Center(
+                  child: SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: CircularProgressIndicator(
+                        value: downloadProgress.progress),
+                  ),
+                ),
+              ),
         ),
       ),
       //  childSize: const Size(300, 300),
