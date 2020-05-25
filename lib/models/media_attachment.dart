@@ -24,7 +24,13 @@ part 'media_attachment.g.dart';
   @JsonKey(name: 'meta')
   Map meta;
 
-  MediaAttachment(this.id,this.type,this.url,this.previewUrl,this.textUrl, this.meta);
+  @JsonKey(name: 'description')
+  String description;
+
+  @JsonKey(name: 'blurhash')
+  String blurhash;
+
+  MediaAttachment(this.id,this.type,this.url,this.previewUrl,this.textUrl, this.meta, this.description, this.blurhash);
 
   factory MediaAttachment.fromJson(Map<String, dynamic> srcJson) => _$MediaAttachmentFromJson(srcJson);
 

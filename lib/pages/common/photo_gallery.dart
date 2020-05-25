@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:fastodon/models/media_attachment.dart';
 import 'package:fastodon/public.dart';
+import 'package:fastodon/untils/dialog_util.dart';
+import 'package:fastodon/widget/common/media_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
@@ -54,84 +56,45 @@ class _PhotoGalleryState extends State<PhotoGallery> {
     });
   }
 
-  Future<bool> _onWillPop() async {
-    revertStatusBar();
-    return true;
-  }
-
   @override
   Widget build(BuildContext context) {
-    FlutterStatusbarcolor.setStatusBarColor(Colors.black);
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          leading: IconButton(icon: Icon(Icons.arrow_back,color: Colors.white,),onPressed: (){revertStatusBar();AppNavigate.pop(context);},),
-          title: Text('${currentIndex+1}/${widget.galleryItems.length}',style: TextStyle(color: Colors.white),),
-          backgroundColor: Colors.transparent,
-          actions: <Widget>[
-            IconButton(icon: Icon(Icons.file_download,color: Colors.white,),onPressed: (){downloadMedia();},),
-         //   IconButton(icon: Icon(Icons.share,color: Colors.white,))
-          ],
-        ),
-        body: InkWell(
-        onTap: (){   revertStatusBar();AppNavigate.pop(context);},
-        child: Container(
-          decoration: widget.backgroundDecoration,
-          constraints: BoxConstraints.expand(
-            height: MediaQuery.of(context).size.height,
-          ),
-          child: Stack(
-            alignment: Alignment.bottomRight,
-            children: <Widget>[
-              PhotoViewGallery.builder(
-                scrollPhysics: const BouncingScrollPhysics(),
-                builder: _buildItem,
-                itemCount: widget.galleryItems.length,
-                loadingBuilder: widget.loadingBuilder,
-                backgroundDecoration: widget.backgroundDecoration,
-                pageController: widget.pageController,
-                onPageChanged: onPageChanged,
-                scrollDirection: widget.scrollDirection,
-              ),
-              Container(
-                padding: const EdgeInsets.all(20.0),
-                child: IconButton(icon: Icon(Icons.save_alt,color: Colors.white,),onPressed: () {
-                  downloadMedia();
-                },),
-              )
-            ],
-          ),
-        ),
-          ),
-      ),
+    return MediaDetail(
+      child: InkWell(
+          onTap: () {
+            revertStatusBar();
+            AppNavigate.pop(context);
+          },
+          child: Container(
+            decoration: widget.backgroundDecoration,
+            constraints: BoxConstraints.expand(
+              height: MediaQuery.of(context).size.height,
+            ),
+            child: PhotoViewGallery.builder(
+              scrollPhysics: const BouncingScrollPhysics(),
+              builder: _buildItem,
+              itemCount: widget.galleryItems.length,
+              loadingBuilder: widget.loadingBuilder,
+              backgroundDecoration: widget.backgroundDecoration,
+              pageController: widget.pageController,
+              onPageChanged: onPageChanged,
+              scrollDirection: widget.scrollDirection,
+            ),
+          )),
+      title: '${currentIndex + 1}/${widget.galleryItems.length}',
+      onDownloadClick: downloadMedia,
     );
-
-
-
   }
 
-  downloadMedia() async{
+  downloadMedia() async {
     var item = widget.galleryItems[currentIndex];
-    showToast('正在下载中...');
-    var response = await Dio().get(item.url, options: Options(responseType: ResponseType.bytes));
-    final result = await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
-
+    DialogUtils.toastDownloadInfo('正在下载中...');
+    var response = await Dio()
+        .get(item.url, options: Options(responseType: ResponseType.bytes));
+    final result =
+        await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
   }
 
-  showToast(String msg) {
-    Fluttertoast.showToast(
 
-        msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 14.0);
-  }
 
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
     var item = widget.galleryItems[index];
@@ -143,7 +106,7 @@ class _PhotoGalleryState extends State<PhotoGallery> {
           imageUrl: item.url,
         ),
       ),
-    //  childSize: const Size(300, 300),
+      //  childSize: const Size(300, 300),
       initialScale: PhotoViewComputedScale.contained,
       minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
       maxScale: PhotoViewComputedScale.covered * 2.0,
@@ -151,11 +114,8 @@ class _PhotoGalleryState extends State<PhotoGallery> {
     );
   }
 
-
-
   revertStatusBar() {
     FlutterStatusbarcolor.setStatusBarColor(Colors.white);
     FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
   }
-
 }

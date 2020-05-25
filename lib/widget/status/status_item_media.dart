@@ -44,7 +44,11 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   Widget build(BuildContext context) {
     var mediaLength = widget.data.mediaAttachments.length;
     if (mediaLength == 1) {
-      return imageWrapper(singleImage());
+      if (widget.images[0].type == 'audio') {
+        return audio();
+      } else {
+        return imageWrapper(singleImage());
+      }
     } else if (mediaLength == 2) {
       return imageWrapper(twoImages());
     } else if (mediaLength == 3) {
@@ -64,6 +68,18 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
         return image(
             widget.images[0], 0, constraints.maxWidth, 220, BoxFit.cover);
       },
+    );
+  }
+
+  Widget audio() {
+    return InkWell(
+      onTap: () {
+        AppNavigate.push(context, VideoPlay(widget.images[0]));
+      },
+      child: ListTile(
+        leading: Icon(Icons.music_note),
+        title: Text(widget.images[0].description,overflow: TextOverflow.ellipsis,maxLines: 2,),
+      ),
     );
   }
 
@@ -273,9 +289,6 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
     );
   }
 
-  Widget singleVideo() {
-
-  }
 
   void open(BuildContext context, final int index) {
     var image = widget.images[index];
