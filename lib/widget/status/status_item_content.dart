@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/untils/my_color.dart';
 import 'package:fastodon/widget/status/status_item_media.dart';
+import 'package:fastodon/widget/status/status_item_poll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
@@ -77,7 +78,8 @@ class _StatusItemContentState extends State<StatusItemContent> {
             print('点击到的链接：' + url);
           },
         ),
-        StatusItemMedia(widget.data)
+        StatusItemMedia(widget.data),
+        StatusItemPoll(widget.data.poll)
       ],),
     );
   }

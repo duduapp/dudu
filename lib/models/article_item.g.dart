@@ -6,7 +6,7 @@ part of 'article_item.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-StatusItemData _$ArticleItemFromJson(Map<String, dynamic> json) {
+StatusItemData _$StatusItemDataFromJson(Map<String, dynamic> json) {
   return StatusItemData(
       json['id'] as String,
       json['created_at'] as String,
@@ -35,10 +35,13 @@ StatusItemData _$ArticleItemFromJson(Map<String, dynamic> json) {
       json['emojis'] as List,
       json['card'] == null
           ? null
-          : Card.fromJson(json['card'] as Map<String, dynamic>));
+          : Card.fromJson(json['card'] as Map<String, dynamic>),
+      json['poll'] == null
+          ? null
+          : Poll.fromJson(json['poll'] as Map<String, dynamic>));
 }
 
-Map<String, dynamic> _$ArticleItemToJson(StatusItemData instance) =>
+Map<String, dynamic> _$StatusItemDataToJson(StatusItemData instance) =>
     <String, dynamic>{
       'id': instance.id,
       'created_at': instance.createdAt,
@@ -61,7 +64,8 @@ Map<String, dynamic> _$ArticleItemToJson(StatusItemData instance) =>
       'mentions': instance.mentions,
       'tags': instance.tags,
       'emojis': instance.emojis,
-      'card': instance.card
+      'card': instance.card,
+      'poll': instance.poll
     };
 
 Application _$ApplicationFromJson(Map<String, dynamic> json) {
@@ -102,4 +106,29 @@ Map<String, dynamic> _$CardToJson(Card instance) => <String, dynamic>{
       'height': instance.height,
       'image': instance.image,
       'embed_url': instance.embedUrl
+    };
+
+Poll _$PollFromJson(Map<String, dynamic> json) {
+  return Poll(
+      id: json['id'] as String,
+      expiresAt: json['expires_at'] as String,
+      expired: json['expired'] as bool,
+      multiple: json['multiple'] as bool,
+      votesCount: json['votes_count'] as int,
+      voted: json['voted'] as bool,
+      ownVotes: json['own_votes'] as List,
+      options: json['options'] as List,
+      emojis: json['emojis'] as List);
+}
+
+Map<String, dynamic> _$PollToJson(Poll instance) => <String, dynamic>{
+      'id': instance.id,
+      'expires_at': instance.expiresAt,
+      'expired': instance.expired,
+      'multiple': instance.multiple,
+      'votes_count': instance.votesCount,
+      'voted': instance.voted,
+      'own_votes': instance.ownVotes,
+      'options': instance.options,
+      'emojis': instance.emojis
     };

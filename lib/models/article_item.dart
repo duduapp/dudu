@@ -1,12 +1,10 @@
-import 'package:json_annotation/json_annotation.dart'; 
+import 'package:json_annotation/json_annotation.dart';
 import 'package:fastodon/models/owner_account.dart';
 
 part 'article_item.g.dart';
 
-
 @JsonSerializable()
-  class StatusItemData extends Object {
-
+class StatusItemData extends Object {
   @JsonKey(name: 'id')
   String id;
 
@@ -73,32 +71,58 @@ part 'article_item.g.dart';
   @JsonKey(name: 'card')
   Card card;
 
-  StatusItemData(this.id,this.createdAt,this.sensitive,this.spoilerText,this.visibility,this.language,this.uri,this.content,this.url,this.repliesCount,this.reblogsCount,this.favouritesCount,this.favourited,this.reblogged,this.muted,this.application,this.account,this.mediaAttachments,this.mentions,this.tags,this.emojis,this.card,);
+  @JsonKey(name: 'poll')
+  Poll poll;
 
-  factory StatusItemData.fromJson(Map<String, dynamic> srcJson) => _$ArticleItemFromJson(srcJson);
+  StatusItemData(
+    this.id,
+    this.createdAt,
+    this.sensitive,
+    this.spoilerText,
+    this.visibility,
+    this.language,
+    this.uri,
+    this.content,
+    this.url,
+    this.repliesCount,
+    this.reblogsCount,
+    this.favouritesCount,
+    this.favourited,
+    this.reblogged,
+    this.muted,
+    this.application,
+    this.account,
+    this.mediaAttachments,
+    this.mentions,
+    this.tags,
+    this.emojis,
+    this.card,
+    this.poll
+  );
 
-  Map<String, dynamic> toJson() => _$ArticleItemToJson(this);
+  factory StatusItemData.fromJson(Map<String, dynamic> srcJson) =>
+      _$StatusItemDataFromJson(srcJson);
 
+  Map<String, dynamic> toJson() => _$StatusItemDataToJson(this);
 }
 
-  
 @JsonSerializable()
-  class Application extends Object {
-
+class Application extends Object {
   @JsonKey(name: 'name')
   String name;
 
-  Application(this.name,);
+  Application(
+    this.name,
+  );
 
-  factory Application.fromJson(Map<String, dynamic> srcJson) => _$ApplicationFromJson(srcJson);
+  factory Application.fromJson(Map<String, dynamic> srcJson) =>
+      _$ApplicationFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$ApplicationToJson(this);
-
 }
-  
-@JsonSerializable()
-  class Card extends Object {
 
+@JsonSerializable()
+class Card extends Object {
   @JsonKey(name: 'url')
   String url;
 
@@ -138,12 +162,61 @@ part 'article_item.g.dart';
   @JsonKey(name: 'embed_url')
   String embedUrl;
 
-  Card(this.url,this.title,this.description,this.type,this.authorName,this.authorUrl,this.providerName,this.providerUrl,this.html,this.width,this.height,this.image,this.embedUrl,);
+  Card(
+    this.url,
+    this.title,
+    this.description,
+    this.type,
+    this.authorName,
+    this.authorUrl,
+    this.providerName,
+    this.providerUrl,
+    this.html,
+    this.width,
+    this.height,
+    this.image,
+    this.embedUrl,
+  );
 
-  factory Card.fromJson(Map<String, dynamic> srcJson) => _$CardFromJson(srcJson);
+  factory Card.fromJson(Map<String, dynamic> srcJson) =>
+      _$CardFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$CardToJson(this);
-
 }
 
-  
+@JsonSerializable()
+class Poll extends Object {
+  @JsonKey(name: 'id')
+  String id;
+
+  @JsonKey(name: 'expires_at')
+  String expiresAt;
+
+  @JsonKey(name: 'expired')
+  bool expired;
+
+  @JsonKey(name: 'multiple')
+  bool multiple;
+
+  @JsonKey(name: 'votes_count')
+  int votesCount;
+
+  @JsonKey(name: 'voted')
+  bool voted;
+
+  @JsonKey(name: 'own_votes')
+  List<dynamic> ownVotes;
+
+  @JsonKey(name: 'options')
+  List<dynamic> options;
+
+  @JsonKey(name: 'emojis')
+  List<dynamic> emojis;
+
+  Poll({this.id,this.expiresAt,this.expired,this.multiple,this.votesCount,this.voted,this.ownVotes,this.options,this.emojis});
+
+  factory Poll.fromJson(Map<String, dynamic> srcJson) =>
+      _$PollFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$PollToJson(this);
+}

@@ -9,7 +9,7 @@ class Vote {
   var option3Enabled = false;
   var option4Enabled = false;
 
-  var expiresIn = 300;
+  var expiresIn = 86400;
   var expiresInString = '1天';
 
   var multiChoice = false;
