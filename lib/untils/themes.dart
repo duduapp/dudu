@@ -5,8 +5,11 @@ var defaultTheme = ThemeData(
   toggleableActiveColor: Color.fromRGBO(0, 0, 0, 60),
   appBarTheme: AppBarTheme(elevation: 1.0),
   dialogTheme: DialogTheme(),
-  popupMenuTheme: PopupMenuThemeData(color: Colors.grey),
+  popupMenuTheme: PopupMenuThemeData(color: Colors.white),
   inputDecorationTheme: InputDecorationTheme(fillColor: Color.fromRGBO(240, 240, 240, 1)),
-  backgroundColor: Color.fromRGBO(240, 240, 240, 1)
+  backgroundColor: Color.fromRGBO(240, 240, 240, 1),
+  buttonColor: Colors.grey[500],
+
+
   
 );

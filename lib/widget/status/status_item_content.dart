@@ -69,19 +69,16 @@ class _StatusItemContentState extends State<StatusItemContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Column(children: <Widget>[
-        Html(
-          data: widget.data.content,
-          onLinkTap: (url) {
-            print('点击到的链接：' + url);
-          },
-        ),
-        StatusItemMedia(widget.data),
-        StatusItemPoll(widget.data.poll)
-      ],),
-    );
+    return Column(children: <Widget>[
+      Html(
+        data: widget.data.content,
+        onLinkTap: (url) {
+          print('点击到的链接：' + url);
+        },
+      ),
+      StatusItemMedia(widget.data),
+      StatusItemPoll(widget.data.poll)
+    ],);
   }
 
 

@@ -18,7 +18,7 @@ class StatusItemHeader extends StatelessWidget {
     return Row(
       children: <Widget>[
         Padding(
-            padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+            padding: EdgeInsets.fromLTRB(0, 15, 15, 0),
             child: GestureDetector(
               onTap: () {
                 AppNavigate.push(context, UserMessage(account: data.account));

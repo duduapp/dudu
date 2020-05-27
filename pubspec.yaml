@@ -38,6 +38,7 @@ dependencies:
   image_gallery_saver: ^1.2.2
   chewie: ^0.9.10
   path_provider: ^1.6.9
+  like_button: ^0.2.0
 
 
 dev_dependencies:
