@@ -16,6 +16,7 @@ StatusItemData _$StatusItemDataFromJson(Map<String, dynamic> json) {
       json['language'] as String,
       json['uri'] as String,
       json['content'] as String,
+      json['text'] as String,
       json['url'] as String,
       json['replies_count'] as int,
       json['reblogs_count'] as int,
@@ -23,6 +24,7 @@ StatusItemData _$StatusItemDataFromJson(Map<String, dynamic> json) {
       json['favourited'] as bool,
       json['reblogged'] as bool,
       json['muted'] as bool,
+      json['bookmarked'] as bool,
       json['application'] == null
           ? null
           : Application.fromJson(json['application'] as Map<String, dynamic>),
@@ -51,6 +53,7 @@ Map<String, dynamic> _$StatusItemDataToJson(StatusItemData instance) =>
       'language': instance.language,
       'uri': instance.uri,
       'content': instance.content,
+      'text': instance.text,
       'url': instance.url,
       'replies_count': instance.repliesCount,
       'reblogs_count': instance.reblogsCount,
@@ -58,6 +61,7 @@ Map<String, dynamic> _$StatusItemDataToJson(StatusItemData instance) =>
       'favourited': instance.favourited,
       'reblogged': instance.reblogged,
       'muted': instance.muted,
+      'bookmarked': instance.bookmarked,
       'application': instance.application,
       'account': instance.account,
       'media_attachments': instance.mediaAttachments,

@@ -29,6 +29,9 @@ class StatusItemData extends Object {
   @JsonKey(name: 'content')
   String content;
 
+  @JsonKey(name: 'text')
+  String text;
+
   @JsonKey(name: 'url')
   String url;
 
@@ -49,6 +52,9 @@ class StatusItemData extends Object {
 
   @JsonKey(name: 'muted')
   bool muted;
+
+  @JsonKey(name: 'bookmarked')
+  bool bookmarked;
 
   @JsonKey(name: 'application')
   Application application;
@@ -83,6 +89,7 @@ class StatusItemData extends Object {
     this.language,
     this.uri,
     this.content,
+    this.text,
     this.url,
     this.repliesCount,
     this.reblogsCount,
@@ -90,6 +97,7 @@ class StatusItemData extends Object {
     this.favourited,
     this.reblogged,
     this.muted,
+    this.bookmarked,
     this.application,
     this.account,
     this.mediaAttachments,

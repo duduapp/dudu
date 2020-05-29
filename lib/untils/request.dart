@@ -32,16 +32,20 @@ class Request {
     }
   }
 
-  static Future post({String url, Object params}) async {
+  static Future post({String url, Object params,String errMsg}) async {
     var dio = Request.createDio();
-
-    Response response = await dio.post(url, data: params);
-    if (response.statusCode != 200) {
-      var errorMsg = "网络请求错误,状态码:" + response.statusCode.toString();
-      showTotast(errorMsg);
-    } else if (response.statusCode == 200 && response != null) {
+    try {
+      Response response = await dio.post(url, data: params);
       return response.data;
+    } catch (e) {
+      if (errMsg != null) {
+        showTotast(errMsg);
+      }
     }
+
+//      var errorMsg = "网络请求错误,状态码:" + response.statusCode.toString();
+//      showTotast(errorMsg);
+
   }
 
   static Future put({String url, Object params}) async {

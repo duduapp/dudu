@@ -1,8 +1,11 @@
 
+import 'package:fastodon/api/accounts_api.dart';
+import 'package:fastodon/api/status_api.dart';
 import 'package:fastodon/pages/home/new_article.dart';
 import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/models/article_item.dart';
+import 'package:flutter/services.dart';
 import 'package:like_button/like_button.dart';
 
 class StatusItemAction extends StatefulWidget {
@@ -27,6 +30,34 @@ class _StatusItemActionState extends State<StatusItemAction> {
     requestFavorite(isLiked);
 
     return !isLiked;
+  }
+
+  Future<bool> _onPressReblog(bool isLiked) async{
+    if (isLiked)
+      StatusApi.unReblog(widget.item.id);
+    else
+      StatusApi.reblog(widget.item.id);
+
+    return !isLiked;
+  }
+
+  Future<bool> _onPressBookmark(bool isLiked) async{
+    if (isLiked)
+      StatusApi.unBookmark(widget.item.id);
+    else
+      StatusApi.bookmark(widget.item.id);
+
+    return !isLiked;
+  }
+
+  _onPressHide() {
+    AccountsApi.mute(widget.item.account.id);
+    AppNavigate.pop(context);
+  }
+
+  _onPressBlock() {
+    AccountsApi.block(widget.item.account.id);
+    AppNavigate.pop(context);
   }
 
   requestFavorite(bool isLiked) async{
@@ -54,7 +85,7 @@ class _StatusItemActionState extends State<StatusItemAction> {
               Icon(Icons.reply, color: buttonColor),
               SizedBox(width: 3),
               Text(
-                '${widget.item.favouritesCount}',
+                '${widget.item.repliesCount}',
                 style:
                     TextStyle(color: buttonColor, fontSize: 12),
               ),
@@ -70,6 +101,7 @@ class _StatusItemActionState extends State<StatusItemAction> {
             isLiked: widget.item.reblogged,
             bubblesColor: BubblesColor(dotPrimaryColor: Colors.blue[700],dotSecondaryColor: Colors.blue[300]),
             circleColor: CircleColor(start: Colors.blue[300],end: Colors.blue[700]),
+            onTap: _onPressReblog,
           ),
           Text('${widget.item.reblogsCount}',
               style:
@@ -88,9 +120,10 @@ class _StatusItemActionState extends State<StatusItemAction> {
           likeBuilder: (bool isLiked) {
             return isLiked ? Icon(Icons.bookmark,color:Colors.green[800]): Icon(Icons.bookmark_border,color: buttonColor,);
           },
-          isLiked: true,
+          isLiked: widget.item.bookmarked,
           bubblesColor: BubblesColor(dotPrimaryColor: Colors.green[700],dotSecondaryColor: Colors.green[300]),
           circleColor: CircleColor(start: Colors.green[300],end: Colors.green[700]),
+          onTap: _onPressBookmark,
         ),
         Spacer(),
         PopupMenuButton(
@@ -98,14 +131,57 @@ class _StatusItemActionState extends State<StatusItemAction> {
           icon: Icon(Icons.more_horiz,color: buttonColor,),
           itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
             new PopupMenuItem<String>(
-                value: 'value01', child: new Text('复制链接')),
+                value: 'copy_url', child: new Text('复制链接')),
             new PopupMenuItem<String>(
-                value: 'value02', child: new Text('复制嘟文')),
+                value: 'copy_content', child: new Text('复制嘟文')),
             new PopupMenuItem<String>(
-                value: 'value03', child: new Text('隐藏')),
+                value: 'hide', child: new Text('隐藏')),
             new PopupMenuItem<String>(
-                value: 'value04', child: new Text('屏蔽'))
+                value: 'block', child: new Text('屏蔽'))
           ],
+          onSelected: (String value) {
+            switch(value) {
+              case 'copy_url':
+                Clipboard.setData(new ClipboardData(text:  widget.item.url));
+                break;
+              case 'copy_content':
+                Clipboard.setData(new ClipboardData(text: StringUntil.removeAllHtmlTags(widget.item.content)));
+                break;
+              case 'hide':
+                showDialog(context: context,builder: (BuildContext context){
+                  return AlertDialog(
+                    content: Text('确定要隐藏${widget.item.account.acct}吗'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('取消'),
+                        onPressed: () => AppNavigate.pop(context),
+                      ),
+                      FlatButton(
+                        child: Text('确定'),
+                        onPressed: _onPressHide,
+                      )
+                    ],
+                  );
+                });
+                break;
+              case "block":
+                showDialog(context: context,builder: (BuildContext context){
+                  return AlertDialog(
+                    content: Text('确定要屏蔽${widget.item.account.acct}吗'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('取消'),
+                        onPressed: () => AppNavigate.pop(context),
+                      ),
+                      FlatButton(
+                        child: Text('确定'),
+                        onPressed: _onPressBlock,
+                      )
+                    ],
+                  );
+                });
+            }
+          },
         )
       ],
     );
