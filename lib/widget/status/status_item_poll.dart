@@ -131,7 +131,7 @@ class _StatusItemPollState extends State<StatusItemPoll> {
   getRemainingTime() {
     var expireAt = DateTime.parse(poll.expiresAt);
     var diff = expireAt.difference(DateTime.now());
-    return diff.inDays > 0 ? '剩余${diff.inDays}天': '剩余${diff.inHours}小时';
+    return diff.inDays > 0 ? '剩余${diff.inDays}天': diff.inHours > 0 ? '剩余${diff.inHours}小时' :'剩余${diff.inMinutes}分钟';
   }
 
   Widget optionRow(double pententage, String title) {
