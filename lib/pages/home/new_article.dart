@@ -54,7 +54,7 @@ class _NewArticleState extends State<NewArticle> {
         _myAcc = accMsg;
       });
     }
-    _getEmojis();
+    //_getEmojis();
 
     if (widget.replyTo != null) {
       _controller.text = getMentionString();

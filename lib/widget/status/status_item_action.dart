@@ -52,11 +52,13 @@ class _StatusItemActionState extends State<StatusItemAction> {
 
   _onPressHide() {
     AccountsApi.mute(widget.item.account.id);
+    eventBus.emit(EventBusKey.muteAccount,{'account_id':widget.item.account.id,'from_status_id':widget.item.id});
     AppNavigate.pop(context);
   }
 
   _onPressBlock() {
     AccountsApi.block(widget.item.account.id);
+    eventBus.emit(EventBusKey.blockAccount,{'account_id':widget.item.account.id,'from_status_id':widget.item.id});
     AppNavigate.pop(context);
   }
 

@@ -46,6 +46,21 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
     eventBus.on(widget.type, (arg) {
         _scrollController.jumpTo(0);
     });
+
+    eventBus.on(EventBusKey.muteAccount,(arg){
+      _removeByAccountId(arg['account_id']);
+
+    });
+    
+    eventBus.on(EventBusKey.blockAccount,(arg) {
+      _removeByAccountId(arg['account_id']);
+    });
+  }
+  
+  _removeByAccountId(String accountId) {
+    setState(() {
+      _dataList.removeWhere((element) => element['account']['id'] == accountId);
+    });
   }
 
   Future<void> _onLoad() async{
@@ -163,6 +178,8 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
   @override
   void dispose() {
     eventBus.off(widget.type);
+    eventBus.off(EventBusKey.muteAccount);
+    eventBus.off(EventBusKey.blockAccount);
     super.dispose();
   }
 }
