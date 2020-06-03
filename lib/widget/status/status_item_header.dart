@@ -37,7 +37,7 @@ class StatusItemHeader extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Flexible(child: Text(StringUntil.displayName(data.account), style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),overflow: TextOverflow.ellipsis)),
+                    Flexible(child: Text(StringUntil.displayName(data.account), style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),overflow: TextOverflow.ellipsis),flex: 2,),
                     Flexible(
                       child: Padding(
                         padding: EdgeInsets.only(right: 15),

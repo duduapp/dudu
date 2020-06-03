@@ -72,16 +72,30 @@ class _StatusItemState extends State<StatusItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(15),
+      color: Theme.of(context).primaryColor,
+      padding: EdgeInsets.fromLTRB(15,0,15,0),
+      margin: EdgeInsets.only(bottom: 8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          StatusItemHeader(widget.item),
-          StatusItemContent(widget.item),
+          if (widget.item.reblog != null) reblogHeader(),
+          StatusItemHeader(widget.item.reblog ?? widget.item),
+          StatusItemContent(widget.item.reblog ?? widget.item),
           StatusItemAction(
-            item: widget.item,
+            item: widget.item.reblog ?? widget.item,
           ),
-          SizedBox(height: 10)
+        ],
+      ),
+    );
+  }
+
+  Widget reblogHeader() {
+    return Container(
+      padding: EdgeInsets.only(top: 8),
+      child: Row(
+        children: <Widget>[
+          Icon(Icons.repeat),
+          Text('${StringUntil.displayName(widget.item.account)}转嘟了')
         ],
       ),
     );

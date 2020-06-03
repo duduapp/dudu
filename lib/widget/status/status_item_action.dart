@@ -75,117 +75,120 @@ class _StatusItemActionState extends State<StatusItemAction> {
   @override
   Widget build(BuildContext context) {
     var buttonColor = Theme.of(context).buttonColor;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        InkWell(
-          onTap: () {
-            AppNavigate.push(context, NewArticle(replyTo: widget.item));
-          },
-          child: Row(
-            children: <Widget>[
-              Icon(Icons.reply, color: buttonColor),
-              SizedBox(width: 3),
-              Text(
-                '${widget.item.repliesCount}',
-                style:
-                    TextStyle(color: buttonColor, fontSize: 12),
-              ),
-            ],
+    return Container(
+      height: 38,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          InkWell(
+            onTap: () {
+              AppNavigate.push(context, NewArticle(replyTo: widget.item));
+            },
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.reply, color: buttonColor,size: 20,),
+                SizedBox(width: 3),
+                Text(
+                  '${widget.item.repliesCount}',
+                  style:
+                      TextStyle(color: buttonColor, fontSize: 12),
+                ),
+              ],
+            ),
           ),
-        ),
-        Spacer(),
-        Row(children: [
+          Spacer(),
+          Row(children: [
+            LikeButton(
+              likeBuilder: (bool isLiked) {
+                return isLiked ? Icon(Icons.repeat_one,color: Colors.blue[800],): Icon(Icons.repeat,color: buttonColor,size: 20,);
+              },
+              isLiked: widget.item.reblogged,
+              bubblesColor: BubblesColor(dotPrimaryColor: Colors.blue[700],dotSecondaryColor: Colors.blue[300]),
+              circleColor: CircleColor(start: Colors.blue[300],end: Colors.blue[700]),
+              onTap: _onPressReblog,
+            ),
+            Text('${widget.item.reblogsCount}',
+                style:
+                    TextStyle(color: buttonColor, fontSize: 12))
+          ]),
+          Spacer(),
           LikeButton(
             likeBuilder: (bool isLiked) {
-              return isLiked ? Icon(Icons.repeat_one,color: Colors.blue[800],): Icon(Icons.repeat,color: buttonColor,);
+              return isLiked ? Icon(Icons.star,color: Colors.yellow[800],): Icon(Icons.star_border,color: buttonColor,size: 20,);
             },
-            isLiked: widget.item.reblogged,
-            bubblesColor: BubblesColor(dotPrimaryColor: Colors.blue[700],dotSecondaryColor: Colors.blue[300]),
-            circleColor: CircleColor(start: Colors.blue[300],end: Colors.blue[700]),
-            onTap: _onPressReblog,
+            isLiked: widget.item.favourited,
+            onTap: _onPressFavoutite,
           ),
-          Text('${widget.item.reblogsCount}',
-              style:
-                  TextStyle(color: buttonColor, fontSize: 12))
-        ]),
-        Spacer(),
-        LikeButton(
-          likeBuilder: (bool isLiked) {
-            return isLiked ? Icon(Icons.star,color: Colors.yellow[800],): Icon(Icons.star_border,color: buttonColor,);
-          },
-          isLiked: widget.item.favourited,
-          onTap: _onPressFavoutite,
-        ),
-        Spacer(flex: 1,),
-        LikeButton(
-          likeBuilder: (bool isLiked) {
-            return isLiked ? Icon(Icons.bookmark,color:Colors.green[800]): Icon(Icons.bookmark_border,color: buttonColor,);
-          },
-          isLiked: widget.item.bookmarked,
-          bubblesColor: BubblesColor(dotPrimaryColor: Colors.green[700],dotSecondaryColor: Colors.green[300]),
-          circleColor: CircleColor(start: Colors.green[300],end: Colors.green[700]),
-          onTap: _onPressBookmark,
-        ),
-        Spacer(),
-        PopupMenuButton(
-          offset: Offset(0,35),
-          icon: Icon(Icons.more_horiz,color: buttonColor,),
-          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-            new PopupMenuItem<String>(
-                value: 'copy_url', child: new Text('复制链接')),
-            new PopupMenuItem<String>(
-                value: 'copy_content', child: new Text('复制嘟文')),
-            new PopupMenuItem<String>(
-                value: 'hide', child: new Text('隐藏')),
-            new PopupMenuItem<String>(
-                value: 'block', child: new Text('屏蔽'))
-          ],
-          onSelected: (String value) {
-            switch(value) {
-              case 'copy_url':
-                Clipboard.setData(new ClipboardData(text:  widget.item.url));
-                break;
-              case 'copy_content':
-                Clipboard.setData(new ClipboardData(text: StringUntil.removeAllHtmlTags(widget.item.content)));
-                break;
-              case 'hide':
-                showDialog(context: context,builder: (BuildContext context){
-                  return AlertDialog(
-                    content: Text('确定要隐藏${widget.item.account.acct}吗'),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text('取消'),
-                        onPressed: () => AppNavigate.pop(context),
-                      ),
-                      FlatButton(
-                        child: Text('确定'),
-                        onPressed: _onPressHide,
-                      )
-                    ],
-                  );
-                });
-                break;
-              case "block":
-                showDialog(context: context,builder: (BuildContext context){
-                  return AlertDialog(
-                    content: Text('确定要屏蔽${widget.item.account.acct}吗'),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text('取消'),
-                        onPressed: () => AppNavigate.pop(context),
-                      ),
-                      FlatButton(
-                        child: Text('确定'),
-                        onPressed: _onPressBlock,
-                      )
-                    ],
-                  );
-                });
-            }
-          },
-        )
-      ],
+          Spacer(flex: 1,),
+          LikeButton(
+            likeBuilder: (bool isLiked) {
+              return isLiked ? Icon(Icons.bookmark,color:Colors.green[800]): Icon(Icons.bookmark_border,color: buttonColor,size: 20,);
+            },
+            isLiked: widget.item.bookmarked,
+            bubblesColor: BubblesColor(dotPrimaryColor: Colors.green[700],dotSecondaryColor: Colors.green[300]),
+            circleColor: CircleColor(start: Colors.green[300],end: Colors.green[700]),
+            onTap: _onPressBookmark,
+          ),
+          Spacer(),
+          PopupMenuButton(
+            offset: Offset(0,35),
+            icon: Icon(Icons.more_horiz,color: buttonColor,size: 20,),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              new PopupMenuItem<String>(
+                  value: 'copy_url', child: new Text('复制链接')),
+              new PopupMenuItem<String>(
+                  value: 'copy_content', child: new Text('复制嘟文')),
+              new PopupMenuItem<String>(
+                  value: 'hide', child: new Text('隐藏')),
+              new PopupMenuItem<String>(
+                  value: 'block', child: new Text('屏蔽'))
+            ],
+            onSelected: (String value) {
+              switch(value) {
+                case 'copy_url':
+                  Clipboard.setData(new ClipboardData(text:  widget.item.url));
+                  break;
+                case 'copy_content':
+                  Clipboard.setData(new ClipboardData(text: StringUntil.removeAllHtmlTags(widget.item.content)));
+                  break;
+                case 'hide':
+                  showDialog(context: context,builder: (BuildContext context){
+                    return AlertDialog(
+                      content: Text('确定要隐藏${widget.item.account.acct}吗'),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('取消'),
+                          onPressed: () => AppNavigate.pop(context),
+                        ),
+                        FlatButton(
+                          child: Text('确定'),
+                          onPressed: _onPressHide,
+                        )
+                      ],
+                    );
+                  });
+                  break;
+                case "block":
+                  showDialog(context: context,builder: (BuildContext context){
+                    return AlertDialog(
+                      content: Text('确定要屏蔽${widget.item.account.acct}吗'),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('取消'),
+                          onPressed: () => AppNavigate.pop(context),
+                        ),
+                        FlatButton(
+                          child: Text('确定'),
+                          onPressed: _onPressBlock,
+                        )
+                      ],
+                    );
+                  });
+              }
+            },
+          )
+        ],
+      ),
     );
   }
 }

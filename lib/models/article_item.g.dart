@@ -10,6 +10,8 @@ StatusItemData _$StatusItemDataFromJson(Map<String, dynamic> json) {
   return StatusItemData(
       json['id'] as String,
       json['created_at'] as String,
+      json['in_reply_to_id'] as String,
+      json['in_reply_to_account_id'] as String,
       json['sensitive'] as bool,
       json['spoiler_text'] as String,
       json['visibility'] as String,
@@ -25,6 +27,9 @@ StatusItemData _$StatusItemDataFromJson(Map<String, dynamic> json) {
       json['reblogged'] as bool,
       json['muted'] as bool,
       json['bookmarked'] as bool,
+      json['reblog'] == null
+          ? null
+          : StatusItemData.fromJson(json['reblog'] as Map<String, dynamic>),
       json['application'] == null
           ? null
           : Application.fromJson(json['application'] as Map<String, dynamic>),
@@ -47,6 +52,8 @@ Map<String, dynamic> _$StatusItemDataToJson(StatusItemData instance) =>
     <String, dynamic>{
       'id': instance.id,
       'created_at': instance.createdAt,
+      'in_reply_to_id': instance.inReplyToId,
+      'in_reply_to_account_id': instance.inReplyToAccountId,
       'sensitive': instance.sensitive,
       'spoiler_text': instance.spoilerText,
       'visibility': instance.visibility,
@@ -62,6 +69,7 @@ Map<String, dynamic> _$StatusItemDataToJson(StatusItemData instance) =>
       'reblogged': instance.reblogged,
       'muted': instance.muted,
       'bookmarked': instance.bookmarked,
+      'reblog': instance.reblog,
       'application': instance.application,
       'account': instance.account,
       'media_attachments': instance.mediaAttachments,

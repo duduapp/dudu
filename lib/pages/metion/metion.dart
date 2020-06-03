@@ -1,3 +1,4 @@
+import 'package:fastodon/widget/easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/refresh_load_listview.dart';
@@ -61,7 +62,7 @@ class _MetionState extends State<Metion> with AutomaticKeepAliveClientMixin {
       ),
       body: LoadingWidget(
         endLoading: _canLoadWidget,
-        childWidget: RefreshLoadListView(
+        childWidget: EasyRefreshListView(
           requestUrl: Api.Notifications,
           buildRow: row,
         ),

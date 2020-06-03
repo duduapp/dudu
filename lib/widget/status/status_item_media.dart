@@ -169,46 +169,49 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   Widget imageWrapper(Widget widget) {
     var primaryColor = Theme.of(context).primaryColor;
     var backgroundColor = Theme.of(context).backgroundColor;
-    return Stack(
-      children: <Widget>[
-        widget,
-        Align(
-          alignment: Alignment.topLeft,
-          child: hideImage == false
-              ? IconButton(
-                  icon: Icon(
-                    Icons.remove_red_eye,
-                    color: primaryColor,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      hideImage = true;
-                    });
-                  },
-                )
-              : Container(),
-        ),
-        if (hideImage)
-        Positioned.fill(
-          child: Align(
-            alignment: Alignment.center,
-            child: InkWell(
-              onTap: () {setState(() {
-                hideImage = false;
-              });},
-              child: Container(
-                padding: EdgeInsets.all(8.0),
-                decoration: new BoxDecoration(
-                    //color is transparent so that it does not blend with the actual color specified
-                    borderRadius: const BorderRadius.all(const Radius.circular(8.0)),
-                    color: new Color.fromRGBO(240, 240, 240, 0.5) // Specifies the background color and the opacity
-                ),
-                child: Text(sensitive ? '敏感内容' : '已隐藏的照片或视频')),
-            ),
-            ),
+    return Padding(
+      padding: EdgeInsets.only(top: 7),
+      child: Stack(
+        children: <Widget>[
+          widget,
+          Align(
+            alignment: Alignment.topLeft,
+            child: hideImage == false
+                ? IconButton(
+                    icon: Icon(
+                      Icons.remove_red_eye,
+                      color: primaryColor,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        hideImage = true;
+                      });
+                    },
+                  )
+                : Container(),
           ),
+          if (hideImage)
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.center,
+              child: InkWell(
+                onTap: () {setState(() {
+                  hideImage = false;
+                });},
+                child: Container(
+                  padding: EdgeInsets.all(8.0),
+                  decoration: new BoxDecoration(
+                      //color is transparent so that it does not blend with the actual color specified
+                      borderRadius: const BorderRadius.all(const Radius.circular(8.0)),
+                      color: new Color.fromRGBO(240, 240, 240, 0.5) // Specifies the background color and the opacity
+                  ),
+                  child: Text(sensitive ? '敏感内容' : '已隐藏的照片或视频')),
+              ),
+              ),
+            ),
 
-      ],
+        ],
+      ),
     );
   }
 

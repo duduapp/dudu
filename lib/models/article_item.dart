@@ -11,6 +11,12 @@ class StatusItemData extends Object {
   @JsonKey(name: 'created_at')
   String createdAt;
 
+  @JsonKey(name: 'in_reply_to_id')
+  String inReplyToId;
+
+  @JsonKey(name: 'in_reply_to_account_id')
+  String inReplyToAccountId;
+
   @JsonKey(name: 'sensitive')
   bool sensitive;
 
@@ -56,6 +62,9 @@ class StatusItemData extends Object {
   @JsonKey(name: 'bookmarked')
   bool bookmarked;
 
+  @JsonKey(name: 'reblog')
+  StatusItemData reblog;
+
   @JsonKey(name: 'application')
   Application application;
 
@@ -83,6 +92,8 @@ class StatusItemData extends Object {
   StatusItemData(
     this.id,
     this.createdAt,
+    this.inReplyToId,
+    this.inReplyToAccountId,
     this.sensitive,
     this.spoilerText,
     this.visibility,
@@ -98,6 +109,7 @@ class StatusItemData extends Object {
     this.reblogged,
     this.muted,
     this.bookmarked,
+    this.reblog,
     this.application,
     this.account,
     this.mediaAttachments,

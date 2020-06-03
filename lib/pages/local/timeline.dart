@@ -74,13 +74,16 @@ class _TimelineState extends State<Timeline>
           actions: <Widget>[],
         ),
       ),
-      body: LoadingWidget(
-          childWidget: EasyRefreshListView(
-            requestUrl: url,
-            buildRow: row,
-            type: widget.type,
-          ),
-          endLoading: _showTab),
+      body: Container(
+        color: Theme.of(context).backgroundColor,
+        child: LoadingWidget(
+            childWidget: EasyRefreshListView(
+              requestUrl: url,
+              buildRow: row,
+              type: widget.type,
+            ),
+            endLoading: _showTab),
+      ),
     );
   }
 

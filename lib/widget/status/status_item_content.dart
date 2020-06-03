@@ -5,6 +5,7 @@ import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/untils/my_color.dart';
 import 'package:fastodon/widget/status/status_item_media.dart';
 import 'package:fastodon/widget/status/status_item_poll.dart';
+import 'package:fastodon/widget/status/status_item_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
@@ -23,7 +24,7 @@ class _StatusItemContentState extends State<StatusItemContent> {
   Widget articleMedia() {
     if (widget.data.card != null && widget.data.card.image != null) {
       return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.fromLTRB(8,8,8,0),
         child: Center(
           child: Container(
             padding: EdgeInsets.all(15),
@@ -70,12 +71,7 @@ class _StatusItemContentState extends State<StatusItemContent> {
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
-      Html(
-        data: widget.data.content,
-        onLinkTap: (url) {
-          print('点击到的链接：' + url);
-        },
-      ),
+      StatusItemText(widget.data),
       StatusItemMedia(widget.data),
       StatusItemPoll(widget.data.poll)
     ],);
