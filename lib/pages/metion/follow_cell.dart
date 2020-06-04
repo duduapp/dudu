@@ -13,21 +13,23 @@ class FollowCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: MyColor.widgetDefaultColor,
+      margin: EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SizedBox(height: 10,),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
-                width: 80,
+                padding: EdgeInsets.only(left: 15),
                 child: Center(
                   child: Icon(Icons.remove_red_eye),
                 ),
               ),
+              SizedBox(width: 5,),
               Expanded(
-                child: Text(StringUntil.displayName(item.account) + '开始关注你了', style: TextStyle(fontSize: 14),),
+                child: Text(StringUtil.displayName(item.account) + '开始关注你了', style: TextStyle(fontSize: 14),),
               ),
             ],
           ),
@@ -43,7 +45,7 @@ class FollowCell extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(StringUntil.displayName(item.account), style: TextStyle(fontSize: 16)),
+                      Text(StringUtil.displayName(item.account), style: TextStyle(fontSize: 16)),
                       Text('@' + item.account.username,  style: TextStyle(fontSize: 13, color: MyColor.greyText)),
                     ],
                   )

@@ -198,7 +198,7 @@ class _UserMessageState extends State<UserMessage> {
                   Avatar(url: widget.account.avatar),
                   SizedBox(height: 5),
                   Text(
-                    StringUntil.displayName(widget.account),
+                    StringUtil.displayName(widget.account),
                     style: TextStyle(color: MyColor.widgetDefaultColor, fontSize: 15),
                   ),
                   Container(

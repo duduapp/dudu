@@ -516,7 +516,7 @@ class _NewArticleState extends State<NewArticle> {
         centerTitle: true,
         actions: <Widget>[
           Container(
-            child: Text(StringUntil.displayName(_myAcc)),
+            child: Text(StringUtil.displayName(_myAcc)),
             padding: EdgeInsets.only(top: 20, right: 10),
           ),
           Container(

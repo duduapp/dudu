@@ -1,6 +1,6 @@
 import 'package:fastodon/models/owner_account.dart';
 
-class StringUntil {
+class StringUtil {
   static String displayName(OwnerAccount item) {
     String displayName = '';
     if (item.displayName == '' || item.displayName.length == 0) {

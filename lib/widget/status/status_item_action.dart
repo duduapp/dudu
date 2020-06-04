@@ -149,7 +149,7 @@ class _StatusItemActionState extends State<StatusItemAction> {
                   Clipboard.setData(new ClipboardData(text:  widget.item.url));
                   break;
                 case 'copy_content':
-                  Clipboard.setData(new ClipboardData(text: StringUntil.removeAllHtmlTags(widget.item.content)));
+                  Clipboard.setData(new ClipboardData(text: StringUtil.removeAllHtmlTags(widget.item.content)));
                   break;
                 case 'hide':
                   showDialog(context: context,builder: (BuildContext context){

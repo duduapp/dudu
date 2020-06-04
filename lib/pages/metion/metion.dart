@@ -41,6 +41,7 @@ class _MetionState extends State<Metion> with AutomaticKeepAliveClientMixin {
         item: item,
       );
     } else if (item.type == 'favourite') {
+      return StatusItem(item: item.status,refIcon: Icons.star, refString:'${StringUtil.displayName(item.account)}收藏了你的嘟文');
       return FavouriteCell(
         item: item,
       );
@@ -48,7 +49,12 @@ class _MetionState extends State<Metion> with AutomaticKeepAliveClientMixin {
       return StatusItem(
         item: item.status,
       );
-    }else {
+    } else if (item.type == 'poll') {
+      return StatusItem(item: item.status,refIcon: Icons.poll,refString: '你创建的投票已结束',);
+
+    } else if (item.type == 'reblog') {
+      return StatusItem(item: item.status,refIcon: Icons.repeat,refString: '${StringUtil.displayName(item.account)}转嘟了你的嘟文',);
+    } else {
       return Container();
     }
   }

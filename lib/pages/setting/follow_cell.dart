@@ -36,7 +36,7 @@ class _FollowCellState extends State<FollowCell> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(StringUntil.displayName(widget.item), style: TextStyle(fontSize: 16)),
+                    Text(StringUtil.displayName(widget.item), style: TextStyle(fontSize: 16)),
                     Text('@' + widget.item.username,  style: TextStyle(fontSize: 13, color: MyColor.greyText)),
                   ],
                 )

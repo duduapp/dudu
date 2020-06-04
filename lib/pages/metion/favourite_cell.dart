@@ -28,7 +28,7 @@ class FavouriteCell extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: Text(StringUntil.displayName(item.status.account) + '收藏了你的嘟文', style: TextStyle(fontSize: 14),),
+                child: Text(StringUtil.displayName(item.status.account) + '收藏了你的嘟文', style: TextStyle(fontSize: 14),),
               ),
             ],
           ),
@@ -56,7 +56,7 @@ class FavouriteCell extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(StringUntil.displayName(item.status.account), style: TextStyle(fontSize: 16)),
+                    Text(StringUtil.displayName(item.status.account), style: TextStyle(fontSize: 16)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[

@@ -103,7 +103,7 @@ class ArticleDetail extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(StringUntil.displayName(item.account), style: TextStyle(fontSize: 16)),
+                            Text(StringUtil.displayName(item.account), style: TextStyle(fontSize: 16)),
                           ],
                         ),
                         Row(

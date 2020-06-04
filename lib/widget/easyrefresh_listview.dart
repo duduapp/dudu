@@ -89,6 +89,11 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
         combineList.addAll(data);
       }
       setState(() {
+        if (data.length == 0) {
+          _controller.finishLoad(noMore: true,success: true);
+        } else {
+          _controller.resetLoadState();
+        }
         _dataList = combineList;
        // _controller.resetLoadState();
       });

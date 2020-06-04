@@ -14,8 +14,10 @@ import 'status_item_action.dart';
 import 'article_media.dart';
 
 class StatusItem extends StatefulWidget {
-  StatusItem({Key key, this.item}) : super(key: key);
+  StatusItem({Key key, this.item, this.refIcon, this.refString}) : super(key: key);
   final StatusItemData item;
+  final IconData refIcon; // 用户引用status时显示的图标，比如 显示在status上面的（icon,who转嘟了）
+  final String refString;
 
   @override
   _StatusItemState createState() => _StatusItemState();
@@ -78,7 +80,7 @@ class _StatusItemState extends State<StatusItem> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          if (widget.item.reblog != null) reblogHeader(),
+          refHeader(),
           StatusItemHeader(widget.item.reblog ?? widget.item),
           StatusItemContent(widget.item.reblog ?? widget.item),
           StatusItemAction(
@@ -89,15 +91,24 @@ class _StatusItemState extends State<StatusItem> {
     );
   }
 
-  Widget reblogHeader() {
-    return Container(
+  Widget refHeader() {
+    IconData icon = widget.refIcon;
+    String str = widget.refString;
+
+    if (widget.item.reblog != null) {
+      icon = Icons.repeat;
+      str = '${StringUtil.displayName(widget.item.account)}转嘟了';
+    }
+
+    return (icon != null && str != null) ? Container(
       padding: EdgeInsets.only(top: 8),
       child: Row(
         children: <Widget>[
-          Icon(Icons.repeat),
-          Text('${StringUntil.displayName(widget.item.account)}转嘟了')
+          Icon(icon),
+          SizedBox(width: 5,),
+          Text(str)
         ],
       ),
-    );
+    ) : Container();
   }
 }
