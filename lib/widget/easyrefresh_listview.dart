@@ -1,5 +1,5 @@
 // 下拉刷新和上拉加载
-import 'package:fastodon/pages/local/timeline.dart';
+import 'package:fastodon/pages/timeline/timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -32,15 +32,12 @@ enum ListStatus {
 class _EasyRefreshListViewState extends State<EasyRefreshListView> {
   ScrollController _scrollController = ScrollController();
   List _dataList = [];
-  bool _finishRequest = false;
-  ListStatus _listStatus = ListStatus.normal;
-  
-  EasyRefreshController _controller;
+  EasyRefreshController _controller = EasyRefreshController();
 
   @override
   void initState() {
     super.initState();
-    _controller = EasyRefreshController();
+
     _startRequest(widget.requestUrl);
 
     eventBus.on(widget.type, (arg) {
@@ -100,45 +97,11 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
     });
   }
 
-  Widget buildFooter() {
-    if (_listStatus == ListStatus.normal) {
-      return Container();
-    } else if (_listStatus == ListStatus.loadingData) {
-      return Container(
-        height: 40,
-        child: Center(
-          child: SpinKitThreeBounce(
-            color: MyColor.mainColor,
-            size: 23,
-          ),
-        ),
-      );
-    } else if (_listStatus == ListStatus.noMoreData) {
-      return Container(
-        height: 40,
-        child: Center(
-          child: Text('没有更多数据了'),
-        ),
-      );
-    } else {
-      return Container();
-    }
-  }
+
 
   Widget buildRow(int index) {
-    if (index == _dataList.length - 1) {
-      return Column(
-        children: <Widget>[
-          widget.buildRow(index, _dataList),
-          buildFooter(),
-        ],
-      );
-    } else {
       return widget.buildRow(index, _dataList);
-    }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -153,25 +116,8 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
           ),
         )
       ],
-      header: ClassicalHeader(
-        refreshText: '下拉刷新',
-        refreshReadyText: '释放刷新',
-        refreshingText: '加载中...',
-        refreshedText: '',
-        refreshFailedText: '刷新失败',
-        noMoreText: '没有更多数据',
-        infoText: '更新于 %T',
-      ),
-      footer: ClassicalFooter(
-        enableInfiniteLoad: true,
-        loadText: '拉动加载',
-        loadReadyText: '释放加载',
-        loadingText: '加载中...',
-        loadedText: '',
-        loadFailedText: '加载失败',
-        noMoreText: '没有更多数据了',
-        infoText: '',
-      ),
+      header: AppConfig.listviewHeader,
+      footer: AppConfig.listviewFooter,
       controller: _controller,
       scrollController: _scrollController,
       onRefresh: _onRefresh,

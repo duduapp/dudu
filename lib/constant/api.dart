@@ -10,7 +10,7 @@ class Api {
   static String OwnerAccount = '/api/v1/accounts/verify_credentials'; // 该账号的信息
   static String Notifications = '/api/v1/notifications'; // 获取用户的通知信息
   static String accounts = '/api/v1/accounts';
-  static String PushNewTooT = '/api/v1/statuses'; // 发送一个新文章
+  static String status = '/api/v1/statuses'; // 发送一个新文章
   static String attachMedia = '/api/v1/media';
   static String poll = '/api/v1/polls';
   // 上传媒体文件

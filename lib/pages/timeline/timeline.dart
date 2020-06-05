@@ -5,8 +5,7 @@ import 'package:fastodon/widget/refresh_load_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
 
-import 'local_timeline.dart';
-import 'public_timeline.dart';
+
 
 enum TimelineType {
   home,

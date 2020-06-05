@@ -24,8 +24,7 @@ class StatusItemHeader extends StatelessWidget {
                 AppNavigate.push(context, UserMessage(account: data.account));
               },
               child: Avatar(url: data.account.avatarStatic),
-            )
-        ),
+            )),
         Expanded(
           child: Container(
             height: 50,
@@ -37,21 +36,30 @@ class StatusItemHeader extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Flexible(child: Text(StringUtil.displayName(data.account), style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),overflow: TextOverflow.ellipsis),flex: 2,),
+                    Flexible(
+                      child: Text(StringUtil.displayName(data.account),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis),
+                      flex: 2,
+                    ),
                     Flexible(
                       child: Padding(
                         padding: EdgeInsets.only(right: 15),
-                        child: Text(DateUntil.dateTime(data.createdAt) ,style: TextStyle(fontSize: 13, color: MyColor.greyText),overflow: TextOverflow.ellipsis),
+                        child: Text(DateUntil.dateTime(data.createdAt),
+                            style: TextStyle(
+                                fontSize: 13, color: MyColor.greyText),
+                            overflow: TextOverflow.ellipsis),
                       ),
                     )
                   ],
-
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('@' + data.account.username,  style: TextStyle(fontSize: 13, color: MyColor.greyText)),
-
+                    Text('@' + data.account.username,
+                        style:
+                            TextStyle(fontSize: 13, color: MyColor.greyText)),
                   ],
                 )
               ],
@@ -59,6 +67,46 @@ class StatusItemHeader extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+}
+
+class SubStatusItemHeader extends StatelessWidget {
+  final StatusItemData data;
+
+  SubStatusItemHeader(this.data);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: Row(
+              children: <Widget>[
+                Text(StringUtil.displayName(data.account),
+                    style: TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis),
+                SizedBox(width: 2,),
+                Flexible(
+                  child: Text('@' + data.account.username,
+                      style:
+                      TextStyle(fontSize: 13, color: MyColor.greyText),overflow: TextOverflow.ellipsis),
+                ),
+              ],
+            ),
+          ),
+
+          Padding(
+            padding: EdgeInsets.only(right: 15),
+            child: Text(DateUntil.dateTime(data.createdAt),
+                style: TextStyle(fontSize: 13, color: MyColor.greyText),
+                overflow: TextOverflow.ellipsis),
+          )
+        ],
+      ),
     );
   }
 }

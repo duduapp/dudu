@@ -6,8 +6,7 @@ import 'package:popup_menu/popup_menu.dart';
 
 import 'home/home.dart';
 import 'home/new_article.dart';
-import 'local/timeline.dart';
-import 'local/public_timeline.dart';
+import 'timeline/timeline.dart';
 import 'metion/metion.dart';
 import 'setting/setting.dart';
 

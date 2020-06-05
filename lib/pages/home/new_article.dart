@@ -118,7 +118,7 @@ class _NewArticleState extends State<NewArticle> {
     paramsMap['visibility'] = _visibility;
 
     try {
-      Request.post(url: Api.PushNewTooT, params: paramsMap).then((data) {
+      Request.post(url: Api.status, params: paramsMap).then((data) {
         StatusItemData newItem = StatusItemData.fromJson(data);
         if (newItem != null) {
           eventBus.emit(EventBusKey.HidePresentWidegt, true);
