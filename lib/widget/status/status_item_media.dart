@@ -9,6 +9,7 @@ import 'package:fastodon/pages/common/video_play.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/untils/screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 
 class StatusItemMedia extends StatefulWidget {
@@ -300,14 +301,17 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
     if (type == 'video' || type == 'gifv') {
       to = VideoPlay(widget.images[index]);
     } else {
-       to = PhotoGallery(
-        galleryItems: widget.images,
-        backgroundDecoration: const BoxDecoration(
-          color: Colors.black,
-        ),
-        initialIndex: index,
-        scrollDirection: Axis.horizontal,
-      );
+       to = AnnotatedRegion<SystemUiOverlayStyle>(
+         value: SystemUiOverlayStyle.dark,
+         child: PhotoGallery(
+          galleryItems: widget.images,
+          backgroundDecoration: const BoxDecoration(
+            color: Colors.black,
+          ),
+          initialIndex: index,
+          scrollDirection: Axis.horizontal,
+      ),
+       );
     }
     Navigator.push(
       context,

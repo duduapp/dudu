@@ -7,7 +7,6 @@ import 'package:fastodon/models/media_attachment.dart';
 import 'package:fastodon/untils/app_navigate.dart';
 import 'package:fastodon/untils/dialog_util.dart';
 import 'package:fastodon/widget/common/media_detail.dart';
-import 'package:fastodon/widget/status_bar_color.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -53,15 +52,11 @@ class _VideoPlayState extends State<VideoPlay> {
     return MediaDetail(
       child: Container(
         color: Colors.black,
-        child: StatusBarColor(
-          child: Hero(
-            tag: widget.media.id,
-            child: Chewie(
-              controller: chewieController,
-            ),
+        child: Hero(
+          tag: widget.media.id,
+          child: Chewie(
+            controller: chewieController,
           ),
-          fromColor: Colors.white,
-          toColor: Colors.black,
         ),
       ),
       title: "1/1",

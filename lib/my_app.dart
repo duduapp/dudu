@@ -2,6 +2,7 @@ import 'package:fastodon/untils/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fastodon/public.dart';
+import 'package:flutter/services.dart';
 import 'package:nav_router/nav_router.dart';
 
 import 'pages/root_page.dart';
@@ -72,6 +73,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+    ));
     return MaterialApp(
       title: 'fastondon',
       theme: defaultTheme,

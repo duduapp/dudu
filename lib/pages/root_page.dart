@@ -19,6 +19,7 @@ class RootPage extends StatefulWidget {
   final Function hideWidget;
   final Function showNewArtical;
 
+
   @override
   _RootPageState createState() => _RootPageState();
 }
@@ -143,23 +144,6 @@ class _RootPageState extends State<RootPage> {
             });
           },
         ),
-        floatingActionButton: _canLoadWidget == true
-            ? Builder(builder: (BuildContext context) {
-                return FloatingActionButton(
-                  child: Icon(Icons.mode_edit),
-                  foregroundColor: Colors.white,
-                  backgroundColor: activeColor,
-                  heroTag: null,
-                  elevation: 7.0,
-                  highlightElevation: 14.0,
-                  onPressed: () {
-                    showNewArtical();
-                  },
-                  mini: false,
-                  shape: new CircleBorder(),
-                  isExtended: false,
-                );
-              })
-            : Container());
+    );
   }
 }

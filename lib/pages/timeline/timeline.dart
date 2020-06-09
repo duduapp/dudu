@@ -1,4 +1,5 @@
 import 'package:fastodon/models/article_item.dart';
+import 'package:fastodon/pages/home/new_article.dart';
 import 'package:fastodon/widget/easyrefresh_listview.dart';
 import 'package:fastodon/widget/status/status_item.dart';
 import 'package:fastodon/widget/refresh_load_listview.dart';
@@ -70,7 +71,10 @@ class _TimelineState extends State<Timeline>
         child: AppBar(
           title: InkWell(child: Text(title),onTap: () => eventBus.emit(widget.type),),
           centerTitle: true,
-          actions: <Widget>[],
+          actions: <Widget>[
+            IconButton(icon: Icon(Icons.search),onPressed: (){},),
+            IconButton(icon: Icon(Icons.add),onPressed: (){AppNavigate.push(context, NewArticle());},)
+          ],
         ),
       ),
       body: Container(

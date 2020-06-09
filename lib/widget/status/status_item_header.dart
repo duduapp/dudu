@@ -83,20 +83,30 @@ class SubStatusItemHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: Row(
-              children: <Widget>[
-                Text(StringUtil.displayName(data.account),
-                    style: TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
-                    overflow: TextOverflow.ellipsis),
-                SizedBox(width: 2,),
-                Flexible(
-                  child: Text('@' + data.account.username,
-                      style:
-                      TextStyle(fontSize: 13, color: MyColor.greyText),overflow: TextOverflow.ellipsis),
-                ),
-              ],
-            ),
+            child:
+            RichText(
+              maxLines: 1,
+              text: TextSpan(
+                text: StringUtil.displayName(data.account)+' ',
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold,color: Colors.grey[850]),
+                children: <TextSpan>[
+                  TextSpan(text: '@' + data.account.username, style: TextStyle(fontSize: 13, color: MyColor.greyText))
+                ]
+              ),
+              overflow: TextOverflow.ellipsis,
+            )
+//            Row(
+//              children: <Widget>[
+//                Text(StringUtil.displayName(data.account),
+//                    style: TextStyle(
+//                        fontSize: 16, fontWeight: FontWeight.bold),
+//                    overflow: TextOverflow.ellipsis),
+//                SizedBox(width: 2,),
+//                Text('@' + data.account.username,
+//                    style:
+//                    TextStyle(fontSize: 13, color: MyColor.greyText),overflow: TextOverflow.ellipsis),
+//              ],
+//            ),
           ),
 
           Padding(

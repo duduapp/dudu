@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nav_router/nav_router.dart' as router;
 
 class AppNavigate {
-  static push(BuildContext context, Widget scene, {Function callBack}) {
+  static push(BuildContext context, Widget scene, {Function callBack,Color statusBarColor}) {
     // Navigator.push(
     //   context,
     //   MaterialPageRoute(
@@ -11,7 +12,19 @@ class AppNavigate {
     // ).then((data) {
     //   callBack(data);
     // });
-    router.routePush(scene).then((data) {
+    Widget widget;
+    if (statusBarColor != null) {
+      widget = AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          statusBarColor: statusBarColor,
+        ),
+        child:scene,
+      );
+    } else {
+      widget = scene;
+    }
+
+    router.routePush(widget).then((data) {
       callBack(data);
     });
   }

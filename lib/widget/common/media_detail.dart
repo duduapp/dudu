@@ -2,7 +2,6 @@
 
 import 'package:fastodon/untils/app_navigate.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
 class MediaDetail extends StatelessWidget {
   final Widget child;
@@ -12,14 +11,12 @@ class MediaDetail extends StatelessWidget {
   MediaDetail({this.child,this.title,this.onDownloadClick});
 
   Future<bool> _onWillPop() async {
-    revertStatusBar();
+  //  revertStatusBar();
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    FlutterStatusbarcolor.setStatusBarColor(Colors.black);
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -31,7 +28,6 @@ class MediaDetail extends StatelessWidget {
               color: Colors.white,
             ),
             onPressed: () {
-              revertStatusBar();
               AppNavigate.pop(context);
             },
           ),
@@ -40,6 +36,7 @@ class MediaDetail extends StatelessWidget {
             style: TextStyle(color: Colors.white),
           ),
           backgroundColor: Colors.transparent,
+          brightness: Brightness.dark,
           actions: <Widget>[
             IconButton(
               icon: Icon(
@@ -59,8 +56,4 @@ class MediaDetail extends StatelessWidget {
   }
 
 
-  revertStatusBar() {
-    FlutterStatusbarcolor.setStatusBarColor(Colors.white);
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
-  }
 }

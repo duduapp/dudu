@@ -7,9 +7,6 @@ import 'package:fastodon/public.dart';
 import 'package:fastodon/untils/dialog_util.dart';
 import 'package:fastodon/widget/common/media_detail.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -61,7 +58,6 @@ class _PhotoGalleryState extends State<PhotoGallery> {
     return MediaDetail(
       child: InkWell(
           onTap: () {
-            revertStatusBar();
             AppNavigate.pop(context);
           },
           child: Container(
@@ -123,10 +119,5 @@ class _PhotoGalleryState extends State<PhotoGallery> {
       maxScale: PhotoViewComputedScale.covered * 2.0,
       heroAttributes: PhotoViewHeroAttributes(tag: item.id),
     );
-  }
-
-  revertStatusBar() {
-    FlutterStatusbarcolor.setStatusBarColor(Colors.white);
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
   }
 }
