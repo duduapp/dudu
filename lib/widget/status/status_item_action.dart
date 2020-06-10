@@ -1,7 +1,7 @@
 
 import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/api/status_api.dart';
-import 'package:fastodon/pages/home/new_article.dart';
+import 'package:fastodon/pages/status/new_status.dart';
 import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/models/article_item.dart';
@@ -82,7 +82,7 @@ class _StatusItemActionState extends State<StatusItemAction> {
         children: <Widget>[
           InkWell(
             onTap: () {
-              AppNavigate.push(context, NewArticle(replyTo: widget.item));
+              AppNavigate.push(context, NewStatus(replyTo: widget.item));
             },
             child: Row(
               children: <Widget>[

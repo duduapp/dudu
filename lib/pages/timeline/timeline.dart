@@ -1,8 +1,8 @@
 import 'package:fastodon/models/article_item.dart';
-import 'package:fastodon/pages/home/new_article.dart';
-import 'package:fastodon/widget/easyrefresh_listview.dart';
+import 'package:fastodon/pages/status/new_status.dart';
+import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
 import 'package:fastodon/widget/status/status_item.dart';
-import 'package:fastodon/widget/refresh_load_listview.dart';
+import 'package:fastodon/widget/listview/refresh_load_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
 
@@ -73,7 +73,7 @@ class _TimelineState extends State<Timeline>
           centerTitle: true,
           actions: <Widget>[
             IconButton(icon: Icon(Icons.search),onPressed: (){},),
-            IconButton(icon: Icon(Icons.add),onPressed: (){AppNavigate.push(context, NewArticle());},)
+            IconButton(icon: Icon(Icons.add),onPressed: (){AppNavigate.push(context, NewStatus());},)
           ],
         ),
       ),

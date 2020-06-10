@@ -1,4 +1,4 @@
-import 'package:fastodon/untils/themes.dart';
+import 'package:fastodon/utils/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fastodon/public.dart';
@@ -7,7 +7,7 @@ import 'package:nav_router/nav_router.dart';
 
 import 'pages/root_page.dart';
 import 'pages/login/login.dart';
-import 'pages/home/new_article.dart';
+import 'pages/status/new_status.dart';
 
 import 'models/user.dart';
 
@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
     showBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return NewArticle();
+        return NewStatus();
       }
     );
   }

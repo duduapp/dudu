@@ -1,12 +1,12 @@
 import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/pages/setting/user_message.dart';
-import 'package:fastodon/untils/app_navigate.dart';
-import 'package:fastodon/untils/date_until.dart';
-import 'package:fastodon/untils/my_color.dart';
-import 'package:fastodon/untils/string_until.dart';
+import 'package:fastodon/utils/app_navigate.dart';
+import 'package:fastodon/utils/date_until.dart';
+import 'package:fastodon/utils/my_color.dart';
+import 'package:fastodon/utils/string_until.dart';
 import 'package:flutter/material.dart';
 
-import '../avatar.dart';
+import '../other/avatar.dart';
 
 class StatusItemHeader extends StatelessWidget {
   final StatusItemData data;

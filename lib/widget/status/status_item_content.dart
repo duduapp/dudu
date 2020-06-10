@@ -2,7 +2,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fastodon/models/article_item.dart';
-import 'package:fastodon/untils/my_color.dart';
+import 'package:fastodon/utils/my_color.dart';
 import 'package:fastodon/widget/status/status_item_media.dart';
 import 'package:fastodon/widget/status/status_item_poll.dart';
 import 'package:fastodon/widget/status/status_item_text.dart';

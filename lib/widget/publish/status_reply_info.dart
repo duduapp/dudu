@@ -3,7 +3,7 @@ import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/public.dart';
 import 'package:flutter/material.dart';
 
-import '../avatar.dart';
+import '../other/avatar.dart';
 
 class StatusReplyInfo extends StatelessWidget {
   StatusItemData item;

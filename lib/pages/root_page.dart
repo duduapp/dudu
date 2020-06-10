@@ -4,10 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:fastodon/public.dart';
 import 'package:popup_menu/popup_menu.dart';
 
-import 'home/home.dart';
-import 'home/new_article.dart';
+import 'status/new_status.dart';
 import 'timeline/timeline.dart';
-import 'metion/metion.dart';
+import 'timeline/notifications.dart';
 import 'setting/setting.dart';
 
 class RootPage extends StatefulWidget {
@@ -105,7 +104,7 @@ class _RootPageState extends State<RootPage> {
   }
 
   void showNewArtical() {
-    AppNavigate.push(context, NewArticle());
+    AppNavigate.push(context, NewStatus());
     // eventBus.emit(EventBusKey.ShowNewArticalWidget);
   }
 
@@ -116,7 +115,7 @@ class _RootPageState extends State<RootPage> {
     return Scaffold(
         key: _scaffoldKey,
         body: IndexedStack(
-          children: <Widget>[Timeline(TimelineType.home), Timeline(TimelineType.local), Timeline(TimelineType.federated),Metion(), Setting()],
+          children: <Widget>[Timeline(TimelineType.home), Timeline(TimelineType.local), Timeline(TimelineType.federated),Notifications(), Setting()],
           index: _tabIndex,
         ),
         bottomNavigationBar: CupertinoTabBar(

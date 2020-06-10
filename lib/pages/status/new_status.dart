@@ -16,18 +16,18 @@ import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/models/article_item.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:progress_indicators/progress_indicators.dart';
-import 'new_article_cell.dart';
+import '../../widget/publish/new_status_publish_level.dart';
 
-class NewArticle extends StatefulWidget {
-  StatusItemData replyTo;
+class NewStatus extends StatefulWidget {
+  final StatusItemData replyTo;
 
-  NewArticle({this.replyTo});
+  NewStatus({this.replyTo});
 
   @override
-  _NewArticleState createState() => _NewArticleState();
+  _NewStatusState createState() => _NewStatusState();
 }
 
-class _NewArticleState extends State<NewArticle> {
+class _NewStatusState extends State<NewStatus> {
   final TextEditingController _controller = new TextEditingController();
   final TextEditingController _wornController = new TextEditingController();
   OwnerAccount _myAcc;
@@ -218,7 +218,7 @@ class _NewArticleState extends State<NewArticle> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                NewArticleCell(
+                NewStatusPublishLevel(
                   title: '公开',
                   description: '所有人可见，并且会出现在公共时间轴上',
                   leftIcon: Icon(Icons.public, size: 30),
@@ -230,7 +230,7 @@ class _NewArticleState extends State<NewArticle> {
                   },
                   currentIcon: _articleRange,
                 ),
-                NewArticleCell(
+                NewStatusPublishLevel(
                   title: '不公开',
                   description: '所有人可见，但不会出现在公共时间轴上',
                   leftIcon: Icon(Icons.vpn_lock, size: 30),
@@ -242,7 +242,7 @@ class _NewArticleState extends State<NewArticle> {
                   },
                   currentIcon: _articleRange,
                 ),
-                NewArticleCell(
+                NewStatusPublishLevel(
                   title: '仅关注者',
                   description: '只有关注你的用户可以看到',
                   leftIcon: Icon(Icons.lock, size: 30),
@@ -254,7 +254,7 @@ class _NewArticleState extends State<NewArticle> {
                   },
                   currentIcon: _articleRange,
                 ),
-                NewArticleCell(
+                NewStatusPublishLevel(
                   title: '私信',
                   description: '只有被提及的用户可以看到',
                   leftIcon: Icon(Icons.sms, size: 30),

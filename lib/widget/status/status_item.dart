@@ -9,8 +9,7 @@ import 'package:fastodon/public.dart';
 
 import 'package:fastodon/pages/setting/user_message.dart';
 import 'package:fastodon/models/article_item.dart';
-import 'package:fastodon/pages/home/article_detail.dart';
-import '../avatar.dart';
+import '../other/avatar.dart';
 import 'status_item_action.dart';
 import 'article_media.dart';
 

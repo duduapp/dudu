@@ -1,5 +1,5 @@
 import 'package:fastodon/constant/api.dart';
-import 'package:fastodon/untils/request.dart';
+import 'package:fastodon/utils/request.dart';
 
 class AccountsApi {
   static mute(String id) {

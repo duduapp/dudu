@@ -1,14 +1,10 @@
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:chewie/chewie.dart';
 import 'package:dio/dio.dart';
 import 'package:fastodon/models/media_attachment.dart';
-import 'package:fastodon/untils/app_navigate.dart';
-import 'package:fastodon/untils/dialog_util.dart';
+import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/widget/common/media_detail.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';

@@ -1,6 +1,6 @@
 
 
-import 'package:fastodon/untils/app_navigate.dart';
+import 'package:fastodon/utils/app_navigate.dart';
 import 'package:flutter/material.dart';
 
 class MediaDetail extends StatelessWidget {

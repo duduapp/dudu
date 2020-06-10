@@ -1,5 +1,5 @@
 import 'package:fastodon/models/article_item.dart';
-import 'package:fastodon/pages/timeline/status_detail.dart';
+import 'package:fastodon/pages/status/status_detail.dart';
 import 'package:fastodon/public.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
 
 import 'package:fastodon/models/owner_account.dart';
-import 'package:fastodon/widget/avatar.dart';
+import 'package:fastodon/widget/other/avatar.dart';
 
 import 'package:fastodon/pages/setting/user_message.dart';
 

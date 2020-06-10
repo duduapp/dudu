@@ -1,5 +1,5 @@
 import 'package:fastodon/models/vote.dart';
-import 'package:fastodon/untils/screen.dart';
+import 'package:fastodon/utils/screen.dart';
 import 'package:flutter/material.dart';
 
 class VoteDisplay extends StatelessWidget {

@@ -1,19 +1,18 @@
-import 'package:fastodon/widget/easyrefresh_listview.dart';
+import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
-import 'package:fastodon/widget/refresh_load_listview.dart';
-import 'model/notificate_item.dart';
+import 'package:fastodon/widget/listview/refresh_load_listview.dart';
+import '../../models/notificate_item.dart';
 
 import 'package:fastodon/widget/status/status_item.dart';
-import 'follow_cell.dart';
-import 'favourite_cell.dart';
+import '../../widget/other/follow_cell.dart';
 
-class Metion extends StatefulWidget {
+class Notifications extends StatefulWidget {
   @override
-  _MetionState createState() => _MetionState();
+  _NotificationsState createState() => _NotificationsState();
 }
 
-class _MetionState extends State<Metion> with AutomaticKeepAliveClientMixin {
+class _NotificationsState extends State<Notifications> with AutomaticKeepAliveClientMixin {
   bool _canLoadWidget = false;
   @override
   bool get wantKeepAlive => true;
@@ -42,9 +41,6 @@ class _MetionState extends State<Metion> with AutomaticKeepAliveClientMixin {
       );
     } else if (item.type == 'favourite') {
       return StatusItem(item: item.status,refIcon: Icons.star, refString:'${StringUtil.displayName(item.account)}收藏了你的嘟文');
-      return FavouriteCell(
-        item: item,
-      );
     } else if (item.type == 'mention') {
       return StatusItem(
         item: item.status,

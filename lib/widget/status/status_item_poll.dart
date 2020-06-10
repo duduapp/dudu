@@ -1,6 +1,6 @@
 import 'package:fastodon/constant/api.dart';
 import 'package:fastodon/models/article_item.dart';
-import 'package:fastodon/untils/request.dart';
+import 'package:fastodon/utils/request.dart';
 import 'package:flutter/material.dart';
 
 class StatusItemPoll extends StatefulWidget {

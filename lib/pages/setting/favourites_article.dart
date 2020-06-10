@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
-import 'package:fastodon/widget/refresh_load_listview.dart';
+import 'package:fastodon/widget/listview/refresh_load_listview.dart';
 import 'package:fastodon/widget/status/status_item.dart';
 import 'package:fastodon/models/article_item.dart';
 

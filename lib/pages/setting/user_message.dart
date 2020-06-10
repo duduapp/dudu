@@ -5,12 +5,12 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/models/owner_account.dart';
 
-import 'package:fastodon/widget/refresh_load_listview.dart';
+import 'package:fastodon/widget/listview/refresh_load_listview.dart';
 import 'package:fastodon/widget/status/status_item.dart';
 import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/models/my_account.dart';
 import 'model/relation_ship.dart';
-import 'package:fastodon/widget/avatar.dart';
+import 'package:fastodon/widget/other/avatar.dart';
 import 'following_list.dart';
 import 'follower_list.dart';
 import 'user_sheet_cell.dart';

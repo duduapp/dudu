@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
 
-class NewArticleCell extends StatelessWidget {
-  NewArticleCell({
+class NewStatusPublishLevel extends StatelessWidget {
+  NewStatusPublishLevel({
     Key key, 
     this.title,
     this.description,
