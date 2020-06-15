@@ -1,5 +1,5 @@
 import 'package:fastodon/widget/status/status_item_content.dart';
-import 'package:fastodon/widget/status/status_item_header.dart';
+import 'package:fastodon/widget/status/status_item_account.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -101,6 +101,7 @@ class _StatusItemState extends State<StatusItem> {
         ),
       );
     } else {
+      StatusItemData data = widget.item.reblog ?? widget.item;
       return Container(
         color: Theme
             .of(context)
@@ -111,10 +112,10 @@ class _StatusItemState extends State<StatusItem> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             refHeader(),
-            StatusItemHeader(widget.item.reblog ?? widget.item),
-            StatusItemContent(widget.item.reblog ?? widget.item),
+            StatusItemAccount(data.account,createdAt:data.createdAt),
+            StatusItemContent(data),
             StatusItemAction(
-              item: widget.item.reblog ?? widget.item,
+              item: data
             ),
           ],
         ),

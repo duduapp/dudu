@@ -1,4 +1,5 @@
 import 'package:fastodon/models/article_item.dart';
+import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/pages/setting/user_message.dart';
 import 'package:fastodon/utils/app_navigate.dart';
 import 'package:fastodon/utils/date_until.dart';
@@ -8,10 +9,12 @@ import 'package:flutter/material.dart';
 
 import '../other/avatar.dart';
 
-class StatusItemHeader extends StatelessWidget {
-  final StatusItemData data;
+class StatusItemAccount extends StatelessWidget {
+  final OwnerAccount account;
 
-  StatusItemHeader(this.data);
+  final String createdAt;
+
+  StatusItemAccount(this.account,{this.createdAt});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +24,9 @@ class StatusItemHeader extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(0, 15, 15, 0),
             child: GestureDetector(
               onTap: () {
-                AppNavigate.push(context, UserMessage(account: data.account));
+                AppNavigate.push(context, UserMessage(account: account));
               },
-              child: Avatar(url: data.account.avatarStatic),
+              child: Avatar(url: account.avatarStatic),
             )),
         Expanded(
           child: Container(
@@ -37,16 +40,17 @@ class StatusItemHeader extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Flexible(
-                      child: Text(StringUtil.displayName(data.account),
+                      child: Text(StringUtil.displayName(account),
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                           overflow: TextOverflow.ellipsis),
                       flex: 2,
                     ),
+                    if (createdAt != null)
                     Flexible(
                       child: Padding(
                         padding: EdgeInsets.only(right: 15),
-                        child: Text(DateUntil.dateTime(data.createdAt),
+                        child: Text(DateUntil.dateTime(createdAt),
                             style: TextStyle(
                                 fontSize: 13, color: MyColor.greyText),
                             overflow: TextOverflow.ellipsis),
@@ -57,7 +61,7 @@ class StatusItemHeader extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('@' + data.account.username,
+                    Text('@' + account.username,
                         style:
                             TextStyle(fontSize: 13, color: MyColor.greyText)),
                   ],

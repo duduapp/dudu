@@ -10,11 +10,17 @@ class EasyRefreshListView extends StatefulWidget {
     Key key,
     @required this.requestUrl,
     @required this.buildRow,
-    this.type
+    this.type,
+    this.mapKey,
+    this.offsetPagination,
+    this.emptyWidget
   }) : super(key: key);
   final String requestUrl;
   final Function buildRow;
   final TimelineType type;
+  final String mapKey; // 返回的结果是map,而且key 是 mapKey
+  final bool offsetPagination; //search 里面的max id和 min id 不能用
+  final Widget emptyWidget;
 
   @override
   _EasyRefreshListViewState createState() => _EasyRefreshListViewState();
@@ -33,12 +39,14 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
   ScrollController _scrollController = ScrollController();
   List _dataList = [];
   EasyRefreshController _controller = EasyRefreshController();
+  int offset;
+  bool noResults = false;
 
   @override
   void initState() {
     super.initState();
 
-    _startRequest(widget.requestUrl);
+    _startRequest(widget.requestUrl,refresh: true);
 
     eventBus.on(widget.type, (arg) {
         _scrollController.jumpTo(0);
@@ -62,11 +70,15 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
 
   Future<void> _onLoad() async{
     String lastCellId = _dataList[_dataList.length - 1]['id'];
+    String appendOffset = "";
+    if (widget.offsetPagination != null && widget.offsetPagination == true) {
+      appendOffset = "&offset=${_dataList.length}";
+    }
     // get请求中是否已经包含了其他的参数
     if (widget.requestUrl.contains('?')) {
-      await _startRequest(widget.requestUrl + '&max_id=$lastCellId');
+      await _startRequest(widget.requestUrl + '&max_id=$lastCellId$appendOffset');
     } else {
-      await _startRequest(widget.requestUrl + '?max_id=$lastCellId');
+      await _startRequest(widget.requestUrl + '?max_id=$lastCellId$appendOffset');
     }
   }
 
@@ -76,11 +88,15 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
 
   Future<void> _startRequest(String url, {bool refresh}) async {
     await Request.get(url: url).then((data) {
+      data = widget.mapKey == null ? data : data[widget.mapKey];
       List combineList = [];
       // 下拉刷新的时候，只需要将新的数组赋值到数据list中
       // 上拉加载的时候，需要将新的数组添加到现有数据list中
       if (refresh == true) {
         combineList = data;
+        if (data.length == 0) {
+          noResults = true;
+        }
       } else {
         combineList = _dataList;
         combineList.addAll(data);
@@ -116,12 +132,15 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
           ),
         )
       ],
+      firstRefresh: true,
+      firstRefreshWidget: Center(child: SizedBox(child: CircularProgressIndicator(),width: 50,height: 50,),),
       header: AppConfig.listviewHeader,
       footer: AppConfig.listviewFooter,
       controller: _controller,
       scrollController: _scrollController,
       onRefresh: _onRefresh,
       onLoad: _onLoad,
+      emptyWidget: noResults ? widget.emptyWidget :null,
     );
 
   }

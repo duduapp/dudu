@@ -13,6 +13,7 @@ class Api {
   static String status = '/api/v1/statuses'; // 发送一个新文章
   static String attachMedia = '/api/v1/media';
   static String poll = '/api/v1/polls';
+  static String search ='/api/v2/search';
   // 上传媒体文件
   static String Following(arg) {
     return '/api/v1/accounts/$arg/following';

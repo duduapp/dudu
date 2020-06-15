@@ -1,4 +1,5 @@
 import 'package:fastodon/models/article_item.dart';
+import 'package:fastodon/pages/search/search_page_delegate.dart';
 import 'package:fastodon/pages/status/new_status.dart';
 import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
 import 'package:fastodon/widget/status/status_item.dart';
@@ -72,7 +73,9 @@ class _TimelineState extends State<Timeline>
           title: InkWell(child: Text(title),onTap: () => eventBus.emit(widget.type),),
           centerTitle: true,
           actions: <Widget>[
-            IconButton(icon: Icon(Icons.search),onPressed: (){},),
+            IconButton(icon: Icon(Icons.search),onPressed: (){
+              showSearch(context: context, delegate: SearchPageDelegate());
+            },),
             IconButton(icon: Icon(Icons.add),onPressed: (){AppNavigate.push(context, NewStatus());},)
           ],
         ),
