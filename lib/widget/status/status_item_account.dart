@@ -18,59 +18,62 @@ class StatusItemAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Padding(
-            padding: EdgeInsets.fromLTRB(0, 15, 15, 0),
-            child: GestureDetector(
-              onTap: () {
-                AppNavigate.push(context, UserMessage(account: account));
-              },
-              child: Avatar(url: account.avatarStatic),
-            )),
-        Expanded(
-          child: Container(
-            height: 50,
-            margin: EdgeInsets.only(top: 8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Flexible(
-                      child: Text(StringUtil.displayName(account),
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                          overflow: TextOverflow.ellipsis),
-                      flex: 2,
-                    ),
-                    if (createdAt != null)
-                    Flexible(
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 15),
-                        child: Text(DateUntil.dateTime(createdAt),
+    return InkWell(
+      onTap: (){if(createdAt == null) AppNavigate.push(context, UserMessage(account: account));}, // 用作搜索页时，整个页面可点击
+      child: Row(
+        children: <Widget>[
+          Padding(
+              padding: EdgeInsets.fromLTRB(0, 15, 15, 0),
+              child: InkWell(
+                onTap: () {
+                  AppNavigate.push(context, UserMessage(account: account));
+                },
+                child: Avatar(url: account.avatarStatic),
+              )),
+          Expanded(
+            child: Container(
+              height: 50,
+              margin: EdgeInsets.only(top: 8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Flexible(
+                        child: Text(StringUtil.displayName(account),
                             style: TextStyle(
-                                fontSize: 13, color: MyColor.greyText),
+                                fontSize: 16, fontWeight: FontWeight.bold),
                             overflow: TextOverflow.ellipsis),
+                        flex: 2,
                       ),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('@' + account.username,
-                        style:
-                            TextStyle(fontSize: 13, color: MyColor.greyText)),
-                  ],
-                )
-              ],
+                      if (createdAt != null)
+                      Flexible(
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 15),
+                          child: Text(DateUntil.dateTime(createdAt),
+                              style: TextStyle(
+                                  fontSize: 13, color: MyColor.greyText),
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('@' + account.username,
+                          style:
+                              TextStyle(fontSize: 13, color: MyColor.greyText)),
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

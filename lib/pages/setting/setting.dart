@@ -1,3 +1,4 @@
+import 'package:fastodon/pages/setting/edit_user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -98,7 +99,8 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              AppNavigate.push(context, UserMessage(account: _account,));
+             // AppNavigate.push(context, UserMessage(account: _account,));
+              AppNavigate.push(context, EditUserProfile(_account));
             },
             child: SettingHead(
               account: _account,
