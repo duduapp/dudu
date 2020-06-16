@@ -7,7 +7,7 @@ import 'package:fastodon/widget/listview/refresh_load_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
 
-
+import '../../widget/other/search.dart' as customSearch;
 
 enum TimelineType {
   home,
@@ -74,7 +74,7 @@ class _TimelineState extends State<Timeline>
           centerTitle: true,
           actions: <Widget>[
             IconButton(icon: Icon(Icons.search),onPressed: (){
-              showSearch(context: context, delegate: SearchPageDelegate());
+              customSearch.showSearch(context: context, delegate: SearchPageDelegate());
             },),
             IconButton(icon: Icon(Icons.add),onPressed: (){AppNavigate.push(context, NewStatus());},)
           ],

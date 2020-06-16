@@ -14,6 +14,8 @@ class Api {
   static String attachMedia = '/api/v1/media';
   static String poll = '/api/v1/polls';
   static String search ='/api/v2/search';
+  static String hashtagTimeline = '/api/v1/timelines/tag';
+
   // 上传媒体文件
   static String Following(arg) {
     return '/api/v1/accounts/$arg/following';

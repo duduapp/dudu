@@ -2,7 +2,10 @@ import 'package:fastodon/api/search_api.dart';
 import 'package:fastodon/pages/search/search_result.dart';
 import 'package:flutter/material.dart';
 
-class SearchPageDelegate extends SearchDelegate  {
+import '../../widget/other/search.dart' as customSearch;
+
+class SearchPageDelegate extends customSearch.SearchDelegate  {
+  SearchPageDelegate() : super(maintainState: true);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -56,5 +59,8 @@ class SearchPageDelegate extends SearchDelegate  {
   Widget buildSuggestions(BuildContext context) {
     return Container();
   }
-  
+
+  @override
+  String get searchFieldLabel => '搜索...';
+
 }

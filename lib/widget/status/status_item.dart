@@ -14,7 +14,7 @@ import 'status_item_action.dart';
 import 'article_media.dart';
 
 class StatusItem extends StatefulWidget {
-  StatusItem({Key key, this.item, this.refIcon, this.refString, this.subStatus}) : super(key: key);
+  StatusItem({Key key, @required this.item, this.refIcon, this.refString, this.subStatus}) : super(key: key);
   final StatusItemData item;
   final IconData refIcon; // 用户引用status时显示的图标，比如 显示在status上面的（icon,who转嘟了）
   final String refString;

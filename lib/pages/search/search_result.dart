@@ -1,6 +1,8 @@
 import 'package:fastodon/api/search_api.dart';
 import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/pages/timeline/hashtag_timeline.dart';
+import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
 import 'package:fastodon/widget/status/status_item.dart';
 import 'package:fastodon/widget/status/status_item_account.dart';
@@ -38,13 +40,16 @@ class _SearchResultState extends State<SearchResult> with AutomaticKeepAliveClie
         );
 
       case SearchType.hashtags:
-        return Container(
-          padding: EdgeInsets.all(12),
-          decoration: BoxDecoration(
-              border: Border(
-                  bottom:
-                      BorderSide(color: Colors.grey[300]))),
-          child: Text('#' + data[idx]['name'], style: TextStyle(fontSize: 16)),
+        return InkWell(
+          onTap: () => AppNavigate.push(context, HashtagTimeline(data[idx]['name'])),
+          child: Container(
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom:
+                        BorderSide(color: Colors.grey[300]))),
+            child: Text('#' + data[idx]['name'], style: TextStyle(fontSize: 16)),
+          ),
         );
     }
     return Container();
@@ -52,6 +57,7 @@ class _SearchResultState extends State<SearchResult> with AutomaticKeepAliveClie
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return EasyRefreshListView(
       requestUrl: SearchApi.getUrl(widget.type, widget.query),
       buildRow: buildRow,
