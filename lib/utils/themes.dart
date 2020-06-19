@@ -9,6 +9,7 @@ var defaultTheme = ThemeData(
   inputDecorationTheme: InputDecorationTheme(fillColor: Color.fromRGBO(240, 240, 240, 1)),
   backgroundColor: Color.fromRGBO(240, 240, 240, 1),
   buttonColor: Colors.grey[500],
+  bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
 
 
   

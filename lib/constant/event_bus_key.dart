@@ -6,4 +6,6 @@ class EventBusKey {
 
   static String muteAccount = 'muteAccount';// 隐藏某人推文
   static String blockAccount = 'blockAccount';// 屏蔽某人推文
+
+  static String accountUpdated = 'accountUpdated';
 }

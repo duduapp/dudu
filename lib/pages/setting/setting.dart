@@ -33,11 +33,16 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
     eventBus.on(EventBusKey.LoadLoginMegSuccess, (arg) {
       _getMyAccount();
     });
+
+    eventBus.on(EventBusKey.accountUpdated,(arg) {
+      _getMyAccount();
+    });
   }
 
   @override
   void dispose() {
     eventBus.off(EventBusKey.LoadLoginMegSuccess);
+    eventBus.off(EventBusKey.accountUpdated);
     super.dispose();
   }
 

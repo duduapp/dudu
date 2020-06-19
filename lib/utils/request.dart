@@ -53,6 +53,11 @@ class Request {
     return await dio.put(url,data:params);
   }
 
+  static Future patch({String url, Object params}) async {
+    var dio = Request.createDio();
+    return await dio.patch(url,data: params);
+  }
+
   static void showTotast(String errorMsg) {
     Fluttertoast.showToast(
         msg: errorMsg,

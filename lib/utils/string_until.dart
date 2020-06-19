@@ -20,4 +20,8 @@ class StringUtil {
 
     return htmlText?.replaceAll(exp, '');
   }
+
+  static bool isUrl(String str) {
+    return Uri.parse(str).isAbsolute;
+  }
 }
