@@ -13,13 +13,16 @@ class EasyRefreshListView extends StatefulWidget {
     this.type,
     this.mapKey,
     this.offsetPagination,
-    this.emptyWidget
+    this.emptyWidget = const Center(child:Text('还没有内容')),
+    this.headerLinkPagination = false,
+
   }) : super(key: key);
   final String requestUrl;
   final Function buildRow;
   final TimelineType type;
   final String mapKey; // 返回的结果是map,而且key 是 mapKey
   final bool offsetPagination; //search 里面的max id和 min id 不能用
+  final bool headerLinkPagination; // 用返回的Header link来分分页
   final Widget emptyWidget;
 
   @override
@@ -41,12 +44,13 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
   EasyRefreshController _controller = EasyRefreshController();
   int offset;
   bool noResults = false;
+  String nextUrl; // 用header link 时分页有用
 
   @override
   void initState() {
     super.initState();
 
-    _startRequest(widget.requestUrl,refresh: true);
+   // _startRequest(widget.requestUrl,refresh: true);
 
     eventBus.on(widget.type, (arg) {
         _scrollController.jumpTo(0);
@@ -69,16 +73,26 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
   }
 
   Future<void> _onLoad() async{
-    String lastCellId = _dataList[_dataList.length - 1]['id'];
-    String appendOffset = "";
-    if (widget.offsetPagination != null && widget.offsetPagination == true) {
-      appendOffset = "&offset=${_dataList.length}";
-    }
-    // get请求中是否已经包含了其他的参数
-    if (widget.requestUrl.contains('?')) {
-      await _startRequest(widget.requestUrl + '&max_id=$lastCellId$appendOffset');
+    if (widget.headerLinkPagination != null && widget.headerLinkPagination == true) {
+      if (nextUrl != null) {
+        _startRequest(nextUrl);
+        nextUrl = null;
+      }
     } else {
-      await _startRequest(widget.requestUrl + '?max_id=$lastCellId$appendOffset');
+      String lastCellId = _dataList[_dataList.length - 1]['id'];
+      String appendOffset = "";
+      if (widget.offsetPagination != null && widget.offsetPagination == true) {
+        appendOffset = "&offset=${_dataList.length}";
+      }
+      // get请求中是否已经包含了其他的参数
+      var since = "max_id";
+      if (widget.requestUrl.contains('?')) {
+        await _startRequest(
+            widget.requestUrl + '&max_id=$lastCellId$appendOffset');
+      } else {
+        await _startRequest(
+            widget.requestUrl + '?max_id=$lastCellId$appendOffset');
+      }
     }
   }
 
@@ -87,7 +101,8 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
   }
 
   Future<void> _startRequest(String url, {bool refresh}) async {
-    await Request.get(url: url).then((data) {
+    await Request.get1(url: url).then((response) {
+      var data = response.data;
       data = widget.mapKey == null ? data : data[widget.mapKey];
       List combineList = [];
       // 下拉刷新的时候，只需要将新的数组赋值到数据list中
@@ -110,6 +125,18 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
         _dataList = combineList;
        // _controller.resetLoadState();
       });
+
+      if (widget.headerLinkPagination != null && widget.headerLinkPagination == true) {
+        var link = response.headers['link'][0].split(',');
+        if (link.length < 2) {
+          setState(() {
+            _controller.finishLoad(noMore: true,success: true);
+          });
+        } else {
+          nextUrl = link[0].substring(1,link[0].indexOf('>'));
+        }
+      }
+
     });
   }
 

@@ -1,3 +1,4 @@
+import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/listview/refresh_load_listview.dart';
@@ -33,9 +34,10 @@ class _FavoutitesArticleState extends State<FavoutitesArticle> {
         centerTitle: true,
         backgroundColor: MyColor.mainColor,
       ),
-      body: RefreshLoadListView(
+      body: EasyRefreshListView(
         requestUrl: Api.Favourites,
         buildRow: row,
+        headerLinkPagination: true,
       )
     );
   }

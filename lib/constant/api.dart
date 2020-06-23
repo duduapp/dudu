@@ -15,6 +15,9 @@ class Api {
   static String poll = '/api/v1/polls';
   static String search ='/api/v2/search';
   static String hashtagTimeline = '/api/v1/timelines/tag';
+  static String Favourites = '/api/v1/favourites'; // 收藏的嘟文
+  static String bookmarks = '/api/v1/bookmarks';
+  static String lists = "/api/v1/lists";
 
   // 上传媒体文件
   static String Following(arg) {
@@ -26,7 +29,7 @@ class Api {
   static String UersArticle(arg, pragma) {
     return '/api/v1/accounts/$arg/statuses?$pragma';
   } // 获取一个用户已经发送的嘟文
-  static String Favourites = '/api/v1/favourites'; // 收藏的嘟文
+
   static String Follow(arg) {
     return '/api/v1/accounts/$arg/follow';
   } // 关注某人

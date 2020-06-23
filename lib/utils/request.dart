@@ -5,6 +5,12 @@ import 'package:fastodon/public.dart';
 
 class Request {
   static Future get({String url, Map params, Map header}) async {
+    Response res = await get1(url: url,params: params,header: header);
+    return res.data;
+  }
+
+  // response all instead of response data only
+  static Future get1({String url, Map params, Map header}) async {
     if (params != null && params.isNotEmpty) {
       StringBuffer sb = new StringBuffer("?");
       params.forEach((key, value) {
@@ -25,7 +31,7 @@ class Request {
         var errorMsg = "网络请求错误,状态码:" + response.statusCode.toString();
         showTotast(errorMsg);
       } else if (response.statusCode == 200 && response != null) {
-        return response.data;
+        return response;
       }
     } catch (exception) {
       showTotast(exception.toString());
@@ -56,6 +62,11 @@ class Request {
   static Future patch({String url, Object params}) async {
     var dio = Request.createDio();
     return await dio.patch(url,data: params);
+  }
+
+  static Future delete({String url, Object params}) async {
+    var dio = Request.createDio();
+    return await dio.delete(url,data: params);
   }
 
   static void showTotast(String errorMsg) {

@@ -8,4 +8,6 @@ class EventBusKey {
   static String blockAccount = 'blockAccount';// 屏蔽某人推文
 
   static String accountUpdated = 'accountUpdated';
+
+
 }

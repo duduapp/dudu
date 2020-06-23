@@ -9,26 +9,41 @@ enum SearchType{
 }
 
 class SearchApi {
-  static searchStatuses({int maxId}) {
-    return _search(SearchType.statuses,maxId: maxId);
+  static const String accountSearchUrl = '/api/v1/accounts/search';
+
+  static searchStatuses(String q,{int maxId}) {
+    return _search(q,SearchType.statuses,maxId: maxId);
   }
 
-  static searchAccounts({int maxId}) {
-    return _search(SearchType.accounts,maxId: maxId);
-  }
-
-  static searchHashtags({int maxId}) {
-    return _search(SearchType.hashtags,maxId: maxId);
-  }
-
-  static _search(SearchType type, {int maxId}) {
+  static searchFollowingAccounts(String q,{int maxId,bool following}) async{
     Map params = {
-      'type':SearchType.statuses.toString()
+      'q':q,
     };
     if (maxId != null) {
       params['max_id'] = maxId;
     }
-    return Request.get(url:Api.search,params: params);
+    if (following != null) {
+      params['following'] = following;
+    }
+    return await Request.get(url:accountSearchUrl,params: params);
+  }
+
+  static searchHashtags(String q,{int maxId}) {
+    return _search(q,SearchType.hashtags,maxId: maxId);
+  }
+
+  static _search(String q,SearchType type, {int maxId,bool following}) async{
+    Map params = {
+      'type':type.toString().split('.')[1],
+      'q':q,
+    };
+    if (maxId != null) {
+      params['max_id'] = maxId;
+    }
+    if (following != null) {
+      params['following'] = following;
+    }
+    return await Request.get(url:Api.search,params: params);
   }
 
   static get statusUrl {

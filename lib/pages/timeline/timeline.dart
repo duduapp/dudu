@@ -95,6 +95,20 @@ class _TimelineState extends State<Timeline>
 
   Widget row(int index, List data) {
     StatusItemData lineItem = StatusItemData.fromJson(data[index]);
+    // 解决可能会出现hero tag must unique
+    for (dynamic media in lineItem.mediaAttachments) {
+      switch (widget.type) {
+        case TimelineType.home:
+            media['id'] = 'home_'+media['id'];
+          break;
+        case TimelineType.local:
+          media['id'] = 'local_'+media['id'];
+          break;
+        case TimelineType.federated:
+          media['id'] = 'federated_'+media['id'];
+          break;
+      }
+    }
     return StatusItem(item: lineItem);
   }
 }

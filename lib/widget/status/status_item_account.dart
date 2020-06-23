@@ -13,8 +13,9 @@ class StatusItemAccount extends StatelessWidget {
   final OwnerAccount account;
 
   final String createdAt;
+  final Widget action;
 
-  StatusItemAccount(this.account,{this.createdAt});
+  StatusItemAccount(this.account,{this.createdAt,this.action});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +72,9 @@ class StatusItemAccount extends StatelessWidget {
                 ],
               ),
             ),
-          )
+          ),
+          if (action != null)
+            action
         ],
       ),
     );
