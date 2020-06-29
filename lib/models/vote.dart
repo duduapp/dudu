@@ -34,18 +34,29 @@ class Vote {
     '7天': 604800
   };
 
-  Vote(
-      {this.option1Controller,
-      this.option2Controller,
-      this.option3Controller,
-      this.option4Controller,
-      this.option3Enabled,
-      this.option4Enabled,
-      this.expiresIn,
-      this.expiresInString,
-      this.multiChoice});
+  Vote();
 
-  Vote.create() {}
+  Vote.create(List<String> options,int expiresIn,bool multiChoose) {
+    if (options.length == 0) {
+    } else {
+      option1Controller.text = options[0];
+      if (options.length >= 2)
+        option2Controller.text = options[1];
+      if (options.length >= 3) {
+        option3Controller.text = options[2];
+        option3Enabled = true;
+      }
+      if (options.length == 4) {
+        option4Controller.text = options[3];
+        option4Enabled = true;
+      }
+    }
+    this.expiresIn = expiresIn;
+    this.expiresInString =voteOptionsInSeconds.keys.firstWhere(
+            (k) => voteOptionsInSeconds[k] == expiresIn, orElse: () => null);
+    this.multiChoice = multiChoose;
+  }
+
 
   // 把option4的数据移到option3
   removeOption3() {
@@ -77,7 +88,7 @@ class Vote {
     return options.length == options.toSet().length;
   }
 
-  getOptions() {
+  List<String> getOptions() {
     var options = [option1Controller.text, option2Controller.text];
     if (option3Enabled) {
       options.add(option3Controller.text);
@@ -105,15 +116,25 @@ class Vote {
   }
 
   Vote clone() {
-    return Vote(
-        option1Controller: this.option1Controller,
-        option2Controller: this.option2Controller,
-        option3Controller: this.option3Controller,
-        option4Controller: this.option4Controller,
-        option3Enabled: this.option3Enabled,
-        option4Enabled: this.option4Enabled,
-        expiresIn: this.expiresIn,
-        expiresInString: this.expiresInString,
-        multiChoice: this.multiChoice);
+    return Vote()
+      ..option1Controller = option1Controller
+      ..option2Controller = option2Controller
+      ..option3Controller = option3Controller
+      ..option4Controller = option4Controller
+        ..option3Enabled = option3Enabled
+        ..option4Enabled = option4Enabled
+        ..expiresIn = expiresIn
+        ..expiresInString = expiresInString
+        ..multiChoice = multiChoice;
+//    return Vote(
+//        option1Controller: this.option1Controller,
+//        option2Controller: this.option2Controller,
+//        option3Controller: this.option3Controller,
+//        option4Controller: this.option4Controller,
+//        option3Enabled: this.option3Enabled,
+//        option4Enabled: this.option4Enabled,
+//        expiresIn: this.expiresIn,
+//        expiresInString: this.expiresInString,
+//        multiChoice: this.multiChoice);
   }
 }

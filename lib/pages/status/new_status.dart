@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -16,6 +17,7 @@ import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/models/article_item.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:progress_indicators/progress_indicators.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../widget/publish/new_status_publish_level.dart';
 
 class NewStatus extends StatefulWidget {
@@ -31,15 +33,21 @@ class _NewStatusState extends State<NewStatus> {
   final TextEditingController _controller = new TextEditingController();
   final TextEditingController _wornController = new TextEditingController();
   OwnerAccount _myAcc;
-  bool _worningWords = false;
+  bool _hasWarning = false;
   Icon _articleRange = Icon(Icons.public, size: 30);
   String _visibility = 'public';
-  List<File> images = [];
-  Map<File, String> imageTitles = {};
-  Map<File, String> imageIds = {};
+  List<String> images = [];
+  Map<String, String> imageTitles = {};
+  Map<String, String> imageIds = {};
   Vote vote;
-  bool showVote = false;
+
   int counter = 0;
+  static const Map<String, IconData> visibilityIcons = {
+    'public': Icons.public,
+    'unlisted': Icons.vpn_lock,
+    'private': Icons.lock,
+    'direct': Icons.sms
+  };
 
   @override
   void initState() {
@@ -59,12 +67,112 @@ class _NewStatusState extends State<NewStatus> {
     if (widget.replyTo != null) {
       _controller.text = getMentionString();
     }
+
+    _loadFromDraft();
   }
 
   Future<void> _getEmojis() async {
     Request.get(url: Api.CustomEmojis).then((data) {
       print(data);
     });
+  }
+
+  _spKey(String str) {
+    return _myAcc.acct + '/' + str;
+  }
+
+  _saveToDraft() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(_spKey('have_draft'), true);
+    prefs.setString(_spKey('text'), _controller.text);
+    prefs.setBool(_spKey('has_warning'), _hasWarning);
+    prefs.setString(_spKey('warning'), _wornController.text);
+    prefs.setString(_spKey('visibility'), _visibility);
+    prefs.setStringList(_spKey('images'), images);
+    prefs.setString(_spKey('image_titles'), json.encode(imageTitles));
+    prefs.setString(_spKey('image_ids'), json.encode(imageIds));
+    if (vote != null) {
+      prefs.setStringList(_spKey('vote_options'), vote.getOptions());
+      prefs.setInt(_spKey('vote_expires_in'), vote.expiresIn);
+      prefs.setBool(_spKey('multi_choice'), vote.multiChoice);
+    }
+  }
+
+  _clearDraft() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(_spKey('have_draft'), false);
+    prefs.remove(_spKey('text'));
+    prefs.remove(_spKey('has_warning'));
+    prefs.remove(_spKey('warning'));
+    prefs.remove(_spKey('visibility'));
+    prefs.remove(_spKey('images'));
+    prefs.remove(_spKey('image_titles'));
+    prefs.remove(_spKey('image_ids'));
+    prefs.remove(_spKey('vote_options'));
+    prefs.remove(_spKey('vote_expires_in'));
+    prefs.remove(_spKey('multi_choice'));
+
+  }
+
+  _loadFromDraft() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool(_spKey('have_draft'))) {
+      _controller.text = prefs.getString(_spKey('text'));
+      _wornController.text = prefs.getString(_spKey('warning'));
+      _hasWarning = prefs.getBool(_spKey('has_warning'));
+      _visibility = prefs.getString(_spKey('visibility'));
+      _articleRange = Icon(
+        visibilityIcons[_visibility],
+        size: 30,
+      );
+      images = prefs.getStringList(_spKey('images'));
+      imageTitles = Map<String,String>.from(json.decode(prefs.getString(_spKey('image_titles'))));
+      imageIds = Map<String,String>.from(json.decode(prefs.getString(_spKey('image_ids'))));
+      var options = prefs.getStringList(_spKey('vote_options'));
+      if (options != null) {
+        vote = Vote.create(
+            prefs.getStringList(_spKey('vote_options')),
+            prefs.getInt(_spKey('vote_expires_in')),
+            prefs.getBool(_spKey('multi_choice')));
+      }
+      counter = _controller.text.length;
+      setState(() {});
+    }
+  }
+
+  Future<bool> _onWillPop() async {
+    if (_controller.text.isNotEmpty ||
+        images.length > 0 ||
+        (vote != null && vote.canCreate())) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: Text('是否保存本次编辑'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('不保留'),
+                  onPressed: () async{
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    _clearDraft();
+                    AppNavigate.pop(context);
+                    AppNavigate.pop(context);
+                  },
+                ),
+                FlatButton(
+                  child: Text('保留'),
+                  onPressed: () {
+                    _saveToDraft();
+                    AppNavigate.pop(context);
+                    AppNavigate.pop(context);
+                  },
+                )
+              ],
+            );
+          });
+      return false;
+    }
+    return true;
   }
 
   Future<void> _getMyAccount() async {
@@ -91,7 +199,7 @@ class _NewStatusState extends State<NewStatus> {
 
   Future<void> _pushNewToot() async {
     var mediaIds = [];
-    for (File file in images) {
+    for (String file in images) {
       var id = imageIds[file];
       if (id != null) {
         mediaIds.add(id);
@@ -144,12 +252,12 @@ class _NewStatusState extends State<NewStatus> {
     }
     String fileId = response['id'];
     if (fileId.isNotEmpty) {
-      imageIds[file] = fileId;
+      imageIds[file.path] = fileId;
       setState(() {});
     }
   }
 
-  updateImageTitle(File file, String title) async {
+  updateImageTitle(String file, String title) async {
     var fileId = imageIds[file];
     if (fileId != null) {
       Map<String, dynamic> paramsMap = Map();
@@ -170,18 +278,18 @@ class _NewStatusState extends State<NewStatus> {
   }
 
   addImage(File file) {
-    images.add(file);
+    images.add(file.path);
     setState(() {});
     uoloadImage(file);
   }
 
-  removeImage(File file) {
+  removeImage(String file) {
     images.remove(file);
     setState(() {});
   }
 
   Widget worningWidge() {
-    if (_worningWords == false) {
+    if (_hasWarning == false) {
       return Container();
     }
     return Column(
@@ -272,7 +380,7 @@ class _NewStatusState extends State<NewStatus> {
   }
 
   showVoteDialog() {
-    Vote newVote = Vote.create();
+    Vote newVote = Vote();
     if (vote != null) {
       newVote = vote.clone();
     }
@@ -510,153 +618,157 @@ class _NewStatusState extends State<NewStatus> {
     var inputFilledColor = Theme.of(context).inputDecorationTheme.fillColor;
     var primaryColor = Theme.of(context).primaryColor;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.replyTo == null ? '发嘟' : '回复'),
-        centerTitle: true,
-        actions: <Widget>[
-          Container(
-            child: Text(StringUtil.displayName(_myAcc)),
-            padding: EdgeInsets.only(top: 20, right: 10),
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 5, bottom: 5, right: 10),
-            child: ClipRRect(
-              child: CachedNetworkImage(
-                imageUrl: _myAcc.avatarStatic,
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
-              ),
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-          ),
-        ],
-      ),
-      resizeToAvoidBottomInset: true,
-      body: Container(
-        child: Stack(
-          alignment: AlignmentDirectional.bottomEnd,
-          children: <Widget>[
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.replyTo == null ? '发嘟' : '回复'),
+          centerTitle: true,
+          actions: <Widget>[
             Container(
-              height: double.infinity,
-              color: inputFilledColor,
-              padding: EdgeInsets.only(bottom: 50),
-              child: SingleChildScrollView(
-                child: Container(
-                  child: Column(
-                    //   mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      worningWidge(),
-                      Container(
-                        // width: Screen.width(context) - 60,
-                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                        child: TextField(
-                          controller: _controller,
-                          onChanged: (value) {
-                            setState(() {
-                              counter = value.length > 500
-                                  ? 500
-                                  : value.length; //当500时可能值会变成501
-                            });
-                          },
-                          autofocus: true,
-                          maxLength: 500,
-                          maxLines: null,
-                          decoration: InputDecoration(
-                              hintText: '有什么新鲜事',
-                              counterText: '',
-                              disabledBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              labelStyle: TextStyle(fontSize: 16)),
-                        ),
-                      ),
-                      if (vote != null)
-                        SizedBox(
-                          height: 20,
-                        ),
-                      if (vote != null) voteView(),
-                      imagesList(),
-                      replyInfo(),
-                    ],
-                  ),
+              child: Text(StringUtil.displayName(_myAcc)),
+              padding: EdgeInsets.only(top: 20, right: 10),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 5, bottom: 5, right: 10),
+              child: ClipRRect(
+                child: CachedNetworkImage(
+                  imageUrl: _myAcc.avatarStatic,
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
                 ),
-              ),
-            ),
-            Container(
-              color: primaryColor,
-              padding: EdgeInsets.fromLTRB(10, 5, 15, 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.photo, size: 30),
-                        onPressed: vote != null
-                            ? null
-                            : () {
-                                getImage();
-                              },
-                        disabledColor: Colors.grey,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          showBottomSheet();
-                        },
-                        child: _articleRange,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.list),
-                        onPressed: images.length > 0
-                            ? null
-                            : () {
-                                showVoteDialog();
-                              },
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            _worningWords = !_worningWords;
-                          });
-                        },
-                        child: Text('cw',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20)),
-                      ),
-                    ],
-                  ),
-                  Text(counter.toString()),
-                  RaisedButton(
-                    onPressed: () {
-                      if (_controller.text.length == 0 && images.length == 0) {
-                        showToast("说点什么吧");
-                      } else {
-                        for (File image in images) {
-                          if (imageIds[image] == null) {
-                            showToast("请等待图片上传完毕");
-                            return;
-                          }
-                        }
-                        _pushNewToot();
-                      }
-                    },
-                    child: Text('嘟嘟!'),
-                  )
-                ],
+                borderRadius: BorderRadius.circular(5.0),
               ),
             ),
           ],
+        ),
+        resizeToAvoidBottomInset: true,
+        body: Container(
+          child: Stack(
+            alignment: AlignmentDirectional.bottomEnd,
+            children: <Widget>[
+              Container(
+                height: double.infinity,
+                color: inputFilledColor,
+                padding: EdgeInsets.only(bottom: 50),
+                child: SingleChildScrollView(
+                  child: Container(
+                    child: Column(
+                      //   mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        worningWidge(),
+                        Container(
+                          // width: Screen.width(context) - 60,
+                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                          child: TextField(
+                            controller: _controller,
+                            onChanged: (value) {
+                              setState(() {
+                                counter = value.length > 500
+                                    ? 500
+                                    : value.length; //当500时可能值会变成501
+                              });
+                            },
+                            autofocus: true,
+                            maxLength: 500,
+                            maxLines: null,
+                            decoration: InputDecoration(
+                                hintText: '有什么新鲜事',
+                                counterText: '',
+                                disabledBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                labelStyle: TextStyle(fontSize: 16)),
+                          ),
+                        ),
+                        if (vote != null)
+                          SizedBox(
+                            height: 20,
+                          ),
+                        if (vote != null) voteView(),
+                        imagesList(),
+                        replyInfo(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                color: primaryColor,
+                padding: EdgeInsets.fromLTRB(10, 5, 15, 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.photo, size: 30),
+                          onPressed: vote != null
+                              ? null
+                              : () {
+                                  getImage();
+                                },
+                          disabledColor: Colors.grey,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            showBottomSheet();
+                          },
+                          child: _articleRange,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.list),
+                          onPressed: images.length > 0
+                              ? null
+                              : () {
+                                  showVoteDialog();
+                                },
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              _hasWarning = !_hasWarning;
+                            });
+                          },
+                          child: Text('cw',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20)),
+                        ),
+                      ],
+                    ),
+                    Text(counter.toString()),
+                    RaisedButton(
+                      onPressed: () {
+                        if (_controller.text.length == 0 &&
+                            images.length == 0) {
+                          showToast("说点什么吧");
+                        } else {
+                          for (String image in images) {
+                            if (imageIds[image] == null) {
+                              showToast("请等待图片上传完毕");
+                              return;
+                            }
+                          }
+                          _pushNewToot();
+                        }
+                      },
+                      child: Text('嘟嘟!'),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -712,7 +824,7 @@ class _NewStatusState extends State<NewStatus> {
     );
   }
 
-  Widget imageDisplayView(File path) {
+  Widget imageDisplayView(String path) {
     var color = Theme.of(context).popupMenuTheme.color;
     var btnKey = GlobalKey();
     PopupMenu menu = PopupMenu(
@@ -743,7 +855,7 @@ class _NewStatusState extends State<NewStatus> {
               width: 100,
               height: 100,
               child: FittedBox(
-                child: Image.file(path),
+                child: Image.file(File(path)),
                 fit: BoxFit.fitWidth,
               )),
           if (imageIds[path] == null)
@@ -759,7 +871,7 @@ class _NewStatusState extends State<NewStatus> {
     );
   }
 
-  openImageTitleDialog(File file) {
+  openImageTitleDialog(String file) {
     var imageTitle = imageTitles[file];
     TextEditingController controller = TextEditingController(text: imageTitle);
     var color = Theme.of(context).toggleableActiveColor;
