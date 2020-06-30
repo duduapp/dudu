@@ -9,5 +9,5 @@ class EventBusKey {
 
   static String accountUpdated = 'accountUpdated';
 
-
+  static String scheduledStatusPublished = 'scheduledStatusPublished';
 }

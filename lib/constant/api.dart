@@ -18,6 +18,7 @@ class Api {
   static String Favourites = '/api/v1/favourites'; // 收藏的嘟文
   static String bookmarks = '/api/v1/bookmarks';
   static String lists = "/api/v1/lists";
+  static String scheduled_status = '/api/v1/scheduled_statuses';
 
   // 上传媒体文件
   static String Following(arg) {

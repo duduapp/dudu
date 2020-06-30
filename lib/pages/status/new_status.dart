@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fastodon/models/vote.dart';
+import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/widget/publish/status_reply_info.dart';
 import 'package:fastodon/widget/publish/vote_display.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -22,8 +24,9 @@ import '../../widget/publish/new_status_publish_level.dart';
 
 class NewStatus extends StatefulWidget {
   final StatusItemData replyTo;
+  final dynamic scheduleInfo;
 
-  NewStatus({this.replyTo});
+  NewStatus({this.replyTo,this.scheduleInfo});
 
   @override
   _NewStatusState createState() => _NewStatusState();
@@ -40,6 +43,9 @@ class _NewStatusState extends State<NewStatus> {
   Map<String, String> imageTitles = {};
   Map<String, String> imageIds = {};
   Vote vote;
+  DateTime scheduledAt;
+  bool sensitive = false;
+  String replyToId;
 
   int counter = 0;
   static const Map<String, IconData> visibilityIcons = {
@@ -65,10 +71,17 @@ class _NewStatusState extends State<NewStatus> {
     //_getEmojis();
 
     if (widget.replyTo != null) {
+      replyToId = widget.replyTo.id;
+    }
+    if (widget.replyTo != null) {
       _controller.text = getMentionString();
     }
 
-    _loadFromDraft();
+    if (widget.scheduleInfo != null) {
+      _loadFromScheduleInfo(widget.scheduleInfo);
+    } else {
+      _loadFromDraft();
+    }
   }
 
   Future<void> _getEmojis() async {
@@ -96,9 +109,11 @@ class _NewStatusState extends State<NewStatus> {
       prefs.setInt(_spKey('vote_expires_in'), vote.expiresIn);
       prefs.setBool(_spKey('multi_choice'), vote.multiChoice);
     }
+    prefs.setString(_spKey('scheduled_at'), scheduledAt.toIso8601String());
+    prefs.setBool(_spKey('sensitive'), sensitive);
   }
 
-  _clearDraft() async{
+  _clearDraft() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(_spKey('have_draft'), false);
     prefs.remove(_spKey('text'));
@@ -111,7 +126,8 @@ class _NewStatusState extends State<NewStatus> {
     prefs.remove(_spKey('vote_options'));
     prefs.remove(_spKey('vote_expires_in'));
     prefs.remove(_spKey('multi_choice'));
-
+    prefs.remove(_spKey('scheduled_at'));
+    prefs.remove(_spKey('sensitive'));
   }
 
   _loadFromDraft() async {
@@ -126,8 +142,10 @@ class _NewStatusState extends State<NewStatus> {
         size: 30,
       );
       images = prefs.getStringList(_spKey('images'));
-      imageTitles = Map<String,String>.from(json.decode(prefs.getString(_spKey('image_titles'))));
-      imageIds = Map<String,String>.from(json.decode(prefs.getString(_spKey('image_ids'))));
+      imageTitles = Map<String, String>.from(
+          json.decode(prefs.getString(_spKey('image_titles'))));
+      imageIds = Map<String, String>.from(
+          json.decode(prefs.getString(_spKey('image_ids'))));
       var options = prefs.getStringList(_spKey('vote_options'));
       if (options != null) {
         vote = Vote.create(
@@ -135,9 +153,45 @@ class _NewStatusState extends State<NewStatus> {
             prefs.getInt(_spKey('vote_expires_in')),
             prefs.getBool(_spKey('multi_choice')));
       }
+      var timeStr = prefs.get(_spKey('scheduled_at'));
+      scheduledAt = timeStr != null ? DateTime.parse(timeStr): null;
+      if (scheduledAt.difference(DateTime.now()).inSeconds < 300) {
+        scheduledAt = null;
+      }
+      sensitive = prefs.getBool(_spKey('sensitive'));
       counter = _controller.text.length;
       setState(() {});
     }
+  }
+
+  _loadFromScheduleInfo(dynamic info) {
+    var params = info['params'];
+    _controller.text = params['text'];
+    _wornController.text = params['spoiler_text'];
+    _visibility = params['visibility'];
+    _articleRange = Icon(
+      visibilityIcons[_visibility],
+      size: 30,
+    );
+    for (var media in info['media_attachments']) {
+      if (media['type'] == 'image') {
+        images.add(media['url']);
+        imageIds[media['url']] = media['id'];
+        imageTitles[media['url']] = media['description'];
+      }
+    }
+    if (params['poll'] != null) {
+      var poll = params['poll'];
+      vote = Vote.create(List<String>.from(poll['options']), poll['expires_in'], poll['multiple']);
+    }
+
+    scheduledAt = DateTime.parse(info['scheduled_at']);
+    sensitive = params['sensitive'];
+    replyToId = params['in_reply_to_id'];
+    counter = _controller.text.length;
+
+    setState(() {});
+
   }
 
   Future<bool> _onWillPop() async {
@@ -152,8 +206,9 @@ class _NewStatusState extends State<NewStatus> {
               actions: <Widget>[
                 FlatButton(
                   child: Text('不保留'),
-                  onPressed: () async{
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                  onPressed: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
                     _clearDraft();
                     AppNavigate.pop(context);
                     AppNavigate.pop(context);
@@ -198,6 +253,11 @@ class _NewStatusState extends State<NewStatus> {
   }
 
   Future<void> _pushNewToot() async {
+    if (scheduledAt != null && scheduledAt.difference(DateTime.now()).inSeconds < 300) {
+      DialogUtils.toastErrorInfo('定时嘟文必须是五分钟后');
+      return;
+    }
+    
     var mediaIds = [];
     for (String file in images) {
       var id = imageIds[file];
@@ -217,13 +277,23 @@ class _NewStatusState extends State<NewStatus> {
     } else {
       paramsMap['media_ids'] = mediaIds;
     }
-    if (widget.replyTo != null) {
-      paramsMap['in_reply_to_id'] = widget.replyTo.id;
+    if (replyToId != null) {
+      paramsMap['in_reply_to_id'] = replyToId;
     }
+
+    if (scheduledAt != null) {
+      paramsMap['scheduled_at'] = scheduledAt.toIso8601String();
+    }
+
     paramsMap['sensitive'] = false;
     paramsMap['spoiler_text'] = _wornController.text;
     paramsMap['status'] = _controller.text;
     paramsMap['visibility'] = _visibility;
+    paramsMap['sensitive'] = sensitive;
+
+    if (scheduledAt != null) {
+      eventBus.emit(EventBusKey.scheduledStatusPublished);
+    }
 
     try {
       Request.post(url: Api.status, params: paramsMap).then((data) {
@@ -711,18 +781,21 @@ class _NewStatusState extends State<NewStatus> {
                                 },
                           disabledColor: Colors.grey,
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
                         GestureDetector(
                           onTap: () {
                             showBottomSheet();
                           },
                           child: _articleRange,
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
+                        if (images.isNotEmpty)
+                          IconButton(
+                            icon: sensitive ? Icon(Icons.visibility_off,color: Colors.blue,):Icon(Icons.visibility),
+                            onPressed: () {
+                              setState(() {
+                                sensitive = !sensitive;
+                              });
+                            },
+                          ),
                         IconButton(
                           icon: Icon(Icons.list),
                           onPressed: images.length > 0
@@ -730,9 +803,6 @@ class _NewStatusState extends State<NewStatus> {
                               : () {
                                   showVoteDialog();
                                 },
-                        ),
-                        SizedBox(
-                          width: 10,
                         ),
                         InkWell(
                           onTap: () {
@@ -744,6 +814,41 @@ class _NewStatusState extends State<NewStatus> {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 20)),
                         ),
+                        IconButton(
+                          onPressed: () {
+                            DatePicker.showDateTimePicker(context,
+                                showTitleActions: true,
+                                minTime:
+                                    DateTime.now().add(Duration(minutes: 8)),
+                                maxTime: null,
+                                onChanged: (date) {}, onConfirm: (date) {
+                                if (date.difference(DateTime.now()).inSeconds > 300) {
+                                  setState(() {
+                                    scheduledAt = date;
+                                  });
+                                } else {
+                                  DialogUtils.toastErrorInfo('时间必须是五分钟后');
+                                  setState(() {
+                                    scheduledAt = null;
+                                  });
+                                }
+                            },
+                                onCancel: () {
+                                  setState(() {
+                                    scheduledAt = null;
+                                  });
+                                },
+                                currentTime: scheduledAt ??
+                                    DateTime.now().add(Duration(minutes: 10)),
+                                locale: LocaleType.zh);
+                          },
+                          icon: Icon(
+                            Icons.access_time,
+                            color: scheduledAt != null
+                                ? Colors.blue
+                                : Colors.black,
+                          ),
+                        )
                       ],
                     ),
                     Text(counter.toString()),
@@ -842,6 +947,12 @@ class _NewStatusState extends State<NewStatus> {
         }
       },
     );
+    Widget imageView;
+    if (StringUtil.isUrl(path)) {
+      imageView =  CachedNetworkImage(imageUrl: path,);
+    } else {
+      imageView = Image.file(File(path));
+    }
     return InkWell(
       key: btnKey,
       onTap: () {
@@ -855,7 +966,7 @@ class _NewStatusState extends State<NewStatus> {
               width: 100,
               height: 100,
               child: FittedBox(
-                child: Image.file(File(path)),
+                child: imageView,
                 fit: BoxFit.fitWidth,
               )),
           if (imageIds[path] == null)

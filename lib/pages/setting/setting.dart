@@ -1,6 +1,7 @@
 import 'package:fastodon/pages/setting/bookmarks_list.dart';
 import 'package:fastodon/pages/setting/edit_user_profile.dart';
 import 'package:fastodon/pages/setting/lists/lists_page.dart';
+import 'package:fastodon/pages/status/scheduled_statuses_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -125,9 +126,14 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
             onPress: () => AppNavigate.push(context, BookmarksList()),
           ),
           SettingCell(
-            title: '请求关注列表',
+            title: '列表',
             leftIcon: Icon(Icons.people),
             onPress: () => AppNavigate.push(context, ListsPage()),
+          ),
+          SettingCell(
+            title: '定时嘟文',
+            leftIcon: Icon(Icons.access_time),
+            onPress: () => AppNavigate.push(context, ScheduledStatusesList()),
           ),
           SettingCell(
             title: '静音用户',

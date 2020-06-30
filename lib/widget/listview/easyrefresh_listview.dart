@@ -15,7 +15,7 @@ class EasyRefreshListView extends StatefulWidget {
     this.offsetPagination,
     this.emptyWidget = const Center(child:Text('还没有内容')),
     this.headerLinkPagination = false,
-
+    this.controller
   }) : super(key: key);
   final String requestUrl;
   final Function buildRow;
@@ -24,6 +24,7 @@ class EasyRefreshListView extends StatefulWidget {
   final bool offsetPagination; //search 里面的max id和 min id 不能用
   final bool headerLinkPagination; // 用返回的Header link来分分页
   final Widget emptyWidget;
+  final EasyRefreshController controller;
 
   @override
   _EasyRefreshListViewState createState() => _EasyRefreshListViewState();
@@ -41,7 +42,7 @@ enum ListStatus {
 class _EasyRefreshListViewState extends State<EasyRefreshListView> {
   ScrollController _scrollController = ScrollController();
   List _dataList = [];
-  EasyRefreshController _controller = EasyRefreshController();
+  EasyRefreshController _controller;
   int offset;
   bool noResults = false;
   String nextUrl; // 用header link 时分页有用
@@ -51,6 +52,7 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
     super.initState();
 
    // _startRequest(widget.requestUrl,refresh: true);
+    _controller = widget.controller ?? EasyRefreshController();
 
     eventBus.on(widget.type, (arg) {
         _scrollController.jumpTo(0);
