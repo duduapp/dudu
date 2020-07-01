@@ -5,12 +5,14 @@ class SettingCell extends StatelessWidget {
   SettingCell({
     Key key, 
     this.title, 
-    this.leftIcon,
-    this.onPress
+    this.leftIcon = const Opacity(child: Icon(Icons.remove),opacity: 0,),
+    this.onPress,
+    this.tail = const Icon(Icons.keyboard_arrow_right, size: 30,)
   }) : super(key: key);
   final String title;
-  final Icon leftIcon;
+  final Widget leftIcon;
   final Function onPress;
+  final Widget tail;
 
   @override
   Widget build(BuildContext context) { 
@@ -25,17 +27,11 @@ class SettingCell extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Row(
-                  children: <Widget>[
                     leftIcon,
                     SizedBox(width: 10),
                     Text(title, style: TextStyle(fontSize: 15)),
-                  ],
-                ),
-                Icon(
-                  Icons.keyboard_arrow_right,
-                  size: 30,
-                )
+              Spacer(),
+                tail
               ],
             ),
           ),

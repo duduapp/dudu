@@ -4,6 +4,7 @@ import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_easyrefresh/material_header.dart';
 
 class ScheduledStatusesList extends StatefulWidget {
   @override
@@ -15,9 +16,6 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
 
   @override
   void initState() {
-    eventBus.on(EventBusKey.scheduledStatusPublished, (arg) {
-      _controller.callRefresh();
-    });
     super.initState();
   }
 
@@ -33,6 +31,8 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
         requestUrl: ScheduledStatusesApi.url,
         buildRow: _buildRow,
         controller: _controller,
+        header: MaterialHeader(),
+        triggerRefreshEvent: [EventBusKey.scheduledStatusDeleted,EventBusKey.scheduledStatusPublished],
       ),
     );
   }
@@ -60,8 +60,7 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
               icon: Icon(Icons.clear),
               onPressed: () async {
                 await ScheduledStatusesApi.delete(row['id']);
-                _controller.callRefresh(duration:Duration(milliseconds: 0));
-
+                eventBus.emit(EventBusKey.scheduledStatusDeleted);
               },
             )
           ],
@@ -75,7 +74,6 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
 
   @override
   void dispose() {
-    eventBus.off(EventBusKey.scheduledStatusPublished);
     super.dispose();
   }
 }

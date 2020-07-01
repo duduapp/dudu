@@ -15,7 +15,9 @@ class EasyRefreshListView extends StatefulWidget {
     this.offsetPagination,
     this.emptyWidget = const Center(child:Text('还没有内容')),
     this.headerLinkPagination = false,
-    this.controller
+    this.controller,
+    this.header,
+    this.triggerRefreshEvent = const []
   }) : super(key: key);
   final String requestUrl;
   final Function buildRow;
@@ -25,6 +27,8 @@ class EasyRefreshListView extends StatefulWidget {
   final bool headerLinkPagination; // 用返回的Header link来分分页
   final Widget emptyWidget;
   final EasyRefreshController controller;
+  final Header header;
+  final List<String> triggerRefreshEvent;
 
   @override
   _EasyRefreshListViewState createState() => _EasyRefreshListViewState();
@@ -45,6 +49,7 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
   EasyRefreshController _controller;
   int offset;
   bool noResults = false;
+  bool finishLoad = false;
   String nextUrl; // 用header link 时分页有用
 
   @override
@@ -66,6 +71,12 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
     eventBus.on(EventBusKey.blockAccount,(arg) {
       _removeByAccountId(arg['account_id']);
     });
+
+    for (var event in widget.triggerRefreshEvent) {
+      eventBus.on(event, (arg) {
+        _onRefresh();
+      });
+    }
   }
   
   _removeByAccountId(String accountId) {
@@ -120,9 +131,10 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
       }
       setState(() {
         if (data.length == 0) {
-          _controller.finishLoad(noMore: true,success: true);
+          _finishLoad();
         } else {
-          _controller.resetLoadState();
+          _resetState();
+
         }
         _dataList = combineList;
        // _controller.resetLoadState();
@@ -131,14 +143,26 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
       if (widget.headerLinkPagination != null && widget.headerLinkPagination == true) {
         var link = response.headers['link'][0].split(',');
         if (link.length < 2) {
-          setState(() {
-            _controller.finishLoad(noMore: true,success: true);
-          });
+          _finishLoad();
         } else {
           nextUrl = link[0].substring(1,link[0].indexOf('>'));
         }
       }
 
+    });
+  }
+
+  _finishLoad() {
+    setState(() {
+      _controller.finishLoad(noMore: true,success: true);
+      finishLoad = true;
+    });
+  }
+
+  _resetState() {
+    _controller.resetLoadState();
+    setState(() {
+      finishLoad = false;
     });
   }
 
@@ -163,13 +187,14 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
       ],
       firstRefresh: true,
       firstRefreshWidget: Center(child: SizedBox(child: CircularProgressIndicator(),width: 50,height: 50,),),
-      header: AppConfig.listviewHeader,
+      header: widget.header ?? AppConfig.listviewHeader,
       footer: AppConfig.listviewFooter,
       controller: _controller,
       scrollController: _scrollController,
       onRefresh: _onRefresh,
-      onLoad: _onLoad,
+      onLoad: finishLoad ? null :_onLoad,
       emptyWidget: noResults ? widget.emptyWidget :null,
+
     );
 
   }
@@ -179,6 +204,9 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
     eventBus.off(widget.type);
     eventBus.off(EventBusKey.muteAccount);
     eventBus.off(EventBusKey.blockAccount);
+    for (var event in widget.triggerRefreshEvent) {
+      eventBus.off(event);
+    }
     super.dispose();
   }
 }

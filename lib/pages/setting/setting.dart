@@ -1,3 +1,4 @@
+import 'package:fastodon/pages/setting/account_setting.dart';
 import 'package:fastodon/pages/setting/bookmarks_list.dart';
 import 'package:fastodon/pages/setting/edit_user_profile.dart';
 import 'package:fastodon/pages/setting/lists/lists_page.dart';
@@ -127,13 +128,18 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
           ),
           SettingCell(
             title: '列表',
-            leftIcon: Icon(Icons.people),
+            leftIcon: Icon(Icons.list),
             onPress: () => AppNavigate.push(context, ListsPage()),
           ),
           SettingCell(
             title: '定时嘟文',
             leftIcon: Icon(Icons.access_time),
             onPress: () => AppNavigate.push(context, ScheduledStatusesList()),
+          ),
+          SettingCell(
+            title: '账号设置',
+            leftIcon: Icon(Icons.account_box),
+            onPress: () => AppNavigate.push(context, AccountSetting()),
           ),
           SettingCell(
             title: '静音用户',

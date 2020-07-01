@@ -5,7 +5,7 @@ class AppConfig {
   static String RedirectUris = 'https://mah93.github.io';
   static String Scopes = 'read write follow push';
 
-  static ClassicalHeader listviewHeader =  ClassicalHeader(
+  static  ClassicalHeader listviewHeader =  ClassicalHeader(
     refreshText: '下拉刷新',
     refreshReadyText: '释放刷新',
     refreshingText: '加载中...',
@@ -16,13 +16,14 @@ class AppConfig {
   );
 
   static ClassicalFooter listviewFooter = ClassicalFooter(
+    showInfo: false,
   enableInfiniteLoad: true,
   loadText: '拉动加载',
   loadReadyText: '释放加载',
   loadingText: '加载中...',
   loadedText: '',
   loadFailedText: '加载失败',
-  noMoreText: '没有更多数据了',
+  noMoreText: '',
   infoText: '',
   );
 }
