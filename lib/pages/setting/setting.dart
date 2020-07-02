@@ -1,3 +1,4 @@
+import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/pages/setting/account_setting.dart';
 import 'package:fastodon/pages/setting/bookmarks_list.dart';
 import 'package:fastodon/pages/setting/edit_user_profile.dart';
@@ -51,14 +52,13 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
   }
 
   Future<void> _getMyAccount() async {
-    Request.get(url: Api.OwnerAccount).then((data) {
-      OwnerAccount account = OwnerAccount.fromJson(data);
-      MyAccount saveAcc = new MyAccount();
-      saveAcc.setAcc(account);
-      setState(() {
-        _finishRequest = true;
-        _account = account;
-      });
+    OwnerAccount account = await AccountsApi.getAccount();
+    MyAccount saveAcc = new MyAccount();
+    saveAcc.setAcc(account);
+    saveAcc.requestPrefrence();
+    setState(() {
+      _finishRequest = true;
+      _account = account;
     });
   }
 

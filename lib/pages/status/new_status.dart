@@ -291,15 +291,16 @@ class _NewStatusState extends State<NewStatus> {
     paramsMap['visibility'] = _visibility;
     paramsMap['sensitive'] = sensitive;
 
-    if (scheduledAt != null) {
-      eventBus.emit(EventBusKey.scheduledStatusPublished);
-    }
+
 
     try {
-      Request.post(url: Api.status, params: paramsMap).then((data) {
+       Request.post(url: Api.status, params: paramsMap).then((data) {
         StatusItemData newItem = StatusItemData.fromJson(data);
         if (newItem != null) {
           eventBus.emit(EventBusKey.HidePresentWidegt, true);
+        }
+        if (scheduledAt != null) {
+          eventBus.emit(EventBusKey.scheduledStatusPublished);
         }
       });
     } on DioError catch (e) {

@@ -12,7 +12,6 @@ class ScheduledStatusesList extends StatefulWidget {
 }
 
 class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
-  EasyRefreshController _controller = EasyRefreshController();
 
   @override
   void initState() {
@@ -30,7 +29,6 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
       body: EasyRefreshListView(
         requestUrl: ScheduledStatusesApi.url,
         buildRow: _buildRow,
-        controller: _controller,
         header: MaterialHeader(),
         triggerRefreshEvent: [EventBusKey.scheduledStatusDeleted,EventBusKey.scheduledStatusPublished],
       ),

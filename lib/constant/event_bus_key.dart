@@ -11,4 +11,8 @@ class EventBusKey {
 
   static String scheduledStatusPublished = 'scheduledStatusPublished';
   static String scheduledStatusDeleted = 'scheduledStatusDeleted';
+
+  static String userUnmuted = 'userUnmuted';
+  static String userUnblocked = 'userUnblocked';
+  static String domainUnblocked = 'domainUnblocked';
 }

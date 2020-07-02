@@ -1,6 +1,11 @@
+import 'package:fastodon/models/owner_account.dart';
+
 class User {
   String host;
   String token;
+
+  OwnerAccount account;
+
   // 工厂模式
   factory User() =>_getInstance();
   static User get instance => _getInstance();
@@ -30,4 +35,9 @@ class User {
   String getToken() {
     return this.token;
   }
+
+  requestAccount() {
+
+  }
 }
+
