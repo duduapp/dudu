@@ -2,6 +2,7 @@ import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/pages/setting/account_setting.dart';
 import 'package:fastodon/pages/setting/bookmarks_list.dart';
 import 'package:fastodon/pages/setting/edit_user_profile.dart';
+import 'package:fastodon/pages/setting/general_setting.dart';
 import 'package:fastodon/pages/setting/lists/lists_page.dart';
 import 'package:fastodon/pages/status/scheduled_statuses_list.dart';
 import 'package:flutter/material.dart';
@@ -117,7 +118,7 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
           ),
           SizedBox(height: 10),
           SettingCell(
-            title: '我的收藏',
+            title: '收藏',
             leftIcon: Icon(Icons.favorite),
             onPress: () => AppNavigate.push(context, FavoutitesArticle()),
           ),
@@ -136,31 +137,19 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
             leftIcon: Icon(Icons.access_time),
             onPress: () => AppNavigate.push(context, ScheduledStatusesList()),
           ),
+
+          SizedBox(height: 10,),
           SettingCell(
             title: '账号设置',
             leftIcon: Icon(Icons.account_box),
             onPress: () => AppNavigate.push(context, AccountSetting()),
           ),
           SettingCell(
-            title: '静音用户',
-            leftIcon: Icon(Icons.volume_off),
-            onPress: () => {},
+            title: '通用',
+            leftIcon: Icon(Icons.settings),
+            onPress: () => AppNavigate.push(context, GeneralSetting()),
           ),
-          SettingCell(
-            title: '黑名单',
-            leftIcon: Icon(Icons.not_interested), 
-            onPress: () => {},
-          ),
-          SettingCell(
-            title: '切换主题',
-            leftIcon: Icon(Icons.wb_sunny),
-            onPress: () => {},
-          ),
-          SettingCell(
-            title: 'App设置',
-            leftIcon: Icon(Icons.settings_input_svideo),
-            onPress: () => {},
-          ),
+
           SizedBox(height: 10),
           SettingCell(
             title: '关于本站',

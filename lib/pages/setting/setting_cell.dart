@@ -37,8 +37,7 @@ class SettingCell extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Ink(
-            color: MyColor.widgetDefaultColor,
-            height: subTitle == null ? 50 : 55,
+            height: subTitle == null ? 55 : 60,
             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

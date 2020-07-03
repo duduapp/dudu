@@ -74,7 +74,7 @@ class _StatusItemActionState extends State<StatusItemAction> {
 
   @override
   Widget build(BuildContext context) {
-    var buttonColor = Theme.of(context).buttonColor;
+    var buttonColor = Theme.of(context).splashColor;
     return Container(
       height: 38,
       child: Row(

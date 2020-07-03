@@ -1,11 +1,21 @@
 import 'package:fastodon/api/search_api.dart';
 import 'package:fastodon/pages/search/search_result.dart';
 import 'package:flutter/material.dart';
+import 'package:theme_provider/theme_provider.dart';
 
 import '../../widget/other/search.dart' as customSearch;
 
 class SearchPageDelegate extends customSearch.SearchDelegate  {
   SearchPageDelegate() : super(maintainState: true);
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    assert(context != null);
+    final ThemeData theme = ThemeProvider.themeOf(context).data;
+    assert(theme != null);
+
+    return theme;
+  }
 
   @override
   List<Widget> buildActions(BuildContext context) {

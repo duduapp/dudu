@@ -14,12 +14,10 @@ class SettingHead extends StatelessWidget {
     if (account == null) {
       return Container(
         height: 150,
-        color: MyColor.mainColor,
       );
     }
     return Container(
       height: 150,
-      color: MyColor.mainColor,
       child: CachedNetworkImage(
         height: 150,
         width: Screen.width(context),
@@ -96,7 +94,7 @@ class SettingHead extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text('个人中心', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                              Text('个人中心', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold)),
                             ],
                           ),
                         ),
@@ -107,7 +105,6 @@ class SettingHead extends StatelessWidget {
                       children: <Widget>[
                         Container(
                           height: 30,
-                          color: MyColor.widgetDefaultColor,
                         ),
                         userName(),
                       ],
@@ -124,7 +121,6 @@ class SettingHead extends StatelessWidget {
           ),
           Container(
             height: 50,
-            color: MyColor.widgetDefaultColor,
             child: headerWidget()
           ),
         ],
