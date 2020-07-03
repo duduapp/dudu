@@ -17,7 +17,8 @@ class EasyRefreshListView extends StatefulWidget {
     this.headerLinkPagination = false,
     this.controller,
     this.header,
-    this.triggerRefreshEvent = const []
+    this.triggerRefreshEvent = const [],
+    this.enableRefresh = true
   }) : super(key: key);
   final String requestUrl;
   final Function buildRow;
@@ -29,6 +30,7 @@ class EasyRefreshListView extends StatefulWidget {
   final EasyRefreshController controller;
   final Header header;
   final List<String> triggerRefreshEvent;
+  final bool enableRefresh; // 不影响第一次刷新，请求成功后不会再刷新
 
   @override
   _EasyRefreshListViewState createState() => _EasyRefreshListViewState();
@@ -50,6 +52,7 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
   int offset;
   bool noResults = false;
   bool finishLoad = false;
+  bool finishRefresh = false;
   String nextUrl; // 用header link 时分页有用
 
   @override
@@ -111,6 +114,11 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
 
   Future<void> _onRefresh() async{
     await _startRequest(widget.requestUrl,refresh: true);
+    if (!widget.enableRefresh) {
+      setState(() {
+        finishRefresh = true;
+      });
+    }
   }
 
   Future<void> _startRequest(String url, {bool refresh}) async {
@@ -191,7 +199,7 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
       footer: AppConfig.listviewFooter,
       controller: _controller,
       scrollController: _scrollController,
-      onRefresh: _onRefresh,
+      onRefresh: finishRefresh ? null : _onRefresh,
       onLoad: finishLoad ? null :_onLoad,
       emptyWidget: noResults ? widget.emptyWidget :null,
 

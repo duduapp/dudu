@@ -15,4 +15,6 @@ class EventBusKey {
   static String userUnmuted = 'userUnmuted';
   static String userUnblocked = 'userUnblocked';
   static String domainUnblocked = 'domainUnblocked';
+
+  static String filterEdited = 'filterEdited';
 }

@@ -5,6 +5,7 @@ import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/models/my_account.dart';
 import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/pages/setting/common_block_list.dart';
+import 'package:fastodon/pages/setting/filter/common_filter_list.dart';
 import 'package:fastodon/pages/setting/setting_cell.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/setting/setting_switch.dart';
@@ -91,15 +92,19 @@ class _AccountSettingState extends State<AccountSetting> {
             Container(child: Text('过滤器'),padding: EdgeInsets.all(8),),
             SettingCell(
               title: '公共时间轴',
+              onPress: () => AppNavigate.push(context, CommonFilterList(FilterType.public)),
             ),
             SettingCell(
               title: '通知',
+              onPress: () => AppNavigate.push(context, CommonFilterList(FilterType.notifications)),
             ),
             SettingCell(
               title: '主页',
+              onPress: () => AppNavigate.push(context,CommonFilterList(FilterType.home)),
             ),
             SettingCell(
               title: '对话',
+              onPress: () => AppNavigate.push(context, CommonFilterList(FilterType.thread)),
             ),
           ],
         ),
