@@ -1,5 +1,6 @@
 // 下拉刷新和上拉加载
 import 'package:fastodon/pages/timeline/timeline.dart';
+import 'package:fastodon/widget/common/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -54,6 +55,7 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
   bool finishLoad = false;
   bool finishRefresh = false;
   String nextUrl; // 用header link 时分页有用
+
 
   @override
   void initState() {
@@ -182,27 +184,30 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
 
   @override
   Widget build(BuildContext context) {
-    return EasyRefresh.custom(
-      slivers: [
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-              (context,index) {
-                return widget.buildRow(index, _dataList);
-              },
-            childCount: _dataList.length
-          ),
-        )
-      ],
-      firstRefresh: true,
-      firstRefreshWidget: Center(child: SizedBox(child: CircularProgressIndicator(),width: 50,height: 50,),),
-      header: widget.header ?? AppConfig.listviewHeader,
-      footer: AppConfig.listviewFooter,
-      controller: _controller,
-      scrollController: _scrollController,
-      onRefresh: finishRefresh ? null : _onRefresh,
-      onLoad: finishLoad ? null :_onLoad,
-      emptyWidget: noResults ? widget.emptyWidget :null,
+    return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+      child: EasyRefresh.custom(
+        slivers: [
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+                (context,index) {
+                  return widget.buildRow(index, _dataList);
+                },
+              childCount: _dataList.length
+            ),
+          )
+        ],
+        firstRefresh: true,
+        firstRefreshWidget: LoadingView(),
+        header: widget.header ?? AppConfig.listviewHeader,
+        footer: AppConfig.listviewFooter,
+        controller: _controller,
+        scrollController: _scrollController,
+        onRefresh: finishRefresh ? null : _onRefresh,
+        onLoad: finishLoad ? null :_onLoad,
+        emptyWidget: noResults ? widget.emptyWidget :null,
 
+      ),
     );
 
   }

@@ -26,7 +26,6 @@ class NewStatusPublishLevel extends StatelessWidget {
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-        color: MyColor.widgetDefaultColor,
         width: Screen.width(context),
         child: Row(
           children: <Widget>[

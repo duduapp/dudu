@@ -11,12 +11,10 @@ import 'setting/setting.dart';
 
 class RootPage extends StatefulWidget {
   const RootPage(
-      {Key key, this.showLogin, this.hideWidget, this.showNewArtical})
+      {Key key, this.showLogin})
       : super(key: key);
 
   final Function showLogin;
-  final Function hideWidget;
-  final Function showNewArtical;
 
 
   @override
@@ -37,13 +35,7 @@ class _RootPageState extends State<RootPage> {
       widget.showLogin();
     });
 
-    eventBus.on(EventBusKey.HidePresentWidegt, (arg) {
-      widget.hideWidget();
-    });
-    // 弹出发送嘟文页面
-    eventBus.on(EventBusKey.ShowNewArticalWidget, (arg) {
-      widget.showNewArtical();
-    });
+
 
     eventBus.on(EventBusKey.LoadLoginMegSuccess, (arg) {
       setState(() {
@@ -55,8 +47,6 @@ class _RootPageState extends State<RootPage> {
   @override
   void dispose() {
     eventBus.off(EventBusKey.ShowLoginWidget);
-    eventBus.off(EventBusKey.HidePresentWidegt);
-    eventBus.off(EventBusKey.ShowNewArticalWidget);
     super.dispose();
   }
 

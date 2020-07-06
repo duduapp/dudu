@@ -1,3 +1,5 @@
+import 'package:fastodon/pages/root_page.dart';
+import 'package:fastodon/widget/common/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -5,7 +7,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:fastodon/public.dart';
 import 'package:fastodon/models/user.dart';
+import 'package:nav_router/nav_router.dart';
 
+import '../../my_app.dart';
 import 'model/app_credential.dart';
 import 'model/server_item.dart';
 import 'model/token.dart';
@@ -20,6 +24,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final TextEditingController _controller = new TextEditingController();
   bool _clickButton = false;
+
+  bool isLoading = false; // 是否登录成功获取token中
 
   @override
   void initState() {
@@ -44,6 +50,12 @@ class _LoginState extends State<Login> {
       });
       AppNavigate.push(context, WebLogin(serverItem: model, hostUrl: hostUrl),
           callBack: (code) {
+        if (code == null) {
+          return;
+        }
+        setState(() {
+          isLoading = true;
+        });
         _getToken(code, model, hostUrl);
       });
     }).catchError(() {
@@ -73,7 +85,9 @@ class _LoginState extends State<Login> {
         User user = new User();
         user.setHost(hostUrl);
         user.setToken(token);
-        eventBus.emit(EventBusKey.HidePresentWidegt);
+        pushAndRemoveUntil(HomePage());
+
+        // eventBus.emit(EventBusKey.HidePresentWidegt);
       });
     } catch (e) {
       print(e);
@@ -138,115 +152,123 @@ class _LoginState extends State<Login> {
         });
   }
 
+  Widget loadView() {
+    return Scaffold(
+      body: LoadingView(text: '正在加载中',),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomPadding: false,
+    return  isLoading ? loadView():
+    Scaffold(
+            resizeToAvoidBottomPadding: false,
         backgroundColor: MyColor.loginPrimary,
-        body: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          child: Container(
-            child: Column(
-              children: <Widget>[
-                Container(
-                    height: 60,
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Center(
-                        child: Text('Mastodon',
-                            style: TextStyle(
-                                fontSize: 20, color: MyColor.loginWhite)),
-                      ),
-                    )),
-                Image.asset('image/wallpaper.png'),
-                Card(
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(2))),
-                  elevation: 5,
-                  color: MyColor.loginWhite,
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text('域名', style: TextStyle(fontSize: 16))
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          child: TextField(
-                            controller: _controller,
-                            decoration: new InputDecoration(
-                                hintText: '例如：cmx.im',
-                                disabledBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                labelStyle: TextStyle(fontSize: 16)),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: RaisedButton(
-                          onPressed: () {
-                            _checkInputText();
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: _showButtonLoading(context),
-                          ),
-                          color: MyColor.loginWhite,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          _showAboutSheet(context);
-                        },
-                        child: Container(
+            body: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                FocusScope.of(context).requestFocus(FocusNode());
+              },
+              child: Container(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                        height: 60,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 20),
                           child: Center(
-                            child: Text('关于Mastodon',
-                                style: TextStyle(color: MyColor.loginWhite)),
+                            child: Text('Mastodon',
+                                style: TextStyle(
+                                    fontSize: 20, )),
                           ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          _chooseServer(context);
-                        },
-                        child: Container(
-                          child: Center(
-                            child: Text('选择域名',
-                                style: TextStyle(color: MyColor.loginWhite)),
+                        )),
+                    Image.asset('image/wallpaper.png'),
+                    Card(
+                      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(2))),
+                      elevation: 5,
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text('域名', style: TextStyle(fontSize: 16))
+                              ],
+                            ),
                           ),
-                        ),
+                          Expanded(
+                            child: Container(
+                              child: TextField(
+                                controller: _controller,
+                                decoration: new InputDecoration(
+                                    hintText: '例如：cmx.im',
+                                    disabledBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    labelStyle: TextStyle(fontSize: 16)),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: RaisedButton(
+                              onPressed: () {
+                                _checkInputText();
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: _showButtonLoading(context),
+                              ),
+                              color: MyColor.loginWhite,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              _showAboutSheet(context);
+                            },
+                            child: Container(
+                              child: Center(
+                                child: Text('关于Mastodon',
+                                    style:
+                                        TextStyle(color: MyColor.loginWhite)),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              _chooseServer(context);
+                            },
+                            child: Container(
+                              child: Center(
+                                child: Text('选择域名',
+                                    style:
+                                        TextStyle(color: MyColor.loginWhite)),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        ));
+              ),
+            ));
   }
 }

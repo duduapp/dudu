@@ -36,8 +36,8 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-    eventBus.on(EventBusKey.LoadLoginMegSuccess, (arg) {
-      _getMyAccount();
+    eventBus.on(EventBusKey.LoadLoginMegSuccess, (arg) async{
+      await _getMyAccount();
     });
 
     eventBus.on(EventBusKey.accountUpdated,(arg) {

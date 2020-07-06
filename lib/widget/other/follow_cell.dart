@@ -12,7 +12,7 @@ class FollowCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: MyColor.widgetDefaultColor,
+      color: Theme.of(context).primaryColor,
       margin: EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

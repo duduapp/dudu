@@ -296,9 +296,6 @@ class _NewStatusState extends State<NewStatus> {
     try {
        Request.post(url: Api.status, params: paramsMap).then((data) {
         StatusItemData newItem = StatusItemData.fromJson(data);
-        if (newItem != null) {
-          eventBus.emit(EventBusKey.HidePresentWidegt, true);
-        }
         if (scheduledAt != null) {
           eventBus.emit(EventBusKey.scheduledStatusPublished);
         }
@@ -368,7 +365,6 @@ class _NewStatusState extends State<NewStatus> {
         Container(
           height: 50,
           //    width: Screen.width(context) - 60,
-          color: MyColor.newArticalTextFieldColor,
           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
           child: TextField(
             controller: _wornController,

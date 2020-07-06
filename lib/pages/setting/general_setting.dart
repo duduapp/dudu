@@ -8,6 +8,18 @@ class GeneralSetting extends StatefulWidget {
 }
 
 class _GeneralSettingState extends State<GeneralSetting> {
+  String textScale;
+
+  @override
+  void initState(){
+    // TODO: implement initState
+    super.initState();
+  }
+
+  _getTextScale() {
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
