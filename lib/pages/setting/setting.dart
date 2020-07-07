@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:fastodon/api/accounts_api.dart';
+import 'package:fastodon/models/local_account.dart';
 import 'package:fastodon/pages/setting/account_setting.dart';
 import 'package:fastodon/pages/setting/bookmarks_list.dart';
 import 'package:fastodon/pages/setting/edit_user_profile.dart';
@@ -33,12 +36,15 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
+  Function loginSuccess;
+
   @override
   void initState() {
     super.initState();
-    eventBus.on(EventBusKey.LoadLoginMegSuccess, (arg) async{
+    loginSuccess = (arg) async{
       await _getMyAccount();
-    });
+    };
+    eventBus.on(EventBusKey.LoadLoginMegSuccess, loginSuccess);
 
     eventBus.on(EventBusKey.accountUpdated,(arg) {
       _getMyAccount();
@@ -47,13 +53,14 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
 
   @override
   void dispose() {
-    eventBus.off(EventBusKey.LoadLoginMegSuccess);
+    eventBus.off(EventBusKey.LoadLoginMegSuccess,loginSuccess);
     eventBus.off(EventBusKey.accountUpdated);
     super.dispose();
   }
 
   Future<void> _getMyAccount() async {
     OwnerAccount account = await AccountsApi.getAccount();
+    LocalStorageAccount.addOwnerAccount(account);
     MyAccount saveAcc = new MyAccount();
     saveAcc.setAcc(account);
     saveAcc.requestPrefrence();

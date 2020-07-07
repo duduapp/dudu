@@ -33,4 +33,26 @@ class Storage {
       return null;
     }
   }
+
+  static Future<List<String>> getStringList(String key) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs.getStringList(key);
+    } catch (e) {
+      print('报错了');
+      print(e.toString());
+      return null;
+    }
+  }
+
+  static Future saveStringList(String key,List<String> value) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs.setStringList(key,value);
+    } catch (e) {
+      print('报错了');
+      print(e.toString());
+      return null;
+    }
+  }
 }

@@ -11,6 +11,10 @@ class StringUtil {
     return displayName;
   }
 
+  static String accountAddress(OwnerAccount account) {
+    return '@'+account.acct+'@'+account.url.substring(account.url.indexOf('\/\/')+2,account.url.lastIndexOf('\/'));
+  }
+
   static String removeAllHtmlTags(String htmlText) {
     RegExp exp = RegExp(
         r"<[^>]*>",

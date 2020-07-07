@@ -18,6 +18,10 @@ class Screen {
     return MediaQuery.of(context).padding.bottom;
   }
 
+  static topSafeHeight(BuildContext context) {
+    return MediaQuery.of(context).padding.top;
+  }
+
   static updateStatusBarStyle(SystemUiOverlayStyle style) {
     SystemChrome.setSystemUIOverlayStyle(style);
   }

@@ -1,3 +1,4 @@
+import 'package:fastodon/models/local_account.dart';
 import 'package:fastodon/utils/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -72,17 +73,17 @@ class HomePage extends StatelessWidget {
 
   // 这是一个异步操作，必须保证单例从local中拿到数据之后，才可以发起请求
   void _showLoginWidget(BuildContext context) {
-    Future<String> hostString = Storage.getString(StorageKey.HostUrl);
-    Future<String> tokenString = Storage.getString(StorageKey.Token);
+    Future<LocalAccount> accounts = LocalStorageAccount.getActiveAccount();
+
 // 保证本地存有host地址以及token
-    Future.wait([hostString, tokenString]).then((List results) {
-      var host = results[0];
-      var token = results[1];
-      if (host == '' || host == null || token == '' || token == null) {
+    Future.wait([accounts]).then((List results) {
+      LocalAccount account  = results[0];
+
+      if (account == null) {
         pushAndRemoveUntil(Login());
       } else {
-        user.setHost(host);
-        user.setToken(token);
+        user.setHost(account.hostUrl);
+        user.setToken(account.token);
         _verifyToken(context);
       }
     });

@@ -32,30 +32,56 @@ class SettingCell extends StatelessWidget {
       cont = Text(title, style: TextStyle(fontSize: 15));
     }
 
-    return InkWell(
-      onTap: () => onPress(),
-      child: Column(
-        children: <Widget>[
-          Ink(
-            height: subTitle == null ? 55 : 60,
-            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                    leftIcon,
-                    SizedBox(width: 10),
-                    cont,
-              Spacer(),
-                tail
-              ],
+    return Container(
+      color: Theme.of(context).primaryColor,
+      child: InkWell(
+        onTap: () => onPress(),
+        child: Column(
+          children: <Widget>[
+            Ink(
+              height: subTitle == null ? 55 : 60,
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                      leftIcon,
+                      SizedBox(width: 10),
+                      cont,
+                if (tail != null)
+                Spacer(),
+                  if (tail != null)
+                  tail
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 50),
-            child: Divider(height: 1.0, color: MyColor.dividerLineColor),
-          )
-        ],
+            Padding(
+              padding: EdgeInsets.only(left: 50),
+              child: Divider(height: 1.0),
+            )
+          ],
+        ),
       ),
     );
   }
 }
+
+class SettingCellText extends StatelessWidget {
+  final Widget text;
+  final Function onPressed;
+  
+  SettingCellText({this.text,this.onPressed});
+  
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(16),
+        color: Theme.of(context).primaryColor,
+        child: Center(child: text),
+      ),
+    );
+  }
+}
+

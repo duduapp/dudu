@@ -1,5 +1,7 @@
+import 'package:fastodon/models/local_account.dart';
 import 'package:fastodon/pages/root_page.dart';
 import 'package:fastodon/widget/common/loading_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -17,6 +19,10 @@ import 'server_list.dart';
 import 'web_login.dart';
 
 class Login extends StatefulWidget {
+  final bool showBackButton;
+
+  Login({this.showBackButton = false});
+
   @override
   _LoginState createState() => _LoginState();
 }
@@ -79,6 +85,8 @@ class _LoginState extends State<Login> {
         Token getToken = Token.fromJson(data);
         String token = '${getToken.tokenType} ${getToken.accessToken}';
         // 这里的存储是异步的，需要将token保存至单例中实时更新页面
+
+        LocalStorageAccount.addLocalAccount(LocalAccount(hostUrl: hostUrl,token: token,active: true));
         Storage.save(StorageKey.Token, token);
         Storage.save(StorageKey.HostUrl, hostUrl);
 
@@ -162,6 +170,11 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return  isLoading ? loadView():
     Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: widget.showBackButton,
+          backgroundColor: Colors.transparent
+      ),
+        extendBodyBehindAppBar:true,
             resizeToAvoidBottomPadding: false,
         backgroundColor: MyColor.loginPrimary,
             body: GestureDetector(

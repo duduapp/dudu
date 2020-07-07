@@ -17,19 +17,22 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
   @override
   bool get wantKeepAlive => true;
 
+  Function loginSuccess;
   @override
   void initState() {
     super.initState();
-    eventBus.on(EventBusKey.LoadLoginMegSuccess, (arg) {
+    loginSuccess = (arg) {
       setState(() {
         _canLoadWidget = true;
       });
-    });
+    };
+
+    eventBus.on(EventBusKey.LoadLoginMegSuccess, loginSuccess);
   }
 
   @override
   void dispose() {
-    eventBus.off(EventBusKey.LoadLoginMegSuccess);
+    eventBus.off(EventBusKey.LoadLoginMegSuccess,loginSuccess);
     super.dispose();
   }
 

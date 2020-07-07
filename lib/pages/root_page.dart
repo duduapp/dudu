@@ -24,24 +24,12 @@ class RootPage extends StatefulWidget {
 class _RootPageState extends State<RootPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _tabIndex = 0;
-  bool _canLoadWidget = false;
 
   @override
   void initState() {
     super.initState();
     widget.showLogin();
-    // 隐藏登录弹出页
-    eventBus.on(EventBusKey.ShowLoginWidget, (arg) {
-      widget.showLogin();
-    });
 
-
-
-    eventBus.on(EventBusKey.LoadLoginMegSuccess, (arg) {
-      setState(() {
-        _canLoadWidget = true;
-      });
-    });
   }
 
   @override

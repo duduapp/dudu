@@ -1,4 +1,6 @@
+import 'package:fastodon/pages/setting/account_switch.dart';
 import 'package:fastodon/pages/setting/setting_cell.dart';
+import 'package:fastodon/public.dart';
 import 'package:flutter/material.dart';
 import 'package:theme_provider/theme_provider.dart';
 
@@ -38,8 +40,12 @@ class _GeneralSettingState extends State<GeneralSetting> {
           ),
           SettingCell(
             leftIcon: Icon(Icons.font_download),
-            title: '字体大小',
-
+            title: '字体大小'
+          ),
+          SizedBox(height: 30,),
+          SettingCellText(
+            text: Text('切换账号',style: TextStyle(fontSize: 16),),
+            onPressed: () => AppNavigate.push(context, AccountSwitch()),
           )
         ],
       ),

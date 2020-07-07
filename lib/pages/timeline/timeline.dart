@@ -29,19 +29,24 @@ class _TimelineState extends State<Timeline>
   bool _local = true;
   bool _showTab = false;
 
+  Function loginSuccess;
   @override
   void initState() {
-    super.initState();
-    eventBus.on(EventBusKey.LoadLoginMegSuccess, (arg) {
+    loginSuccess = (arg) {
       setState(() {
         _showTab = true;
       });
-    });
+    };
+    eventBus.on(
+        EventBusKey.LoadLoginMegSuccess,loginSuccess
+    );
+    super.initState();
+
   }
 
   @override
   void dispose() {
-    eventBus.off(EventBusKey.LoadLoginMegSuccess);
+    eventBus.off(EventBusKey.LoadLoginMegSuccess,loginSuccess);
     super.dispose();
   }
 
@@ -70,13 +75,25 @@ class _TimelineState extends State<Timeline>
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40.0),
         child: AppBar(
-          title: InkWell(child: Text(title),onTap: () => eventBus.emit(widget.type),),
+          title: InkWell(
+            child: Text(title),
+            onTap: () => eventBus.emit(widget.type),
+          ),
           centerTitle: true,
           actions: <Widget>[
-            IconButton(icon: Icon(Icons.search),onPressed: (){
-              customSearch.showSearch(context: context, delegate: SearchPageDelegate());
-            },),
-            IconButton(icon: Icon(Icons.add),onPressed: (){AppNavigate.push(context, NewStatus());},)
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                customSearch.showSearch(
+                    context: context, delegate: SearchPageDelegate());
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                AppNavigate.push(context, NewStatus());
+              },
+            )
           ],
         ),
       ),
@@ -99,13 +116,13 @@ class _TimelineState extends State<Timeline>
     for (dynamic media in lineItem.mediaAttachments) {
       switch (widget.type) {
         case TimelineType.home:
-            media['id'] = 'home_'+media['id'];
+          media['id'] = 'home_' + media['id'];
           break;
         case TimelineType.local:
-          media['id'] = 'local_'+media['id'];
+          media['id'] = 'local_' + media['id'];
           break;
         case TimelineType.federated:
-          media['id'] = 'federated_'+media['id'];
+          media['id'] = 'federated_' + media['id'];
           break;
       }
     }
