@@ -23,6 +23,18 @@ class Storage {
     }
   }
 
+  static Future<int> getInt(String key) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int response = prefs.getInt(key);
+      return response;
+    } catch (e) {
+      print('报错了');
+      print(e.toString());
+      return null;
+    }
+  }
+
   static void removeString(String key) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -38,6 +50,17 @@ class Storage {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       return prefs.getStringList(key);
+    } catch (e) {
+      print('报错了');
+      print(e.toString());
+      return null;
+    }
+  }
+
+  static Future saveInt(String key,int value) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs.setInt(key,value);
     } catch (e) {
       print('报错了');
       print(e.toString());

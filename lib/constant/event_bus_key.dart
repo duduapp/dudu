@@ -17,4 +17,6 @@ class EventBusKey {
   static String domainUnblocked = 'domainUnblocked';
 
   static String filterEdited = 'filterEdited';
+
+  static String textScaleChanged = 'textScaleChanged';
 }

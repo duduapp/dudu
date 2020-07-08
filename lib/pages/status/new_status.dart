@@ -115,7 +115,7 @@ class _NewStatusState extends State<NewStatus> {
 
   _clearDraft() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(_spKey('have_draft'), false);
+    prefs.remove(_spKey('have_draft'));
     prefs.remove(_spKey('text'));
     prefs.remove(_spKey('has_warning'));
     prefs.remove(_spKey('warning'));
@@ -132,7 +132,7 @@ class _NewStatusState extends State<NewStatus> {
 
   _loadFromDraft() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool(_spKey('have_draft'))) {
+    if (prefs.getBool(_spKey('have_draft')) != null) {
       _controller.text = prefs.getString(_spKey('text'));
       _wornController.text = prefs.getString(_spKey('warning'));
       _hasWarning = prefs.getBool(_spKey('has_warning'));
@@ -764,109 +764,111 @@ class _NewStatusState extends State<NewStatus> {
               Container(
                 color: primaryColor,
                 padding: EdgeInsets.fromLTRB(10, 5, 15, 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.photo, size: 30),
-                          onPressed: vote != null
-                              ? null
-                              : () {
-                                  getImage();
-                                },
-                          disabledColor: Colors.grey,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            showBottomSheet();
-                          },
-                          child: _articleRange,
-                        ),
-                        if (images.isNotEmpty)
+                child: SafeArea(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
                           IconButton(
-                            icon: sensitive ? Icon(Icons.visibility_off,color: Colors.blue,):Icon(Icons.visibility),
-                            onPressed: () {
+                            icon: Icon(Icons.photo, size: 30),
+                            onPressed: vote != null
+                                ? null
+                                : () {
+                                    getImage();
+                                  },
+                            disabledColor: Colors.grey,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              showBottomSheet();
+                            },
+                            child: _articleRange,
+                          ),
+                          if (images.isNotEmpty)
+                            IconButton(
+                              icon: sensitive ? Icon(Icons.visibility_off,color: Colors.blue,):Icon(Icons.visibility),
+                              onPressed: () {
+                                setState(() {
+                                  sensitive = !sensitive;
+                                });
+                              },
+                            ),
+                          IconButton(
+                            icon: Icon(Icons.list),
+                            onPressed: images.length > 0
+                                ? null
+                                : () {
+                                    showVoteDialog();
+                                  },
+                          ),
+                          InkWell(
+                            onTap: () {
                               setState(() {
-                                sensitive = !sensitive;
+                                _hasWarning = !_hasWarning;
                               });
                             },
+                            child: Text('cw',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 20)),
                           ),
-                        IconButton(
-                          icon: Icon(Icons.list),
-                          onPressed: images.length > 0
-                              ? null
-                              : () {
-                                  showVoteDialog();
-                                },
-                        ),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              _hasWarning = !_hasWarning;
-                            });
-                          },
-                          child: Text('cw',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20)),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            DatePicker.showDateTimePicker(context,
-                                showTitleActions: true,
-                                minTime:
-                                    DateTime.now().add(Duration(minutes: 8)),
-                                maxTime: null,
-                                onChanged: (date) {}, onConfirm: (date) {
-                                if (date.difference(DateTime.now()).inSeconds > 300) {
-                                  setState(() {
-                                    scheduledAt = date;
-                                  });
-                                } else {
-                                  DialogUtils.toastErrorInfo('时间必须是五分钟后');
-                                  setState(() {
-                                    scheduledAt = null;
-                                  });
-                                }
+                          IconButton(
+                            onPressed: () {
+                              DatePicker.showDateTimePicker(context,
+                                  showTitleActions: true,
+                                  minTime:
+                                      DateTime.now().add(Duration(minutes: 8)),
+                                  maxTime: null,
+                                  onChanged: (date) {}, onConfirm: (date) {
+                                  if (date.difference(DateTime.now()).inSeconds > 300) {
+                                    setState(() {
+                                      scheduledAt = date;
+                                    });
+                                  } else {
+                                    DialogUtils.toastErrorInfo('时间必须是五分钟后');
+                                    setState(() {
+                                      scheduledAt = null;
+                                    });
+                                  }
+                              },
+                                  onCancel: () {
+                                    setState(() {
+                                      scheduledAt = null;
+                                    });
+                                  },
+                                  currentTime: scheduledAt ??
+                                      DateTime.now().add(Duration(minutes: 10)),
+                                  locale: LocaleType.zh);
                             },
-                                onCancel: () {
-                                  setState(() {
-                                    scheduledAt = null;
-                                  });
-                                },
-                                currentTime: scheduledAt ??
-                                    DateTime.now().add(Duration(minutes: 10)),
-                                locale: LocaleType.zh);
-                          },
-                          icon: Icon(
-                            Icons.access_time,
-                            color: scheduledAt != null
-                                ? Colors.blue
-                                : Colors.black,
-                          ),
-                        )
-                      ],
-                    ),
-                    Text(counter.toString()),
-                    RaisedButton(
-                      onPressed: () {
-                        if (_controller.text.length == 0 &&
-                            images.length == 0) {
-                          showToast("说点什么吧");
-                        } else {
-                          for (String image in images) {
-                            if (imageIds[image] == null) {
-                              showToast("请等待图片上传完毕");
-                              return;
+                            icon: Icon(
+                              Icons.access_time,
+                              color: scheduledAt != null
+                                  ? Colors.blue
+                                  : Colors.black,
+                            ),
+                          )
+                        ],
+                      ),
+                      Text(counter.toString()),
+                      RaisedButton(
+                        onPressed: () {
+                          if (_controller.text.length == 0 &&
+                              images.length == 0) {
+                            showToast("说点什么吧");
+                          } else {
+                            for (String image in images) {
+                              if (imageIds[image] == null) {
+                                showToast("请等待图片上传完毕");
+                                return;
+                              }
                             }
+                            _pushNewToot();
                           }
-                          _pushNewToot();
-                        }
-                      },
-                      child: Text('嘟嘟!'),
-                    )
-                  ],
+                        },
+                        child: Text('嘟嘟!'),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ],

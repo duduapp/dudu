@@ -5,8 +5,9 @@ class SingleChoiceDialog extends StatelessWidget {
   final Widget title;
   final List<String> choices;
   final Function onChoose;
+  final int groupValue;
 
-  SingleChoiceDialog({this.title, this.choices, this.onChoose});
+  SingleChoiceDialog({this.title, this.choices, this.onChoose,this.groupValue});
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +17,14 @@ class SingleChoiceDialog extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Radio(
-              value: 'unlisted',
+              value: choices.indexOf(choice),
+              groupValue: groupValue,
             ),
-            Text('不公开')
+            Text(choice)
           ],
         ),
         onTap: () {
-          onChoose(choice);
+          onChoose(choices.indexOf(choice));
           AppNavigate.pop(context);
         },
       ));

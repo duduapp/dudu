@@ -1,5 +1,6 @@
 // 下拉刷新和上拉加载
 import 'package:fastodon/pages/timeline/timeline.dart';
+import 'package:fastodon/widget/common/empty_view.dart';
 import 'package:fastodon/widget/common/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -14,7 +15,7 @@ class EasyRefreshListView extends StatefulWidget {
     this.type,
     this.mapKey,
     this.offsetPagination,
-    this.emptyWidget = const Center(child:Text('还没有内容')),
+    this.emptyWidget,
     this.headerLinkPagination = false,
     this.controller,
     this.header,
@@ -55,6 +56,8 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
   bool finishLoad = false;
   bool finishRefresh = false;
   String nextUrl; // 用header link 时分页有用
+  int textScale = 1;
+  Function onTextScaleChanged;
 
 
   @override
@@ -63,6 +66,14 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
 
    // _startRequest(widget.requestUrl,refresh: true);
     _controller = widget.controller ?? EasyRefreshController();
+
+    Storage.getInt("mastodon.text_scale").then((value){
+      if (value != null && value != textScale) {
+        setState(() {
+          textScale = value;
+        });
+      }
+    });
 
     eventBus.on(widget.type, (arg) {
         _scrollController.jumpTo(0);
@@ -76,6 +87,12 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
     eventBus.on(EventBusKey.blockAccount,(arg) {
       _removeByAccountId(arg['account_id']);
     });
+
+    onTextScaleChanged = (arg) {setState(() {
+      textScale = arg;
+    }); };
+    eventBus.on(EventBusKey.textScaleChanged, onTextScaleChanged);
+
 
     for (var event in widget.triggerRefreshEvent) {
       eventBus.on(event, (arg) {
@@ -185,7 +202,7 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0+0.18*textScale),
       child: EasyRefresh.custom(
         slivers: [
           SliverList(
@@ -205,7 +222,7 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
         scrollController: _scrollController,
         onRefresh: finishRefresh ? null : _onRefresh,
         onLoad: finishLoad ? null :_onLoad,
-        emptyWidget: noResults ? widget.emptyWidget :null,
+        emptyWidget: noResults ? widget.emptyWidget ?? EmptyView() :null,
 
       ),
     );
@@ -220,6 +237,7 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
     for (var event in widget.triggerRefreshEvent) {
       eventBus.off(event);
     }
+    eventBus.off(EventBusKey.textScaleChanged,onTextScaleChanged);
     super.dispose();
   }
 }

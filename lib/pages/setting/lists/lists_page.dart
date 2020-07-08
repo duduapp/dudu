@@ -4,6 +4,7 @@ import 'package:fastodon/pages/setting/lists/lists_eidt.dart';
 import 'package:fastodon/pages/timeline/lists_timeline.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/request.dart';
+import 'package:fastodon/widget/common/loading_view.dart';
 import 'package:flutter/material.dart';
 
 class ListsPage extends StatefulWidget {
@@ -44,11 +45,14 @@ class _ListsPageState extends State<ListsPage> {
       body: loaded == true
           ? (lists.length == 0
               ? Text('没有内容')
-              : ListView.builder(
-                  itemCount: lists.length,
-                  itemBuilder: _row,
-                ))
-          : Center(child: CircularProgressIndicator()),
+              : Container(
+                color: Theme.of(context).backgroundColor,
+                child: ListView.builder(
+                    itemCount: lists.length,
+                    itemBuilder: _row,
+                  ),
+              ))
+          : LoadingView(),
     );
   }
 
@@ -92,6 +96,7 @@ class _ListsPageState extends State<ListsPage> {
           )
         ]),
         decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
             border:
                 Border(bottom: BorderSide(color: Theme.of(context).buttonColor))),
       ),

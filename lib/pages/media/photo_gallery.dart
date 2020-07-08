@@ -98,26 +98,29 @@ class _PhotoGalleryState extends State<PhotoGallery> {
       child: Container(
         width: 300,
         height: 300,
-        child: CachedNetworkImage(
-          imageUrl: item.url,
-          progressIndicatorBuilder: (context, url, downloadProgress) =>
-              Container(
-                child: Center(
-                  child: SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: CircularProgressIndicator(
-                        value: downloadProgress.progress),
+        child: Hero(
+          tag: item.id,
+          child: CachedNetworkImage(
+            imageUrl: item.url,
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                Container(
+                  child: Center(
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: CircularProgressIndicator(
+                          value: downloadProgress.progress),
+                    ),
                   ),
                 ),
-              ),
+          ),
         ),
       ),
       //  childSize: const Size(300, 300),
       initialScale: PhotoViewComputedScale.contained,
       minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
       maxScale: PhotoViewComputedScale.covered * 2.0,
-      heroAttributes: PhotoViewHeroAttributes(tag: item.id),
+     // heroAttributes: PhotoViewHeroAttributes(tag: item.id),
     );
   }
 }

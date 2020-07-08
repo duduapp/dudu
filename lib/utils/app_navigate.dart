@@ -1,38 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:nav_router/nav_router.dart' as router;
 import 'package:theme_provider/theme_provider.dart';
 
 class AppNavigate {
   static push(BuildContext context, Widget scene,
-      {Function callBack, Color statusBarColor}) {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (BuildContext context) => scene,
-    //   ),
-    // ).then((data) {
-    //   callBack(data);
-    // });
-    Widget widget;
-    if (statusBarColor != null) {
-      widget = AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle(
-          statusBarColor: statusBarColor,
-        ),
-        child: scene,
-      );
-    } else {
-      widget = scene;
-    }
-
-    router.routePush(ThemeConsumer(child: widget)).then((data) {
-      callBack(data);
-    });
+      {Function callBack, router.RouterType routeType}) {
+    return router.routePush(ThemeConsumer(child: scene),routeType ?? router.RouterType.cupertino);
   }
 
   static pop(BuildContext context, {dynamic param}) {
     router.pop(param);
-    //Navigator.of(context).pop(param);
+  }
+
+  static pushAndRemoveUntil(BuildContext context, Widget scene,
+      {Function callBack, router.RouterType routeType}) {
+    router.pushAndRemoveUntil(ThemeConsumer(child: scene),routeType ?? router.RouterType.cupertino).then((data) {
+      if (callBack != null) callBack(data);
+    });
   }
 }

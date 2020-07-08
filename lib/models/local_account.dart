@@ -81,6 +81,11 @@ class LocalStorageAccount {
     }
     await saveAccounts(newAcc);
   }
+
+  static logout() async{
+    LocalAccount account = await getActiveAccount();
+    await removeAccount(account);
+  }
   
   static addLocalAccount(LocalAccount account) async{
     List<LocalAccount> accounts = await getAccounts();

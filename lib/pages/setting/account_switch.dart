@@ -106,7 +106,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
             //SizedBox(height: 10,),
             if (!manageMode)
               InkWell(
-                onTap: () => routePush(Login(showBackButton: true,),RouterType.scale),
+                onTap: () => AppNavigate.push(context,Login(showBackButton: true,),routeType:RouterType.material),
                 child: Container(
                   padding: EdgeInsets.all(25),
                   color: primaryColor,

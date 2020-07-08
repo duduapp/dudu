@@ -26,11 +26,14 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
         title: Text('定时嘟文'),
         centerTitle: false,
       ),
-      body: EasyRefreshListView(
-        requestUrl: ScheduledStatusesApi.url,
-        buildRow: _buildRow,
-        header: MaterialHeader(),
-        triggerRefreshEvent: [EventBusKey.scheduledStatusDeleted,EventBusKey.scheduledStatusPublished],
+      body: Container(
+        color: Theme.of(context).backgroundColor,
+        child: EasyRefreshListView(
+          requestUrl: ScheduledStatusesApi.url,
+          buildRow: _buildRow,
+          header: MaterialHeader(),
+          triggerRefreshEvent: [EventBusKey.scheduledStatusDeleted,EventBusKey.scheduledStatusPublished],
+        ),
       ),
     );
   }

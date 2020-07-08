@@ -10,6 +10,7 @@ import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nav_router/nav_router.dart';
 import 'package:video_player/video_player.dart';
 
 class StatusItemMedia extends StatefulWidget {
@@ -313,11 +314,31 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
       ),
        );
     }
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => to,
-      ),
+//    Navigator.of(context).push(
+//      PageRouteBuilder(
+//        transitionDuration: Duration(milliseconds: 2000),
+//        pageBuilder: (
+//            BuildContext context,
+//            Animation<double> animation,
+//            Animation<double> secondaryAnimation) {
+//          return to;
+//        },
+//        transitionsBuilder: (
+//            BuildContext context,
+//            Animation<double> animation,
+//            Animation<double> secondaryAnimation,
+//            Widget child) {
+//          return Align(
+//            child: FadeTransition(
+//              opacity: animation,
+//              child: child,
+//            ),
+//          );
+//        },
+//      ),
+//    );
+    AppNavigate.push(
+      context, to,routeType: RouterType.fade
     );
   }
 

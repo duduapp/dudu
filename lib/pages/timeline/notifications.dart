@@ -65,11 +65,14 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
         title: Text('通知'),
         centerTitle: true,
       ),
-      body: LoadingWidget(
-        endLoading: _canLoadWidget,
-        childWidget: EasyRefreshListView(
-          requestUrl: Api.Notifications,
-          buildRow: row,
+      body: Container(
+        color: Theme.of(context).backgroundColor,
+        child: LoadingWidget(
+          endLoading: _canLoadWidget,
+          childWidget: EasyRefreshListView(
+            requestUrl: Api.Notifications,
+            buildRow: row,
+          ),
         ),
       )
     );

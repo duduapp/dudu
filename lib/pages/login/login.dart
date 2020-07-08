@@ -49,26 +49,20 @@ class _LoginState extends State<Login> {
     paramsMap['redirect_uris'] = AppConfig.RedirectUris;
     paramsMap['scopes'] = AppConfig.Scopes;
 
-    Request.post(url: '$hostUrl' + Api.Apps, params: paramsMap).then((data) {
-      AppCredential model = AppCredential.fromJson(data);
-      setState(() {
-        _clickButton = false;
-      });
-      AppNavigate.push(context, WebLogin(serverItem: model, hostUrl: hostUrl),
-          callBack: (code) {
-        if (code == null) {
-          return;
-        }
-        setState(() {
-          isLoading = true;
-        });
-        _getToken(code, model, hostUrl);
-      });
-    }).catchError(() {
-      setState(() {
-        _clickButton = true;
-      });
+    var data = await Request.post(url: '$hostUrl' + Api.Apps, params: paramsMap);
+    AppCredential model = AppCredential.fromJson(data);
+    setState(() {
+      _clickButton = false;
     });
+    final result = await AppNavigate.push(context, WebLogin(serverItem: model, hostUrl: hostUrl),);
+
+    if (result == null) {
+      return;
+    }
+    setState(() {
+      isLoading = true;
+    });
+    _getToken(result, model, hostUrl);
   }
 
 // 获取token，此后的每次请求都需带上此token
@@ -161,9 +155,8 @@ class _LoginState extends State<Login> {
   }
 
   Widget loadView() {
-    return Scaffold(
-      body: LoadingView(text: '正在加载中',),
-    );
+
+      return LoadingView(text: '正在加载中',);
   }
 
   @override

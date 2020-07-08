@@ -6,6 +6,7 @@ import 'package:fastodon/widget/status/status_item.dart';
 import 'package:fastodon/widget/listview/refresh_load_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
+import 'package:nav_router/nav_router.dart';
 
 import '../../widget/other/search.dart' as customSearch;
 
@@ -91,7 +92,7 @@ class _TimelineState extends State<Timeline>
             IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
-                AppNavigate.push(context, NewStatus());
+                AppNavigate.push(context, NewStatus(),routeType: RouterType.material);
               },
             )
           ],

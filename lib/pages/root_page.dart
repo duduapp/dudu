@@ -38,28 +38,17 @@ class _RootPageState extends State<RootPage> {
     super.dispose();
   }
 
-  List<Icon> _tabImages = [
-    Icon(Icons.home),
-    Icon(Icons.people),
-    Icon(Icons.notifications),
-    Icon(Icons.settings),
-  ];
-  List<Icon> _tabSelectedImages = [
-    Icon(Icons.home, color: MyColor.mainColor),
-    Icon(Icons.people, color: MyColor.mainColor),
-    Icon(Icons.notifications, color: MyColor.mainColor),
-    Icon(Icons.settings, color: MyColor.mainColor),
-  ];
+
 
   List<IconData> _tabIcons = [
     Icons.home,
     Icons.people,
     Icons.public,
     Icons.notifications,
-    Icons.settings
+    Icons.person
   ];
 
-  List<String> _tabTitles = ['首页', '本站', '跨站', '消息', '设置'];
+  List<String> _tabTitles = ['首页', '本站', '跨站', '消息', '我'];
 
   Icon getTabIcon(int index, Color activeColor) {
     if (index == _tabIndex) {

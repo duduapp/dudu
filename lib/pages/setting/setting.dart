@@ -108,8 +108,8 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
   }
 
   Widget settingWidget() {
-    return RefreshIndicator(
-      onRefresh: () => _getMyAccount(),
+    return Container(
+      color: Theme.of(context).backgroundColor,
       child: ListView(
         padding: EdgeInsets.only(top: 0),
         controller: _scrollController,
@@ -158,27 +158,7 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
           ),
 
           SizedBox(height: 10),
-          SettingCell(
-            title: '关于本站',
-            leftIcon: Icon(Icons.attachment),
-            onPress: () {
-              User user = new User();
-              String urlHost = user.getHost();
-              Open.url(urlHost + '/about');
-            },
-          ),
-          SettingCell(
-            title: '关于App',
-            leftIcon: Icon(Icons.bubble_chart),
-            onPress: () => AppNavigate.push(context, AboutApp()),
-          ),
-          SettingCell(
-            title: '退出',
-            leftIcon: Icon(Icons.exit_to_app),
-            onPress: () {
-              showAlert();
-            },
-          ),
+
         ],
       ),
     );

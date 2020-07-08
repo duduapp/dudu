@@ -80,7 +80,7 @@ class HomePage extends StatelessWidget {
       LocalAccount account  = results[0];
 
       if (account == null) {
-        pushAndRemoveUntil(Login());
+        AppNavigate.pushAndRemoveUntil(context,Login(),routeType:RouterType.fade);
       } else {
         user.setHost(account.hostUrl);
         user.setToken(account.token);

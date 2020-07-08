@@ -32,12 +32,13 @@ class _FavoutitesArticleState extends State<FavoutitesArticle> {
       appBar: AppBar(
         title: Text('我的收藏'),
         centerTitle: true,
-        backgroundColor: MyColor.mainColor,
       ),
-      body: EasyRefreshListView(
-        requestUrl: Api.Favourites,
-        buildRow: row,
-        headerLinkPagination: true,
+      body: Container(
+        color: Theme.of(context).backgroundColor,
+        child: EasyRefreshListView(
+          requestUrl: Api.Favourites,
+          buildRow: row,
+        ),
       )
     );
   }
