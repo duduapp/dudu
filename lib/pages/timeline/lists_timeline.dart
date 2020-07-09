@@ -20,12 +20,9 @@ class ListTimeline extends StatelessWidget {
         title: Text('列表时间轴'),
         centerTitle: false,
       ),
-      body: Container(
-        color: Theme.of(context).backgroundColor,
-        child: EasyRefreshListView(
-          requestUrl: ListsApi.timelineUrl+'/'+id,
-          buildRow: buildRow,
-        ),
+      body: EasyRefreshListView(
+        requestUrl: ListsApi.timelineUrl+'/'+id,
+        buildRow: buildRow,
       ),
     );
   }

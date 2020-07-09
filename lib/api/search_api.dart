@@ -15,7 +15,7 @@ class SearchApi {
     return _search(q,SearchType.statuses,maxId: maxId);
   }
 
-  static searchFollowingAccounts(String q,{int maxId,bool following}) async{
+  static searchAccounts(String q,{int maxId,bool following}) async{
     Map params = {
       'q':q,
     };

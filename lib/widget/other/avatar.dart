@@ -31,7 +31,7 @@ class Avatar extends StatelessWidget {
           height: height,
           fit: BoxFit.cover,
       ),
-      borderRadius: BorderRadius.circular(5.0),
+      borderRadius: BorderRadius.circular(10.0),
     );
   }
 }

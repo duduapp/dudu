@@ -118,7 +118,7 @@ class _ListsEditState extends State<ListsEdit> {
       return;
     } else {
       List<OwnerAccount> accounts = [];
-      var res = await SearchApi.searchFollowingAccounts(q,following: true);
+      var res = await SearchApi.searchAccounts(q,following: true);
       for (var r in res) {
         accounts.add(OwnerAccount.fromJson(r));
       }

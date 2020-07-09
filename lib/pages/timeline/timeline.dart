@@ -98,16 +98,13 @@ class _TimelineState extends State<Timeline>
           ],
         ),
       ),
-      body: Container(
-        color: Theme.of(context).backgroundColor,
-        child: LoadingWidget(
-            childWidget: EasyRefreshListView(
-              requestUrl: url,
-              buildRow: row,
-              type: widget.type,
-            ),
-            endLoading: _showTab),
-      ),
+      body: LoadingWidget(
+          childWidget: EasyRefreshListView(
+            requestUrl: url,
+            buildRow: row,
+            type: widget.type,
+          ),
+          endLoading: _showTab),
     );
   }
 

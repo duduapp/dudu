@@ -3,6 +3,7 @@
 import 'package:fastodon/api/status_api.dart';
 import 'package:fastodon/constant/app_config.dart';
 import 'package:fastodon/models/article_item.dart';
+import 'package:fastodon/utils/list_view.dart';
 import 'package:fastodon/widget/status/status_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -118,8 +119,8 @@ class _StatusDetailState extends State<StatusDetail> {
             ),
           )
         ],
-        header: AppConfig.listviewHeader,
-        footer: AppConfig.listviewFooter,
+        header: ListViewUtil.getDefaultHeader(context),
+        footer: ListViewUtil.getDefaultFooter(context),
         controller: _controller,
         scrollController: _scrollController,
         onRefresh: _onRefresh,

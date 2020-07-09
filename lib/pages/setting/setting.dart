@@ -21,7 +21,7 @@ import 'user_message.dart';
 import 'setting_head.dart';
 import 'setting_cell.dart';
 import 'about_app.dart';
-import 'favourites_article.dart';
+import 'favourites_list.dart';
 
 class Setting extends StatefulWidget {
   @override
@@ -108,59 +108,56 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
   }
 
   Widget settingWidget() {
-    return Container(
-      color: Theme.of(context).backgroundColor,
-      child: ListView(
-        padding: EdgeInsets.only(top: 0),
-        controller: _scrollController,
-        children: <Widget>[
-          GestureDetector(
-            onTap: () {
-             // AppNavigate.push(context, UserMessage(account: _account,));
-              AppNavigate.push(context, EditUserProfile(_account));
-            },
-            child: SettingHead(
-              account: _account,
-            )
-          ),
-          SizedBox(height: 10),
-          SettingCell(
-            title: '收藏',
-            leftIcon: Icon(Icons.favorite),
-            onPress: () => AppNavigate.push(context, FavoutitesArticle()),
-          ),
-          SettingCell(
-            title: '书签',
-            leftIcon: Icon(Icons.bookmark),
-            onPress: () => AppNavigate.push(context, BookmarksList()),
-          ),
-          SettingCell(
-            title: '列表',
-            leftIcon: Icon(Icons.list),
-            onPress: () => AppNavigate.push(context, ListsPage()),
-          ),
-          SettingCell(
-            title: '定时嘟文',
-            leftIcon: Icon(Icons.access_time),
-            onPress: () => AppNavigate.push(context, ScheduledStatusesList()),
-          ),
+    return ListView(
+      padding: EdgeInsets.only(top: 0),
+      controller: _scrollController,
+      children: <Widget>[
+        GestureDetector(
+          onTap: () {
+           // AppNavigate.push(context, UserMessage(account: _account,));
+            AppNavigate.push(context, EditUserProfile(_account));
+          },
+          child: SettingHead(
+            account: _account,
+          )
+        ),
+        SizedBox(height: 10),
+        SettingCell(
+          title: '收藏',
+          leftIcon: Icon(Icons.favorite),
+          onPress: () => AppNavigate.push(context, FavoutitesList()),
+        ),
+        SettingCell(
+          title: '书签',
+          leftIcon: Icon(Icons.bookmark),
+          onPress: () => AppNavigate.push(context, BookmarksList()),
+        ),
+        SettingCell(
+          title: '列表',
+          leftIcon: Icon(Icons.list),
+          onPress: () => AppNavigate.push(context, ListsPage()),
+        ),
+        SettingCell(
+          title: '定时嘟文',
+          leftIcon: Icon(Icons.access_time),
+          onPress: () => AppNavigate.push(context, ScheduledStatusesList()),
+        ),
 
-          SizedBox(height: 10,),
-          SettingCell(
-            title: '账号设置',
-            leftIcon: Icon(Icons.account_box),
-            onPress: () => AppNavigate.push(context, AccountSetting()),
-          ),
-          SettingCell(
-            title: '通用',
-            leftIcon: Icon(Icons.settings),
-            onPress: () => AppNavigate.push(context, GeneralSetting()),
-          ),
+        SizedBox(height: 10,),
+        SettingCell(
+          title: '账号设置',
+          leftIcon: Icon(Icons.account_box),
+          onPress: () => AppNavigate.push(context, AccountSetting()),
+        ),
+        SettingCell(
+          title: '通用',
+          leftIcon: Icon(Icons.settings),
+          onPress: () => AppNavigate.push(context, GeneralSetting()),
+        ),
 
-          SizedBox(height: 10),
+        SizedBox(height: 10),
 
-        ],
-      ),
+      ],
     );
   }
 

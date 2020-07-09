@@ -5,12 +5,12 @@ import 'package:fastodon/widget/listview/refresh_load_listview.dart';
 import 'package:fastodon/widget/status/status_item.dart';
 import 'package:fastodon/models/article_item.dart';
 
-class FavoutitesArticle extends StatefulWidget {
+class FavoutitesList extends StatefulWidget {
   @override
-  _FavoutitesArticleState createState() => _FavoutitesArticleState();
+  _FavoutitesListState createState() => _FavoutitesListState();
 }
 
-class _FavoutitesArticleState extends State<FavoutitesArticle> {  
+class _FavoutitesListState extends State<FavoutitesList> {  
   @override
   void initState() {
     super.initState();
@@ -33,12 +33,10 @@ class _FavoutitesArticleState extends State<FavoutitesArticle> {
         title: Text('我的收藏'),
         centerTitle: true,
       ),
-      body: Container(
-        color: Theme.of(context).backgroundColor,
-        child: EasyRefreshListView(
-          requestUrl: Api.Favourites,
-          buildRow: row,
-        ),
+      body: EasyRefreshListView(
+        requestUrl: Api.Favourites,
+        buildRow: row,
+        headerLinkPagination: true,
       )
     );
   }

@@ -44,73 +44,68 @@ class _AccountSettingState extends State<AccountSetting> {
         title: Text('账号设置'),
         centerTitle: false,
       ),
-      body: Container(
-        color: Theme.of(context).backgroundColor,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SettingCell(
-                leftIcon: Icon(Icons.volume_off),
-                title: '被隐藏的用户',
-                onPress: () => AppNavigate.push(context, CommonBlockList(BlockType.mute)),
-              ),
-              SettingCell(
-                leftIcon: Icon(Icons.block),
-                title: '被屏蔽的用户',
-                onPress: () => AppNavigate.push(context, CommonBlockList(BlockType.block)),
-              ),
-              SettingCell(
-                leftIcon: Icon(Icons.volume_off),
-                title: '隐藏域名',
-                onPress: () => AppNavigate.push(context, CommonBlockList(BlockType.hideDomain)),
-              ),
-              Container(child: Text('发布'),padding: EdgeInsets.all(8),),
-              SettingCell(
-                leftIcon: Icon(Icons.public),
-                title: '嘟文默认可见范围',
-                subTitle: _getPrivacyStr(),
-                tail: Container(),
-                onPress: _onPrivacyPressed,
-              ),
-              SettingCell(
-                leftIcon: Icon(Icons.remove_red_eye),
-                title: '自动标记媒体为敏感内容',
-                tail: SettingSwitch(myAccount,SettingSwitchType.sensitive),
-              ),
-              Container(child: Text('时间轴'),padding: EdgeInsets.all(8),),
-              SettingCell(
-                title: '显示预览图',
-                tail: SettingSwitch(myAccount,SettingSwitchType.showMedia),
-              ),
-              SettingCell(
-                title: '总是显示所有敏感媒体内容',
-                tail: SettingSwitch(myAccount,SettingSwitchType.showSensitive),
-              ),
-              SettingCell(
-                title: '始终扩展标有内容警告的嘟文',
-                tail: SettingSwitch(myAccount,SettingSwitchType.expandSpoilers),
-              ),
-              Container(child: Text('过滤器'),padding: EdgeInsets.all(8),),
-              SettingCell(
-                title: '公共时间轴',
-                onPress: () => AppNavigate.push(context, CommonFilterList(FilterType.public)),
-              ),
-              SettingCell(
-                title: '通知',
-                onPress: () => AppNavigate.push(context, CommonFilterList(FilterType.notifications)),
-              ),
-              SettingCell(
-                title: '主页',
-                onPress: () => AppNavigate.push(context,CommonFilterList(FilterType.home)),
-              ),
-              SettingCell(
-                title: '对话',
-                onPress: () => AppNavigate.push(context, CommonFilterList(FilterType.thread)),
-              ),
-            ],
+      body: ListView(
+        children: <Widget>[
+          SettingCell(
+            leftIcon: Icon(Icons.volume_off),
+            title: '被隐藏的用户',
+            onPress: () => AppNavigate.push(context, CommonBlockList(BlockType.mute)),
           ),
-        ),
+          SettingCell(
+            leftIcon: Icon(Icons.block),
+            title: '被屏蔽的用户',
+            onPress: () => AppNavigate.push(context, CommonBlockList(BlockType.block)),
+          ),
+          SettingCell(
+            leftIcon: Icon(Icons.volume_off),
+            title: '隐藏域名',
+            onPress: () => AppNavigate.push(context, CommonBlockList(BlockType.hideDomain)),
+          ),
+          Container(child: Text('发布'),padding: EdgeInsets.all(8),),
+          SettingCell(
+            leftIcon: Icon(Icons.public),
+            title: '嘟文默认可见范围',
+            subTitle: _getPrivacyStr(),
+            tail: Container(),
+            onPress: _onPrivacyPressed,
+          ),
+          SettingCell(
+            leftIcon: Icon(Icons.remove_red_eye),
+            title: '自动标记媒体为敏感内容',
+            tail: SettingSwitch(myAccount,SettingSwitchType.sensitive),
+          ),
+          Container(child: Text('时间轴'),padding: EdgeInsets.all(8),),
+          SettingCell(
+            title: '显示预览图',
+            tail: SettingSwitch(myAccount,SettingSwitchType.showMedia),
+          ),
+          SettingCell(
+            title: '总是显示所有敏感媒体内容',
+            tail: SettingSwitch(myAccount,SettingSwitchType.showSensitive),
+          ),
+          SettingCell(
+            title: '始终扩展标有内容警告的嘟文',
+            tail: SettingSwitch(myAccount,SettingSwitchType.expandSpoilers),
+          ),
+          Container(child: Text('过滤器'),padding: EdgeInsets.all(8),),
+          SettingCell(
+            title: '公共时间轴',
+            onPress: () => AppNavigate.push(context, CommonFilterList(FilterType.public)),
+          ),
+          SettingCell(
+            title: '通知',
+            onPress: () => AppNavigate.push(context, CommonFilterList(FilterType.notifications)),
+          ),
+          SettingCell(
+            title: '主页',
+            onPress: () => AppNavigate.push(context,CommonFilterList(FilterType.home)),
+          ),
+          SettingCell(
+            title: '对话',
+            onPress: () => AppNavigate.push(context, CommonFilterList(FilterType.thread)),
+          ),
+          SizedBox(height: 30,)
+        ],
       ),
     );
   }

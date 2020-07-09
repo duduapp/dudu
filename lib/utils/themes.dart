@@ -10,7 +10,8 @@ var defaultTheme = ThemeData(
   backgroundColor: Color.fromRGBO(240, 240, 240, 1),
   buttonColor: Colors.grey[500],
   bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
-  splashColor: Colors.grey[600]
+  splashColor: Colors.grey[600],
+  accentColor: Colors.grey[600]
 
 
   
@@ -22,6 +23,8 @@ var darTheme = ThemeData.dark().copyWith(
   toggleableActiveColor: Colors.white,
   backgroundColor: Color.fromRGBO(21, 21, 21, 1),
   appBarTheme: AppBarTheme(color: Color.fromRGBO(30, 30, 30, 1),elevation: 1.0),
-  splashColor: Colors.grey[500]
+  splashColor: Color.fromRGBO(30, 30, 30, 1),
+  scaffoldBackgroundColor: Color.fromRGBO(21, 21, 21, 1),
+  buttonColor: Colors.grey[800],
 
 );

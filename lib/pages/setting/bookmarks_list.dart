@@ -12,12 +12,10 @@ class BookmarksList extends StatelessWidget {
           title: Text('书签'),
           centerTitle: true,
         ),
-        body: Container(
-          color: Theme.of(context).backgroundColor,
-          child: EasyRefreshListView(
-            requestUrl: Api.bookmarks,
-            buildRow: row,
-          ),
+        body: EasyRefreshListView(
+          requestUrl: Api.bookmarks,
+          buildRow: row,
+          headerLinkPagination: true,
         )
     );
   }

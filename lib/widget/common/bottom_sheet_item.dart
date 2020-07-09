@@ -5,8 +5,9 @@ class BottomSheetItem extends StatelessWidget {
   final Function onTap;
   final double height;
   final bool safeArea;
+  final bool bottomBorder;
 
-  BottomSheetItem({this.text, this.onTap, this.height, this.safeArea = false});
+  BottomSheetItem({this.text, this.onTap, this.height, this.safeArea = false,this.bottomBorder});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +16,7 @@ class BottomSheetItem extends StatelessWidget {
         onTap: onTap,
         child: SafeArea(
           child: Container(
+
             height: height,
             width: double.infinity,
             //  color: Theme.of(context).bottomSheetTheme.backgroundColor,
@@ -33,6 +35,7 @@ class BottomSheetItem extends StatelessWidget {
       return InkWell(
         onTap: onTap,
         child: Container(
+
           height: height,
           width: double.infinity,
           //  color: Theme.of(context).bottomSheetTheme.backgroundColor,

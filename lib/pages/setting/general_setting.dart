@@ -79,38 +79,35 @@ class _GeneralSettingState extends State<GeneralSetting> {
         title: Text('通用设置'),
         centerTitle: false,
       ),
-      body: Container(
-        color: Theme.of(context).backgroundColor,
-        child: Column(
-          children: <Widget>[
-            SettingCell(
-              leftIcon: Icon(Icons.color_lens),
-              title: '应用主题',
-              onPress: () => showDialog(
-                  context: context,
-                  builder: (_) => ThemeConsumer(child: ThemeDialog(title: Text('选择主题'),hasDescription: false,))),
-            ),
-            SettingCell(
-              leftIcon: Icon(Icons.font_download),
-              title: '字体大小',
-              onPress: () {
-                showDialog(context: context,builder: (BuildContext context) {
-                  return SingleChoiceDialog(title:Text('字体大小'),choices: ['小','中','大'],onChoose: _onTextScaleChoosed,groupValue: textScale,);
-                });
-              },
-            ),
-            SizedBox(height: 30,),
-            SettingCellText(
-              text: Text('切换账号',style: TextStyle(fontSize: 16),),
-              onPressed: () => AppNavigate.push(context, AccountSwitch(),routeType: RouterType.material),
-            ),
-            SizedBox(height: 10,),
-            SettingCellText(
-              text: Text('退出登录',style: TextStyle(fontSize: 16),),
-              onPressed: _onExitPressed,
-            ),
-          ],
-        ),
+      body: ListView(
+        children: <Widget>[
+          SettingCell(
+            leftIcon: Icon(Icons.color_lens),
+            title: '应用主题',
+            onPress: () => showDialog(
+                context: context,
+                builder: (_) => ThemeConsumer(child: ThemeDialog(title: Text('选择主题'),hasDescription: false,))),
+          ),
+          SettingCell(
+            leftIcon: Icon(Icons.font_download),
+            title: '字体大小',
+            onPress: () {
+              showDialog(context: context,builder: (BuildContext context) {
+                return SingleChoiceDialog(title:Text('字体大小'),choices: ['小','中','大'],onChoose: _onTextScaleChoosed,groupValue: textScale,);
+              });
+            },
+          ),
+          SizedBox(height: 30,),
+          SettingCellText(
+            text: Text('切换账号',style: TextStyle(fontSize: 16),),
+            onPressed: () => AppNavigate.push(context, AccountSwitch(),routeType: RouterType.material),
+          ),
+          SizedBox(height: 10,),
+          SettingCellText(
+            text: Text('退出登录',style: TextStyle(fontSize: 16),),
+            onPressed: _onExitPressed,
+          ),
+        ],
       ),
     );
   }

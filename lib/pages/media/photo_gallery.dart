@@ -96,11 +96,10 @@ class _PhotoGalleryState extends State<PhotoGallery> {
     var item = widget.galleryItems[index];
     return PhotoViewGalleryPageOptions.customChild(
       child: Container(
-        width: 300,
-        height: 300,
         child: Hero(
           tag: item.id,
           child: CachedNetworkImage(
+            fit: BoxFit.fitWidth,
             imageUrl: item.url,
             progressIndicatorBuilder: (context, url, downloadProgress) =>
                 Container(
@@ -117,9 +116,9 @@ class _PhotoGalleryState extends State<PhotoGallery> {
         ),
       ),
       //  childSize: const Size(300, 300),
-      initialScale: PhotoViewComputedScale.contained,
+      initialScale: PhotoViewComputedScale.covered ,
       minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
-      maxScale: PhotoViewComputedScale.covered * 2.0,
+      maxScale: PhotoViewComputedScale.covered * 3.0,
      // heroAttributes: PhotoViewHeroAttributes(tag: item.id),
     );
   }
