@@ -41,6 +41,13 @@ class AccountsApi {
     await Request.post(url: api,errMsg: '取消屏蔽用户$id失败');
   }
 
+  static blockDomain(String domain) async {
+    var params = {
+      'domain' : domain
+    };
+    await Request.post(url: blockDomainUrl,params: params);
+  }
+
   static unBlockDomain(String domain) async {
     var params = {
       'domain' : domain

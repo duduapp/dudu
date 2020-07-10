@@ -25,14 +25,44 @@ class DialogUtils {
         fontSize: 16.0);
   }
 
-  static showInfoDialog(BuildContext context,String msg) {
-    showDialog(context: context,barrierDismissible:false,builder: (BuildContext context) {
-      return AlertDialog(
-        content: Text(msg),
-        actions: <Widget>[
-          FlatButton(child: Text('确定'),onPressed: ()=> AppNavigate.pop(context),)
-        ],
-      );
-    });
+  static showInfoDialog(BuildContext context, String msg) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text(msg),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('确定'),
+                onPressed: () => AppNavigate.pop(context),
+              )
+            ],
+          );
+        });
+  }
+
+  static showSimpleAlertDialog(
+  {BuildContext context, String text, Function onConfirm,bool popFirst}) {
+    if (popFirst != null && popFirst == true) {
+      AppNavigate.pop(context);
+    }
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text(text),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('取消'),
+                onPressed: () => AppNavigate.pop(context),
+              ),
+              FlatButton(
+                child: Text('确定'),
+                onPressed: onConfirm,
+              )
+            ],
+          );
+        });
   }
 }

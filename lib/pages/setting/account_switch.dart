@@ -145,7 +145,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   BottomSheetItem(
-                    text: '删除账号${StringUtil.accountAddress(account.account)}',
+                    text: '删除账号${StringUtil.accountFullAddress(account.account)}',
                     onTap: () => _confirmDelete(account),
                   ),
                   Container(
@@ -200,7 +200,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                 )
             ],
           ),
-          subtitle: Text(StringUtil.accountAddress(accountInfo.account)),
+          subtitle: Text(StringUtil.accountFullAddress(accountInfo.account)),
           trailing: (manageMode && !accountInfo.active)
               ? ButtonTheme(
                   minWidth: 60,

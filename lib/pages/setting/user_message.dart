@@ -1,3 +1,6 @@
+import 'package:fastodon/api/accounts_api.dart';
+import 'package:fastodon/pages/status/new_status.dart';
+import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/widget/common/bottom_sheet_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +14,7 @@ import 'package:fastodon/widget/listview/refresh_load_listview.dart';
 import 'package:fastodon/widget/status/status_item.dart';
 import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/models/my_account.dart';
+import 'package:nav_router/nav_router.dart';
 import 'model/relation_ship.dart';
 import 'package:fastodon/widget/other/avatar.dart';
 import 'following_list.dart';
@@ -29,6 +33,7 @@ class UserMessage extends StatefulWidget {
 }
 
 class _UserMessageState extends State<UserMessage> {
+  RelationShip relationShip;
   int _currentWidget = 0;
   bool followed;
   String _bottomSheetTitle = '未关注';
@@ -53,11 +58,9 @@ class _UserMessageState extends State<UserMessage> {
     String title = '';
     String name = '';
 
-
-      setState(() {
-        followed = relate.following;
-      });
-
+    setState(() {
+      followed = relate.following;
+    });
 
     if (relate.followedBy == true && relate.following == true) {
       title = '互相关注';
@@ -84,6 +87,9 @@ class _UserMessageState extends State<UserMessage> {
       List response = data;
       RelationShip relate = RelationShip.fromJson(response[0]);
       _changeBottomSheet(relate);
+      setState(() {
+        relationShip = relate;
+      });
     });
   }
 
@@ -96,7 +102,7 @@ class _UserMessageState extends State<UserMessage> {
       RelationShip relate = RelationShip.fromJson(data);
       if (relate.following == true) {
         setState(() {
-          followed  = true;
+          followed = true;
         });
         // 关注成功
         OwnerAccount mineAccount = mine.account;
@@ -123,7 +129,7 @@ class _UserMessageState extends State<UserMessage> {
     });
   }
 
-  Widget header(BuildContext context) {
+  Widget headerImage(BuildContext context) {
     if (widget.account == null) {
       return Container(
         height: 200,
@@ -139,6 +145,22 @@ class _UserMessageState extends State<UserMessage> {
     );
   }
 
+  _onPressHide() {
+    AccountsApi.mute(widget.account.id);
+    eventBus.emit(EventBusKey.muteAccount, {'account_id': widget.account.id});
+    AppNavigate.pop(context);
+  }
+
+  _onPressBlock() {
+    AccountsApi.block(widget.account.id);
+    eventBus.emit(EventBusKey.blockAccount, {'account_id': widget.account.id});
+    AppNavigate.pop(context);
+  }
+
+  _onPressBlockDomain() {
+    AccountsApi.blockDomain(StringUtil.accountDomain(widget.account));
+    AppNavigate.pop(context);
+  }
 
   _showMore() {
     showModalBottomSheet(
@@ -148,45 +170,54 @@ class _UserMessageState extends State<UserMessage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                child: Center(
-                  child: Text(_bottomSheetTitle,
-                      style: TextStyle(
-                          fontSize: 13, color: MyColor.greyText)),
-                ),
-              ),
               BottomSheetItem(
-                text: '提及',
-              ),
+                  text: '提及',
+                  onTap: () {
+                    AppNavigate.pop(context);
+                    AppNavigate.push(
+                        context,
+                        NewStatus(
+                          prepareText: '@' + widget.account.acct + ' ',
+                        ),
+                        routeType: RouterType.material);
+                  }),
               BottomSheetItem(
-                text: '私信',
+                text: _bottomSheetFunName,
+                onTap: _onPressButton,
               ),
               BottomSheetItem(
                 text: '隐藏',
+                onTap: () => DialogUtils.showSimpleAlertDialog(
+                    context: context,
+                    text: '确定要隐藏@${widget.account.acct}吗',
+                    onConfirm: _onPressHide,
+                    popFirst: true),
               ),
               BottomSheetItem(
                 text: '屏蔽',
+                onTap: () => DialogUtils.showSimpleAlertDialog(
+                    context: context,
+                    text: '确定要屏蔽@${widget.account.acct}吗',
+                    onConfirm: _onPressBlock,
+                    popFirst: true),
+              ),
+              BottomSheetItem(
+                text: '隐藏该用户所在域名',
+                onTap: () => DialogUtils.showSimpleAlertDialog(
+                    context: context,
+                    text:
+                        '你确定要屏蔽@${StringUtil.accountDomain(widget.account)}域名吗？你将不会在任何公共时间轴或通知中看到该域名的内容，而且该域名的关注者也会被删除',
+                    onConfirm: _onPressBlockDomain,
+                    popFirst: true),
               ),
               BottomSheetItem(
                 text: '举报',
               ),
-              BottomSheetItem(
-                text: _bottomSheetFunName,
-                onTap: () {
-                  if (_bottomSheetFunName == '关注') {
-                    _followByid();
-                  }
-                  if (_bottomSheetFunName == '取消关注') {
-                    _unfollowByid();
-                  }
-                },
+              Container(
+                height: 8,
+                color: Theme.of(context).backgroundColor,
               ),
-          Container(
-          height: 8,
-          color: Theme.of(context).backgroundColor,
-          ),
-          BottomSheetItem(
+              BottomSheetItem(
                 text: '取消',
                 onTap: () => AppNavigate.pop(context),
                 safeArea: true,
@@ -196,7 +227,11 @@ class _UserMessageState extends State<UserMessage> {
         });
   }
 
-  _onPressFollow() {
+  _onPressButton() {
+    if (relationShip.blocking) {
+      //取消屏蔽
+      AccountsApi.unBlock(widget.account.id);
+    }
     if (followed) {
       _showUnfollowConfrimDialog();
     } else {
@@ -205,46 +240,71 @@ class _UserMessageState extends State<UserMessage> {
   }
 
   _showUnfollowConfrimDialog() {
-    showDialog(context: context,builder: (BuildContext context) {
-      return AlertDialog(
-        content: Text('不再关注此用户'),
-        actions: <Widget>[
-          FlatButton(child: Text('取消'),onPressed: () => AppNavigate.pop(context),),
-          FlatButton(child: Text('确定'),onPressed: () {_unfollowByid();AppNavigate.pop(context);},)
-        ],
-      );
-    });
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text('不再关注此用户'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('取消'),
+                onPressed: () => AppNavigate.pop(context),
+              ),
+              FlatButton(
+                child: Text('确定'),
+                onPressed: () {
+                  _unfollowByid();
+                  AppNavigate.pop(context);
+                },
+              )
+            ],
+          );
+        });
   }
+
+  String getButtonString() {}
 
   Widget userHeader(BuildContext context) {
     return Column(
       children: <Widget>[
-        header(context),
+        headerImage(context),
         Stack(overflow: Overflow.visible, children: [
           Container(
-            padding: EdgeInsets.only(left: 20,right: 20),
+            padding: EdgeInsets.only(left: 20, right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(height: 10),
-                Row(children: <Widget>[
-                  Spacer(),
-                  if (followed != null)
-                  RaisedButton(child: Text(followed ?'取消关注': '关注'),onPressed: _onPressFollow,)
-                ],),
-                SizedBox(height: 20,),
-                Text(
-                  StringUtil.displayName(widget.account),
-                  style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
+                Row(
+                  children: <Widget>[
+                    Spacer(),
+                    if (relationShip != null)
+                      RaisedButton(
+                        child: Text(relationShip.blocking
+                            ? '取消屏蔽'
+                            : relationShip.requested
+                                ? '已发送关注请求'
+                                : relationShip.following ? '取消关注' : '关注'),
+                        onPressed: _onPressButton,
+                      )
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
                 ),
                 Text(
-                  '@'+widget.account.acct,
+                  StringUtil.displayName(widget.account),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  '@' + widget.account.acct,
                 ),
                 Container(
                     width: Screen.width(context) - 60,
                     child: Center(
                       child: Html(
-                          data: widget.account.note,),
+                        data: widget.account.note,
+                      ),
                     )),
                 headerFields()
               ],
@@ -257,11 +317,13 @@ class _UserMessageState extends State<UserMessage> {
                 width: 100,
                 height: 100,
                 decoration: BoxDecoration(
-                  border: Border.all(width: 4,color: Colors.white),
+                  border: Border.all(width: 4, color: Colors.white),
                   borderRadius: new BorderRadius.all(Radius.circular(10.0)),
                   shape: BoxShape.rectangle,
                 ),
-                child: Avatar(url: widget.account.avatar,),
+                child: Avatar(
+                  url: widget.account.avatar,
+                ),
               )),
         ]),
         //   more(context),
@@ -275,8 +337,14 @@ class _UserMessageState extends State<UserMessage> {
       rows.add(Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(filed['name'],style: TextStyle(fontWeight: FontWeight.bold),),
-          Text(filed['value'])
+          Text(
+            filed['name'],
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Html(
+            data: filed['value'],
+            shrinkToFit: true,
+          )
         ],
       ));
     }
@@ -336,7 +404,10 @@ class _UserMessageState extends State<UserMessage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.more_horiz),onPressed: _showMore,)
+          IconButton(
+            icon: Icon(Icons.more_horiz),
+            onPressed: _showMore,
+          )
         ],
       ),
       extendBodyBehindAppBar: true,

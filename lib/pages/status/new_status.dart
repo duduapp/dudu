@@ -25,8 +25,9 @@ import '../../widget/publish/new_status_publish_level.dart';
 class NewStatus extends StatefulWidget {
   final StatusItemData replyTo;
   final dynamic scheduleInfo;
+  final String prepareText;// 预设的嘟嘟内容
 
-  NewStatus({this.replyTo,this.scheduleInfo});
+  NewStatus({this.replyTo,this.scheduleInfo,this.prepareText});
 
   @override
   _NewStatusState createState() => _NewStatusState();
@@ -81,6 +82,10 @@ class _NewStatusState extends State<NewStatus> {
       _loadFromScheduleInfo(widget.scheduleInfo);
     } else {
       _loadFromDraft();
+    }
+
+    if(widget.prepareText != null) {
+      _controller.text = widget.prepareText;
     }
   }
 

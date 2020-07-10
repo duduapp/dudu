@@ -2,6 +2,7 @@
 import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/api/status_api.dart';
 import 'package:fastodon/pages/status/new_status.dart';
+import 'package:fastodon/utils/dialog_util.dart';
 import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/models/article_item.dart';
@@ -152,38 +153,10 @@ class _StatusItemActionState extends State<StatusItemAction> {
                   Clipboard.setData(new ClipboardData(text: StringUtil.removeAllHtmlTags(widget.item.content)));
                   break;
                 case 'hide':
-                  showDialog(context: context,builder: (BuildContext context){
-                    return AlertDialog(
-                      content: Text('确定要隐藏${widget.item.account.acct}吗'),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text('取消'),
-                          onPressed: () => AppNavigate.pop(context),
-                        ),
-                        FlatButton(
-                          child: Text('确定'),
-                          onPressed: _onPressHide,
-                        )
-                      ],
-                    );
-                  });
+                  DialogUtils.showSimpleAlertDialog(context:context, text:'确定要隐藏@${widget.item.account.acct}吗', onConfirm: _onPressHide);
                   break;
                 case "block":
-                  showDialog(context: context,builder: (BuildContext context){
-                    return AlertDialog(
-                      content: Text('确定要屏蔽${widget.item.account.acct}吗'),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text('取消'),
-                          onPressed: () => AppNavigate.pop(context),
-                        ),
-                        FlatButton(
-                          child: Text('确定'),
-                          onPressed: _onPressBlock,
-                        )
-                      ],
-                    );
-                  });
+                  DialogUtils.showSimpleAlertDialog(context:context, text:'确定要屏蔽${widget.item.account.acct}吗', onConfirm: _onPressBlock);
               }
             },
           )
