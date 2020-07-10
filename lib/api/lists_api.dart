@@ -1,5 +1,6 @@
 import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/utils/request.dart';
+import 'package:flutter/cupertino.dart';
 
 
 class ListsApi {
@@ -44,10 +45,10 @@ class ListsApi {
     await Request.delete(url: requestUrl);
   }
 
-  static add(String title) async {
+  static add(String title,{BuildContext context}) async {
     var params = {
       'title':title
     };
-    await Request.post(url: url,params: params);
+    await Request.post(url: url,params: params,showDialog: true);
   }
 }

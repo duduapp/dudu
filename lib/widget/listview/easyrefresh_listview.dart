@@ -21,7 +21,8 @@ class EasyRefreshListView extends StatefulWidget {
     this.controller,
     this.header,
     this.triggerRefreshEvent = const [],
-    this.enableRefresh = true
+    this.enableRefresh = true,
+    this.reverseData = false
   }) : super(key: key);
   final String requestUrl;
   final Function buildRow;
@@ -33,7 +34,8 @@ class EasyRefreshListView extends StatefulWidget {
   final EasyRefreshController controller;
   final Header header;
   final List<String> triggerRefreshEvent;
-  final bool enableRefresh; // 不影响第一次刷新，请求成功后不会再刷新
+  final bool enableRefresh;// 不影响第一次刷新，请求成功后不会再刷新
+  final bool reverseData; // 必须和enableRefresh 一起使用
 
   @override
   _EasyRefreshListViewState createState() => _EasyRefreshListViewState();
@@ -137,6 +139,7 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
     if (!widget.enableRefresh) {
       setState(() {
         finishRefresh = true;
+        finishLoad = true;
       });
     }
   }
@@ -164,7 +167,11 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
           _resetState();
 
         }
-        _dataList = combineList;
+        if (widget.reverseData && widget.enableRefresh) {
+          _dataList = combineList.reversed;
+        } else {
+          _dataList = combineList;
+        }
        // _controller.resetLoadState();
       });
 
@@ -224,7 +231,6 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
         onRefresh: finishRefresh ? null : _onRefresh,
         onLoad: finishLoad ? null :_onLoad,
         emptyWidget: noResults ? widget.emptyWidget ?? EmptyView() :null,
-
       ),
     );
 

@@ -4,7 +4,9 @@ import 'package:fastodon/pages/setting/lists/lists_eidt.dart';
 import 'package:fastodon/pages/timeline/lists_timeline.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/request.dart';
+import 'package:fastodon/widget/common/list_row.dart';
 import 'package:fastodon/widget/common/loading_view.dart';
+import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 
 class ListsPage extends StatefulWidget {
@@ -42,32 +44,27 @@ class _ListsPageState extends State<ListsPage> {
           IconButton(icon: Icon(Icons.add),onPressed: _showAddDialog,)
         ],
       ),
-      body: loaded == true
-          ? (lists.length == 0
-              ? Text('没有内容')
-              : Container(
-                color: Theme.of(context).backgroundColor,
-                child: ListView.builder(
-                    itemCount: lists.length,
-                    itemBuilder: _row,
-                  ),
-              ))
-          : LoadingView(),
+      body: EasyRefreshListView(
+        requestUrl: Api.lists,
+        buildRow: _row,
+        enableRefresh: false,
+        reverseData: true,
+      ),
     );
   }
 
-  Widget _row(BuildContext context, int idx) {
-    return InkWell(
-      onTap: ()=> AppNavigate.push(context, ListTimeline(lists[idx]['id'])),
-      child: Container(
-        padding: EdgeInsets.all(8),
+  Widget _row(int idx,List data) {
+    var list = data[idx];
+    return ListRow(
+      child: InkWell(
+        onTap: ()=> AppNavigate.push(context, ListTimeline(list['id'])),
         child: Row(children: [
           Icon(
             Icons.list,
             size: 25,
           ),
           Text(
-            lists[idx]['title'],
+            list['title'],
             style: TextStyle(fontSize: 18),
           ),
           Spacer(),
@@ -83,22 +80,18 @@ class _ListsPageState extends State<ListsPage> {
             onSelected: (String value) {
               switch (value) {
                 case 'edit':
-                  _showEditDialog(lists[idx]['id']);
+                  _showEditDialog(list['id']);
                   break;
                 case 'rename':
-                  _showRenameDialog(lists[idx]['id'], lists[idx]['title']);
+                  _showRenameDialog(list['id'], list['title']);
                   break;
                 case 'delete':
-                  _remove(lists[idx]['id']);
+                  _remove(list['id']);
                   break;
               }
             },
           )
         ]),
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-            border:
-                Border(bottom: BorderSide(color: Theme.of(context).buttonColor))),
       ),
     );
   }
@@ -161,7 +154,7 @@ class _ListsPageState extends State<ListsPage> {
           FlatButton(
             child: Text('新建列表'),
             onPressed: () async {
-              _create(_controller.text.trim());
+              await _create(_controller.text.trim());
               AppNavigate.pop(context);
             },
           )
@@ -181,7 +174,8 @@ class _ListsPageState extends State<ListsPage> {
   }
 
   _create(String title) async{
-    await ListsApi.add(title);
+    AppNavigate.pop(context);
+    await ListsApi.add(title,context: context);
     _requestList();
   }
 }
