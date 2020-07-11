@@ -37,18 +37,18 @@ class ListsApi {
     var params = {
       'title':newTitle
     };
-    return await Request.put(url: requestUrl,params: params);
+    return await Request.put(url: requestUrl,params: params,showDialog: true);
   }
 
   static remove(String listId) async{
     var requestUrl = '$url/$listId';
-    await Request.delete(url: requestUrl);
+    await Request.delete(url: requestUrl,showDialog: true);
   }
 
-  static add(String title,{BuildContext context}) async {
+  static add(String title) async {
     var params = {
       'title':title
     };
-    await Request.post(url: url,params: params,showDialog: true);
+    return await Request.post(url: url,params: params,showDialog: true);
   }
 }

@@ -95,6 +95,7 @@ class ProgressDialog {
       String message,
       Widget progressWidget,
       TextStyle progressTextStyle,
+        Widget customBody,
       TextStyle messageTextStyle}) {
     if (_progressDialogType == ProgressDialogType.Download) {
       _progress = progress ?? _progress;
@@ -105,6 +106,7 @@ class ProgressDialog {
     _progressWidget = progressWidget ?? _progressWidget;
     _messageStyle = messageTextStyle ?? _messageStyle;
     _progressTextStyle = progressTextStyle ?? _progressTextStyle;
+    _customBody = customBody ?? _customBody;
 
     if (_isShowing) _dialog.update();
   }

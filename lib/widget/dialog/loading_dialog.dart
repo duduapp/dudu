@@ -12,7 +12,7 @@ class LoadingDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget loadingIcon;
     if (finished) {
-      loadingIcon = Icon(Icons.check_circle_outline);
+      loadingIcon = Icon(Icons.check_circle_outline,size: 40,color: Colors.white,);
     } else {
       loadingIcon =             SpinKitFadingCircle(
         size: 40,
@@ -23,8 +23,8 @@ class LoadingDialog extends StatelessWidget {
       borderRadius: BorderRadius.circular(10),
       child: Container(
         padding: EdgeInsets.all(20),
-        width: 120,
-        height: 120,
+        width: 140,
+        height: 110,
         color: Color.fromRGBO(54, 54, 54, 1),
         child: Column(
           mainAxisSize: MainAxisSize.min,

@@ -1,3 +1,5 @@
+import 'package:fastodon/models/article_item.dart';
+import 'package:fastodon/widget/status/status_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -29,6 +31,13 @@ class ListViewUtil {
       noMoreText: '',
       infoText: '',
     );
+  }
+  
+  static statusRowFunction() {
+    return (int index, List data) {
+      StatusItemData lineItem = StatusItemData.fromJson(data[index]);
+      return StatusItem(item: lineItem);
+    };
   }
 
 }
