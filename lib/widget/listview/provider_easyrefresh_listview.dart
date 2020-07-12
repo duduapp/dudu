@@ -43,7 +43,7 @@ enum ListStatus {
 class _ProviderEasyRefreshListViewState
     extends State<ProviderEasyRefreshListView> {
   ScrollController _scrollController = ScrollController();
-  List _dataList = [];
+
   EasyRefreshController _controller;
   int offset;
   bool noResults = false;
@@ -95,7 +95,7 @@ class _ProviderEasyRefreshListViewState
 
   _removeByAccountId(String accountId) {
     setState(() {
-      _dataList.removeWhere((element) => element['account']['id'] == accountId);
+
     });
   }
 
@@ -118,7 +118,7 @@ class _ProviderEasyRefreshListViewState
                   return SizeTransition(
                     axis: Axis.vertical,
                     sizeFactor: animation,
-                    child: provider.buildRow(index, provider.list),
+                    child: provider.buildRow(index, provider.list,provider),
                   );
                 },
               )

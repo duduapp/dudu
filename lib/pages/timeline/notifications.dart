@@ -1,7 +1,10 @@
+import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
+import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/listview/refresh_load_listview.dart';
+import 'package:provider/provider.dart';
 import '../../models/notificate_item.dart';
 
 import 'package:fastodon/widget/status/status_item.dart';
@@ -36,7 +39,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
     super.dispose();
   }
 
-  Widget row(int index, List data) {
+  Widget row(int index, List data,ResultListProvider provider) {
     NotificateItem item = NotificateItem.fromJson(data[index]);
     if (item.type == 'follow') {
       return FollowCell(
@@ -67,9 +70,14 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
       ),
       body: LoadingWidget(
         endLoading: _canLoadWidget,
-        childWidget: EasyRefreshListView(
-          requestUrl: Api.Notifications,
-          buildRow: row,
+        childWidget: ChangeNotifierProvider<ResultListProvider>(
+          create: (context) => ResultListProvider(
+              requestUrl: Api.Notifications,
+              buildRow: row,
+
+          ),
+          child: ProviderEasyRefreshListView(
+          ),
         ),
       )
     );

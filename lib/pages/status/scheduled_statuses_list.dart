@@ -1,10 +1,14 @@
 import 'package:fastodon/api/scheduled_statuses_api.dart';
+import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/status/new_status.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
+import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
+import 'package:nav_router/nav_router.dart';
+import 'package:provider/provider.dart';
 
 class ScheduledStatusesList extends StatefulWidget {
   @override
@@ -12,12 +16,12 @@ class ScheduledStatusesList extends StatefulWidget {
 }
 
 class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
+  BuildContext providerContext;
 
   @override
   void initState() {
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +30,24 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
         title: Text('定时嘟文'),
         centerTitle: false,
       ),
-      body: EasyRefreshListView(
-        requestUrl: ScheduledStatusesApi.url,
-        buildRow: _buildRow,
-        header: MaterialHeader(),
-        triggerRefreshEvent: [EventBusKey.scheduledStatusDeleted,EventBusKey.scheduledStatusPublished],
-      ),
+      body: ChangeNotifierProvider<ResultListProvider>(
+          create: (context) => ResultListProvider(
+                requestUrl: ScheduledStatusesApi.url,
+                buildRow: _buildRow,
+              ),
+          builder: (context, snapshot) {
+            providerContext = context;
+            return ProviderEasyRefreshListView(
+              header: MaterialHeader(),
+              //    triggerRefreshEvent: [EventBusKey.scheduledStatusDeleted,EventBusKey.scheduledStatusPublished],
+            );
+          }),
     );
   }
 
   Widget _buildRow(int idx, List data) {
+    ResultListProvider provider =
+        Provider.of<ResultListProvider>(providerContext, listen: false);
     var row = data[idx];
     return InkWell(
       child: Container(
@@ -51,14 +63,14 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
                     context,
                     NewStatus(
                       scheduleInfo: row,
-                    ));
+                    ),routeType: RouterType.material);
               },
             ),
             IconButton(
               icon: Icon(Icons.clear),
               onPressed: () async {
                 await ScheduledStatusesApi.delete(row['id']);
-                eventBus.emit(EventBusKey.scheduledStatusDeleted);
+                provider.removeByIdWithAnimation(row['id']);
               },
             )
           ],

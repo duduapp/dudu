@@ -146,9 +146,10 @@ class _UserMessageState extends State<UserMessage> {
   }
 
   _onPressHide() {
+    AppNavigate.pop(context);
     AccountsApi.mute(widget.account.id);
     eventBus.emit(EventBusKey.muteAccount, {'account_id': widget.account.id});
-    AppNavigate.pop(context);
+
   }
 
   _onPressBlock() {

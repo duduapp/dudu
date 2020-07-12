@@ -1,3 +1,4 @@
+import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/request.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +15,10 @@ class ResultListProvider extends ChangeNotifier {
   bool finishLoad = false;
   bool noResults = false;
   String nextUrl;
+  final bool listenBlockEvent;
   GlobalKey<SliverAnimatedListState> listKey;
   final Function buildRow;
+  Map<String, dynamic> events = {};
 
   ResultListProvider(
       {@required this.requestUrl,
@@ -24,7 +27,30 @@ class ResultListProvider extends ChangeNotifier {
       this.offsetPagination,
       this.headerLinkPagination = false,
       this.enableRefresh = true,
-      this.reverseData = false});
+      this.reverseData = false,
+      this.listenBlockEvent = false}) {
+    if (listenBlockEvent) {
+      _addEvent(EventBusKey.blockAccount, (arg) {
+        var accountId = arg['account_id'];
+//       if (arg.containsKey('from_status_id')) {
+//         removeByIdWithAnimation(arg['from_status_id']);
+//       }
+        list.removeWhere((element) => element['account']['id'] == accountId);
+        notifyListeners();
+      });
+      _addEvent(EventBusKey.muteAccount, (arg) {
+        var accountId = arg['account_id'];
+
+        list.removeWhere((element) => element['account']['id'] == accountId);
+        notifyListeners();
+      });
+    }
+  }
+
+  _addEvent(String eventName, EventCallback callback) {
+    eventBus.on(eventName, callback);
+    events[eventName] = callback;
+  }
 
   Future<void> refresh() async {
     await _startRequest(requestUrl, refresh: true);
@@ -103,13 +129,29 @@ class ResultListProvider extends ChangeNotifier {
 
   removeByIdWithAnimation(String id) {
     var idx = _indexOfId(id);
+    if (idx == -1) {
+      return;
+    }
     listKey?.currentState?.removeItem(idx, (context, animation) {
       var copyList = List.from(list);
       list.removeWhere((element) => element['id'] == id);
       return SizeTransition(
         axis: Axis.vertical,
         sizeFactor: animation,
-        child: buildRow(idx, copyList),
+        child: buildRow(idx, copyList, this),
+      );
+    });
+  }
+
+  removeByValueWithAnimation(dynamic value) {
+    var idx = list.indexOf(value);
+    listKey?.currentState?.removeItem(idx, (context, animation) {
+      var copyList = List.from(list);
+      list.remove(value);
+      return SizeTransition(
+        axis: Axis.vertical,
+        sizeFactor: animation,
+        child: buildRow(idx, copyList, this),
       );
     });
   }
@@ -143,7 +185,9 @@ class ResultListProvider extends ChangeNotifier {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    events.forEach((key, value) {
+      eventBus.off(key, value);
+    });
     super.dispose();
   }
 }

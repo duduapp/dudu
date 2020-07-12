@@ -18,51 +18,40 @@ class ListsPage extends StatefulWidget {
 }
 
 class _ListsPageState extends State<ListsPage> {
-  List<dynamic> lists = [];
-
-  bool loaded = false;
+  BuildContext providerContext;
 
   @override
   void initState() {
     super.initState();
   }
 
-  _requestList() {
-    Request.get(url: Api.lists).then((data) {
-      setState(() {
-        lists = data;
-        loaded = true;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ResultListProvider>(
-      create: (context) => ResultListProvider(
-          requestUrl: Api.lists,
-          buildRow: _row,
-          enableRefresh: false,
-          reverseData: true),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('列表'),
-          centerTitle: false,
-          actions: <Widget>[
-            Consumer<ResultListProvider>(builder: (context, provider, child) {
-              return IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () => _showAddDialog(provider),
-              );
-            })
-          ],
-        ),
-        body: ProviderEasyRefreshListView(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('列表'),
+        centerTitle: false,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () => _showAddDialog(),
+          )
+        ],
       ),
+      body: ChangeNotifierProvider<ResultListProvider>(
+          create: (context) => ResultListProvider(
+              requestUrl: Api.lists,
+              buildRow: _row,
+              enableRefresh: false,
+              reverseData: true),
+          builder: (context, snapshot) {
+            providerContext = context;
+            return ProviderEasyRefreshListView();
+          }),
     );
   }
 
-  Widget _row(int idx, List data) {
+  Widget _row(int idx, List data,ResultListProvider provider) {
     var list = data[idx];
     return ListRow(
       child: InkWell(
@@ -77,33 +66,30 @@ class _ListsPageState extends State<ListsPage> {
             style: TextStyle(fontSize: 18),
           ),
           Spacer(),
-          Consumer<ResultListProvider>(builder: (context, provider, child) {
-            return PopupMenuButton(
-              offset: Offset(0, 35),
-              icon: Icon(Icons.more_horiz),
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                new PopupMenuItem<String>(
-                    value: 'edit', child: new Text('编辑列表')),
-                new PopupMenuItem<String>(
-                    value: 'rename', child: new Text('重命名列表')),
-                new PopupMenuItem<String>(
-                    value: 'delete', child: new Text('删除列表')),
-              ],
-              onSelected: (String value) {
-                switch (value) {
-                  case 'edit':
-                    _showEditDialog(list['id']);
-                    break;
-                  case 'rename':
-                    _showRenameDialog(list['id'], list['title'],provider);
-                    break;
-                  case 'delete':
-                    _remove(list['id'], provider);
-                    break;
-                }
-              },
-            );
-          })
+          PopupMenuButton(
+            offset: Offset(0, 35),
+            icon: Icon(Icons.more_horiz),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              new PopupMenuItem<String>(value: 'edit', child: new Text('编辑列表')),
+              new PopupMenuItem<String>(
+                  value: 'rename', child: new Text('重命名列表')),
+              new PopupMenuItem<String>(
+                  value: 'delete', child: new Text('删除列表')),
+            ],
+            onSelected: (String value) {
+              switch (value) {
+                case 'edit':
+                  _showEditDialog(list['id']);
+                  break;
+                case 'rename':
+                  _showRenameDialog(list['id'], list['title'], provider);
+                  break;
+                case 'delete':
+                  _remove(list['id'], provider);
+                  break;
+              }
+            },
+          )
         ]),
       ),
     );
@@ -119,7 +105,7 @@ class _ListsPageState extends State<ListsPage> {
         });
   }
 
-  _showRenameDialog(String id, String title,ResultListProvider provider) {
+  _showRenameDialog(String id, String title, ResultListProvider provider) {
     TextEditingController _controller = TextEditingController(text: title);
     showDialog(
         context: context,
@@ -141,9 +127,9 @@ class _ListsPageState extends State<ListsPage> {
                 child: Text('重命名列表'),
                 onPressed: () async {
                   AppNavigate.pop(context);
-                  var data = await ListsApi.updateTitle(id, _controller.text.trim());
-                    provider.update(data);
-
+                  var data =
+                      await ListsApi.updateTitle(id, _controller.text.trim());
+                  provider.update(data);
                 },
               )
             ],
@@ -151,7 +137,9 @@ class _ListsPageState extends State<ListsPage> {
         });
   }
 
-  _showAddDialog(ResultListProvider provider) {
+  _showAddDialog() {
+    ResultListProvider provider =
+        Provider.of<ResultListProvider>(providerContext, listen: false);
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -181,11 +169,6 @@ class _ListsPageState extends State<ListsPage> {
             ],
           );
         });
-  }
-
-  _rename(String id, String newTitle) async {
-    await ListsApi.updateTitle(id, newTitle);
-    _requestList();
   }
 
   _remove(String id, ResultListProvider provider) async {

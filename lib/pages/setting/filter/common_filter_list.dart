@@ -1,9 +1,12 @@
 import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/constant/event_bus_key.dart';
+import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/setting/filter/common_filter_edit.dart';
 import 'package:fastodon/widget/common/list_row.dart';
 import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
+import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 enum FilterType { home, notifications, public, thread }
 
@@ -17,9 +20,6 @@ class CommonFilterList extends StatefulWidget {
 }
 
 class _CommonFilterListState extends State<CommonFilterList> {
-
-
-
   @override
   Widget build(BuildContext context) {
     var title;
@@ -37,29 +37,39 @@ class _CommonFilterListState extends State<CommonFilterList> {
         title = '对话';
         break;
     }
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        centerTitle: false,
-        actions: <Widget>[
-          IconButton(icon:Icon(Icons.add),onPressed: _add,)
-        ],
-      ),
-      body: EasyRefreshListView(
-        requestUrl: AccountsApi.filterUrl,
-        buildRow: _buildRow,
-        enableRefresh: false,
-        triggerRefreshEvent: [EventBusKey.filterEdited],
-      ),
-    );
+    return ChangeNotifierProvider<ResultListProvider>(
+        create: (context) => ResultListProvider(
+            requestUrl: AccountsApi.filterUrl,
+            buildRow: _buildRow,
+            enableRefresh: false),
+        builder: (context, snapshot) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(title),
+              centerTitle: false,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () => _add(context),
+                )
+              ],
+            ),
+            body: ProviderEasyRefreshListView(),
+          );
+        });
   }
 
-  _buildRow(int idx, List dynamic) {
+  _buildRow(int idx, List dynamic, ResultListProvider provider) {
     var data = dynamic[idx];
     var context = data['context'];
     if (context.contains(widget.type.toString().split('.')[1])) {
       return InkWell(
-        onTap: () => _editRow(id: data['id'],phrase: data['phrase'],phraseContext: context,wholeWord: data['whole_word']),
+        onTap: () => _editRow(
+            id: data['id'],
+            phrase: data['phrase'],
+            phraseContext: context,
+            wholeWord: data['whole_word'],
+            provider: provider),
         child: ListRow(
           child: Container(
               padding: EdgeInsets.all(8),
@@ -74,24 +84,44 @@ class _CommonFilterListState extends State<CommonFilterList> {
     }
   }
 
-  _editRow({String id,String phrase,List phraseContext,bool wholeWord}) {
-    showDialog(context: context,builder: (BuildContext context) {
-      return AlertDialog(
-        contentPadding: EdgeInsets.all(8),
-        title: Text('编辑过滤器'),
-        content: CommonFilterEdit(id: id,phrase: phrase,context: phraseContext,wholeWord: wholeWord,),
-      );
-    });
+  _editRow(
+      {String id,
+      String phrase,
+      List phraseContext,
+      bool wholeWord,
+      ResultListProvider provider}) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.all(8),
+            title: Text('编辑过滤器'),
+            content: CommonFilterEdit(
+              id: id,
+              phrase: phrase,
+              context: phraseContext,
+              wholeWord: wholeWord,
+              provider: provider,
+            ),
+          );
+        });
   }
 
-  _add() {
+  _add(BuildContext context) {
+    ResultListProvider provider = Provider.of<ResultListProvider>(context,listen: false);
     List phraseContext = [widget.type.toString().split('.')[1]];
-    showDialog(context: context,builder: (BuildContext context) {
-      return AlertDialog(
-        contentPadding: EdgeInsets.all(8),
-        title: Text('添加新的过滤器'),
-        content: CommonFilterEdit(context: phraseContext,newFilter: true,),
-      );
-    });
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.all(8),
+            title: Text('添加新的过滤器'),
+            content: CommonFilterEdit(
+              context: phraseContext,
+              newFilter: true,
+              provider: provider,
+            ),
+          );
+        });
   }
 }

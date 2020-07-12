@@ -20,25 +20,25 @@ class AccountsApi {
     return await Request.get(url: preferencesUrl);
   }
 
-  static mute(String id) {
+  static mute(String id) async{
     var api = '$url/$id/mute';
-    Request.post(url: api,errMsg: '隐藏用户$id失败');
+    return await Request.post(url: api,errMsg: '隐藏用户$id失败');
   }
 
   static unMute(String id) async{
     var api = '$url/$id/unmute';
-    await Request.post(url: api,errMsg: '取消隐藏用户$id失败');
+    return await Request.post(url: api,errMsg: '取消隐藏用户$id失败');
   }
 
 
-  static block(String id) {
+  static block(String id) async{
     var api = '$url/$id/block';
-    Request.post(url: api,errMsg: '屏蔽用户$id失败');
+    return await Request.post(url: api,errMsg: '屏蔽用户$id失败');
   }
 
   static unBlock(String id) async{
     var api = '$url/$id/unblock';
-    await Request.post(url: api,errMsg: '取消屏蔽用户$id失败');
+    return await Request.post(url: api,errMsg: '取消屏蔽用户$id失败');
   }
 
   static blockDomain(String domain) async {
@@ -69,7 +69,7 @@ class AccountsApi {
 
   static removeFilter(String id) async {
     var api = '$filterUrl/$id';
-    await Request.delete(url: api);
+    return await Request.delete(url: api);
   }
 
   static addFilter(String phrase, List context,bool wholeWord) async{
@@ -78,7 +78,7 @@ class AccountsApi {
       'context': context,
       'whole_word': wholeWord
     };
-    await Request.post(url: filterUrl,params: params);
+   return  await Request.post(url: filterUrl,params: params);
   }
 
   static updateFilter(String id,String phrase,List context,bool wholeWord) async{
@@ -89,6 +89,6 @@ class AccountsApi {
       'whole_word': wholeWord
     };
 
-    await Request.put(url: api,params: params);
+    return await Request.put(url: api,params: params);
   }
 }

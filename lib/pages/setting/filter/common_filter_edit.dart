@@ -1,6 +1,8 @@
 import 'package:fastodon/api/accounts_api.dart';
+import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/public.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CommonFilterEdit extends StatefulWidget {
   final String id;
@@ -8,8 +10,9 @@ class CommonFilterEdit extends StatefulWidget {
   final List context;
   final bool wholeWord;
   final bool newFilter;
+  final ResultListProvider provider;
 
-  CommonFilterEdit({this.id, this.phrase, this.context, this.wholeWord,this.newFilter = false});
+  CommonFilterEdit({this.id, this.phrase, this.context, this.wholeWord,this.newFilter = false,this.provider});
 
   @override
   _CommonFilterEditState createState() => _CommonFilterEditState();
@@ -78,25 +81,28 @@ class _CommonFilterEditState extends State<CommonFilterEdit> {
   }
 
   _remove() async{
-    AccountsApi.removeFilter(widget.id).then(
-        (dynamic d) {eventBus.emit(EventBusKey.filterEdited);}
-    );
     AppNavigate.pop(context);
+    var res = await AccountsApi.removeFilter(widget.id);
+    if (res != null) {
+      widget.provider.removeByIdWithAnimation(widget.id);
+    }
   }
 
   _updateOrCreate() async{
+    AppNavigate.pop(context);
     if (widget.newFilter) {
-      AccountsApi.addFilter(phraseController.text.trim(), widget.context, wholeWord).then((_)=>eventBus.emit(EventBusKey.filterEdited) );
+      var res = await AccountsApi.addFilter(phraseController.text.trim(), widget.context, wholeWord);
+      if (res != null) {
+        widget.provider.addToListWithAnimation(res);
+      }
     } else {
-      AccountsApi.updateFilter(
-          widget.id, phraseController.text.trim(), widget.context, wholeWord)
-          .then(
-              (dynamic d) {
-            eventBus.emit(EventBusKey.filterEdited);
-          }
-      );
+      var res = await AccountsApi.updateFilter(
+          widget.id, phraseController.text.trim(), widget.context, wholeWord);
+      if (res != null) {
+        widget.provider.update(res);
+      }
     }
 
-    AppNavigate.pop(context);
+
   }
 }

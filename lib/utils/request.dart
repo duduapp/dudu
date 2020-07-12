@@ -56,7 +56,7 @@ class Request {
       {String url,
       Object params,
       String errMsg,
-      bool showDialog,
+      bool showDialog = true,
       String dialogMessage}) async {
     return await _request(
         requestType: RequestType.post,
@@ -71,7 +71,7 @@ class Request {
       {String url,
       Object params,
       String errMsg,
-      bool showDialog,
+      bool showDialog = true,
       String dialogMessage}) async {
     return await _request(
         requestType: RequestType.put,
@@ -100,7 +100,7 @@ class Request {
       {String url,
       Object params,
       String errMsg,
-      bool showDialog,
+      bool showDialog = true,
       String dialogMessage}) async {
     return await _request(
         requestType: RequestType.delete,

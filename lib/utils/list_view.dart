@@ -1,4 +1,5 @@
 import 'package:fastodon/models/article_item.dart';
+import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/widget/status/status_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class ListViewUtil {
   }
   
   static statusRowFunction() {
-    return (int index, List data) {
+    return (int index, List data,ResultListProvider provider) {
       StatusItemData lineItem = StatusItemData.fromJson(data[index]);
       return StatusItem(item: lineItem);
     };

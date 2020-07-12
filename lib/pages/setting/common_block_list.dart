@@ -1,10 +1,13 @@
 import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/common/list_row.dart';
 import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
+import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:fastodon/widget/status/status_item_account.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 enum BlockType { mute, block, hideDomain }
 
@@ -13,7 +16,7 @@ class CommonBlockList extends StatelessWidget {
 
   CommonBlockList(this.type);
 
-  Widget _buildMuteRow(int idx, List dynamic) {
+  Widget _buildMuteRow(int idx, List dynamic,ResultListProvider provider) {
     OwnerAccount account = OwnerAccount.fromJson(dynamic[idx]);
     return ListRow(
         child: Container(
@@ -22,14 +25,16 @@ class CommonBlockList extends StatelessWidget {
       action: IconButton(
         icon: Icon(Icons.volume_up),
         onPressed: () async{
-          await AccountsApi.unMute(account.id);
-          eventBus.emit(EventBusKey.userUnmuted);
+          var res = await AccountsApi.unMute(account.id);
+          if (res != null) {
+            provider.removeByIdWithAnimation(account.id);
+          }
         },
       ),
     )));
   }
 
-  Widget _buildBlockRow(int idx, List dynamic) {
+  Widget _buildBlockRow(int idx, List dynamic,ResultListProvider provider) {
     OwnerAccount account = OwnerAccount.fromJson(dynamic[idx]);
     return ListRow(
         child: Container(
@@ -38,14 +43,16 @@ class CommonBlockList extends StatelessWidget {
               action: IconButton(
                 icon: Icon(Icons.clear),
                 onPressed: () async{
-                  await AccountsApi.unBlock(account.id);
-                  eventBus.emit(EventBusKey.userUnblocked);
+                  var res = await AccountsApi.unBlock(account.id);
+                  if (res != null) {
+                    provider.removeByIdWithAnimation(account.id);
+                  }
                 },
               ),
             )));
   }
 
-  Widget _buildBlockDomainRow(int idx, List dynamic) {
+  Widget _buildBlockDomainRow(int idx, List dynamic,ResultListProvider provider) {
     return ListRow(
       child: Row(
         children: <Widget>[
@@ -53,8 +60,10 @@ class CommonBlockList extends StatelessWidget {
           Spacer(),
           IconButton(icon: Icon(Icons.volume_up),
             onPressed: () async{
-              await AccountsApi.unBlockDomain(dynamic[idx]);
-              eventBus.emit(EventBusKey.domainUnblocked);
+              var res = await AccountsApi.unBlockDomain(dynamic[idx]);
+              if (res != null) {
+                provider.removeByValueWithAnimation(dynamic[idx]);
+              }
             },
           )
         ],
@@ -94,10 +103,18 @@ class CommonBlockList extends StatelessWidget {
         title: Text(title),
         centerTitle: false,
       ),
-      body: EasyRefreshListView(
-        requestUrl: url,
-        buildRow: buildRow,
-        triggerRefreshEvent: [refreshEvent],
+      body: ChangeNotifierProvider<ResultListProvider>(
+          create: (context) => ResultListProvider(
+            requestUrl: url,
+            buildRow: buildRow,
+            headerLinkPagination: true
+
+          ),
+        builder: (context, snapshot) {
+          return ProviderEasyRefreshListView(
+       //     triggerRefreshEvent: [refreshEvent],
+          );
+        }
       ),
     );
   }
