@@ -33,7 +33,7 @@ class LoadingDialog extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Text(text ?? '加载中...',style: TextStyle(color: Colors.white),)
+            Text(text,style: TextStyle(color: Colors.white),)
           ],
         ),
       ),

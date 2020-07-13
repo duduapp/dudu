@@ -19,6 +19,7 @@ class ResultListProvider extends ChangeNotifier {
   GlobalKey<SliverAnimatedListState> listKey;
   final Function buildRow;
   Map<String, dynamic> events = {};
+  final bool firstRefresh;
 
   ResultListProvider(
       {@required this.requestUrl,
@@ -28,7 +29,9 @@ class ResultListProvider extends ChangeNotifier {
       this.headerLinkPagination = false,
       this.enableRefresh = true,
       this.reverseData = false,
-      this.listenBlockEvent = false}) {
+      this.listenBlockEvent = false,
+      this.firstRefresh = false // easy refresh 在 nestedscrollview 有问题
+      }) {
     if (listenBlockEvent) {
       _addEvent(EventBusKey.blockAccount, (arg) {
         var accountId = arg['account_id'];
@@ -44,6 +47,9 @@ class ResultListProvider extends ChangeNotifier {
         list.removeWhere((element) => element['account']['id'] == accountId);
         notifyListeners();
       });
+    }
+    if (firstRefresh) {
+      refresh();
     }
   }
 

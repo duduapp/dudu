@@ -52,7 +52,6 @@ class _StatusItemActionState extends State<StatusItemAction> {
   }
 
   _onPressHide() async {
-    AppNavigate.pop(context);
     var provider = Provider.of<ResultListProvider>(context, listen: false);
     var res = await AccountsApi.mute(widget.item.account.id);
 
@@ -69,7 +68,6 @@ class _StatusItemActionState extends State<StatusItemAction> {
   }
 
   _onPressBlock() async {
-    AppNavigate.pop(context);
     var provider = Provider.of<ResultListProvider>(context, listen: false);
     var res = await AccountsApi.block(widget.item.account.id);
     ;

@@ -10,24 +10,23 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fastodon/public.dart';
 import 'package:provider/provider.dart';
 
-class ProviderEasyRefreshListView extends StatefulWidget {
-  ProviderEasyRefreshListView(
-      {Key key,
-      this.type,
-      this.emptyWidget,
-      this.controller,
-      this.header})
-      : super(key: key);
+class ProviderEasyRefreshNestedListView extends StatefulWidget {
+  ProviderEasyRefreshNestedListView({
+    Key key,
+    this.type,
+    this.emptyWidget,
+    this.controller,
+    this.header,
+  }) : super(key: key);
   final TimelineType type;
 
   final Widget emptyWidget;
   final EasyRefreshController controller;
   final Header header;
 
-
   @override
-  _ProviderEasyRefreshListViewState createState() =>
-      _ProviderEasyRefreshListViewState();
+  _ProviderEasyRefreshNestedListViewState createState() =>
+      _ProviderEasyRefreshNestedListViewState();
 }
 
 enum ListStatus {
@@ -39,8 +38,8 @@ enum ListStatus {
   noMoreData
 }
 
-class _ProviderEasyRefreshListViewState
-    extends State<ProviderEasyRefreshListView> with AutomaticKeepAliveClientMixin{
+class _ProviderEasyRefreshNestedListViewState
+    extends State<ProviderEasyRefreshNestedListView> {
   ScrollController _scrollController = ScrollController();
 
   EasyRefreshController _controller;
@@ -103,33 +102,22 @@ class _ProviderEasyRefreshListViewState
         GlobalKey<SliverAnimatedListState> listKey =
             GlobalKey<SliverAnimatedListState>();
         provider.setAnimatedListKey(listKey);
-        // 初次可能从Provider 里面请求
-        return  (provider.firstRefresh && !provider.noResults && provider.list.isEmpty) ? LoadingView(): EasyRefresh(
-          child: CustomScrollView(
-            slivers: [
-              SliverAnimatedList(
-                key: listKey,
-                initialItemCount: provider.list.length,
-                itemBuilder: (context, index, animation) {
-                  return SizeTransition(
-                    axis: Axis.vertical,
-                    sizeFactor: animation,
-                    child: provider.buildRow(index, provider.list, provider),
-                  );
-                },
-              )
-            ],
+        return EasyRefresh(
+          child: ListView.builder(
+            itemBuilder: (context, idx) {
+              return provider.buildRow(idx, provider.list, provider);
+            },
+            itemCount: provider.list.length,
           ),
-          firstRefresh: provider.firstRefresh ? false: true, //在NestedScrollView 不用启用这个选项，而且不能设置scroll controller
-          firstRefreshWidget: LoadingView(),
-          header: widget.header ?? ListViewUtil.getDefaultHeader(context),
-          footer: ListViewUtil.getDefaultFooter(context),
+ //         firstRefresh: true,
+//          firstRefreshWidget: LoadingView(),
+//          header: widget.header ?? ListViewUtil.getDefaultHeader(context),
+//          footer: ListViewUtil.getDefaultFooter(context),
           controller: _controller,
-          scrollController: widget.type == null ? null : _scrollController,
+          scrollController: _scrollController,
           onRefresh: provider.finishRefresh ? null : provider.refresh,
           onLoad: provider.finishLoad ? null : provider.load,
-          emptyWidget:
-              provider.noResults ? widget.emptyWidget ?? EmptyView() : null,
+//          emptyWidget: provider.noResults ? widget.emptyWidget ?? EmptyView() : null,
         );
       }),
     );
@@ -144,8 +132,4 @@ class _ProviderEasyRefreshListViewState
     eventBus.off(EventBusKey.textScaleChanged, onTextScaleChanged);
     super.dispose();
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }

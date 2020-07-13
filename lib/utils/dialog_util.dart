@@ -44,9 +44,18 @@ class DialogUtils {
   }
 
   static showSimpleAlertDialog(
-  {BuildContext context, String text, Function onConfirm,bool popFirst}) {
+  {BuildContext context, String text, Function onConfirm,bool popFirst,bool popAfter = true}) {
     if (popFirst != null && popFirst == true) {
       AppNavigate.pop(context);
+    }
+    Function callback;
+    if (popAfter) {
+      callback = () async {
+        AppNavigate.pop(context);
+        await onConfirm();
+      };
+    } else {
+      callback = onConfirm;
     }
     showDialog(
         context: context,
@@ -60,7 +69,7 @@ class DialogUtils {
               ),
               FlatButton(
                 child: Text('确定'),
-                onPressed: onConfirm,
+                onPressed: callback,
               )
             ],
           );

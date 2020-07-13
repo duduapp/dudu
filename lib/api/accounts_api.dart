@@ -20,6 +20,18 @@ class AccountsApi {
     return await Request.get(url: preferencesUrl);
   }
 
+  static follow(String id,{bool receiveReblogs = true}) async{
+    var api = '$url/$id/follow';
+    Map paramsMap = Map();
+    paramsMap['reblogs'] = receiveReblogs;
+    return await Request.post(url: api,params: paramsMap);
+  }
+
+  static unFollow(String id) async {
+    var api = '$url/$id/unfollow';
+    return await Request.post(url:api,closeDilogDelay: 0);
+  }
+
   static mute(String id) async{
     var api = '$url/$id/mute';
     return await Request.post(url: api,errMsg: '隐藏用户$id失败');
@@ -52,7 +64,7 @@ class AccountsApi {
     var params = {
       'domain' : domain
     };
-    await Request.delete(url: blockDomainUrl,params: params);
+    return await Request.delete(url: blockDomainUrl,params: params);
   }
 
   static updateCredentials(Map<String,dynamic> params) async{

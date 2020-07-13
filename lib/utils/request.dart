@@ -57,14 +57,18 @@ class Request {
       Object params,
       String errMsg,
       bool showDialog = true,
-      String dialogMessage}) async {
+      String dialogMessage,
+      String successMessage,
+      int closeDilogDelay}) async {
     return await _request(
         requestType: RequestType.post,
         url: url,
         params: params,
         errMsg: errMsg,
         showDialog: showDialog,
-        dialogMessage: dialogMessage);
+        dialogMessage: dialogMessage,
+    successMessage: successMessage,
+    closeDialogDelay: closeDilogDelay);
   }
 
   static Future put(
@@ -105,6 +109,7 @@ class Request {
     return await _request(
         requestType: RequestType.delete,
         url: url,
+        params: params,
         errMsg: errMsg,
         showDialog: showDialog,
         dialogMessage: dialogMessage);
@@ -116,12 +121,14 @@ class Request {
       Object params,
       String errMsg,
       bool showDialog,
-      String dialogMessage}) async {
+      String dialogMessage,
+      String successMessage,
+      int closeDialogDelay}) async {
     ProgressDialog dialog;
     Response response;
     if (showDialog != null && showDialog == true) {
       dialog = ProgressDialog(navGK.currentState.overlay.context,
-          isDismissible: false, customBody: LoadingDialog(text: dialogMessage));
+          isDismissible: false, customBody: LoadingDialog(text: dialogMessage ?? '处理中...'));
       dialog.style(borderRadius: 20);
       await dialog.show();
     }
@@ -144,9 +151,10 @@ class Request {
           response = await dio.patch(url,data: params);
           break;
       }
+      if (closeDialogDelay != 0)
       dialog?.update(
           customBody: LoadingDialog(
-            text: '已完成',
+            text: successMessage ?? '已完成',
         finished: true,
       ));
     } catch (e) {
@@ -154,9 +162,14 @@ class Request {
         showTotast(errMsg);
       }
     }
-    await Future.delayed(Duration(milliseconds: 100), () {
-      dialog?.hide();
-    });
+
+    if (closeDialogDelay == 0) {
+      await dialog?.hide();
+    } else {
+      await Future.delayed(Duration(milliseconds: closeDialogDelay ?? 100), () {
+        dialog?.hide();
+      });
+    }
     return response.data;
   }
 
