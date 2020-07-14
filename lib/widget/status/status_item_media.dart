@@ -10,6 +10,7 @@ import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:nav_router/nav_router.dart';
 import 'package:video_player/video_player.dart';
 
@@ -30,7 +31,6 @@ class StatusItemMedia extends StatefulWidget {
 class _StatusItemMediaState extends State<StatusItemMedia> {
   bool sensitive;
   bool hideImage;
-
 
   @override
   void initState() {
@@ -80,11 +80,14 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
       },
       child: ListTile(
         leading: Icon(Icons.music_note),
-        title: Text(widget.images[0].description,overflow: TextOverflow.ellipsis,maxLines: 2,),
+        title: Text(
+          widget.images[0].description,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+        ),
       ),
     );
   }
-
 
   Widget twoImages() {
     return LayoutBuilder(
@@ -193,25 +196,28 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
                 : Container(),
           ),
           if (hideImage)
-          Positioned.fill(
-            child: Align(
-              alignment: Alignment.center,
-              child: InkWell(
-                onTap: () {setState(() {
-                  hideImage = false;
-                });},
-                child: Container(
-                  padding: EdgeInsets.all(8.0),
-                  decoration: new BoxDecoration(
-                      //color is transparent so that it does not blend with the actual color specified
-                      borderRadius: const BorderRadius.all(const Radius.circular(8.0)),
-                      color: new Color.fromRGBO(240, 240, 240, 0.5) // Specifies the background color and the opacity
-                  ),
-                  child: Text(sensitive ? '敏感内容' : '已隐藏的照片或视频')),
-              ),
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.center,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      hideImage = false;
+                    });
+                  },
+                  child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      decoration: new BoxDecoration(
+                          //color is transparent so that it does not blend with the actual color specified
+                          borderRadius: const BorderRadius.all(
+                              const Radius.circular(8.0)),
+                          color: new Color.fromRGBO(240, 240, 240,
+                              0.5) // Specifies the background color and the opacity
+                          ),
+                      child: Text(sensitive ? '敏感内容' : '已隐藏的照片或视频')),
+                ),
               ),
             ),
-
         ],
       ),
     );
@@ -242,60 +248,49 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
         }
         open(context, idx);
       },
-      child: Hero(
-        tag: image.id,
-        child: CachedNetworkImage(
-            width: width,
-            height: height,
-            imageUrl: imageUrl,
-            imageBuilder: (context, imageProvider) {
-              return Stack(
-                children :[ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Container(
-                    width: width,
-                    height: height,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
+      child: Stack(children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Hero(
+            tag: image.id,
+            child: CachedNetworkImage(
+                fit: BoxFit.cover,
+                width: width,
+                height: height,
+                imageUrl: imageUrl,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Container(
+                      width: width,
+                      height: height,
+                      child: Center(
+                        child: SizedBox(
+                          width: indicatorSize,
+                          height: indicatorSize,
+                          child: CircularProgressIndicator(
+                              value: downloadProgress.progress),
+                        ),
                       ),
                     ),
-                    child: hideImage == true
-                        ? BackdropFilter(
-                            filter: ImageFilter.blur(sigmaY: 20, sigmaX: 20),
-                            child: Container(
-                              color: Colors.black.withOpacity(0.1),
-                            ),
-                          )
-                        : Container(),
-                  ),
-                ),
-                  if ((image.type == 'video' || image.type == 'gifv') && hideImage == false)
-                    Positioned.fill(
-                      child: Center(child: Icon(Icons.play_circle_filled,size: 65,color: Colors.white,)),
-                    )
-                ]
-              );
-            },
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                Container(
-                  width: width,
-                  height: height,
-                  child: Center(
-                    child: SizedBox(
-                      width: indicatorSize,
-                      height: indicatorSize,
-                      child: CircularProgressIndicator(
-                          value: downloadProgress.progress),
-                    ),
-                  ),
-                ),
-            errorWidget: (context, url, error) => Icon(Icons.error)),
-      ),
+                errorWidget: (context, url, error) => Icon(Icons.error)),
+          ),
+        ),
+        if (hideImage)
+          Positioned.fill(
+            child: ClipRRect(child: BlurHash(hash: image.blurhash,),borderRadius: BorderRadius.circular(8.0)),
+          ),
+        if ((image.type == 'video' || image.type == 'gifv') &&
+            hideImage == false)
+          Positioned.fill(
+            child: Center(
+                child: Icon(
+              Icons.play_circle_filled,
+              size: 65,
+              color: Colors.white,
+            )),
+          )
+      ]),
     );
   }
-
 
   void open(BuildContext context, final int index) {
     var image = widget.images[index];
@@ -304,10 +299,9 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
     if (type == 'video' || type == 'gifv') {
       to = VideoPlay(widget.images[index]);
     } else {
-       to = PhotoGallery(
+      to = PhotoGallery(
         galleryItems: widget.images,
         initialIndex: index,
-
       );
     }
 //    Navigator.of(context).push(
@@ -333,9 +327,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
 //        },
 //      ),
 //    );
-    AppNavigate.push(
-      context, to,routeType: RouterType.fade
-    );
+    AppNavigate.push(context, to, routeType: RouterType.fade);
   }
 
   @override
@@ -349,7 +341,4 @@ class VideoPlayer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container();
   }
-
-
 }
-
