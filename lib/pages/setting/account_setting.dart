@@ -29,7 +29,7 @@ class _AccountSettingState extends State<AccountSetting> {
 
 
   getAccount() async{
-    OwnerAccount account1 = await AccountsApi.getAccount();
+    OwnerAccount account1 = await AccountsApi.getMyAccount();
     MyAccount().setAcc(account1);
     await MyAccount().requestPrefrence();
     setState(() {

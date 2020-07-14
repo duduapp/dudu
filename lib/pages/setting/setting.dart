@@ -59,7 +59,7 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
   }
 
   Future<void> _getMyAccount() async {
-    OwnerAccount account = await AccountsApi.getAccount();
+    OwnerAccount account = await AccountsApi.getMyAccount();
     LocalStorageAccount.addOwnerAccount(account);
     MyAccount saveAcc = new MyAccount();
     saveAcc.setAcc(account);

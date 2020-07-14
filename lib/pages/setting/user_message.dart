@@ -1,11 +1,15 @@
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
+    as extend;
 import 'package:fastodon/api/accounts_api.dart';
+import 'package:fastodon/models/media_attachment.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
+import 'package:fastodon/pages/media/photo_gallery.dart';
 import 'package:fastodon/pages/status/new_status.dart';
 import 'package:fastodon/utils/dialog_util.dart';
+import 'package:fastodon/utils/list_view.dart';
 import 'package:fastodon/widget/common/bottom_sheet_item.dart';
 import 'package:fastodon/widget/common/colored_tab_bar.dart';
 import 'package:fastodon/widget/common/measure_size.dart';
-import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -17,7 +21,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/models/owner_account.dart';
 
-import 'package:fastodon/widget/listview/refresh_load_listview.dart';
 import 'package:fastodon/widget/status/status_item.dart';
 import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/models/my_account.dart';
@@ -42,8 +45,6 @@ class UserMessage extends StatefulWidget {
 class _UserMessageState extends State<UserMessage>
     with SingleTickerProviderStateMixin {
   RelationShip relationShip;
-  int _tabIndex = 0;
-
 
   OwnerAccount _account = mine.account;
   TabController _tabController;
@@ -63,33 +64,25 @@ class _UserMessageState extends State<UserMessage>
   void initState() {
     super.initState();
     _account = widget.account;
-    if (mine.account.id != widget.account.id) {
+    if (mine.account.id != _account.id) {
       _getRelationShuips();
     }
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
 
     _scrollController = ScrollController()
-      ..addListener(
-            () {
-              if (_scrollController.offset > _sliverExpandHeight - 200) {
-                _setShowAccountInfo(true);
-              } else {
-                _setShowAccountInfo(false);
-              }
-            }
-      );
+      ..addListener(() {
+        if (_scrollController.offset > _sliverExpandHeight - 200) {
+          _setShowAccountInfo(true);
+        } else {
+          _setShowAccountInfo(false);
+        }
+      });
   }
 
-
-
   Future<void> _getRelationShuips() async {
-    Request.get(url: Api.Relationships, params: {'id[]': widget.account.id})
-        .then((data) {
-      List response = data;
-      RelationShip relate = RelationShip.fromJson(response[0]);
-      setState(() {
-        relationShip = relate;
-      });
+    var res = await AccountsApi.getRelationShip(_account.id);
+    setState(() {
+      relationShip = res;
     });
   }
 
@@ -97,7 +90,7 @@ class _UserMessageState extends State<UserMessage>
     Map paramsMap = Map();
     paramsMap['reblogs'] = true;
 
-    var data = await AccountsApi.follow(widget.account.id);
+    var data = await AccountsApi.follow(_account.id);
     if (data != null) {
       relationShip = RelationShip.fromJson(data);
       if (relationShip.following == true) {
@@ -111,7 +104,7 @@ class _UserMessageState extends State<UserMessage>
   }
 
   Future<void> _unfollowByid() async {
-    var data = await AccountsApi.unFollow(widget.account.id);
+    var data = await AccountsApi.unFollow(_account.id);
     if (data != null) {
       relationShip = RelationShip.fromJson(data);
       if (relationShip.following == false) {
@@ -125,7 +118,7 @@ class _UserMessageState extends State<UserMessage>
   }
 
   Widget headerImage(BuildContext context) {
-    if (widget.account == null) {
+    if (_account == null) {
       return Container(
         height: 200,
       );
@@ -135,35 +128,34 @@ class _UserMessageState extends State<UserMessage>
       child: CachedNetworkImage(
         height: 200,
         width: Screen.width(context),
-        imageUrl: widget.account.header,
+        imageUrl: _account.header,
         fit: BoxFit.cover,
       ),
     );
   }
 
   _muteUser() async {
-    var data = await AccountsApi.mute(widget.account.id);
+    var data = await AccountsApi.mute(_account.id);
     if (data != null) {
       setState(() {
         relationShip = RelationShip.fromJson(data);
       });
-      eventBus.emit(EventBusKey.muteAccount, {'account_id': widget.account.id});
+      eventBus.emit(EventBusKey.muteAccount, {'account_id': _account.id});
     }
   }
 
   _blockUser() async {
-    var data = await AccountsApi.block(widget.account.id);
+    var data = await AccountsApi.block(_account.id);
     if (data != null) {
       setState(() {
         relationShip = RelationShip.fromJson(data);
       });
-      eventBus
-          .emit(EventBusKey.blockAccount, {'account_id': widget.account.id});
+      eventBus.emit(EventBusKey.blockAccount, {'account_id': _account.id});
     }
   }
 
   _unBlockUser() async {
-    var data = await AccountsApi.unBlock(widget.account.id);
+    var data = await AccountsApi.unBlock(_account.id);
     if (data != null) {
       setState(() {
         relationShip = RelationShip.fromJson(data);
@@ -178,7 +170,7 @@ class _UserMessageState extends State<UserMessage>
     } else {
       DialogUtils.showSimpleAlertDialog(
           context: context,
-          text: '确定要屏蔽@${widget.account.acct}吗',
+          text: '确定要屏蔽@${_account.acct}吗',
           onConfirm: _blockUser);
     }
   }
@@ -190,14 +182,14 @@ class _UserMessageState extends State<UserMessage>
     } else {
       DialogUtils.showSimpleAlertDialog(
         context: context,
-        text: '确定要隐藏@${widget.account.acct}吗',
+        text: '确定要隐藏@${_account.acct}吗',
         onConfirm: _muteUser,
       );
     }
   }
 
   _onPressUnmute() async {
-    var data = await AccountsApi.unMute(widget.account.id);
+    var data = await AccountsApi.unMute(_account.id);
     if (data != null) {
       setState(() {
         relationShip = RelationShip.fromJson(data);
@@ -206,7 +198,7 @@ class _UserMessageState extends State<UserMessage>
   }
 
   _onPressBlockDomain() async {
-    await AccountsApi.blockDomain(StringUtil.accountDomain(widget.account));
+    await AccountsApi.blockDomain(StringUtil.accountDomain(_account));
   }
 
   _onPressButton() async {
@@ -260,7 +252,7 @@ class _UserMessageState extends State<UserMessage>
                     AppNavigate.push(
                         context,
                         NewStatus(
-                          prepareText: '@' + widget.account.acct + ' ',
+                          prepareText: '@' + _account.acct + ' ',
                         ),
                         routeType: RouterType.material);
                   }),
@@ -282,7 +274,7 @@ class _UserMessageState extends State<UserMessage>
                 onTap: () => DialogUtils.showSimpleAlertDialog(
                     context: context,
                     text:
-                        '你确定要屏蔽@${StringUtil.accountDomain(widget.account)}域名吗？你将不会在任何公共时间轴或通知中看到该域名的内容，而且该域名的关注者也会被删除',
+                        '你确定要屏蔽@${StringUtil.accountDomain(_account)}域名吗？你将不会在任何公共时间轴或通知中看到该域名的内容，而且该域名的关注者也会被删除',
                     onConfirm: _onPressBlockDomain,
                     popFirst: true),
               ),
@@ -310,97 +302,99 @@ class _UserMessageState extends State<UserMessage>
           if (!_getSliverExpandHeight) {
             setState(() {
               _getSliverExpandHeight = true;
-              _sliverExpandHeight = size.height + 20;
+              _sliverExpandHeight = size.height + 10;
             });
             print(size.height);
           }
         },
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            headerImage(context),
-            Stack(overflow: Overflow.visible, children: [
-              Container(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(height: 10),
-                    Row(
-                      children: <Widget>[
-                        Spacer(),
-                        if (relationShip != null && relationShip.muting)
-                          IconButton(
-                            icon: Icon(Icons.volume_up),
-                            onPressed: _onPressUnmute,
-                          ),
-                        Visibility(
-                          visible: relationShip != null,
-                          maintainSize: true,
-                          maintainAnimation: true,
-                          maintainState: true,
-                          child: RaisedButton(
-                            child: Text(relationShip == null
-                                ? 'whatever'
-                                : relationShip.blocking
-                                    ? '取消屏蔽'
-                                    : relationShip.requested
-                                        ? '已发送关注请求'
-                                        : relationShip.following
-                                            ? '取消关注'
-                                            : '关注'),
-                            onPressed: _onPressButton,
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      StringUtil.displayName(widget.account),
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      '@' + widget.account.acct,
-                    ),
-                    Container(
-                        width: Screen.width(context) - 60,
-                        child: Center(
-                          child: Html(
-                            data: widget.account.note,
-                          ),
-                        )),
-                    headerFields(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    headerFollowsAndFollowers(),
-                    SizedBox(
-                      height: 10,
-                    )
-                  ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              headerImage(context),
+              Stack(overflow: Overflow.visible, children: [
+                Container(
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: 10),
+                      Row(
+                        children: <Widget>[
+                          Spacer(),
+                          if (relationShip != null && relationShip.muting)
+                            IconButton(
+                              icon: Icon(Icons.volume_up),
+                              onPressed: _onPressUnmute,
+                            ),
+                          Visibility(
+                            visible: relationShip != null,
+                            maintainSize: true,
+                            maintainAnimation: true,
+                            maintainState: true,
+                            child: RaisedButton(
+                              child: Text(relationShip == null
+                                  ? 'whatever'
+                                  : relationShip.blocking
+                                      ? '取消屏蔽'
+                                      : relationShip.requested
+                                          ? '已发送关注请求'
+                                          : relationShip.following
+                                              ? '取消关注'
+                                              : '关注'),
+                              onPressed: _onPressButton,
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        StringUtil.displayName(_account),
+                        style:
+                            TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '@' + _account.acct,
+                      ),
+                      Container(
+                          width: Screen.width(context) - 60,
+                          child: Center(
+                            child: Html(
+                              data: _account.note,
+                            ),
+                          )),
+                      headerFields(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      headerFollowsAndFollowers(),
+                      SizedBox(
+                        height: 10,
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Positioned(
-                  top: -50,
-                  left: 20,
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 4, color: Colors.white),
-                      borderRadius: new BorderRadius.all(Radius.circular(10.0)),
-                      shape: BoxShape.rectangle,
-                    ),
-                    child: Avatar(
-                      url: widget.account.avatar,
-                    ),
-                  )),
-            ]),
-            //   more(context),
-          ],
+                Positioned(
+                    top: -50,
+                    left: 20,
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 4, color: Colors.white),
+                        borderRadius: new BorderRadius.all(Radius.circular(10.0)),
+                        shape: BoxShape.rectangle,
+                      ),
+                      child: Avatar(
+                        url: _account.avatar,
+                      ),
+                    )),
+              ]),
+              //   more(context),
+            ],
+          ),
         ),
       ),
     );
@@ -408,17 +402,25 @@ class _UserMessageState extends State<UserMessage>
 
   Widget headerFields() {
     List<Widget> rows = [];
-    for (var filed in widget.account.fields) {
+    for (var filed in _account.fields) {
       rows.add(Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            filed['name'],
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Expanded(
+            flex: 3,
+            child: Text(
+              filed['name'],
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
-          Html(
-            data: filed['value'],
-            shrinkToFit: true,
+          Expanded(
+            flex: 7,
+            child: Html(
+              data: filed['value'],
+              shrinkToFit: true,
+
+            ),
           )
         ],
       ));
@@ -440,29 +442,47 @@ class _UserMessageState extends State<UserMessage>
           InkWell(
             child: Row(
               children: <Widget>[
-                Text('关注'),
+                Text(_account.statusesCount.toString()),
                 SizedBox(
-                  width: 5,
+                  width: 1,
                 ),
-                Text(widget.account.followingCount.toString())
+                Text('嘟文'),
               ],
             ),
           ),
           SizedBox(
             width: 10,
           ),
-          Text('|'),
+          //   Text('|'),
           SizedBox(
             width: 10,
           ),
           InkWell(
             child: Row(
               children: <Widget>[
-                Text('粉丝'),
+                Text(_account.followingCount.toString()),
                 SizedBox(
-                  width: 5,
+                  width: 1,
                 ),
-                Text(widget.account.followersCount.toString())
+                Text('关注'),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          //   Text('|'),
+          SizedBox(
+            width: 10,
+          ),
+          InkWell(
+            child: Row(
+              children: <Widget>[
+                Text(_account.followersCount.toString()),
+                SizedBox(
+                  width: 1,
+                ),
+                Text('粉丝'),
               ],
             ),
           )
@@ -471,47 +491,103 @@ class _UserMessageState extends State<UserMessage>
     );
   }
 
-  Widget headerSection(BuildContext context, int number, String title) {
+  Widget tabText(String text) {
     return Container(
       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: Column(
-        children: <Widget>[
-          Text('$number',
-              style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black)),
-          Text(title, style: TextStyle(fontSize: 13, color: MyColor.greyText))
-        ],
+      child: Text(
+        text,
+        style: TextStyle(fontSize: 13, color: Theme.of(context).accentColor),
       ),
     );
-  }
-
-  Widget row(int index, List data, ResultListProvider provider) {
-    StatusItemData lineItem = StatusItemData.fromJson(data[index]);
-    return StatusItem(item: lineItem);
   }
 
   Widget contentView() {
     return TabBarView(
       controller: _tabController,
-  //    index: _tabIndex,
+      //    index: _tabIndex,
       children: <Widget>[
-        ChangeNotifierProvider<ResultListProvider>(
-          create: (context) => ResultListProvider(
-              requestUrl:
-                  Api.UersArticle(widget.account.id, 'exclude_replies=true'),
-              buildRow: row,
-              firstRefresh: true),
-          child: ProviderEasyRefreshListView(),
-        ),
-        FollowingList(
-          url: Api.Following(widget.account.id),
-        ),
-        FollowerList(
-          url: Api.Follower(widget.account.id),
-        ),
+        extend.NestedScrollViewInnerScrollPositionKeyWidget(
+            Key('tab0'),
+            ChangeNotifierProvider<ResultListProvider>(
+              create: (context) => ResultListProvider(
+                  requestUrl:
+                      Api.UersArticle(_account.id, 'exclude_replies=true'),
+                  buildRow:
+                      ListViewUtil.statusRowFunction(),
+                  firstRefresh: true,
+                  dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('status_'),
+                  showHeader: false),
+              child: ProviderEasyRefreshListView(),
+            )),
+        extend.NestedScrollViewInnerScrollPositionKeyWidget(
+            Key('tab1'),
+            ChangeNotifierProvider<ResultListProvider>(
+              create: (context) => ResultListProvider(
+                  requestUrl: AccountsApi.accountStatusUrl(_account.id),
+                  buildRow: ListViewUtil.statusRowFunction(),
+                  firstRefresh: true,
+                  dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('replies_'),
+                  showHeader: false),
+              child: ProviderEasyRefreshListView(),
+            )),
+        extend.NestedScrollViewInnerScrollPositionKeyWidget(
+            Key('tab3'),
+            ChangeNotifierProvider<ResultListProvider>(
+              create: (context) => ResultListProvider(
+                requestUrl: AccountsApi.accountStatusUrl(_account.id,
+                    param: 'pinned=true'),
+                buildRow:
+                    ListViewUtil.statusRowFunction(),
+                firstRefresh: true,
+                dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('pinned_'),
+                showHeader: false,
+              ),
+              child: ProviderEasyRefreshListView(),
+            )),
+        extend.NestedScrollViewInnerScrollPositionKeyWidget(
+            Key('tab2'),
+            ChangeNotifierProvider<ResultListProvider>(
+              create: (context) => ResultListProvider(
+                  requestUrl: AccountsApi.accountStatusUrl(_account.id,
+                      param: 'only_media=true'),
+                  buildRow: _buildGridItem,
+                  firstRefresh: true,
+                  showHeader: false,
+                  dataHandler: (data) {
+                    var handledData = [];
+                    for (var row in data) {
+                      row['media_attachments'].forEach((element) {
+                        element['id'] = 'media_' + element['id'];
+                      });
+                      handledData.addAll(row['media_attachments']);
+                    }
+                    return handledData;
+                  }),
+              child: ProviderEasyRefreshListView(
+                usingGrid: true,
+              ),
+            )),
       ],
+    );
+  }
+
+  _buildGridItem(int idx, List data, ResultListProvider provider) {
+    MediaAttachment media = MediaAttachment.fromJson(data[idx]);
+    return InkWell(
+      onTap: () => AppNavigate.push(
+          context,
+          PhotoGallery(
+            initialIndex: idx,
+            galleryItems:
+                provider.list.map((e) => MediaAttachment.fromJson(e)).toList(),
+          ),routeType: RouterType.fade),
+      child: Hero(
+        tag: media.id,
+        child: CachedNetworkImage(
+          fit: BoxFit.cover,
+          imageUrl: media.previewUrl,
+        ),
+      ),
     );
   }
 
@@ -523,59 +599,85 @@ class _UserMessageState extends State<UserMessage>
     }
   }
 
+  Future<void> _onRefreshPage() async {
+    var newAccount = await AccountsApi.getAccount(_account.id);
+    var newRelationShip = await AccountsApi.getRelationShip(_account.id);
+    setState(() {
+      _account = newAccount ?? _account;
+      relationShip = newRelationShip ?? relationShip;
+      _getSliverExpandHeight = false;
+      _sliverExpandHeight = 10000;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NestedScrollView(
-        controller: _scrollController,
-        headerSliverBuilder: (context, boxIsScrolled) {
-          return [
-            SliverAppBar(
-              title: _showAccountInfoInAppBar?Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(StringUtil.displayName(widget.account),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                  Text('@'+widget.account.acct,style: TextStyle(fontSize: 14,fontWeight: FontWeight.normal),)
+      body: extend.NestedScrollViewRefreshIndicator(
+        onRefresh: _onRefreshPage,
+        child: extend.NestedScrollView(
+          innerScrollPositionKeyBuilder: () {
+            return Key('tab${_tabController.index}');
+          },
+          controller: _scrollController,
+          headerSliverBuilder: (context, boxIsScrolled) {
+            return [
+              SliverAppBar(
+                title: _showAccountInfoInAppBar
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            StringUtil.displayName(_account),
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            '@' + _account.acct,
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.normal),
+                          )
+                        ],
+                      )
+                    : Container(),
+                centerTitle: false,
+                pinned: true,
+                floating: false,
+                snap: false,
+                //backgroundColor: Colors.transparent,
+                actions: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.more_horiz),
+                    onPressed: _showMore,
+                  )
                 ],
-              ):Container(),
-              centerTitle: false,
-              pinned: true,
-              floating: false,
-              snap: false,
-              //backgroundColor: Colors.transparent,
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.more_horiz),
-                  onPressed: _showMore,
-                )
-              ],
-              flexibleSpace: !_getSliverExpandHeight
-                  ? userHeader(context)
-                  : FlexibleSpaceBar(
-                  collapseMode:CollapseMode.pin,
-                      background: userHeader(context),
-                    ),
-              expandedHeight: _sliverExpandHeight,
-              bottom: ColoredTabBar(
-                color: Theme.of(context).backgroundColor,
-                tabBar: TabBar(
-                  tabs: [
-                    headerSection(context, _account.statusesCount, '嘟文'),
-                    headerSection(context, _account.followingCount, '关注'),
-                    headerSection(context, _account.followersCount, '粉丝'),
-                  ],
-                  onTap: (index) {
-                    setState(() {
-                      _tabIndex = index;
-                    });
-                  },
-                  controller: _tabController,
+                flexibleSpace: !_getSliverExpandHeight
+                    ? userHeader(context)
+                    : FlexibleSpaceBar(
+                        collapseMode: CollapseMode.pin,
+                        background: userHeader(context),
+                      ),
+                expandedHeight: _sliverExpandHeight,
+                bottom: ColoredTabBar(
+                  color: Theme.of(context).backgroundColor,
+                  tabBar: TabBar(
+                    tabs: [
+                      tabText('嘟文'),
+                      tabText('嘟文和回复'),
+                      tabText('已置顶'),
+                      tabText('媒体'),
+                    ],
+                    onTap: (index) {
+                      setState(() {});
+                    },
+                    controller: _tabController,
+                  ),
                 ),
-              ),
-            )
-          ];
-        },
-        body: contentView(),
+              )
+            ];
+          },
+          body: contentView(),
+        ),
       ),
     );
   }

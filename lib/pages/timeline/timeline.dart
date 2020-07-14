@@ -2,6 +2,7 @@ import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/search/search_page_delegate.dart';
 import 'package:fastodon/pages/status/new_status.dart';
+import 'package:fastodon/utils/list_view.dart';
 import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:fastodon/widget/status/status_item.dart';
@@ -105,8 +106,9 @@ class _TimelineState extends State<Timeline>
           childWidget: ChangeNotifierProvider<ResultListProvider>(
               create: (context) => ResultListProvider(
                 requestUrl: url,
-                buildRow: row,
-                listenBlockEvent: true
+                buildRow: ListViewUtil.statusRowFunction(),
+                listenBlockEvent: true,
+                dataHandler: ListViewUtil.dataHandlerPrefixIdFunction(widget.type.toString().split('.')[1])
               ),
             builder: (context, snapshot) {
               return ProviderEasyRefreshListView(
@@ -118,22 +120,5 @@ class _TimelineState extends State<Timeline>
     );
   }
 
-  Widget row(int index, List data,ResultListProvider provider) {
-    StatusItemData lineItem = StatusItemData.fromJson(data[index]);
-    // 解决可能会出现hero tag must unique
-    for (dynamic media in lineItem.mediaAttachments) {
-      switch (widget.type) {
-        case TimelineType.home:
-          media['id'] = 'home_' + media['id'];
-          break;
-        case TimelineType.local:
-          media['id'] = 'local_' + media['id'];
-          break;
-        case TimelineType.federated:
-          media['id'] = 'federated_' + media['id'];
-          break;
-      }
-    }
-    return StatusItem(item: lineItem);
-  }
+
 }

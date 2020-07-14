@@ -6,18 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 class ListViewUtil {
-
   static Header getDefaultHeader(BuildContext context) {
     return ClassicalHeader(
-      refreshText: '下拉刷新',
-      refreshReadyText: '释放刷新',
-      refreshingText: '加载中...',
-      refreshedText: '',
-      refreshFailedText: '刷新失败',
-      noMoreText: '没有更多数据',
-      infoText: '更新于 %T',
-      textColor: Theme.of(context).accentColor
-    );
+        refreshText: '下拉刷新',
+        refreshReadyText: '释放刷新',
+        refreshingText: '加载中...',
+        refreshedText: '',
+        refreshFailedText: '刷新失败',
+        noMoreText: '没有更多数据',
+        infoText: '更新于 %T',
+        textColor: Theme.of(context).accentColor);
   }
 
   static getDefaultFooter(BuildContext context) {
@@ -33,12 +31,18 @@ class ListViewUtil {
       infoText: '',
     );
   }
-  
+
   static statusRowFunction() {
-    return (int index, List data,ResultListProvider provider) {
+    return (int index, List data, ResultListProvider provider) {
       StatusItemData lineItem = StatusItemData.fromJson(data[index]);
       return StatusItem(item: lineItem);
     };
   }
 
+  static ResultListDataHandler dataHandlerPrefixIdFunction(String prefix) {
+    return (data) {
+      data.forEach((e) => e['media_attachments'].forEach((e) => e['id'] = prefix+e['id']));
+      return data;
+    };
+  }
 }

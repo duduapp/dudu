@@ -24,7 +24,7 @@ class Request {
   }
 
   // response all instead of response data only
-  static Future get1({String url, Map params, Map header}) async {
+  static Future get1({String url, Map params, Map header,CancelToken cancelToken}) async {
     if (params != null && params.isNotEmpty) {
       StringBuffer sb = new StringBuffer("?");
       params.forEach((key, value) {
@@ -40,7 +40,7 @@ class Request {
       dio.options.headers = header;
     }
     try {
-      Response response = await dio.get(url);
+      Response response = await dio.get(url,cancelToken: cancelToken);
       if (response.statusCode != 200) {
         var errorMsg = "网络请求错误,状态码:" + response.statusCode.toString();
         showTotast(errorMsg);
@@ -48,6 +48,9 @@ class Request {
         return response;
       }
     } catch (exception) {
+      if (CancelToken.isCancel(exception)) {
+        return;
+      }
       showTotast(exception.toString());
     }
   }

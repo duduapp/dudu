@@ -1,7 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/request.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+typedef ResultListDataHandler = Function(dynamic data);
 
 class ResultListProvider extends ChangeNotifier {
   final String requestUrl;
@@ -20,7 +23,12 @@ class ResultListProvider extends ChangeNotifier {
   final Function buildRow;
   Map<String, dynamic> events = {};
   final bool firstRefresh;
+  final bool onlyMedia;
+  final ResultListDataHandler dataHandler;
+  String lastCellId = '0';
+  CancelToken requestCancelToken = CancelToken();
 
+  /// map key 的优先级高于 data handler
   ResultListProvider(
       {@required this.requestUrl,
       @required this.buildRow,
@@ -30,14 +38,14 @@ class ResultListProvider extends ChangeNotifier {
       this.enableRefresh = true,
       this.reverseData = false,
       this.listenBlockEvent = false,
-      this.firstRefresh = false // easy refresh 在 nestedscrollview 有问题
+      this.firstRefresh = false, // easy refresh 在 nestedscrollview 有问题
+        bool showHeader = true,// easy refresh 中只有当onrefresh 设为Null 时才能隐藏header
+        this.onlyMedia = false,
+        this.dataHandler,
       }) {
     if (listenBlockEvent) {
       _addEvent(EventBusKey.blockAccount, (arg) {
         var accountId = arg['account_id'];
-//       if (arg.containsKey('from_status_id')) {
-//         removeByIdWithAnimation(arg['from_status_id']);
-//       }
         list.removeWhere((element) => element['account']['id'] == accountId);
         notifyListeners();
       });
@@ -51,6 +59,7 @@ class ResultListProvider extends ChangeNotifier {
     if (firstRefresh) {
       refresh();
     }
+    finishRefresh = !showHeader;
   }
 
   _addEvent(String eventName, EventCallback callback) {
@@ -74,13 +83,12 @@ class ResultListProvider extends ChangeNotifier {
         nextUrl = null;
       }
     } else {
-      String lastCellId = list[list.length - 1]['id'];
+
       String appendOffset = "";
       if (offsetPagination != null && offsetPagination) {
         appendOffset = "&offset=${list.length}";
       }
       // get请求中是否已经包含了其他的参数
-      var since = "max_id";
       if (requestUrl.contains('?')) {
         await _startRequest(requestUrl + '&max_id=$lastCellId$appendOffset');
       } else {
@@ -89,21 +97,37 @@ class ResultListProvider extends ChangeNotifier {
     }
   }
 
+
   Future<void> _startRequest(String url, {bool refresh}) async {
-    await Request.get1(url: url).then((response) {
+    await Request.get1(url: url,cancelToken: requestCancelToken).then((response) {
+      if (response == null) {
+        return;
+      }
       var data = response.data;
-      data = mapKey == null ? data : data[mapKey];
-      List combineList = [];
+
+      if (mapKey != null) {
+        data = data[mapKey];
+      }
+
+      if (data.length > 0)
+      lastCellId = data[data.length - 1]['id'];
+
+      if (dataHandler != null) {
+        data = dataHandler(data);
+      }
+
+
+
+
       // 下拉刷新的时候，只需要将新的数组赋值到数据list中
       // 上拉加载的时候，需要将新的数组添加到现有数据list中
       if (refresh == true) {
-        combineList = data;
+        list = data;
         if (data.length == 0) {
           noResults = true;
         }
       } else {
-        combineList = list;
-        combineList.addAll(data);
+        list.addAll(data);
       }
 
       if (data.length == 0) {
@@ -112,10 +136,9 @@ class ResultListProvider extends ChangeNotifier {
         finishLoad = false;
       }
       if (reverseData && enableRefresh) {
-        list = combineList.reversed;
-      } else {
-        list = combineList;
+        list = list.reversed;
       }
+
 
       if (headerLinkPagination != null && headerLinkPagination == true) {
         if (response.headers.map.containsKey('link')) {
@@ -191,6 +214,7 @@ class ResultListProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    requestCancelToken.cancel('canceld');
     events.forEach((key, value) {
       eventBus.off(key, value);
     });

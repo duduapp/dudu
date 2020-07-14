@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:fastodon/constant/api.dart';
 import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/pages/setting/model/relation_ship.dart';
 import 'package:fastodon/utils/request.dart';
 
 class AccountsApi {
@@ -10,10 +11,33 @@ class AccountsApi {
   static const String blockDomainUrl = '/api/v1/domain_blocks';
   static const String preferencesUrl = '/api/v1/preferences';
   static const String filterUrl = '/api/v1/filters';
+  static const String relationShipUrl = '/api/v1/accounts/relationships';
 
-  static Future<OwnerAccount> getAccount() async{
+  static Future<OwnerAccount> getMyAccount() async{
     var data = await Request.get(url: url+'/verify_credentials');
     return OwnerAccount.fromJson(data);
+  }
+
+  static Future<OwnerAccount> getAccount(String id) async {
+    var api = '$url/$id';
+    var res =  await Request.get(url: api);
+    if (res == null) {
+      return null;
+    } else {
+      return OwnerAccount.fromJson(res);
+    }
+  }
+
+  static Future<RelationShip> getRelationShip(String id) async {
+    var params = {
+      'id[]':id
+    };
+    var res = await Request.get(url: relationShipUrl,params: params);
+    if (res == null) {
+      return null;
+    } else {
+      return RelationShip.fromJson(res[0]);
+    }
   }
 
   static getPreferences() async {
@@ -102,5 +126,9 @@ class AccountsApi {
     };
 
     return await Request.put(url: api,params: params);
+  }
+
+  static String accountStatusUrl(String accountId,{String param = ''}) {
+    return '$url/$accountId/statuses?$param';
   }
 }

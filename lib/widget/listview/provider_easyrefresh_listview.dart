@@ -16,14 +16,15 @@ class ProviderEasyRefreshListView extends StatefulWidget {
       this.type,
       this.emptyWidget,
       this.controller,
-      this.header})
+      this.header,
+      this.usingGrid = false})
       : super(key: key);
   final TimelineType type;
 
   final Widget emptyWidget;
   final EasyRefreshController controller;
   final Header header;
-
+  final usingGrid;
 
   @override
   _ProviderEasyRefreshListViewState createState() =>
@@ -40,7 +41,8 @@ enum ListStatus {
 }
 
 class _ProviderEasyRefreshListViewState
-    extends State<ProviderEasyRefreshListView> with AutomaticKeepAliveClientMixin{
+    extends State<ProviderEasyRefreshListView>
+    with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = ScrollController();
 
   EasyRefreshController _controller;
@@ -52,9 +54,6 @@ class _ProviderEasyRefreshListViewState
   int textScale = 1;
   Function onTextScaleChanged;
 
-  final GlobalKey<SliverAnimatedListState> listKey =
-      GlobalKey<SliverAnimatedListState>();
-
   @override
   void initState() {
     super.initState();
@@ -64,22 +63,15 @@ class _ProviderEasyRefreshListViewState
 
     Storage.getInt("mastodon.text_scale").then((value) {
       if (value != null && value != textScale) {
-        setState(() {
-          textScale = value;
-        });
+        if (mounted)
+          setState(() {
+            textScale = value;
+          });
       }
     });
 
     eventBus.on(widget.type, (arg) {
       _scrollController.jumpTo(0);
-    });
-
-    eventBus.on(EventBusKey.muteAccount, (arg) {
-      _removeByAccountId(arg['account_id']);
-    });
-
-    eventBus.on(EventBusKey.blockAccount, (arg) {
-      _removeByAccountId(arg['account_id']);
     });
 
     onTextScaleChanged = (arg) {
@@ -90,12 +82,9 @@ class _ProviderEasyRefreshListViewState
     eventBus.on(EventBusKey.textScaleChanged, onTextScaleChanged);
   }
 
-  _removeByAccountId(String accountId) {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return MediaQuery(
       data: MediaQuery.of(context)
           .copyWith(textScaleFactor: 1.0 + 0.18 * textScale),
@@ -104,33 +93,51 @@ class _ProviderEasyRefreshListViewState
             GlobalKey<SliverAnimatedListState>();
         provider.setAnimatedListKey(listKey);
         // 初次可能从Provider 里面请求
-        return  (provider.firstRefresh && !provider.noResults && provider.list.isEmpty) ? LoadingView(): EasyRefresh(
-          child: CustomScrollView(
-            slivers: [
-              SliverAnimatedList(
-                key: listKey,
-                initialItemCount: provider.list.length,
-                itemBuilder: (context, index, animation) {
-                  return SizeTransition(
-                    axis: Axis.vertical,
-                    sizeFactor: animation,
-                    child: provider.buildRow(index, provider.list, provider),
-                  );
-                },
-              )
-            ],
-          ),
-          firstRefresh: provider.firstRefresh ? false: true, //在NestedScrollView 不用启用这个选项，而且不能设置scroll controller
-          firstRefreshWidget: LoadingView(),
-          header: widget.header ?? ListViewUtil.getDefaultHeader(context),
-          footer: ListViewUtil.getDefaultFooter(context),
-          controller: _controller,
-          scrollController: widget.type == null ? null : _scrollController,
-          onRefresh: provider.finishRefresh ? null : provider.refresh,
-          onLoad: provider.finishLoad ? null : provider.load,
-          emptyWidget:
-              provider.noResults ? widget.emptyWidget ?? EmptyView() : null,
-        );
+        return (provider.firstRefresh &&
+                !provider.noResults &&
+                provider.list.isEmpty)
+            ? LoadingView()
+            : EasyRefresh.custom(
+                topBouncing: false,
+                slivers: [
+                  !widget.usingGrid
+                      ? SliverAnimatedList(
+                          key: listKey,
+                          initialItemCount: provider.list.length,
+                          itemBuilder: (context, index, animation) {
+                            return SizeTransition(
+                              axis: Axis.vertical,
+                              sizeFactor: animation,
+                              child: provider.buildRow(
+                                  index, provider.list, provider),
+                            );
+                          },
+                        )
+                      : SliverGrid(
+                          delegate: SliverChildBuilderDelegate((context, idx) {
+                            return provider.buildRow(
+                                idx, provider.list, provider);
+                          }, childCount: provider.list.length),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3),
+                        )
+                ],
+                firstRefresh: provider.firstRefresh
+                    ? false
+                    : true, //在NestedScrollView 不用启用这个选项，而且不能设置scroll controller
+                firstRefreshWidget: LoadingView(),
+                header: widget.header ?? ListViewUtil.getDefaultHeader(context),
+                footer: ListViewUtil.getDefaultFooter(context),
+                controller: _controller,
+                scrollController:
+                    widget.type == null ? null : _scrollController,
+                onRefresh: provider.finishRefresh ? null : provider.refresh,
+                onLoad: provider.finishLoad ? null : provider.load,
+                emptyWidget: provider.noResults
+                    ? widget.emptyWidget ?? EmptyView()
+                    : null,
+              );
       }),
     );
   }

@@ -245,6 +245,8 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
       child: Hero(
         tag: image.id,
         child: CachedNetworkImage(
+            width: width,
+            height: height,
             imageUrl: imageUrl,
             imageBuilder: (context, imageProvider) {
               return Stack(
@@ -302,17 +304,11 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
     if (type == 'video' || type == 'gifv') {
       to = VideoPlay(widget.images[index]);
     } else {
-       to = AnnotatedRegion<SystemUiOverlayStyle>(
-         value: SystemUiOverlayStyle.dark,
-         child: PhotoGallery(
-          galleryItems: widget.images,
-          backgroundDecoration: const BoxDecoration(
-            color: Colors.black,
-          ),
-          initialIndex: index,
-          scrollDirection: Axis.horizontal,
-      ),
-       );
+       to = PhotoGallery(
+        galleryItems: widget.images,
+        initialIndex: index,
+
+      );
     }
 //    Navigator.of(context).push(
 //      PageRouteBuilder(

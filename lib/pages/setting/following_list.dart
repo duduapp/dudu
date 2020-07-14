@@ -43,19 +43,16 @@ class _FollowingListState extends State<FollowingList> with AutomaticKeepAliveCl
   Widget build(BuildContext context) {
     return LoadingWidget(
       endLoading: _finishRequest,
-      childWidget: RefreshIndicator(
-        onRefresh: () => _startRequest(widget.url),
-        child:  ListView.separated(
-          padding: new EdgeInsets.only(top: 0.0),
-          itemBuilder: (BuildContext context, int index) {
-            OwnerAccount account = OwnerAccount.fromJson(_dataList[index]);
-            return FollowCell(item: account);
-          },
-          itemCount: _dataList.length,
-          separatorBuilder: (BuildContext context, int index) {
-            return Divider(height: 1.0, color: MyColor.dividerLineColor);
-          },
-        ),
+      childWidget: ListView.separated(
+        padding: new EdgeInsets.only(top: 0.0),
+        itemBuilder: (BuildContext context, int index) {
+          OwnerAccount account = OwnerAccount.fromJson(_dataList[index]);
+          return FollowCell(item: account);
+        },
+        itemCount: _dataList.length,
+        separatorBuilder: (BuildContext context, int index) {
+          return Divider(height: 1.0, color: MyColor.dividerLineColor);
+        },
       )
     );
   }
