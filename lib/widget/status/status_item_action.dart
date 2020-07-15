@@ -90,7 +90,7 @@ class _StatusItemActionState extends State<StatusItemAction> {
         : Api.UnFavouritesArticle(widget.item.id);
     try {
       StatusItemData data =
-          StatusItemData.fromJson(await Request.post(url: url));
+          StatusItemData.fromJson(await Request.post(url: url,showDialog: false));
       widget.item.favourited = data.favourited;
     } catch (e) {
       print(e);

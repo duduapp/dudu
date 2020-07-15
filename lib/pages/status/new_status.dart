@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:fastodon/models/vote.dart';
 import 'package:fastodon/utils/dialog_util.dart';
+import 'package:fastodon/widget/common/sized_icon_button.dart';
+import 'package:fastodon/widget/new_status/handle_vote_dialog.dart';
 import 'package:fastodon/widget/publish/status_reply_info.dart';
 import 'package:fastodon/widget/publish/vote_display.dart';
 import 'package:flutter/material.dart';
@@ -25,9 +27,9 @@ import '../../widget/publish/new_status_publish_level.dart';
 class NewStatus extends StatefulWidget {
   final StatusItemData replyTo;
   final dynamic scheduleInfo;
-  final String prepareText;// 预设的嘟嘟内容
+  final String prepareText; // 预设的嘟嘟内容
 
-  NewStatus({this.replyTo,this.scheduleInfo,this.prepareText});
+  NewStatus({this.replyTo, this.scheduleInfo, this.prepareText});
 
   @override
   _NewStatusState createState() => _NewStatusState();
@@ -35,7 +37,7 @@ class NewStatus extends StatefulWidget {
 
 class _NewStatusState extends State<NewStatus> {
   final TextEditingController _controller = new TextEditingController();
-  final TextEditingController _wornController = new TextEditingController();
+  final TextEditingController _warningController = new TextEditingController();
   OwnerAccount _myAcc;
   bool _hasWarning = false;
   Icon _articleRange = Icon(Icons.public, size: 30);
@@ -84,7 +86,7 @@ class _NewStatusState extends State<NewStatus> {
       _loadFromDraft();
     }
 
-    if(widget.prepareText != null) {
+    if (widget.prepareText != null) {
       _controller.text = widget.prepareText;
     }
   }
@@ -104,7 +106,7 @@ class _NewStatusState extends State<NewStatus> {
     prefs.setBool(_spKey('have_draft'), true);
     prefs.setString(_spKey('text'), _controller.text);
     prefs.setBool(_spKey('has_warning'), _hasWarning);
-    prefs.setString(_spKey('warning'), _wornController.text);
+    prefs.setString(_spKey('warning'), _warningController.text);
     prefs.setString(_spKey('visibility'), _visibility);
     prefs.setStringList(_spKey('images'), images);
     prefs.setString(_spKey('image_titles'), json.encode(imageTitles));
@@ -139,7 +141,7 @@ class _NewStatusState extends State<NewStatus> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getBool(_spKey('have_draft')) != null) {
       _controller.text = prefs.getString(_spKey('text'));
-      _wornController.text = prefs.getString(_spKey('warning'));
+      _warningController.text = prefs.getString(_spKey('warning'));
       _hasWarning = prefs.getBool(_spKey('has_warning'));
       _visibility = prefs.getString(_spKey('visibility'));
       _articleRange = Icon(
@@ -159,7 +161,7 @@ class _NewStatusState extends State<NewStatus> {
             prefs.getBool(_spKey('multi_choice')));
       }
       var timeStr = prefs.get(_spKey('scheduled_at'));
-      scheduledAt = timeStr != null ? DateTime.parse(timeStr): null;
+      scheduledAt = timeStr != null ? DateTime.parse(timeStr) : null;
       if (scheduledAt.difference(DateTime.now()).inSeconds < 300) {
         scheduledAt = null;
       }
@@ -172,7 +174,7 @@ class _NewStatusState extends State<NewStatus> {
   _loadFromScheduleInfo(dynamic info) {
     var params = info['params'];
     _controller.text = params['text'];
-    _wornController.text = params['spoiler_text'];
+    _warningController.text = params['spoiler_text'];
     _visibility = params['visibility'];
     _articleRange = Icon(
       visibilityIcons[_visibility],
@@ -187,7 +189,8 @@ class _NewStatusState extends State<NewStatus> {
     }
     if (params['poll'] != null) {
       var poll = params['poll'];
-      vote = Vote.create(List<String>.from(poll['options']), poll['expires_in'], poll['multiple']);
+      vote = Vote.create(List<String>.from(poll['options']), poll['expires_in'],
+          poll['multiple']);
     }
 
     scheduledAt = DateTime.parse(info['scheduled_at']);
@@ -196,7 +199,6 @@ class _NewStatusState extends State<NewStatus> {
     counter = _controller.text.length;
 
     setState(() {});
-
   }
 
   Future<bool> _onWillPop() async {
@@ -258,11 +260,12 @@ class _NewStatusState extends State<NewStatus> {
   }
 
   Future<void> _pushNewToot() async {
-    if (scheduledAt != null && scheduledAt.difference(DateTime.now()).inSeconds < 300) {
+    if (scheduledAt != null &&
+        scheduledAt.difference(DateTime.now()).inSeconds < 300) {
       DialogUtils.toastErrorInfo('定时嘟文必须是五分钟后');
       return;
     }
-    
+
     var mediaIds = [];
     for (String file in images) {
       var id = imageIds[file];
@@ -291,16 +294,19 @@ class _NewStatusState extends State<NewStatus> {
     }
 
     paramsMap['sensitive'] = false;
-    paramsMap['spoiler_text'] = _wornController.text;
+    paramsMap['spoiler_text'] = _warningController.text;
     paramsMap['status'] = _controller.text;
     paramsMap['visibility'] = _visibility;
     paramsMap['sensitive'] = sensitive;
 
-
-
     try {
-       Request.post(url: Api.status, params: paramsMap).then((data) {
-        StatusItemData newItem = StatusItemData.fromJson(data);
+      Request.post(
+              url: Api.status,
+              params: paramsMap,
+              dialogMessage: '嘟嘟中...',
+              successMessage: '嘟文已发送')
+          .then((data) {
+        AppNavigate.pop(context);
         if (scheduledAt != null) {
           eventBus.emit(EventBusKey.scheduledStatusPublished);
         }
@@ -341,13 +347,12 @@ class _NewStatusState extends State<NewStatus> {
     }
   }
 
-  Future getImage() async {
+  Future chooseImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (image == null) {
       return;
     }
     if (images.length < 4) addImage(image);
-    print(image);
   }
 
   addImage(File file) {
@@ -361,7 +366,7 @@ class _NewStatusState extends State<NewStatus> {
     setState(() {});
   }
 
-  Widget worningWidge() {
+  Widget warningWidget() {
     if (_hasWarning == false) {
       return Container();
     }
@@ -372,7 +377,7 @@ class _NewStatusState extends State<NewStatus> {
           //    width: Screen.width(context) - 60,
           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
           child: TextField(
-            controller: _wornController,
+            controller: _warningController,
             decoration: InputDecoration(
                 hintText: '折叠部分的警告消息',
                 disabledBorder: InputBorder.none,
@@ -401,7 +406,7 @@ class _NewStatusState extends State<NewStatus> {
                 NewStatusPublishLevel(
                   title: '公开',
                   description: '所有人可见，并且会出现在公共时间轴上',
-                  leftIcon: Icon(Icons.public, size: 30),
+                  leftIcon: Icon(Icons.public, size: 26),
                   onSelect: (Icon icons) {
                     setState(() {
                       _articleRange = icons;
@@ -413,7 +418,7 @@ class _NewStatusState extends State<NewStatus> {
                 NewStatusPublishLevel(
                   title: '不公开',
                   description: '所有人可见，但不会出现在公共时间轴上',
-                  leftIcon: Icon(Icons.vpn_lock, size: 30),
+                  leftIcon: Icon(Icons.lock_open, size: 26),
                   onSelect: (Icon icons) {
                     setState(() {
                       _articleRange = icons;
@@ -425,7 +430,7 @@ class _NewStatusState extends State<NewStatus> {
                 NewStatusPublishLevel(
                   title: '仅关注者',
                   description: '只有关注你的用户可以看到',
-                  leftIcon: Icon(Icons.lock, size: 30),
+                  leftIcon: Icon(Icons.lock_outline, size: 26),
                   onSelect: (Icon icons) {
                     setState(() {
                       _articleRange = icons;
@@ -437,7 +442,7 @@ class _NewStatusState extends State<NewStatus> {
                 NewStatusPublishLevel(
                   title: '私信',
                   description: '只有被提及的用户可以看到',
-                  leftIcon: Icon(Icons.sms, size: 30),
+                  leftIcon: Icon(Icons.mail_outline, size: 26),
                   onSelect: (Icon icons) {
                     setState(() {
                       _articleRange = icons;
@@ -451,220 +456,23 @@ class _NewStatusState extends State<NewStatus> {
         });
   }
 
-  showVoteDialog() {
-    Vote newVote = Vote();
-    if (vote != null) {
-      newVote = vote.clone();
-    }
-    var color = Theme.of(context).toggleableActiveColor;
-    showDialog(
+  showVoteDialog() async {
+    Vote newVote = await showDialog(
         context: context,
         builder: (context) {
-          return StatefulBuilder(
-            builder: (context, setState) {
-              return SingleChildScrollView(
-                child: AlertDialog(
-                  insetPadding: EdgeInsets.only(top: 30, left: 0, right: 0),
-                  title: Text('创建投票'),
-                  content: Theme(
-                    data: ThemeData(primaryColor: color),
-                    child: Container(
-                      width: Screen.width(context) * 0.75,
-                      padding: EdgeInsets.all(0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            width: Screen.width(context) * 0.6,
-                            child: TextField(
-                              maxLines: null,
-                              maxLength: 25,
-                              controller: newVote.option1Controller,
-                              decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.only(left: 10, right: 10),
-                                  hintText: '选择1',
-                                  counterText: '',
-                                  border: new OutlineInputBorder(
-                                      borderSide:
-                                          new BorderSide(color: Colors.teal)),
-                                  labelText: '选择1'),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: Screen.width(context) * 0.6,
-                            child: TextField(
-                              maxLength: 25,
-                              maxLines: null,
-                              controller: newVote.option2Controller,
-                              decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.only(left: 10, right: 10),
-                                  hintText: '选择2',
-                                  counterText: "",
-                                  border: new OutlineInputBorder(
-                                      borderSide:
-                                          new BorderSide(color: Colors.teal)),
-                                  labelText: '选择2'),
-                            ),
-                          ),
-                          if (newVote.option3Enabled)
-                            SizedBox(
-                              height: 10,
-                            ),
-                          if (newVote.option3Enabled)
-                            Row(children: <Widget>[
-                              Container(
-                                width: Screen.width(context) * 0.6,
-                                child: TextField(
-                                  maxLength: 25,
-                                  maxLines: null,
-                                  controller: newVote.option3Controller,
-                                  decoration: InputDecoration(
-                                      contentPadding:
-                                          EdgeInsets.only(left: 10, right: 10),
-                                      hintText: '选择3',
-                                      counterText: "",
-                                      border: new OutlineInputBorder(
-                                          borderSide: new BorderSide(
-                                              color: Colors.teal)),
-                                      labelText: '选择3'),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(0),
-                                child: IconButton(
-                                  icon: Icon(Icons.clear),
-                                  onPressed: () {
-                                    newVote.removeOption3();
-                                    setState(() {});
-                                  },
-                                ),
-                              )
-                            ]),
-                          if (newVote.option4Enabled)
-                            SizedBox(
-                              height: 10,
-                            ),
-                          if (newVote.option4Enabled)
-                            Row(children: <Widget>[
-                              Container(
-                                width: Screen.width(context) * 0.6,
-                                child: TextField(
-                                  maxLength: 25,
-                                  maxLines: null,
-                                  controller: newVote.option4Controller,
-                                  decoration: InputDecoration(
-                                      contentPadding:
-                                          EdgeInsets.only(left: 10, right: 10),
-                                      hintText: '选择4',
-                                      counterText: '',
-                                      border: new OutlineInputBorder(
-                                          borderSide: new BorderSide(
-                                              color: Colors.teal)),
-                                      labelText: '选择4'),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(0),
-                                child: IconButton(
-                                  icon: Icon(Icons.clear),
-                                  onPressed: () {
-                                    newVote.removeOption4();
-                                    setState(() {});
-                                  },
-                                ),
-                              )
-                            ]),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: <Widget>[
-                              OutlineButton(
-                                onPressed: () {
-                                  newVote.addOption();
-                                  setState(() {});
-                                },
-                                child: Text('添加选择'),
-                              ),
-                              SizedBox(
-                                width: 30,
-                              ),
-                              DropdownButton(
-                                value: newVote.expiresInString,
-                                onChanged: (String newValue) {
-                                  newVote.expiresIn =
-                                      Vote.voteOptionsInSeconds[newValue];
-
-                                  setState(() {
-                                    newVote.expiresInString = newValue;
-                                  });
-                                },
-                                items: Vote.voteOptions
-                                    .map<DropdownMenuItem<String>>(
-                                        (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              )
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(0),
-                                child: Checkbox(
-                                  value: newVote.multiChoice,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      newVote.multiChoice = value;
-                                    });
-                                  },
-                                ),
-                              ),
-                              Text('多个选择')
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text('取消'),
-                      onPressed: () {
-                        //vote = null;
-                        AppNavigate.pop(context);
-                      },
-                    ),
-                    FlatButton(
-                      child: Text('确定'),
-                      onPressed: () {
-                        if (newVote.canCreate()) {
-                          vote = newVote;
-                          createVote();
-                          AppNavigate.pop(context);
-                        }
-                      },
-                    )
-                  ],
-                ),
-              );
-            },
+          return Dialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            child: HandleVoteDialog(
+              vote: vote,
+            ),
           );
         });
-  }
-
-  // statefulbuild 里面的setstate是更新自己组件的，外层组件用这个方法
-  createVote() {
-    setState(() {});
+    if (newVote != null) {
+      setState(() {
+        vote = newVote;
+      });
+    }
   }
 
   Widget replyInfo() {
@@ -729,7 +537,7 @@ class _NewStatusState extends State<NewStatus> {
                     child: Column(
                       //   mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
-                        worningWidge(),
+                        warningWidget(),
                         Container(
                           // width: Screen.width(context) - 60,
                           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -775,49 +583,58 @@ class _NewStatusState extends State<NewStatus> {
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          IconButton(
-                            icon: Icon(Icons.photo, size: 30),
+                          SizedIconButton(
+                            width:35,
+                            icon: Icon(Icons.attach_file),
                             onPressed: vote != null
                                 ? null
                                 : () {
-                                    getImage();
+                                    chooseImage();
                                   },
-                            disabledColor: Colors.grey,
                           ),
-                          InkWell(
-                            onTap: () {
+                          SizedIconButton(
+                            onPressed: () {
                               showBottomSheet();
                             },
-                            child: _articleRange,
+                            icon: _articleRange,
                           ),
                           if (images.isNotEmpty)
-                            IconButton(
-                              icon: sensitive ? Icon(Icons.visibility_off,color: Colors.blue,):Icon(Icons.visibility),
+                            SizedIconButton(
+                              icon: sensitive
+                                  ? Icon(
+                                      Icons.visibility_off,
+                                      color: Colors.blue,
+                                    )
+                                  : Icon(Icons.visibility),
                               onPressed: () {
                                 setState(() {
                                   sensitive = !sensitive;
                                 });
                               },
                             ),
-                          IconButton(
-                            icon: Icon(Icons.list),
+                          SizedIconButton(
+                            icon: Icon(
+                              Icons.list,
+                              size: 30,
+                            ),
                             onPressed: images.length > 0
                                 ? null
                                 : () {
                                     showVoteDialog();
                                   },
                           ),
-                          InkWell(
-                            onTap: () {
+                          SizedIconButton(
+                            onPressed: () {
                               setState(() {
                                 _hasWarning = !_hasWarning;
                               });
                             },
-                            child: Text('cw',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20)),
+                            icon: Icon(Icons.feedback),
+//                            child: Text('cw',
+//                                style: TextStyle(
+//                                    fontWeight: FontWeight.bold, fontSize: 20)),
                           ),
-                          IconButton(
+                          SizedIconButton(
                             onPressed: () {
                               DatePicker.showDateTimePicker(context,
                                   showTitleActions: true,
@@ -825,22 +642,22 @@ class _NewStatusState extends State<NewStatus> {
                                       DateTime.now().add(Duration(minutes: 8)),
                                   maxTime: null,
                                   onChanged: (date) {}, onConfirm: (date) {
-                                  if (date.difference(DateTime.now()).inSeconds > 300) {
-                                    setState(() {
-                                      scheduledAt = date;
-                                    });
-                                  } else {
-                                    DialogUtils.toastErrorInfo('时间必须是五分钟后');
-                                    setState(() {
-                                      scheduledAt = null;
-                                    });
-                                  }
+                                if (date.difference(DateTime.now()).inSeconds >
+                                    300) {
+                                  setState(() {
+                                    scheduledAt = date;
+                                  });
+                                } else {
+                                  DialogUtils.toastErrorInfo('时间必须是五分钟后');
+                                  setState(() {
+                                    scheduledAt = null;
+                                  });
+                                }
+                              }, onCancel: () {
+                                setState(() {
+                                  scheduledAt = null;
+                                });
                               },
-                                  onCancel: () {
-                                    setState(() {
-                                      scheduledAt = null;
-                                    });
-                                  },
                                   currentTime: scheduledAt ??
                                       DateTime.now().add(Duration(minutes: 10)),
                                   locale: LocaleType.zh);
@@ -953,7 +770,9 @@ class _NewStatusState extends State<NewStatus> {
     );
     Widget imageView;
     if (StringUtil.isUrl(path)) {
-      imageView =  CachedNetworkImage(imageUrl: path,);
+      imageView = CachedNetworkImage(
+        imageUrl: path,
+      );
     } else {
       imageView = Image.file(File(path));
     }

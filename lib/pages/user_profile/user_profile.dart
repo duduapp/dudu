@@ -163,7 +163,7 @@ class _UserProfileState extends State<UserProfile>
       );
     }
     return Container(
-      color: Theme.of(context).accentColor,
+      color: Theme.of(context).splashColor,
       child: CachedNetworkImage(
         height: 200,
         width: Screen.width(context),
@@ -457,7 +457,7 @@ class _UserProfileState extends State<UserProfile>
             flex: 7,
             child: Html(
               data: filed['value'],
-              shrinkToFit: true,
+        //      shrinkToFit: true,
             ),
           )
         ],
@@ -533,14 +533,14 @@ class _UserProfileState extends State<UserProfile>
   }
 
   Widget tabText(String text) {
-    return Tab(text: text,);
     return Container(
      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Text(
         text,
-        style: TextStyle(fontSize: 13, color: Theme.of(context).accentColor),
+        style: TextStyle(fontSize: 13, color: Theme.of(context).accentColor,fontWeight:FontWeight.bold),
       ),
     );
+    // return Tab(text: text,);
   }
 
   Widget contentView() {

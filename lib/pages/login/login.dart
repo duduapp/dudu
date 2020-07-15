@@ -49,7 +49,7 @@ class _LoginState extends State<Login> {
     paramsMap['redirect_uris'] = AppConfig.RedirectUris;
     paramsMap['scopes'] = AppConfig.Scopes;
 
-    var data = await Request.post(url: '$hostUrl' + Api.Apps, params: paramsMap);
+    var data = await Request.post(url: '$hostUrl' + Api.Apps, params: paramsMap,showDialog: false);
     AppCredential model = AppCredential.fromJson(data);
     setState(() {
       _clickButton = false;
@@ -75,7 +75,7 @@ class _LoginState extends State<Login> {
     paramsMap['code'] = code;
     paramsMap['redirect_uri'] = serverItem.redirectUri;
     try {
-      Request.post(url: '$hostUrl' + Api.Token, params: paramsMap).then((data) {
+      Request.post(url: '$hostUrl' + Api.Token, params: paramsMap,showDialog: false).then((data) {
         Token getToken = Token.fromJson(data);
         String token = '${getToken.tokenType} ${getToken.accessToken}';
         // 这里的存储是异步的，需要将token保存至单例中实时更新页面

@@ -76,7 +76,7 @@ class Vote {
   }
 
   //是否可以根据现有数据创建投票
-  canCreate() {
+  bool canCreate() {
     var options = getOptions();
 
     for (var v in options) {

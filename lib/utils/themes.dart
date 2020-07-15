@@ -23,7 +23,7 @@ var darTheme = ThemeData.dark().copyWith(
   toggleableActiveColor: Colors.white,
   backgroundColor: Color.fromRGBO(21, 21, 21, 1),
   appBarTheme: AppBarTheme(color: Color.fromRGBO(30, 30, 30, 1),elevation: 1.0),
-  splashColor: Color.fromRGBO(30, 30, 30, 1),
+  splashColor: Colors.grey[800],
   scaffoldBackgroundColor: Color.fromRGBO(21, 21, 21, 1),
   buttonColor: Colors.grey[800],
 
