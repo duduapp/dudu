@@ -5,7 +5,7 @@ import 'package:fastodon/public.dart';
 import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/widget/other/avatar.dart';
 
-import 'package:fastodon/pages/setting/user_message.dart';
+import 'package:fastodon/pages/user_profile/user_profile.dart';
 
 class FollowCell extends StatefulWidget {
   FollowCell({Key key, this.item}) : super(key: key);
@@ -20,7 +20,7 @@ class _FollowCellState extends State<FollowCell> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        AppNavigate.push(context, UserMessage(account: widget.item));
+        AppNavigate.push(context, UserProfile(account: widget.item));
       },
       child: Container(
         color: MyColor.widgetDefaultColor,

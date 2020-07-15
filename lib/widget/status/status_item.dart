@@ -7,7 +7,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:fastodon/public.dart';
 
-import 'package:fastodon/pages/setting/user_message.dart';
+import 'package:fastodon/pages/user_profile/user_profile.dart';
 import 'package:fastodon/models/article_item.dart';
 import '../other/avatar.dart';
 import 'status_item_action.dart';

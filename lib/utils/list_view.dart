@@ -1,6 +1,9 @@
 import 'package:fastodon/models/article_item.dart';
+import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
+import 'package:fastodon/widget/common/list_row.dart';
 import 'package:fastodon/widget/status/status_item.dart';
+import 'package:fastodon/widget/status/status_item_account.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -36,6 +39,13 @@ class ListViewUtil {
     return (int index, List data, ResultListProvider provider) {
       StatusItemData lineItem = StatusItemData.fromJson(data[index]);
       return StatusItem(item: lineItem);
+    };
+  }
+
+  static accountRowFunction() {
+    return (int index, List data, ResultListProvider provider) {
+      OwnerAccount account = OwnerAccount.fromJson(data[index]);
+      return ListRow(child: StatusItemAccount(account));
     };
   }
 

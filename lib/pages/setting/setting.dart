@@ -17,7 +17,7 @@ import 'package:fastodon/models/my_account.dart';
 import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/models/user.dart';
 
-import 'user_message.dart';
+import '../user_profile/user_profile.dart';
 import 'setting_head.dart';
 import 'setting_cell.dart';
 import 'about_app.dart';

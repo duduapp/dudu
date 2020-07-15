@@ -1,5 +1,5 @@
 import 'package:fastodon/models/owner_account.dart';
-import 'package:fastodon/pages/setting/user_message.dart';
+import 'package:fastodon/pages/user_profile/user_profile.dart';
 import 'package:fastodon/utils/app_navigate.dart';
 import 'package:fastodon/utils/date_until.dart';
 import 'package:fastodon/utils/my_color.dart';
@@ -19,7 +19,7 @@ class AccountItem extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(0, 15, 15, 0),
             child: GestureDetector(
               onTap: () {
-                AppNavigate.push(context, UserMessage(account: account));
+                AppNavigate.push(context, UserProfile(account: account));
               },
               child: Avatar(url: account.avatarStatic),
             )),

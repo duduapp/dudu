@@ -81,7 +81,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
       child: ListTile(
         leading: Icon(Icons.music_note),
         title: Text(
-          widget.images[0].description,
+          widget.images[0].description??'',
           overflow: TextOverflow.ellipsis,
           maxLines: 2,
         ),

@@ -1,6 +1,6 @@
 import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/models/owner_account.dart';
-import 'package:fastodon/pages/setting/user_message.dart';
+import 'package:fastodon/pages/user_profile/user_profile.dart';
 import 'package:fastodon/utils/app_navigate.dart';
 import 'package:fastodon/utils/date_until.dart';
 import 'package:fastodon/utils/my_color.dart';
@@ -20,14 +20,14 @@ class StatusItemAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){if(createdAt == null) AppNavigate.push(context, UserMessage(account: account));}, // 用作搜索页时，整个页面可点击
+      onTap: (){if(createdAt == null) AppNavigate.push(context, UserProfile(account: account));}, // 用作搜索页时，整个页面可点击
       child: Row(
         children: <Widget>[
           Padding(
               padding: EdgeInsets.fromLTRB(0, 15, 15, 0),
               child: InkWell(
                 onTap: () {
-                  AppNavigate.push(context, UserMessage(account: account));
+                  AppNavigate.push(context, UserProfile(account: account));
                 },
                 child: Avatar(url: account.avatarStatic),
               )),

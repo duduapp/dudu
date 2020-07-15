@@ -5,6 +5,8 @@ import 'package:fastodon/models/media_attachment.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/media/photo_gallery.dart';
 import 'package:fastodon/pages/status/new_status.dart';
+import 'package:fastodon/pages/user_profile/user_follewers.dart';
+import 'package:fastodon/pages/user_profile/user_follewing.dart';
 import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/utils/list_view.dart';
 import 'package:fastodon/widget/common/bottom_sheet_item.dart';
@@ -21,28 +23,25 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/models/owner_account.dart';
 
-import 'package:fastodon/widget/status/status_item.dart';
-import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/models/my_account.dart';
 import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
-import 'model/relation_ship.dart';
+import '../setting/model/relation_ship.dart';
 import 'package:fastodon/widget/other/avatar.dart';
-import 'following_list.dart';
-import 'follower_list.dart';
+
 
 MyAccount mine = new MyAccount();
 
-class UserMessage extends StatefulWidget {
-  UserMessage({Key key, @required this.account}) : super(key: key);
+class UserProfile extends StatefulWidget {
+  UserProfile({Key key, @required this.account}) : super(key: key);
 
   final OwnerAccount account;
 
   @override
-  _UserMessageState createState() => _UserMessageState();
+  _UserProfileState createState() => _UserProfileState();
 }
 
-class _UserMessageState extends State<UserMessage>
+class _UserProfileState extends State<UserProfile>
     with SingleTickerProviderStateMixin {
   RelationShip relationShip;
 
@@ -51,6 +50,7 @@ class _UserMessageState extends State<UserMessage>
   double _sliverExpandHeight = 10000;
   bool _getSliverExpandHeight = false;
   bool _showAccountInfoInAppBar = false;
+  List<ResultListProvider> providers = [];
 
   ScrollController _scrollController;
   @override
@@ -71,12 +71,51 @@ class _UserMessageState extends State<UserMessage>
 
     _scrollController = ScrollController()
       ..addListener(() {
-        if (_scrollController.offset > _sliverExpandHeight - 200) {
+        if (_scrollController.offset > _sliverExpandHeight - 105) {
           _setShowAccountInfo(true);
         } else {
           _setShowAccountInfo(false);
         }
       });
+    providers.addAll([
+      ResultListProvider(
+          requestUrl: Api.UersArticle(_account.id, 'exclude_replies=true'),
+          buildRow: ListViewUtil.statusRowFunction(),
+          firstRefresh: true,
+          dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('status_'),
+          showHeader: false),
+      ResultListProvider(
+          requestUrl: AccountsApi.accountStatusUrl(_account.id),
+          buildRow: ListViewUtil.statusRowFunction(),
+          firstRefresh: true,
+          dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('replies_'),
+          showHeader: false),
+      ResultListProvider(
+        requestUrl:
+        AccountsApi.accountStatusUrl(_account.id, param: 'pinned=true'),
+        buildRow: ListViewUtil.statusRowFunction(),
+        firstRefresh: true,
+        dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('pinned_'),
+        showHeader: false,
+      ),
+      ResultListProvider(
+          requestUrl: AccountsApi.accountStatusUrl(_account.id,
+              param: 'only_media=true'),
+          buildRow: _buildGridItem,
+          firstRefresh: true,
+          showHeader: false,
+          dataHandler: (data) {
+            var handledData = [];
+            for (var row in data) {
+              row['media_attachments'].forEach((element) {
+                element['id'] = 'media_' + element['id'];
+              });
+              handledData.addAll(row['media_attachments']);
+            }
+            return handledData;
+          }),
+
+    ]);
   }
 
   Future<void> _getRelationShuips() async {
@@ -304,7 +343,6 @@ class _UserMessageState extends State<UserMessage>
               _getSliverExpandHeight = true;
               _sliverExpandHeight = size.height + 10;
             });
-            print(size.height);
           }
         },
         child: SingleChildScrollView(
@@ -352,8 +390,8 @@ class _UserMessageState extends State<UserMessage>
                       ),
                       Text(
                         StringUtil.displayName(_account),
-                        style:
-                            TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         '@' + _account.acct,
@@ -384,7 +422,8 @@ class _UserMessageState extends State<UserMessage>
                       height: 100,
                       decoration: BoxDecoration(
                         border: Border.all(width: 4, color: Colors.white),
-                        borderRadius: new BorderRadius.all(Radius.circular(10.0)),
+                        borderRadius:
+                            new BorderRadius.all(Radius.circular(14.0)),
                         shape: BoxShape.rectangle,
                       ),
                       child: Avatar(
@@ -419,7 +458,6 @@ class _UserMessageState extends State<UserMessage>
             child: Html(
               data: filed['value'],
               shrinkToFit: true,
-
             ),
           )
         ],
@@ -440,6 +478,7 @@ class _UserMessageState extends State<UserMessage>
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           InkWell(
+            onTap: () => _tabController.animateTo(0),
             child: Row(
               children: <Widget>[
                 Text(_account.statusesCount.toString()),
@@ -458,6 +497,7 @@ class _UserMessageState extends State<UserMessage>
             width: 10,
           ),
           InkWell(
+            onTap: () => AppNavigate.push(context, UserFollowing(_account.id)),
             child: Row(
               children: <Widget>[
                 Text(_account.followingCount.toString()),
@@ -476,6 +516,7 @@ class _UserMessageState extends State<UserMessage>
             width: 10,
           ),
           InkWell(
+            onTap: () => AppNavigate.push(context, UserFollowers(_account.id)),
             child: Row(
               children: <Widget>[
                 Text(_account.followersCount.toString()),
@@ -492,8 +533,9 @@ class _UserMessageState extends State<UserMessage>
   }
 
   Widget tabText(String text) {
+    return Tab(text: text,);
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+     padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Text(
         text,
         style: TextStyle(fontSize: 13, color: Theme.of(context).accentColor),
@@ -508,61 +550,26 @@ class _UserMessageState extends State<UserMessage>
       children: <Widget>[
         extend.NestedScrollViewInnerScrollPositionKeyWidget(
             Key('tab0'),
-            ChangeNotifierProvider<ResultListProvider>(
-              create: (context) => ResultListProvider(
-                  requestUrl:
-                      Api.UersArticle(_account.id, 'exclude_replies=true'),
-                  buildRow:
-                      ListViewUtil.statusRowFunction(),
-                  firstRefresh: true,
-                  dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('status_'),
-                  showHeader: false),
+            ChangeNotifierProvider<ResultListProvider>.value(
+              value: providers[0],
               child: ProviderEasyRefreshListView(),
             )),
         extend.NestedScrollViewInnerScrollPositionKeyWidget(
             Key('tab1'),
-            ChangeNotifierProvider<ResultListProvider>(
-              create: (context) => ResultListProvider(
-                  requestUrl: AccountsApi.accountStatusUrl(_account.id),
-                  buildRow: ListViewUtil.statusRowFunction(),
-                  firstRefresh: true,
-                  dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('replies_'),
-                  showHeader: false),
-              child: ProviderEasyRefreshListView(),
-            )),
-        extend.NestedScrollViewInnerScrollPositionKeyWidget(
-            Key('tab3'),
-            ChangeNotifierProvider<ResultListProvider>(
-              create: (context) => ResultListProvider(
-                requestUrl: AccountsApi.accountStatusUrl(_account.id,
-                    param: 'pinned=true'),
-                buildRow:
-                    ListViewUtil.statusRowFunction(),
-                firstRefresh: true,
-                dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('pinned_'),
-                showHeader: false,
-              ),
+            ChangeNotifierProvider<ResultListProvider>.value(
+              value: providers[1],
               child: ProviderEasyRefreshListView(),
             )),
         extend.NestedScrollViewInnerScrollPositionKeyWidget(
             Key('tab2'),
-            ChangeNotifierProvider<ResultListProvider>(
-              create: (context) => ResultListProvider(
-                  requestUrl: AccountsApi.accountStatusUrl(_account.id,
-                      param: 'only_media=true'),
-                  buildRow: _buildGridItem,
-                  firstRefresh: true,
-                  showHeader: false,
-                  dataHandler: (data) {
-                    var handledData = [];
-                    for (var row in data) {
-                      row['media_attachments'].forEach((element) {
-                        element['id'] = 'media_' + element['id'];
-                      });
-                      handledData.addAll(row['media_attachments']);
-                    }
-                    return handledData;
-                  }),
+            ChangeNotifierProvider<ResultListProvider>.value(
+              value: providers[2],
+              child: ProviderEasyRefreshListView(),
+            )),
+        extend.NestedScrollViewInnerScrollPositionKeyWidget(
+            Key('tab3'),
+            ChangeNotifierProvider<ResultListProvider>.value(
+              value: providers[3],
               child: ProviderEasyRefreshListView(
                 usingGrid: true,
               ),
@@ -580,7 +587,8 @@ class _UserMessageState extends State<UserMessage>
             initialIndex: idx,
             galleryItems:
                 provider.list.map((e) => MediaAttachment.fromJson(e)).toList(),
-          ),routeType: RouterType.fade),
+          ),
+          routeType: RouterType.fade),
       child: Hero(
         tag: media.id,
         child: CachedNetworkImage(
@@ -600,6 +608,7 @@ class _UserMessageState extends State<UserMessage>
   }
 
   Future<void> _onRefreshPage() async {
+    providers[_tabController.index]?.refresh();
     var newAccount = await AccountsApi.getAccount(_account.id);
     var newRelationShip = await AccountsApi.getRelationShip(_account.id);
     setState(() {
@@ -623,22 +632,28 @@ class _UserMessageState extends State<UserMessage>
           headerSliverBuilder: (context, boxIsScrolled) {
             return [
               SliverAppBar(
+
+                titleSpacing: 0,
                 title: _showAccountInfoInAppBar
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            StringUtil.displayName(_account),
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            '@' + _account.acct,
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.normal),
-                          )
-                        ],
-                      )
+                    ? Container(
+                  width: double.infinity,
+                  color: Theme.of(context).backgroundColor,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              StringUtil.displayName(_account),
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              '@' + _account.acct,
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.normal),
+                            )
+                          ],
+                        ),
+                    )
                     : Container(),
                 centerTitle: false,
                 pinned: true,
