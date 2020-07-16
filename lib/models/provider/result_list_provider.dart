@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/request.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 typedef ResultListDataHandler = Function(dynamic data);
+typedef RowBuilder = Function(int idx,List data,ResultListProvider provider);
 
 class ResultListProvider extends ChangeNotifier {
   final String requestUrl;
@@ -20,13 +23,14 @@ class ResultListProvider extends ChangeNotifier {
   String nextUrl;
   final bool listenBlockEvent;
   GlobalKey<SliverAnimatedListState> listKey;
-  final Function buildRow;
+  final RowBuilder buildRow;
   Map<String, dynamic> events = {};
   final bool firstRefresh;
   final bool onlyMedia;
   final ResultListDataHandler dataHandler;
   String lastCellId = '0';
   CancelToken requestCancelToken = CancelToken();
+  final int cacheTimeInSeconds;
 
   /// map key 的优先级高于 data handler
   ResultListProvider(
@@ -42,6 +46,7 @@ class ResultListProvider extends ChangeNotifier {
         bool showHeader = true,// easy refresh 中只有当onrefresh 设为Null 时才能隐藏header
         this.onlyMedia = false,
         this.dataHandler,
+        this.cacheTimeInSeconds
       }) {
     if (listenBlockEvent) {
       _addEvent(EventBusKey.blockAccount, (arg) {
@@ -98,12 +103,29 @@ class ResultListProvider extends ChangeNotifier {
   }
 
 
+
   Future<void> _startRequest(String url, {bool refresh}) async {
+    if (cacheTimeInSeconds != null) {
+      int cacheTime = await Storage.getIntWithAccount('cache_time'+url);
+      if (cacheTime != null) {
+        if (DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(cacheTime)).inSeconds < cacheTimeInSeconds) {
+          list = json.decode(await Storage.getStringWithAccount('cache_data'+url));
+          notifyListeners();
+          return;
+        }
+      }
+    }
+
     await Request.get1(url: url,cancelToken: requestCancelToken).then((response) {
       if (response == null) {
         return;
       }
       var data = response.data;
+
+      if (cacheTimeInSeconds != null) {
+        Storage.saveIntWithAccount('cache_time'+url, DateTime.now().millisecondsSinceEpoch);
+        Storage.saveStringWithAccount('cache_data'+url, json.encode(data));
+      }
 
       if (mapKey != null) {
         data = data[mapKey];

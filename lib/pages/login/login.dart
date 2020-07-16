@@ -81,8 +81,8 @@ class _LoginState extends State<Login> {
         // 这里的存储是异步的，需要将token保存至单例中实时更新页面
 
         LocalStorageAccount.addLocalAccount(LocalAccount(hostUrl: hostUrl,token: token,active: true));
-        Storage.save(StorageKey.Token, token);
-        Storage.save(StorageKey.HostUrl, hostUrl);
+        Storage.saveString(StorageKey.Token, token);
+        Storage.saveString(StorageKey.HostUrl, hostUrl);
 
         User user = new User();
         user.setHost(hostUrl);

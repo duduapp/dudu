@@ -1,10 +1,12 @@
 import 'dart:convert';
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fastodon/models/vote.dart';
 import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/widget/common/sized_icon_button.dart';
+import 'package:fastodon/widget/new_status/emoji_widget.dart';
 import 'package:fastodon/widget/new_status/handle_vote_dialog.dart';
 import 'package:fastodon/widget/publish/status_reply_info.dart';
 import 'package:fastodon/widget/publish/vote_display.dart';
@@ -49,6 +51,9 @@ class _NewStatusState extends State<NewStatus> {
   DateTime scheduledAt;
   bool sensitive = false;
   String replyToId;
+  bool showEmojiKeyboard = false;
+  double keyboardHeight = 0;
+  var focusNode = new FocusNode();
 
   int counter = 0;
   static const Map<String, IconData> visibilityIcons = {
@@ -71,7 +76,6 @@ class _NewStatusState extends State<NewStatus> {
         _myAcc = accMsg;
       });
     }
-    //_getEmojis();
 
     if (widget.replyTo != null) {
       replyToId = widget.replyTo.id;
@@ -89,11 +93,13 @@ class _NewStatusState extends State<NewStatus> {
     if (widget.prepareText != null) {
       _controller.text = widget.prepareText;
     }
-  }
 
-  Future<void> _getEmojis() async {
-    Request.get(url: Api.CustomEmojis).then((data) {
-      print(data);
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        setState(() {
+          showEmojiKeyboard = false;
+        });
+      }
     });
   }
 
@@ -523,7 +529,7 @@ class _NewStatusState extends State<NewStatus> {
             ),
           ],
         ),
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: showEmojiKeyboard ? false : true,
         body: Container(
           child: Stack(
             alignment: AlignmentDirectional.bottomEnd,
@@ -542,6 +548,7 @@ class _NewStatusState extends State<NewStatus> {
                           // width: Screen.width(context) - 60,
                           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: TextField(
+                            focusNode: focusNode,
                             controller: _controller,
                             onChanged: (value) {
                               setState(() {
@@ -574,17 +581,17 @@ class _NewStatusState extends State<NewStatus> {
                   ),
                 ),
               ),
-              Container(
-                color: primaryColor,
-                padding: EdgeInsets.fromLTRB(10, 5, 15, 5),
-                child: SafeArea(
+              Column(mainAxisSize: MainAxisSize.min, children: [
+                Container(
+                  color: primaryColor,
+                  padding: EdgeInsets.fromLTRB(10, 5, 15, 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Row(
                         children: <Widget>[
                           SizedIconButton(
-                            width:35,
+                            width: 35,
                             icon: Icon(Icons.attach_file),
                             onPressed: vote != null
                                 ? null
@@ -668,6 +675,10 @@ class _NewStatusState extends State<NewStatus> {
                                   ? Colors.blue
                                   : Colors.black,
                             ),
+                          ),
+                          SizedIconButton(
+                            icon: Icon(Icons.insert_emoticon),
+                            onPressed: _toggleEmoji,
                           )
                         ],
                       ),
@@ -692,12 +703,38 @@ class _NewStatusState extends State<NewStatus> {
                     ],
                   ),
                 ),
-              ),
+                Visibility(
+                  visible: showEmojiKeyboard,
+                  child: SizedBox(
+                    height: keyboardHeight,
+                    child: EmojiKeyboard(onChoose: (e) => _controller.text = _controller.text +' :'+e+':'),
+                  ),
+                )
+              ]),
             ],
           ),
         ),
       ),
     );
+  }
+
+  _toggleEmoji() {
+    setState(() {
+      showEmojiKeyboard = !showEmojiKeyboard;
+    });
+
+    var kHeight = MediaQuery.of(context).viewInsets.bottom;
+    // keyboard is shown up
+    if (kHeight > 0) {
+      FocusScope.of(context).unfocus();
+      if (kHeight != keyboardHeight) {
+        setState(() {
+          keyboardHeight = kHeight;
+        });
+      }
+    } else {
+      FocusScope.of(context).requestFocus(focusNode);
+    }
   }
 
   Widget voteView() {

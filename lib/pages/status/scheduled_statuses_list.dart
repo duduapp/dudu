@@ -45,9 +45,7 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
     );
   }
 
-  Widget _buildRow(int idx, List data) {
-    ResultListProvider provider =
-        Provider.of<ResultListProvider>(providerContext, listen: false);
+  Widget _buildRow(int idx, List data,ResultListProvider provider) {
     var row = data[idx];
     return InkWell(
       child: Container(
