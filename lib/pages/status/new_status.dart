@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:fastodon/api/search_api.dart';
 import 'package:fastodon/models/vote.dart';
 import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/widget/common/sized_icon_button.dart';
@@ -10,9 +11,11 @@ import 'package:fastodon/widget/new_status/emoji_widget.dart';
 import 'package:fastodon/widget/new_status/handle_vote_dialog.dart';
 import 'package:fastodon/widget/publish/status_reply_info.dart';
 import 'package:fastodon/widget/publish/vote_display.dart';
+import 'package:fastodon/widget/status/status_item_account.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -546,27 +549,76 @@ class _NewStatusState extends State<NewStatus> {
                         warningWidget(),
                         Container(
                           // width: Screen.width(context) - 60,
-                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: TextField(
-                            focusNode: focusNode,
-                            controller: _controller,
-                            onChanged: (value) {
-                              setState(() {
-                                counter = value.length > 500
-                                    ? 500
-                                    : value.length; //当500时可能值会变成501
-                              });
+                         // padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                          child: TypeAheadField(
+                            suggestionsBoxVerticalOffset: 5,
+                            suggestionsCallback: (pattern) async{
+                              var arr = pattern.split(' ');
+                              if (arr.length > 1) {
+                                if (arr.last.isNotEmpty) {
+                                  var lastChar = arr.last.substring(0,1);
+                                  var query = arr.last.substring(1);
+                                  switch (lastChar) {
+                                    case '@':
+                                      return await SearchApi.searchAccounts(query);
+                                      break;
+                                    case '#':
+                                      break;
+                                    case ':':
+                                      break;
+                                  }
+                                }
+                              }
+                              return [];
                             },
-                            autofocus: true,
-                            maxLength: 500,
-                            maxLines: null,
-                            decoration: InputDecoration(
-                                hintText: '有什么新鲜事',
-                                counterText: '',
-                                disabledBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                labelStyle: TextStyle(fontSize: 16)),
+                            itemBuilder: (context, suggestion) {
+                              if (suggestion.containsKey('username')) {
+                                OwnerAccount account = OwnerAccount.fromJson(suggestion);
+                                return Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: StatusItemAccount(account,noNavigateOnClick: true,),
+                                );
+                              } else {
+                                return Container();
+                              }
+                            },
+                            onSuggestionSelected: (suggestion) {
+                              if (suggestion.containsKey('username')) {
+                                _controller.text = _controller.text.substring(0,_controller.text.lastIndexOf('@')+1);
+                                _controller.text = _controller.text+suggestion['acct'];
+                              }
+
+                            },
+
+                            hideOnEmpty: true,
+
+                            suggestionsBoxDecoration: SuggestionsBoxDecoration(
+                              color: Theme.of(context).backgroundColor,
+                              elevation: 2,
+                            ),
+
+                            textFieldConfiguration: TextFieldConfiguration(
+                              focusNode: focusNode,
+                              controller: _controller,
+                              onChanged: (value) {
+                                setState(() {
+                                  counter = value.length > 500
+                                      ? 500
+                                      : value.length; //当500时可能值会变成501
+                                });
+                              },
+                              autofocus: true,
+                              maxLength: 500,
+                              maxLines: null,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(15),
+                                  hintText: '有什么新鲜事',
+                                  counterText: '',
+                                  disabledBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  labelStyle: TextStyle(fontSize: 16)),
+                            ),
                           ),
                         ),
                         if (vote != null)

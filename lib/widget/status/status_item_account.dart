@@ -14,17 +14,18 @@ class StatusItemAccount extends StatelessWidget {
 
   final String createdAt;
   final Widget action;
+  final bool noNavigateOnClick;
 
-  StatusItemAccount(this.account,{this.createdAt,this.action});
+  StatusItemAccount(this.account,{this.createdAt,this.action,this.noNavigateOnClick = false});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){if(createdAt == null) AppNavigate.push(context, UserProfile(account: account));}, // 用作搜索页时，整个页面可点击
+      onTap: noNavigateOnClick ? null : (){if(createdAt == null) AppNavigate.push(context, UserProfile(account: account));}, // 用作搜索页时，整个页面可点击
       child: Row(
         children: <Widget>[
           Padding(
-              padding: EdgeInsets.fromLTRB(0, 15, 15, 0),
+              padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
               child: InkWell(
                 onTap: () {
                   AppNavigate.push(context, UserProfile(account: account));
@@ -34,7 +35,7 @@ class StatusItemAccount extends StatelessWidget {
           Expanded(
             child: Container(
               height: 50,
-              margin: EdgeInsets.only(top: 8),
+            //ns  margin: EdgeInsets.only(top: 8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +65,7 @@ class StatusItemAccount extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text('@' + account.username,
+                      Text('@' + account.acct,
                           style:
                               TextStyle(fontSize: 13, color: MyColor.greyText)),
                     ],
