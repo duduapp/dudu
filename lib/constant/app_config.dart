@@ -6,5 +6,5 @@ class AppConfig {
   static String RedirectUris = 'https://google.com';
   static String Scopes = 'read write follow push';
 
-
+  static const Color buttonColor = Colors.blue;
 }

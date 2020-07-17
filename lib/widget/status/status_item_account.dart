@@ -27,7 +27,7 @@ class StatusItemAccount extends StatelessWidget {
           Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
               child: InkWell(
-                onTap: () {
+                onTap: noNavigateOnClick ? null : () {
                   AppNavigate.push(context, UserProfile(account: account));
                 },
                 child: Avatar(url: account.avatarStatic),
@@ -62,13 +62,10 @@ class StatusItemAccount extends StatelessWidget {
                       )
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('@' + account.acct,
-                          style:
-                              TextStyle(fontSize: 13, color: MyColor.greyText)),
-                    ],
+                  Flexible(
+                    child: Text('@' + account.acct,
+                        style:
+                            TextStyle(fontSize: 13, color: MyColor.greyText),overflow: TextOverflow.ellipsis,),
                   )
                 ],
               ),

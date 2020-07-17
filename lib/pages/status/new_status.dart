@@ -9,6 +9,7 @@ import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/widget/common/sized_icon_button.dart';
 import 'package:fastodon/widget/new_status/emoji_widget.dart';
 import 'package:fastodon/widget/new_status/handle_vote_dialog.dart';
+import 'package:fastodon/widget/new_status/status_text_editor.dart';
 import 'package:fastodon/widget/publish/status_reply_info.dart';
 import 'package:fastodon/widget/publish/vote_display.dart';
 import 'package:fastodon/widget/status/status_item_account.dart';
@@ -26,6 +27,7 @@ import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/models/article_item.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:progress_indicators/progress_indicators.dart';
+import 'package:rich_text_controller/rich_text_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../widget/publish/new_status_publish_level.dart';
 
@@ -41,7 +43,7 @@ class NewStatus extends StatefulWidget {
 }
 
 class _NewStatusState extends State<NewStatus> {
-  final TextEditingController _controller = new TextEditingController();
+  TextEditingController _controller;
   final TextEditingController _warningController = new TextEditingController();
   OwnerAccount _myAcc;
   bool _hasWarning = false;
@@ -68,6 +70,14 @@ class _NewStatusState extends State<NewStatus> {
 
   @override
   void initState() {
+    _controller = RichTextController(
+        {
+          RegExp(r"\B#[a-zA-Z0-9]+\b"):TextStyle(color:AppConfig.buttonColor),
+          RegExp(r"\B@[@\.a-zA-Z0-9]+\b"):TextStyle(color:AppConfig.buttonColor)
+        },
+        onMatch: (List<String> matches){
+        }
+    );
     super.initState();
     // 隐藏登录弹出页
     MyAccount acc = new MyAccount();
@@ -547,79 +557,16 @@ class _NewStatusState extends State<NewStatus> {
                       //   mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         warningWidget(),
-                        Container(
-                          // width: Screen.width(context) - 60,
-                         // padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: TypeAheadField(
-                            suggestionsBoxVerticalOffset: 5,
-                            suggestionsCallback: (pattern) async{
-                              var arr = pattern.split(' ');
-                              if (arr.length > 1) {
-                                if (arr.last.isNotEmpty) {
-                                  var lastChar = arr.last.substring(0,1);
-                                  var query = arr.last.substring(1);
-                                  switch (lastChar) {
-                                    case '@':
-                                      return await SearchApi.searchAccounts(query);
-                                      break;
-                                    case '#':
-                                      break;
-                                    case ':':
-                                      break;
-                                  }
-                                }
-                              }
-                              return [];
-                            },
-                            itemBuilder: (context, suggestion) {
-                              if (suggestion.containsKey('username')) {
-                                OwnerAccount account = OwnerAccount.fromJson(suggestion);
-                                return Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: StatusItemAccount(account,noNavigateOnClick: true,),
-                                );
-                              } else {
-                                return Container();
-                              }
-                            },
-                            onSuggestionSelected: (suggestion) {
-                              if (suggestion.containsKey('username')) {
-                                _controller.text = _controller.text.substring(0,_controller.text.lastIndexOf('@')+1);
-                                _controller.text = _controller.text+suggestion['acct'];
-                              }
-
-                            },
-
-                            hideOnEmpty: true,
-
-                            suggestionsBoxDecoration: SuggestionsBoxDecoration(
-                              color: Theme.of(context).backgroundColor,
-                              elevation: 2,
-                            ),
-
-                            textFieldConfiguration: TextFieldConfiguration(
-                              focusNode: focusNode,
-                              controller: _controller,
-                              onChanged: (value) {
-                                setState(() {
-                                  counter = value.length > 500
-                                      ? 500
-                                      : value.length; //当500时可能值会变成501
-                                });
-                              },
-                              autofocus: true,
-                              maxLength: 500,
-                              maxLines: null,
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(15),
-                                  hintText: '有什么新鲜事',
-                                  counterText: '',
-                                  disabledBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  labelStyle: TextStyle(fontSize: 16)),
-                            ),
-                          ),
+                        StatusTextEditor(
+                          controller: _controller,
+                          focusNode: focusNode,
+                          onChanged: (value) {
+                            setState(() {
+                              counter = value.length > 500
+                                  ? 500
+                                  : value.length; //当500时可能值会变成501
+                            });
+                          },
                         ),
                         if (vote != null)
                           SizedBox(
@@ -736,6 +683,8 @@ class _NewStatusState extends State<NewStatus> {
                       ),
                       Text(counter.toString()),
                       RaisedButton(
+                        color: AppConfig.buttonColor,
+                        textColor: Colors.white,
                         onPressed: () {
                           if (_controller.text.length == 0 &&
                               images.length == 0) {

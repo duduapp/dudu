@@ -77,7 +77,7 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
-    Color activeColor = Theme.of(context).toggleableActiveColor;
+    Color activeColor = AppConfig.buttonColor;
 
     return Scaffold(
         key: _scaffoldKey,
