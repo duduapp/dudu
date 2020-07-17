@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fastodon/public.dart';
 
 class SettingCell extends StatelessWidget {
   SettingCell({

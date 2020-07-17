@@ -1,13 +1,12 @@
 // 下拉刷新和上拉加载
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/timeline/timeline.dart';
+import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/list_view.dart';
 import 'package:fastodon/widget/common/empty_view.dart';
 import 'package:fastodon/widget/common/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fastodon/public.dart';
 import 'package:provider/provider.dart';
 
 class ProviderEasyRefreshListView extends StatefulWidget {

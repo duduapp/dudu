@@ -1,11 +1,14 @@
 import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/api/status_api.dart';
+import 'package:fastodon/models/article_item.dart';
+import 'package:fastodon/models/my_account.dart';
+import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/status/new_status.dart';
+import 'package:fastodon/pages/user_profile/user_report.dart';
+import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/dialog_util.dart';
 import 'package:flutter/material.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/models/article_item.dart';
 import 'package:flutter/services.dart';
 import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
@@ -70,7 +73,6 @@ class _StatusItemActionState extends State<StatusItemAction> {
   _onPressBlock() async {
     var provider = Provider.of<ResultListProvider>(context, listen: false);
     var res = await AccountsApi.block(widget.item.account.id);
-    ;
 
     var statusId = widget.item.id;
     var accountId = widget.item.account.id;
@@ -82,6 +84,12 @@ class _StatusItemActionState extends State<StatusItemAction> {
             {'account_id': accountId, 'from_status_id': statusId});
       });
     }
+  }
+
+  _onPressRemove() async {
+    var provider = Provider.of<ResultListProvider>(context, listen: false);
+    provider.removeByIdWithAnimation(widget.item.id);
+    StatusApi.remove(widget.item.id);
   }
 
   requestFavorite(bool isLiked) async {
@@ -99,6 +107,7 @@ class _StatusItemActionState extends State<StatusItemAction> {
 
   @override
   Widget build(BuildContext context) {
+    OwnerAccount myAccount = MyAccount().account;
     var buttonColor = Theme.of(context).splashColor;
     return Container(
       height: 38,
@@ -197,12 +206,16 @@ class _StatusItemActionState extends State<StatusItemAction> {
               size: 20,
             ),
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              new PopupMenuItem<String>(
+              PopupMenuItem<String>(
                   value: 'copy_url', child: new Text('复制链接')),
-              new PopupMenuItem<String>(
+              PopupMenuItem<String>(
                   value: 'copy_content', child: new Text('复制嘟文')),
-              new PopupMenuItem<String>(value: 'hide', child: new Text('隐藏')),
-              new PopupMenuItem<String>(value: 'block', child: new Text('屏蔽'))
+              PopupMenuItem<String>(value: 'hide', child: new Text('隐藏')),
+              PopupMenuItem<String>(value: 'block', child: new Text('屏蔽')),
+              if (myAccount == widget.item.account)
+                PopupMenuItem<String>(value: 'remove', child: new Text('删除')),
+              if (myAccount != widget.item.account)
+                PopupMenuItem<String>(value: 'report', child: new Text('举报'))
             ],
             onSelected: (String value) {
               switch (value) {
@@ -224,6 +237,17 @@ class _StatusItemActionState extends State<StatusItemAction> {
                       context: context,
                       text: '确定要屏蔽${widget.item.account.acct}吗',
                       onConfirm: _onPressBlock);
+                  break;
+                case 'remove':
+                  DialogUtils.showSimpleAlertDialog(
+                      context: context,
+                      text: '确定要删除这条嘟嘟吗?',
+                      onConfirm: _onPressRemove);
+                  break;
+                case 'report':
+                  AppNavigate.push(context, UserReport(account: widget.item.account,));
+                  break;
+
               }
             },
           )

@@ -1,12 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:fastodon/models/user.dart';
+import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/dialog/loading_dialog.dart';
 import 'package:fastodon/widget/flutter_framework/progress_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:fastodon/public.dart';
 import 'package:nav_router/nav_router.dart';
 
 enum RequestType {

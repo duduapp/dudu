@@ -1,7 +1,8 @@
 // 下拉刷新和上拉加载
-import 'package:flutter/material.dart';
-import 'package:fastodon/public.dart';
 import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/public.dart';
+import 'package:flutter/material.dart';
+
 import 'follow_cell.dart';
 
 class FollowerList extends StatefulWidget {

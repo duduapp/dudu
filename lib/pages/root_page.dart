@@ -1,13 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:fastodon/public.dart';
-import 'package:popup_menu/popup_menu.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-import 'status/new_status.dart';
-import 'timeline/timeline.dart';
-import 'timeline/notifications.dart';
 import 'setting/setting.dart';
+import 'status/new_status.dart';
+import 'timeline/notifications.dart';
+import 'timeline/timeline.dart';
 
 class RootPage extends StatefulWidget {
   const RootPage(

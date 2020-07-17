@@ -3,7 +3,6 @@ import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/common/list_row.dart';
-import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:fastodon/widget/status/status_item_account.dart';
 import 'package:flutter/material.dart';

@@ -2,20 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:async';
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
-
-import 'app_bar.dart';
-import 'colors.dart';
-import 'debug.dart';
-import 'input_border.dart';
-import 'input_decorator.dart';
-import 'material_localizations.dart';
-import 'scaffold.dart';
-import 'text_field.dart';
-import 'theme.dart';
+'dart:async';
+        'package:flutter/foundation.dart';
+        'package:flutter/widgets.dart';
+        'app_bar.dart';
+        'colors.dart';
+        'debug.dart';
+        'input_border.dart';
+        'input_decorator.dart';
+        'material_localizations.dart';
+        'scaffold.dart';
+        'text_field.dart'; 'theme.dart';
 
 /// Shows a full screen search page and returns the search result selected by
 /// the user when the page is closed.

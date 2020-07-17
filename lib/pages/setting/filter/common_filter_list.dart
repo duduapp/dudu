@@ -1,9 +1,7 @@
 import 'package:fastodon/api/accounts_api.dart';
-import 'package:fastodon/constant/event_bus_key.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/setting/filter/common_filter_edit.dart';
 import 'package:fastodon/widget/common/list_row.dart';
-import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
+import 'package:flutter/material.dart';
 
 class ExpandStateBean{
   var isOpen;

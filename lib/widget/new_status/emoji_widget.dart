@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fastodon/constant/api.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
-import 'package:fastodon/utils/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

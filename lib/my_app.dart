@@ -1,17 +1,14 @@
 import 'package:fastodon/models/local_account.dart';
+import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/themes.dart';
 import 'package:flutter/material.dart';
-
-import 'package:fastodon/public.dart';
 import 'package:flutter/services.dart';
 import 'package:nav_router/nav_router.dart';
 import 'package:theme_provider/theme_provider.dart';
 
-import 'pages/root_page.dart';
-import 'pages/login/login.dart';
-import 'pages/status/new_status.dart';
-
 import 'models/user.dart';
+import 'pages/login/login.dart';
+import 'pages/root_page.dart';
 
 User user = new User();
 

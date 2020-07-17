@@ -1,33 +1,31 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extend;
 import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/models/media_attachment.dart';
+import 'package:fastodon/models/my_account.dart';
+import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/media/photo_gallery.dart';
 import 'package:fastodon/pages/status/new_status.dart';
 import 'package:fastodon/pages/user_profile/user_follewers.dart';
 import 'package:fastodon/pages/user_profile/user_follewing.dart';
+import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/utils/list_view.dart';
 import 'package:fastodon/widget/common/bottom_sheet_item.dart';
 import 'package:fastodon/widget/common/colored_tab_bar.dart';
 import 'package:fastodon/widget/common/measure_size.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
-
+import 'package:fastodon/widget/other/avatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_html/flutter_html.dart';
-
-import 'package:fastodon/public.dart';
-import 'package:fastodon/models/owner_account.dart';
-
-import 'package:fastodon/models/my_account.dart';
 import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
+
 import '../setting/model/relation_ship.dart';
-import 'package:fastodon/widget/other/avatar.dart';
 
 
 MyAccount mine = new MyAccount();

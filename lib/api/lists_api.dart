@@ -1,6 +1,5 @@
 import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/utils/request.dart';
-import 'package:flutter/cupertino.dart';
 
 
 class ListsApi {

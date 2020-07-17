@@ -1,10 +1,13 @@
 import 'dart:convert';
-
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:fastodon/api/search_api.dart';
+import 'package:fastodon/models/article_item.dart';
+import 'package:fastodon/models/my_account.dart';
+import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/models/vote.dart';
+import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/widget/common/sized_icon_button.dart';
 import 'package:fastodon/widget/new_status/emoji_widget.dart';
@@ -12,23 +15,15 @@ import 'package:fastodon/widget/new_status/handle_vote_dialog.dart';
 import 'package:fastodon/widget/new_status/status_text_editor.dart';
 import 'package:fastodon/widget/publish/status_reply_info.dart';
 import 'package:fastodon/widget/publish/vote_display.dart';
-import 'package:fastodon/widget/status/status_item_account.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'package:fastodon/public.dart';
-
-import 'package:fastodon/models/my_account.dart';
-import 'package:fastodon/models/owner_account.dart';
-import 'package:fastodon/models/article_item.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rich_text_controller/rich_text_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../widget/publish/new_status_publish_level.dart';
 
 class NewStatus extends StatefulWidget {

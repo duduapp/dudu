@@ -1,14 +1,10 @@
 import 'package:fastodon/models/local_account.dart';
-import 'package:fastodon/pages/root_page.dart';
-import 'package:fastodon/widget/common/loading_view.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
-import 'package:fastodon/public.dart';
 import 'package:fastodon/models/user.dart';
+import 'package:fastodon/public.dart';
+import 'package:fastodon/widget/common/loading_view.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:nav_router/nav_router.dart';
 
 import '../../my_app.dart';

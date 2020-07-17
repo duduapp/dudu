@@ -1,7 +1,6 @@
 
 
 import 'package:fastodon/api/status_api.dart';
-import 'package:fastodon/constant/app_config.dart';
 import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/utils/list_view.dart';
 import 'package:fastodon/widget/status/status_item.dart';

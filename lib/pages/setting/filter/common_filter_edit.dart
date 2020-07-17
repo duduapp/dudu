@@ -2,7 +2,6 @@ import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/public.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CommonFilterEdit extends StatefulWidget {
   final String id;

@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
-import 'package:fastodon/public.dart';
-
 import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/other/avatar.dart';
+import 'package:flutter/material.dart';
 
 class SettingHead extends StatelessWidget {
   SettingHead({Key key, this.account}) : super(key: key);

@@ -1,17 +1,14 @@
-import 'package:fastodon/widget/status/status_item_content.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fastodon/models/article_item.dart';
+import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/status/status_item_account.dart';
+import 'package:fastodon/widget/status/status_item_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
-import 'package:fastodon/public.dart';
-
-import 'package:fastodon/pages/user_profile/user_profile.dart';
-import 'package:fastodon/models/article_item.dart';
 import '../other/avatar.dart';
-import 'status_item_action.dart';
 import 'article_media.dart';
+import 'status_item_action.dart';
 
 class StatusItem extends StatefulWidget {
   StatusItem({Key key, @required this.item, this.refIcon, this.refString, this.subStatus}) : super(key: key);
@@ -112,7 +109,10 @@ class _StatusItemState extends State<StatusItem> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             refHeader(),
-            StatusItemAccount(data.account,createdAt:data.createdAt),
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: StatusItemAccount(data.account,createdAt:data.createdAt),
+            ),
             StatusItemContent(data),
             StatusItemAction(
               item: data

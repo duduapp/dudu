@@ -1,27 +1,20 @@
-import 'dart:math';
-
 import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/models/local_account.dart';
+import 'package:fastodon/models/my_account.dart';
+import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/pages/setting/account_setting.dart';
 import 'package:fastodon/pages/setting/bookmarks_list.dart';
 import 'package:fastodon/pages/setting/edit_user_profile.dart';
 import 'package:fastodon/pages/setting/general_setting.dart';
 import 'package:fastodon/pages/setting/lists/lists_page.dart';
 import 'package:fastodon/pages/status/scheduled_statuses_list.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:fastodon/public.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-import 'package:fastodon/models/my_account.dart';
-import 'package:fastodon/models/owner_account.dart';
-import 'package:fastodon/models/user.dart';
-
-import '../user_profile/user_profile.dart';
-import 'setting_head.dart';
-import 'setting_cell.dart';
-import 'about_app.dart';
 import 'favourites_list.dart';
+import 'setting_cell.dart';
+import 'setting_head.dart';
 
 class Setting extends StatefulWidget {
   @override

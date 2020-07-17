@@ -1,8 +1,9 @@
+import 'package:fastodon/utils/app_navigate.dart';
 import 'package:fastodon/widget/common/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+
 import 'model/app_credential.dart';
-import 'package:fastodon/utils/app_navigate.dart';
 
 class WebLogin extends StatelessWidget {
   WebLogin({Key key, this.serverItem, this.hostUrl}) : super(key: key);

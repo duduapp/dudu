@@ -1,14 +1,10 @@
-import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/search/search_page_delegate.dart';
 import 'package:fastodon/pages/status/new_status.dart';
-import 'package:fastodon/utils/list_view.dart';
-import 'package:fastodon/widget/listview/easyrefresh_listview.dart';
-import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
-import 'package:fastodon/widget/status/status_item.dart';
-import 'package:fastodon/widget/listview/refresh_load_listview.dart';
-import 'package:flutter/material.dart';
 import 'package:fastodon/public.dart';
+import 'package:fastodon/utils/list_view.dart';
+import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
+import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
 

@@ -1,5 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:fastodon/models/owner_account.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'article_item.g.dart';
 

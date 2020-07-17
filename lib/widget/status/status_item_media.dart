@@ -1,18 +1,14 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chewie/chewie.dart';
 import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/models/media_attachment.dart';
 import 'package:fastodon/pages/media/photo_gallery.dart';
 import 'package:fastodon/pages/media/video_play.dart';
 import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:nav_router/nav_router.dart';
-import 'package:video_player/video_player.dart';
 
 class StatusItemMedia extends StatefulWidget {
   @override
