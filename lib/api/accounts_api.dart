@@ -11,6 +11,7 @@ class AccountsApi {
   static const String preferencesUrl = '/api/v1/preferences';
   static const String filterUrl = '/api/v1/filters';
   static const String relationShipUrl = '/api/v1/accounts/relationships';
+  static const String reportUrl = '/api/v1/reports';
 
   static Future<OwnerAccount> getMyAccount() async{
     var data = await Request.get(url: url+'/verify_credentials');
@@ -129,5 +130,18 @@ class AccountsApi {
 
   static String accountStatusUrl(String accountId,{String param = ''}) {
     return '$url/$accountId/statuses?$param';
+  }
+
+  static  reportUser(String accountId,List<String> statusesIds,String comment,bool forward) async{
+    var params = {
+      'account_id':accountId,
+      'status_ids': statusesIds,
+      'forward':forward
+    };
+    if (comment != null) {
+      params['comment'] = comment;
+    }
+
+    return await Request.post(url: reportUrl,params: params);
   }
 }

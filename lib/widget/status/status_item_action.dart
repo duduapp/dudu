@@ -245,7 +245,7 @@ class _StatusItemActionState extends State<StatusItemAction> {
                       onConfirm: _onPressRemove);
                   break;
                 case 'report':
-                  AppNavigate.push(context, UserReport(account: widget.item.account,));
+                  AppNavigate.push(context, UserReport(account: widget.item.account,fromStatusId: widget.item.id,));
                   break;
 
               }

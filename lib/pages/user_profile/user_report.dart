@@ -2,6 +2,7 @@ import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/models/article_item.dart';
 import 'package:fastodon/models/owner_account.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
+import 'package:fastodon/pages/user_profile/user_report_message.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/common/list_row.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
@@ -11,19 +12,28 @@ import 'package:provider/provider.dart';
 
 class UserReport extends StatefulWidget {
   final OwnerAccount account;
+  final String fromStatusId;
 
-  UserReport({Key key, this.account}) : super(key: key);
+  UserReport({Key key, this.account,this.fromStatusId}) : super(key: key);
 
   @override
   _UserReportState createState() => _UserReportState();
 }
 
 class _UserReportState extends State<UserReport> {
+  List<String> chooseStatues = [];
+
+  @override
+  void initState() {
+    chooseStatues.add(widget.fromStatusId);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('举报${widget.account.acct}的滥用行为',overflow: TextOverflow.fade,),
+        title: Text('举报@${widget.account.acct}的滥用行为',overflow: TextOverflow.fade,),
       ),
       body: Column(
         children: <Widget>[
@@ -43,7 +53,9 @@ class _UserReportState extends State<UserReport> {
                 Spacer(),
                 OutlineButton(textColor:Theme.of(context).buttonColor,child: Text('取消'),onPressed: (){AppNavigate.pop(context);},),
                 SizedBox(width: 5,),
-                RaisedButton(textColor:Colors.white,child: Text('继续'),onPressed: () {},),
+                RaisedButton(textColor:Colors.white,child: Text('继续'),onPressed: () {
+                  AppNavigate.push(context, UserReportMessage(chooseStatuses: chooseStatues,account: widget.account,));
+                },),
                 SizedBox(width: 20,)
               ],
             ),
@@ -67,7 +79,16 @@ class _UserReportState extends State<UserReport> {
             child: Column(
               children: <Widget>[
                 Text(DateUntil.dateTime(itemData.createdAt)),
-                Checkbox(value: false,)
+                Checkbox(value: chooseStatues.contains(itemData.id),onChanged: (bool) {
+                  if (bool) {
+                    chooseStatues.add(itemData.id);
+                  } else {
+                    chooseStatues.remove(itemData.id);
+                  }
+                  setState(() {
+
+                  });
+                },)
               ],
 
             ),
