@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fastodon/api/search_api.dart';
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/widget/common/measure_size.dart';
 import 'package:fastodon/widget/status/status_item_account.dart';
 import 'package:flutter/cupertino.dart';

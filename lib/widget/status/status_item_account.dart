@@ -1,5 +1,5 @@
-import 'package:fastodon/models/article_item.dart';
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/article_item.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/pages/user_profile/user_profile.dart';
 import 'package:fastodon/utils/app_navigate.dart';
 import 'package:fastodon/utils/date_until.dart';

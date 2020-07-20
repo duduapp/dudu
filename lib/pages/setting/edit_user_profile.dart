@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/constant/api.dart';
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/utils/request.dart';

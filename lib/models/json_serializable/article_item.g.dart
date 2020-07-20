@@ -6,6 +6,7 @@ part of 'article_item.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+
 StatusItemData _$StatusItemDataFromJson(Map<String, dynamic> json) {
   return StatusItemData(
       json['id'] as String,

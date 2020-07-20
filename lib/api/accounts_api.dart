@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/pages/setting/model/relation_ship.dart';
 import 'package:fastodon/utils/request.dart';
 

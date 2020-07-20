@@ -1,5 +1,8 @@
+import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/models/local_account.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/user.dart';
+import 'package:fastodon/pages/home_page.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/common/loading_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -71,18 +74,23 @@ class _LoginState extends State<Login> {
     paramsMap['code'] = code;
     paramsMap['redirect_uri'] = serverItem.redirectUri;
     try {
-      Request.post(url: '$hostUrl' + Api.Token, params: paramsMap,showDialog: false).then((data) {
+      Request.post(url: '$hostUrl' + Api.Token, params: paramsMap,showDialog: false).then((data) async{
         Token getToken = Token.fromJson(data);
         String token = '${getToken.tokenType} ${getToken.accessToken}';
-        // 这里的存储是异步的，需要将token保存至单例中实时更新页面
+        
 
-        LocalStorageAccount.addLocalAccount(LocalAccount(hostUrl: hostUrl,token: token,active: true));
-        Storage.saveString(StorageKey.Token, token);
-        Storage.saveString(StorageKey.HostUrl, hostUrl);
+        LocalAccount localAccount = LocalAccount(hostUrl: hostUrl,token: token,active: true);
+        await LocalStorageAccount.addLocalAccount(localAccount);
+        
 
-        User user = new User();
+        LoginedUser user = new LoginedUser();
         user.setHost(hostUrl);
         user.setToken(token);
+
+        OwnerAccount account = await AccountsApi.getMyAccount();
+        user.account = account;
+        await LocalStorageAccount.addOwnerAccount(account);
+
         pushAndRemoveUntil(HomePage());
 
         // eventBus.emit(EventBusKey.HidePresentWidegt);

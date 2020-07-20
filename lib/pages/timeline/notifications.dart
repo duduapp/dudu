@@ -1,3 +1,4 @@
+import 'package:fastodon/models/json_serializable/notificate_item.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
@@ -5,7 +6,7 @@ import 'package:fastodon/widget/status/status_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/notificate_item.dart';
+
 import '../../widget/other/follow_cell.dart';
 
 class Notifications extends StatefulWidget {

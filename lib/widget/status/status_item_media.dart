@@ -1,14 +1,16 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fastodon/models/article_item.dart';
-import 'package:fastodon/models/media_attachment.dart';
+import 'package:fastodon/models/json_serializable/article_item.dart';
+import 'package:fastodon/models/json_serializable/media_attachment.dart';
+import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/media/photo_gallery.dart';
 import 'package:fastodon/pages/media/video_play.dart';
 import 'package:fastodon/public.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:nav_router/nav_router.dart';
+import 'package:provider/provider.dart';
 
 class StatusItemMedia extends StatefulWidget {
   @override
@@ -40,23 +42,59 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
 
   @override
   Widget build(BuildContext context) {
-    var mediaLength = widget.data.mediaAttachments.length;
-    if (mediaLength == 1) {
-      if (widget.images[0].type == 'audio') {
-        return audio();
-      } else {
-        return imageWrapper(singleImage());
+    bool showThumbnails =
+        context.select<SettingsProvider, bool>((m) => m.get('show_thumbnails'));
+    if (showThumbnails) {
+      var mediaLength = widget.data.mediaAttachments.length;
+      if (mediaLength == 1) {
+        if (widget.images[0].type == 'audio') {
+          return audio();
+        } else {
+          return imageWrapper(singleImage());
+        }
+      } else if (mediaLength == 2) {
+        return imageWrapper(twoImages());
+      } else if (mediaLength == 3) {
+        return imageWrapper(threeImages());
+      } else if (mediaLength == 4) {
+        return imageWrapper(fourImages());
       }
-    } else if (mediaLength == 2) {
-      return imageWrapper(twoImages());
-    } else if (mediaLength == 3) {
-      return imageWrapper(threeImages());
-    } else if (mediaLength == 4) {
-      return imageWrapper(fourImages());
+    } else {
+      return mediaWithNoThumbnail();
     }
     return Container(
       width: 0,
       height: 0,
+    );
+  }
+
+  Widget mediaWithNoThumbnail() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10,bottom: 10),
+      child: Column(
+        children: <Widget>[
+          for (MediaAttachment media in widget.images)
+            InkWell(
+              onTap: () => open(context, widget.images.indexOf(media)),
+              child: Row(
+                children: <Widget>[
+                  Icon(media.type == 'image'
+                      ? Icons.image
+                      : media.type == 'video'
+                          ? Icons.videocam
+                          : media.type == 'audio'
+                              ? Icons.audiotrack
+                              : Icons.image),
+                  Expanded(
+                      child: Text(
+                    media.description ?? '没有描述信息',
+                    overflow: TextOverflow.ellipsis,
+                  ))
+                ],
+              ),
+            )
+        ],
+      ),
     );
   }
 
@@ -77,7 +115,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
       child: ListTile(
         leading: Icon(Icons.music_note),
         title: Text(
-          widget.images[0].description??'',
+          widget.images[0].description ?? '',
           overflow: TextOverflow.ellipsis,
           maxLines: 2,
         ),
@@ -169,7 +207,6 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
 
   Widget imageWrapper(Widget widget) {
     var primaryColor = Theme.of(context).primaryColor;
-    var backgroundColor = Theme.of(context).backgroundColor;
     return Padding(
       padding: EdgeInsets.only(top: 7),
       child: Stack(
@@ -272,7 +309,11 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
         ),
         if (hideImage)
           Positioned.fill(
-            child: ClipRRect(child: BlurHash(hash: image.blurhash,),borderRadius: BorderRadius.circular(8.0)),
+            child: ClipRRect(
+                child: BlurHash(
+                  hash: image.blurhash,
+                ),
+                borderRadius: BorderRadius.circular(8.0)),
           ),
         if ((image.type == 'video' || image.type == 'gifv') &&
             hideImage == false)
@@ -292,7 +333,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
     var image = widget.images[index];
     var type = image.type;
     Widget to;
-    if (type == 'video' || type == 'gifv') {
+    if (type == 'video' || type == 'gifv' || type == 'audio') {
       to = VideoPlay(widget.images[index]);
     } else {
       to = PhotoGallery(

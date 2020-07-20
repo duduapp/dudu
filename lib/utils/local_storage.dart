@@ -59,6 +59,28 @@ class Storage {
     }
   }
 
+  static Future<bool> getBool(String key) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs.getBool(key);
+    } catch (e) {
+      print('报错了');
+      print(e.toString());
+      return null;
+    }
+  }
+
+  static Future saveBool(String key,bool value) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs.setBool(key,value);
+    } catch (e) {
+      print('报错了');
+      print(e.toString());
+      return null;
+    }
+  }
+
   static Future saveInt(String key,int value) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();

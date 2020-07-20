@@ -1,5 +1,5 @@
 import 'package:fastodon/api/lists_api.dart';
-import 'package:fastodon/models/article_item.dart';
+import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/utils/list_view.dart';
 import 'package:fastodon/widget/listview/easyrefresh_listview.dart';

@@ -1,7 +1,8 @@
 import 'package:fastodon/models/local_account.dart';
+import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/login/login.dart';
 import 'package:fastodon/pages/setting/account_switch.dart';
-import 'package:fastodon/pages/setting/setting_cell.dart';
+import 'package:fastodon/widget/setting/setting_cell.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/common/bottom_sheet_item.dart';
 import 'package:fastodon/widget/dialog/single_choice_dialog.dart';
@@ -88,14 +89,13 @@ class _GeneralSettingState extends State<GeneralSetting> {
                 context: context,
                 builder: (_) => ThemeConsumer(child: ThemeDialog(title: Text('选择主题'),hasDescription: false,))),
           ),
-          SettingCell(
+          ProviderSettingCell(
+            providerKey: 'text_scale',
             leftIcon: Icon(Icons.font_download),
             title: '字体大小',
-            onPress: () {
-              showDialog(context: context,builder: (BuildContext context) {
-                return SingleChoiceDialog(title:Text('字体大小'),choices: ['小','中','大'],onChoose: _onTextScaleChoosed,groupValue: textScale,);
-              });
-            },
+            options: ['0','1','2'],
+            displayOptions: ['小','中','大'],
+            type: SettingType.string,
           ),
           SizedBox(height: 30,),
           SettingCellText(

@@ -2,9 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extend;
 import 'package:fastodon/api/accounts_api.dart';
-import 'package:fastodon/models/media_attachment.dart';
+import 'package:fastodon/models/json_serializable/media_attachment.dart';
 import 'package:fastodon/models/my_account.dart';
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/media/photo_gallery.dart';
 import 'package:fastodon/pages/status/new_status.dart';

@@ -190,7 +190,7 @@ class Request {
   static Dio createDio() {
     var dio = new Dio();
 
-    User user = new User();
+    LoginedUser user = new LoginedUser();
     String userHeader = user.getToken();
     String urlHost = user.getHost();
 

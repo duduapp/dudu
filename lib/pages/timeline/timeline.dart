@@ -25,9 +25,7 @@ class Timeline extends StatefulWidget {
   _TimelineState createState() => _TimelineState();
 }
 
-class _TimelineState extends State<Timeline>
-    with AutomaticKeepAliveClientMixin {
-  bool _local = true;
+class _TimelineState extends State<Timeline> {
   bool _showTab = false;
 
   Function loginSuccess;
@@ -51,8 +49,6 @@ class _TimelineState extends State<Timeline>
     super.dispose();
   }
 
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

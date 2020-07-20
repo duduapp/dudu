@@ -1,7 +1,7 @@
 
 import 'dart:convert';
 
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/utils/local_storage.dart';
 // account info saved in local
 class LocalAccount {
@@ -94,7 +94,7 @@ class LocalStorageAccount {
     }
     accounts.add(account);
 
-    saveAccounts(accounts);
+    await saveAccounts(accounts);
   }
   
   static Future addOwnerAccount(OwnerAccount account) async{

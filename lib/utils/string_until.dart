@@ -1,4 +1,4 @@
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 
 class StringUtil {
   static String displayName(OwnerAccount item) {

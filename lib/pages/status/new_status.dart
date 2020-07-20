@@ -3,9 +3,10 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:fastodon/models/article_item.dart';
+import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/my_account.dart';
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
+import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/models/vote.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/dialog_util.dart';
@@ -21,6 +22,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:progress_indicators/progress_indicators.dart';
+import 'package:provider/provider.dart';
 import 'package:rich_text_controller/rich_text_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -58,9 +60,9 @@ class _NewStatusState extends State<NewStatus> {
   int counter = 0;
   static const Map<String, IconData> visibilityIcons = {
     'public': Icons.public,
-    'unlisted': Icons.vpn_lock,
-    'private': Icons.lock,
-    'direct': Icons.sms
+    'unlisted': Icons.lock_open,
+    'private': Icons.lock_outline,
+    'direct': Icons.mail_outline
   };
 
   @override
@@ -108,6 +110,12 @@ class _NewStatusState extends State<NewStatus> {
           showEmojiKeyboard = false;
         });
       }
+    });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      SettingsProvider provider = Provider.of<SettingsProvider>(context,listen: false);
+      _visibility =  provider.get('default_post_privacy');
+      _articleRange = Icon(visibilityIcons[_visibility]);
+      sensitive = provider.get('make_media_sensitive');
     });
   }
 
@@ -511,6 +519,8 @@ class _NewStatusState extends State<NewStatus> {
     PopupMenu.context = context;
     var inputFilledColor = Theme.of(context).inputDecorationTheme.fillColor;
     var primaryColor = Theme.of(context).primaryColor;
+
+
 
     return WillPopScope(
       onWillPop: _onWillPop,

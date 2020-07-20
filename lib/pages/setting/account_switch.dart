@@ -7,6 +7,8 @@ import 'package:fastodon/widget/common/bottom_sheet_item.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
 
+import '../home_page.dart';
+
 class AccountSwitch extends StatefulWidget {
   @override
   _AccountSwitchState createState() => _AccountSwitchState();

@@ -1,4 +1,4 @@
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/pages/user_profile/user_profile.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/other/avatar.dart';

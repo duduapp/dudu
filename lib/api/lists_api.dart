@@ -1,4 +1,4 @@
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/utils/request.dart';
 
 

@@ -1,5 +1,6 @@
 // 下拉刷新和上拉加载
 import 'package:fastodon/models/provider/result_list_provider.dart';
+import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/timeline/timeline.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/list_view.dart';
@@ -84,60 +85,70 @@ class _ProviderEasyRefreshListViewState
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return MediaQuery(
-      data: MediaQuery.of(context)
-          .copyWith(textScaleFactor: 1.0 + 0.18 * textScale),
-      child: Consumer<ResultListProvider>(builder: (context, provider, child) {
-        GlobalKey<SliverAnimatedListState> listKey =
-            GlobalKey<SliverAnimatedListState>();
-        provider.setAnimatedListKey(listKey);
-        // 初次可能从Provider 里面请求
-        return (provider.firstRefresh &&
-                !provider.noResults &&
-                provider.list.isEmpty)
-            ? LoadingView()
-            : EasyRefresh.custom(
-                topBouncing: false,
-                slivers: [
-                  !widget.usingGrid
-                      ? SliverAnimatedList(
-                          key: listKey,
-                          initialItemCount: provider.list.length,
-                          itemBuilder: (context, index, animation) {
-                            return SizeTransition(
-                              axis: Axis.vertical,
-                              sizeFactor: animation,
-                              child: provider.buildRow(
-                                  index, provider.list, provider),
-                            );
-                          },
-                        )
-                      : SliverGrid(
-                          delegate: SliverChildBuilderDelegate((context, idx) {
-                            return provider.buildRow(
-                                idx, provider.list, provider);
-                          }, childCount: provider.list.length),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3),
-                        )
-                ],
-                firstRefresh: provider.firstRefresh
-                    ? false
-                    : true, //在NestedScrollView 不用启用这个选项，而且不能设置scroll controller
-                firstRefreshWidget: LoadingView(),
-                header: widget.header ?? ListViewUtil.getDefaultHeader(context),
-                footer: ListViewUtil.getDefaultFooter(context),
-                controller: _controller,
-                scrollController:
-                    widget.type == null ? null : _scrollController,
-                onRefresh: provider.finishRefresh ? null : provider.refresh,
-                onLoad: provider.finishLoad ? null : provider.load,
-                emptyWidget: provider.noResults
-                    ? widget.emptyWidget ?? EmptyView()
-                    : null,
-              );
-      }),
+
+    return Selector<SettingsProvider, String>(
+      selector: (_, m) => m.get('text_scale'),
+      shouldRebuild: (preCount, nextCount) => preCount != nextCount,
+      builder: (context, scale, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context)
+              .copyWith(textScaleFactor: 1.0 + 0.18 * double.parse(scale)),
+          child:
+              Consumer<ResultListProvider>(builder: (context, provider, child) {
+            GlobalKey<SliverAnimatedListState> listKey =
+                GlobalKey<SliverAnimatedListState>();
+            provider.setAnimatedListKey(listKey);
+            // 初次可能从Provider 里面请求
+            return (provider.firstRefresh &&
+                    !provider.noResults &&
+                    provider.list.isEmpty)
+                ? LoadingView()
+                : EasyRefresh.custom(
+                    topBouncing: false,
+                    slivers: [
+                      !widget.usingGrid
+                          ? SliverAnimatedList(
+                              key: listKey,
+                              initialItemCount: provider.list.length,
+                              itemBuilder: (context, index, animation) {
+                                return SizeTransition(
+                                  axis: Axis.vertical,
+                                  sizeFactor: animation,
+                                  child: provider.buildRow(
+                                      index, provider.list, provider),
+                                );
+                              },
+                            )
+                          : SliverGrid(
+                              delegate:
+                                  SliverChildBuilderDelegate((context, idx) {
+                                return provider.buildRow(
+                                    idx, provider.list, provider);
+                              }, childCount: provider.list.length),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3),
+                            )
+                    ],
+                    firstRefresh: provider.firstRefresh
+                        ? false
+                        : true, //在NestedScrollView 不用启用这个选项，而且不能设置scroll controller
+                    firstRefreshWidget: LoadingView(),
+                    header:
+                        widget.header ?? ListViewUtil.getDefaultHeader(context),
+                    footer: ListViewUtil.getDefaultFooter(context),
+                    controller: _controller,
+                    scrollController:
+                        widget.type == null ? null : _scrollController,
+                    onRefresh: provider.finishRefresh ? null : provider.refresh,
+                    onLoad: provider.finishLoad ? null : provider.load,
+                    emptyWidget: provider.noResults
+                        ? widget.emptyWidget ?? EmptyView()
+                        : null,
+                  );
+          }),
+        );
+      },
     );
   }
 

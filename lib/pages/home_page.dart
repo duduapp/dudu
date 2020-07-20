@@ -1,34 +1,64 @@
+import 'package:fastodon/models/local_account.dart';
+import 'package:fastodon/models/provider/settings_provider.dart';
+import 'package:fastodon/models/user.dart';
 import 'package:fastodon/public.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:nav_router/nav_router.dart';
+import 'package:provider/provider.dart';
 
+import 'login/login.dart';
 import 'setting/setting.dart';
 import 'status/new_status.dart';
 import 'timeline/notifications.dart';
 import 'timeline/timeline.dart';
 
-class RootPage extends StatefulWidget {
-  const RootPage(
-      {Key key, this.showLogin})
+class HomePage extends StatefulWidget {
+  const HomePage(
+      {Key key})
       : super(key: key);
 
-  final Function showLogin;
-
-
   @override
-  _RootPageState createState() => _RootPageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _RootPageState extends State<RootPage> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+class _HomePageState extends State<HomePage> {
+
   int _tabIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    widget.showLogin();
-
+    _verifyToken();
   }
+
+  Future<void> _verifyToken() async {
+    LoginedUser user = LoginedUser();
+    LocalAccount localAccount = await LocalStorageAccount.getActiveAccount();
+
+
+
+
+    if (localAccount == null) {
+      AppNavigate.pushAndRemoveUntil(context, Login(),
+          routeType: RouterType.fade);
+    } else {
+      user.setHost(localAccount.hostUrl);
+      user.setToken(localAccount.token);
+      user.account = localAccount.account;
+    }
+
+
+    Request.get(url: Api.VerifyToken).then((data) {
+      if (data['name'] == AppConfig.ClientName) {
+        eventBus.emit(EventBusKey.LoadLoginMegSuccess);
+      } else {
+        AppNavigate.pushAndRemoveUntil(context, Login(),
+            routeType: RouterType.fade);
+      }
+    });
+  }
+
 
   @override
   void dispose() {
@@ -74,11 +104,18 @@ class _RootPageState extends State<RootPage> {
   }
 
   @override
+  void didChangeDependencies() {
+
+
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Color activeColor = AppConfig.buttonColor;
 
     return Scaffold(
-        key: _scaffoldKey,
+
         body: IndexedStack(
           children: <Widget>[Timeline(TimelineType.home), Timeline(TimelineType.local), Timeline(TimelineType.federated),Notifications(), Setting()],
           index: _tabIndex,

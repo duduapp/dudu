@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fastodon/models/article_item.dart';
+import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/status/status_item_account.dart';
 import 'package:fastodon/widget/status/status_item_content.dart';

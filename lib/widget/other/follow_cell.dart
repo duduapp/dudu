@@ -1,8 +1,8 @@
+import 'package:fastodon/models/json_serializable/notificate_item.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/other/avatar.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/notificate_item.dart';
 
 class FollowCell extends StatelessWidget {
   FollowCell({Key key, @required this.item}) : super(key: key);

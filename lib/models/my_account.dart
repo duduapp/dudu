@@ -1,5 +1,5 @@
 import 'package:fastodon/api/accounts_api.dart';
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyAccount {

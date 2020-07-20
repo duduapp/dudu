@@ -1,8 +1,8 @@
 import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/api/status_api.dart';
-import 'package:fastodon/models/article_item.dart';
+import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/my_account.dart';
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/status/new_status.dart';
 import 'package:fastodon/pages/user_profile/user_report.dart';

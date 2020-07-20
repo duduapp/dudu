@@ -1,7 +1,7 @@
 import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/models/local_account.dart';
 import 'package:fastodon/models/my_account.dart';
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/pages/setting/account_setting.dart';
 import 'package:fastodon/pages/setting/bookmarks_list.dart';
 import 'package:fastodon/pages/setting/edit_user_profile.dart';
@@ -13,7 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'favourites_list.dart';
-import 'setting_cell.dart';
+import '../../widget/setting/setting_cell.dart';
 import 'setting_head.dart';
 
 class Setting extends StatefulWidget {

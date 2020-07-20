@@ -1,5 +1,5 @@
-import 'package:fastodon/models/article_item.dart';
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/article_item.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'notificate_item.g.dart';

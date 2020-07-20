@@ -1,6 +1,6 @@
 import 'package:fastodon/api/search_api.dart';
-import 'package:fastodon/models/article_item.dart';
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/article_item.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/timeline/hashtag_timeline.dart';
 import 'package:fastodon/public.dart';

@@ -1,21 +1,21 @@
-import 'package:fastodon/models/owner_account.dart';
+import 'package:fastodon/models/json_serializable/owner_account.dart';
 
-class User {
+class LoginedUser {
   String host;
   String token;
 
   OwnerAccount account;
 
   // 工厂模式
-  factory User() =>_getInstance();
-  static User get instance => _getInstance();
-  static User _instance;
-  User._internal() {
+  factory LoginedUser() =>_getInstance();
+  static LoginedUser get instance => _getInstance();
+  static LoginedUser _instance;
+  LoginedUser._internal() {
     // 
   }
-  static User _getInstance() {
+  static LoginedUser _getInstance() {
     if (_instance == null) {
-      _instance = new User._internal();
+      _instance = new LoginedUser._internal();
     }
     return _instance;
   }
@@ -34,10 +34,6 @@ class User {
 
   String getToken() {
     return this.token;
-  }
-
-  requestAccount() {
-
   }
 }
 
