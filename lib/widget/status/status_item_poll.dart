@@ -111,7 +111,7 @@ class _StatusItemPollState extends State<StatusItemPoll> {
   vote() async{
     Map<String, dynamic> paramsMap = Map();
     paramsMap['choices'] = choices;
-    var response = await Request.post(url:'${Api.poll}/${poll.id}/votes',params: paramsMap);
+    var response = await Request.post(url:'${Api.poll}/${poll.id}/votes',params: paramsMap,showDialog: false);
     Poll votedPoll = Poll.fromJson(response);
     if (votedPoll.id.isNotEmpty) {
       setState(() {

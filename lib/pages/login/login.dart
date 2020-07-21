@@ -1,7 +1,7 @@
 import 'package:fastodon/api/accounts_api.dart';
-import 'package:fastodon/models/local_account.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
-import 'package:fastodon/models/user.dart';
+import 'package:fastodon/models/local_account.dart';
+import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/pages/home_page.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/common/loading_view.dart';
@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:nav_router/nav_router.dart';
 
-import '../../my_app.dart';
 import 'model/app_credential.dart';
 import 'model/server_item.dart';
 import 'model/token.dart';

@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:fastodon/models/user.dart';
+import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/dialog/loading_dialog.dart';
 import 'package:fastodon/widget/flutter_framework/progress_dialog.dart';

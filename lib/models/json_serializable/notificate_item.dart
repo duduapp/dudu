@@ -6,7 +6,7 @@ part 'notificate_item.g.dart';
 
 
 @JsonSerializable()
-  class NotificateItem extends Object {
+  class NotificationItem extends Object {
 
   @JsonKey(name: 'id')
   String id;
@@ -23,9 +23,9 @@ part 'notificate_item.g.dart';
   @JsonKey(name: 'status')
   StatusItemData status;
 
-  NotificateItem(this.id,this.type,this.createdAt,this.account,this.status,);
+  NotificationItem(this.id,this.type,this.createdAt,this.account,this.status,);
 
-  factory NotificateItem.fromJson(Map<String, dynamic> srcJson) => _$NotificateItemFromJson(srcJson);
+  factory NotificationItem.fromJson(Map<String, dynamic> srcJson) => _$NotificateItemFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$NotificateItemToJson(this);
 

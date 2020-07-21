@@ -6,7 +6,6 @@ import 'package:fastodon/widget/status/status_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 import '../../widget/other/follow_cell.dart';
 
 class Notifications extends StatefulWidget {
@@ -39,7 +38,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
   }
 
   Widget row(int index, List data,ResultListProvider provider) {
-    NotificateItem item = NotificateItem.fromJson(data[index]);
+    NotificationItem item = NotificationItem.fromJson(data[index]);
     if (item.type == 'follow') {
       return FollowCell(
         item: item,

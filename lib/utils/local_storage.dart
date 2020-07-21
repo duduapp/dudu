@@ -1,4 +1,4 @@
-import 'package:fastodon/models/my_account.dart';
+import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/public.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -104,7 +104,7 @@ class Storage {
   }
 
   static String _accountPrefix() {
-    MyAccount myAccount = MyAccount();
+    LoginedUser myAccount = LoginedUser();
     return StringUtil.accountFullAddress(myAccount.account);
   }
 

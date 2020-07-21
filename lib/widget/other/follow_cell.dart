@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class FollowCell extends StatelessWidget {
   FollowCell({Key key, @required this.item}) : super(key: key);
-  final NotificateItem item;
+  final NotificationItem item;
 
   @override
   Widget build(BuildContext context) {

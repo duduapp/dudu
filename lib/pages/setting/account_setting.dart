@@ -1,11 +1,11 @@
 import 'package:fastodon/api/accounts_api.dart';
-import 'package:fastodon/models/my_account.dart';
-import 'package:fastodon/models/json_serializable/owner_account.dart';
+import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/setting/common_block_list.dart';
 import 'package:fastodon/pages/setting/filter/common_filter_list.dart';
-import 'package:fastodon/widget/setting/setting_cell.dart';
+import 'package:fastodon/pages/setting/setting_notification.dart';
 import 'package:fastodon/public.dart';
+import 'package:fastodon/widget/setting/setting_cell.dart';
 import 'package:flutter/material.dart';
 
 class AccountSetting extends StatefulWidget {
@@ -14,22 +14,10 @@ class AccountSetting extends StatefulWidget {
 }
 
 class _AccountSettingState extends State<AccountSetting> {
-  MyAccount myAccount;
-
   @override
   void initState() {
     super.initState();
-    myAccount = MyAccount();
-    getAccount();
-  }
-
-  getAccount() async {
-    OwnerAccount account1 = await AccountsApi.getMyAccount();
-    MyAccount().setAcc(account1);
-    await MyAccount().requestPrefrence();
-    setState(() {
-      myAccount = MyAccount();
-    });
+    LoginedUser().requestPreference();
   }
 
   @override
@@ -41,6 +29,11 @@ class _AccountSettingState extends State<AccountSetting> {
       ),
       body: ListView(
         children: <Widget>[
+          SettingCell(
+            leftIcon: Icon(Icons.notifications),
+            title: '通知设置',
+            onPress: () => AppNavigate.push(context, SettingNotification()),
+          ),
           SettingCell(
             leftIcon: Icon(Icons.volume_off),
             title: '被隐藏的用户',
@@ -68,8 +61,8 @@ class _AccountSettingState extends State<AccountSetting> {
             leftIcon: Icon(Icons.public),
             title: '嘟文默认可见范围',
             type: SettingType.string,
-            displayOptions: ['公开','不公开','仅关注者'],
-            options: ['public','unlisted','private'],
+            displayOptions: ['公开', '不公开', '仅关注者'],
+            options: ['public', 'unlisted', 'private'],
             onPressed: _changePrivacy,
           ),
           ProviderSettingCell(
@@ -135,88 +128,10 @@ class _AccountSettingState extends State<AccountSetting> {
     );
   }
 
-  void _onPrivacyPressed() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              '嘟文默认可见范围',
-              style: TextStyle(fontSize: 16),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                InkWell(
-                  child: Row(
-                    children: <Widget>[
-                      Radio(
-                        value: 'public',
-                        groupValue: myAccount.account.source.privacy,
-                      ),
-                      Text('公开')
-                    ],
-                  ),
-                  onTap: () {
-                    _changePrivacy('public');
-                    AppNavigate.pop(context);
-                  },
-                ),
-                InkWell(
-                  child: Row(
-                    children: <Widget>[
-                      Radio(
-                        value: 'unlisted',
-                        groupValue: myAccount.account.source.privacy,
-                      ),
-                      Text('不公开')
-                    ],
-                  ),
-                  onTap: () {
-                    _changePrivacy('unlisted');
-                    AppNavigate.pop(context);
-                  },
-                ),
-                InkWell(
-                  child: Row(
-                    children: <Widget>[
-                      Radio(
-                        value: 'private',
-                        groupValue: myAccount.account.source.privacy,
-                      ),
-                      Text('仅关注者')
-                    ],
-                  ),
-                  onTap: () {
-                    _changePrivacy('private');
-                    AppNavigate.pop(context);
-                  },
-                )
-              ],
-            ),
-          );
-        });
-  }
-
   _changePrivacy(dynamic privacy) {
-    setState(() {
-      myAccount.account.source.privacy = privacy;
-    });
     var params = {
       'source': {'privacy': privacy}
     };
     AccountsApi.updateCredentials(params);
-  }
-
-  String _getPrivacyStr() {
-    switch (MyAccount().account.source.privacy) {
-      case 'public':
-        return '公开';
-      case 'unlisted':
-        return '不公开';
-      case 'private':
-        return '仅关注者';
-    }
-    return '';
   }
 }

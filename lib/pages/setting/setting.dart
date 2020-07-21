@@ -1,7 +1,7 @@
 import 'package:fastodon/api/accounts_api.dart';
-import 'package:fastodon/models/local_account.dart';
-import 'package:fastodon/models/my_account.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
+import 'package:fastodon/models/local_account.dart';
+import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/pages/setting/account_setting.dart';
 import 'package:fastodon/pages/setting/bookmarks_list.dart';
 import 'package:fastodon/pages/setting/edit_user_profile.dart';
@@ -12,8 +12,8 @@ import 'package:fastodon/public.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'favourites_list.dart';
 import '../../widget/setting/setting_cell.dart';
+import 'favourites_list.dart';
 import 'setting_head.dart';
 
 class Setting extends StatefulWidget {
@@ -34,6 +34,8 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
+    _account = LoginedUser().account;
+
     loginSuccess = (arg) async{
       await _getMyAccount();
     };
@@ -54,51 +56,13 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
   Future<void> _getMyAccount() async {
     OwnerAccount account = await AccountsApi.getMyAccount();
     LocalStorageAccount.addOwnerAccount(account);
-    MyAccount saveAcc = new MyAccount();
-    saveAcc.setAcc(account);
-    saveAcc.requestPrefrence();
+    LoginedUser().account = account;
     setState(() {
       _finishRequest = true;
       _account = account;
     });
   }
 
-  void showAlert() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text("提示"),
-          content: Text("确定要退出登录"),
-          actions: [
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              child: Text("取消"),
-              onPressed: () {
-                Navigator.pop(context, 'Cancel');
-              }
-            ),
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              child: Text("确定"),
-              onPressed: () {
-                // 清除单例保存的内容
-                MyAccount saveAcc = new MyAccount();
-                saveAcc.removeAcc();
-                // 清除本地存储的内容
-                Storage.removeString(StorageKey.HostUrl);
-                Storage.removeString(StorageKey.Token);
-
-                Navigator.pop(context, 'Cancel');
-                // 弹出登录页面
-                eventBus.emit(EventBusKey.ShowLoginWidget);
-              }
-            )
-          ],
-        );
-      }
-    );
-  }
 
   Widget settingWidget() {
     return ListView(

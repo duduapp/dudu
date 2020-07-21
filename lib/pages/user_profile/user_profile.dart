@@ -3,8 +3,8 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extend;
 import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/models/json_serializable/media_attachment.dart';
-import 'package:fastodon/models/my_account.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
+import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/media/photo_gallery.dart';
 import 'package:fastodon/pages/status/new_status.dart';
@@ -28,7 +28,7 @@ import 'package:provider/provider.dart';
 import '../setting/model/relation_ship.dart';
 
 
-MyAccount mine = new MyAccount();
+LoginedUser mine =  LoginedUser();
 
 class UserProfile extends StatefulWidget {
   UserProfile({Key key, @required this.account}) : super(key: key);
@@ -43,7 +43,7 @@ class _UserProfileState extends State<UserProfile>
     with SingleTickerProviderStateMixin {
   RelationShip relationShip;
 
-  OwnerAccount _account = mine.account;
+  OwnerAccount _account = LoginedUser().account;
   TabController _tabController;
   double _sliverExpandHeight = 10000;
   bool _getSliverExpandHeight = false;
@@ -134,7 +134,6 @@ class _UserProfileState extends State<UserProfile>
         // 关注成功
         OwnerAccount mineAccount = mine.account;
         mineAccount.followingCount = mine.account.followingCount + 1;
-        mine.setAcc(mineAccount);
       }
       setState(() {});
     }
@@ -148,7 +147,6 @@ class _UserProfileState extends State<UserProfile>
         // 取关成功
         OwnerAccount mineAccount = mine.account;
         mineAccount.followingCount = mine.account.followingCount - 1;
-        mine.setAcc(mineAccount);
       }
       setState(() {});
     }

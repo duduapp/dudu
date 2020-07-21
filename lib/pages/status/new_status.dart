@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
-import 'package:fastodon/models/my_account.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
+import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/models/vote.dart';
 import 'package:fastodon/public.dart';
@@ -77,15 +77,8 @@ class _NewStatusState extends State<NewStatus> {
     );
     super.initState();
     // 隐藏登录弹出页
-    MyAccount acc = new MyAccount();
-    OwnerAccount accMsg = acc.getAcc();
-    if (accMsg == null) {
-      _getMyAccount();
-    } else {
-      setState(() {
-        _myAcc = accMsg;
-      });
-    }
+    _myAcc = LoginedUser().account;
+
 
     if (widget.replyTo != null) {
       replyToId = widget.replyTo.id;
@@ -259,16 +252,6 @@ class _NewStatusState extends State<NewStatus> {
     return true;
   }
 
-  Future<void> _getMyAccount() async {
-    Request.get(url: Api.OwnerAccount).then((data) {
-      OwnerAccount account = OwnerAccount.fromJson(data);
-      MyAccount saveAcc = new MyAccount();
-      saveAcc.setAcc(account);
-      setState(() {
-        _myAcc = account;
-      });
-    });
-  }
 
   showToast(String str) {
     Fluttertoast.showToast(

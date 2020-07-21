@@ -1,6 +1,4 @@
-import 'package:fastodon/models/local_account.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,9 +6,9 @@ import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
 
-import 'models/user.dart';
-import 'pages/login/login.dart';
+import 'models/logined_user.dart';
 import 'pages/home_page.dart';
+import 'pages/login/login.dart';
 
 LoginedUser user = new LoginedUser();
 

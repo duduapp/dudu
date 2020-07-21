@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fastodon/models/local_account.dart';
-import 'package:fastodon/my_app.dart';
 import 'package:fastodon/pages/login/login.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/common/bottom_sheet_item.dart';

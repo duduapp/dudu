@@ -1,11 +1,10 @@
 import 'package:fastodon/models/local_account.dart';
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/models/user.dart';
+import 'package:fastodon/models/logined_user.dart';
+import 'package:fastodon/models/task_runner.dart';
 import 'package:fastodon/public.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
-import 'package:provider/provider.dart';
 
 import 'login/login.dart';
 import 'setting/setting.dart';
@@ -52,6 +51,7 @@ class _HomePageState extends State<HomePage> {
     Request.get(url: Api.VerifyToken).then((data) {
       if (data['name'] == AppConfig.ClientName) {
         eventBus.emit(EventBusKey.LoadLoginMegSuccess);
+        TaskRunner.enableNotification();
       } else {
         AppNavigate.pushAndRemoveUntil(context, Login(),
             routeType: RouterType.fade);

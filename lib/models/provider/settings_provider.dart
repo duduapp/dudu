@@ -1,8 +1,10 @@
-import 'package:fastodon/models/user.dart';
+import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/local_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:nav_router/nav_router.dart';
+import 'package:provider/provider.dart';
 
 enum SettingType {
   bool,
@@ -10,7 +12,7 @@ enum SettingType {
 }
 
 class SettingsProvider extends ChangeNotifier {
-  Map<String,dynamic> _settings = {
+  Map<String,dynamic> settings = {
   };
 
   String storageKey;
@@ -20,13 +22,23 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   load() {
-    _settings = {
+    settings = {
       'show_thumbnails':true,
       'always_show_sensitive':false,
       'always_expand_tools':false,
       'default_post_privacy':'public',
       'make_media_sensitive':false,
-      'text_scale':'1'
+      'text_scale':'1',
+
+      'show_notifications':true,
+      'show_notifications.reblog':true,
+      'show_notifications.favourite': true,
+      'show_notifications.follow_requests':true,
+      'show_notifications.follow':true,
+      'show_notifications.mention':true,
+      'show_notifications.poll':true
+
+
     };
     _loadFromStorage();
   }
@@ -39,7 +51,7 @@ class SettingsProvider extends ChangeNotifier {
     storageKey = StringUtil.accountFullAddress(user.account)+'.settings';
     var keys = await Storage.getStringList(storageKey);
     if (keys == null) {
-      await Storage.saveStringList(storageKey, _settings.keys.toList());
+      await Storage.saveStringList(storageKey, settings.keys.toList());
       return;
     }
     for (String key in keys) {
@@ -56,14 +68,14 @@ class SettingsProvider extends ChangeNotifier {
             break;
         }
         if (value != null) {
-          _settings[key] = value;
+          settings[key] = value;
         }
       }
     }
   }
 
   update(String key,dynamic value) {
-    _settings[key] = value;
+    settings[key] = value;
     if (value is String) {
       Storage.saveString('$storageKey.$key.type', 'string');
       Storage.saveString('$storageKey.$key.value', value);
@@ -77,11 +89,25 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   _saveKeys() {
-    Storage.saveStringList(storageKey, _settings.keys.toList());
+    Storage.saveStringList(storageKey, settings.keys.toList());
   }
 
   get(String key) {
-    return _settings[key];
+    return settings[key];
+  }
+
+  static SettingsProvider getCurrentContextProvider({listen = false}) {
+    return Provider.of<SettingsProvider>(navGK.currentContext,listen: listen);
+  }
+
+  static dynamic getWithCurrentContext(String key,{listen = false}) {
+    SettingsProvider provider = getCurrentContextProvider(listen: listen);
+    return provider.get(key);
+  }
+
+  static updateWithCurrentContext(String key,dynamic value) {
+    SettingsProvider provider = getCurrentContextProvider();
+    provider.update(key, value);
   }
 
 
