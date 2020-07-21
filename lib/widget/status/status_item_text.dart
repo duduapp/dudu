@@ -2,6 +2,7 @@ import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/status/status_detail.dart';
 import 'package:fastodon/public.dart';
+import 'package:fastodon/widget/common/HtmlContent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
@@ -40,14 +41,10 @@ class _StatusItemTextState extends State<StatusItemText> {
       child: Padding(
         padding: const EdgeInsets.only(top: 8),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Html(
-            data: widget.data.spoilerText.isEmpty
+          HtmlContent(
+             widget.data.spoilerText.isEmpty
                 ? widget.data.content.trim()
                 : widget.data.spoilerText.trim(),
-            blockSpacing: 0,
-            onLinkTap: (url) {
-              print('点击到的链接：' + url);
-            },
           ),
           if (widget.data.spoilerText.isNotEmpty)
             OutlineButton(
