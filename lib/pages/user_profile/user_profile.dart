@@ -27,13 +27,12 @@ import 'package:provider/provider.dart';
 
 import '../setting/model/relation_ship.dart';
 
-
-LoginedUser mine =  LoginedUser();
+LoginedUser mine = LoginedUser();
 
 class UserProfile extends StatefulWidget {
-  UserProfile({Key key, @required this.account}) : super(key: key);
+  UserProfile({Key key, this.accountId}) : super(key: key);
 
-  final OwnerAccount account;
+  final String accountId;
 
   @override
   _UserProfileState createState() => _UserProfileState();
@@ -43,7 +42,7 @@ class _UserProfileState extends State<UserProfile>
     with SingleTickerProviderStateMixin {
   RelationShip relationShip;
 
-  OwnerAccount _account = LoginedUser().account;
+  OwnerAccount _account;
   TabController _tabController;
   double _sliverExpandHeight = 10000;
   bool _getSliverExpandHeight = false;
@@ -61,10 +60,9 @@ class _UserProfileState extends State<UserProfile>
   @override
   void initState() {
     super.initState();
-    _account = widget.account;
-    if (mine.account.id != _account.id) {
-      _getRelationShuips();
-    }
+
+    _onRefreshPage(firstRefresh: true);
+
     _tabController = TabController(length: 4, vsync: this);
 
     _scrollController = ScrollController()
@@ -77,27 +75,27 @@ class _UserProfileState extends State<UserProfile>
       });
     providers.addAll([
       ResultListProvider(
-          requestUrl: Api.UersArticle(_account.id, 'exclude_replies=true'),
+          requestUrl: Api.UersArticle(widget.accountId, 'exclude_replies=true'),
           buildRow: ListViewUtil.statusRowFunction(),
           firstRefresh: true,
           dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('status_'),
           showHeader: false),
       ResultListProvider(
-          requestUrl: AccountsApi.accountStatusUrl(_account.id),
+          requestUrl: AccountsApi.accountStatusUrl(widget.accountId),
           buildRow: ListViewUtil.statusRowFunction(),
           firstRefresh: true,
           dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('replies_'),
           showHeader: false),
       ResultListProvider(
-        requestUrl:
-        AccountsApi.accountStatusUrl(_account.id, param: 'pinned=true'),
+        requestUrl: AccountsApi.accountStatusUrl(widget.accountId,
+            param: 'pinned=true'),
         buildRow: ListViewUtil.statusRowFunction(),
         firstRefresh: true,
         dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('pinned_'),
         showHeader: false,
       ),
       ResultListProvider(
-          requestUrl: AccountsApi.accountStatusUrl(_account.id,
+          requestUrl: AccountsApi.accountStatusUrl(widget.accountId,
               param: 'only_media=true'),
           buildRow: _buildGridItem,
           firstRefresh: true,
@@ -112,15 +110,7 @@ class _UserProfileState extends State<UserProfile>
             }
             return handledData;
           }),
-
     ]);
-  }
-
-  Future<void> _getRelationShuips() async {
-    var res = await AccountsApi.getRelationShip(_account.id);
-    setState(() {
-      relationShip = res;
-    });
   }
 
   Future<void> _followByid() async {
@@ -155,6 +145,7 @@ class _UserProfileState extends State<UserProfile>
   Widget headerImage(BuildContext context) {
     if (_account == null) {
       return Container(
+        color: Theme.of(context).splashColor,
         height: 200,
       );
     }
@@ -330,6 +321,11 @@ class _UserProfileState extends State<UserProfile>
         });
   }
 
+  _resetExpandHeight() {
+    _getSliverExpandHeight = false;
+    _sliverExpandHeight = 10000;
+  }
+
   Widget userHeader(BuildContext context) {
     return Container(
       child: MeasureSize(
@@ -384,26 +380,28 @@ class _UserProfileState extends State<UserProfile>
                       SizedBox(
                         height: 20,
                       ),
-                      Text(
-                        StringUtil.displayName(_account),
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        '@' + _account.acct,
-                      ),
-                      Container(
-                          width: Screen.width(context) - 60,
-                          child: Center(
-                            child: Html(
-                              data: _account.note,
-                            ),
-                          )),
-                      headerFields(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      headerFollowsAndFollowers(),
+                      if (_account != null) ...[
+                        Text(
+                          StringUtil.displayName(_account),
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          '@' + _account.acct,
+                        ),
+                        Container(
+                            width: Screen.width(context) - 60,
+                            child: Center(
+                              child: Html(
+                                data: _account.note,
+                              ),
+                            )),
+                        headerFields(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        headerFollowsAndFollowers()
+                      ],
                       SizedBox(
                         height: 10,
                       )
@@ -423,7 +421,10 @@ class _UserProfileState extends State<UserProfile>
                         shape: BoxShape.rectangle,
                       ),
                       child: Avatar(
-                        url: _account.avatar,
+                        url: _account != null
+                            ? _account.avatar
+                            : LoginedUser().getHost() +
+                                '/avatars/original/missing.png',
                       ),
                     )),
               ]),
@@ -453,7 +454,7 @@ class _UserProfileState extends State<UserProfile>
             flex: 7,
             child: Html(
               data: filed['value'],
-        //      shrinkToFit: true,
+              //      shrinkToFit: true,
             ),
           )
         ],
@@ -466,74 +467,79 @@ class _UserProfileState extends State<UserProfile>
 
   Widget headerFollowsAndFollowers() {
     return DefaultTextStyle(
-      style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-          color: Theme.of(context).accentColor),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          InkWell(
-            onTap: () => _tabController.animateTo(0),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Theme.of(context).accentColor),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text(_account.statusesCount.toString()),
-                SizedBox(
-                  width: 1,
+                InkWell(
+                  onTap: () => _tabController.animateTo(0),
+                  child: Row(
+                    children: <Widget>[
+                      Text(_account.statusesCount.toString()),
+                      SizedBox(
+                        width: 1,
+                      ),
+                      Text('嘟文'),
+                    ],
+                  ),
                 ),
-                Text('嘟文'),
+                SizedBox(
+                  width: 10,
+                ),
+                //   Text('|'),
+                SizedBox(
+                  width: 10,
+                ),
+                InkWell(
+                  onTap: () =>
+                      AppNavigate.push(context, UserFollowing(_account.id)),
+                  child: Row(
+                    children: <Widget>[
+                      Text(_account.followingCount.toString()),
+                      SizedBox(
+                        width: 1,
+                      ),
+                      Text('关注'),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                //   Text('|'),
+                SizedBox(
+                  width: 10,
+                ),
+                InkWell(
+                  onTap: () =>
+                      AppNavigate.push(context, UserFollowers(_account.id)),
+                  child: Row(
+                    children: <Widget>[
+                      Text(_account.followersCount.toString()),
+                      SizedBox(
+                        width: 1,
+                      ),
+                      Text('粉丝'),
+                    ],
+                  ),
+                )
               ],
             ),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          //   Text('|'),
-          SizedBox(
-            width: 10,
-          ),
-          InkWell(
-            onTap: () => AppNavigate.push(context, UserFollowing(_account.id)),
-            child: Row(
-              children: <Widget>[
-                Text(_account.followingCount.toString()),
-                SizedBox(
-                  width: 1,
-                ),
-                Text('关注'),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          //   Text('|'),
-          SizedBox(
-            width: 10,
-          ),
-          InkWell(
-            onTap: () => AppNavigate.push(context, UserFollowers(_account.id)),
-            child: Row(
-              children: <Widget>[
-                Text(_account.followersCount.toString()),
-                SizedBox(
-                  width: 1,
-                ),
-                Text('粉丝'),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
+          );
   }
 
   Widget tabText(String text) {
     return Container(
-     padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Text(
         text,
-        style: TextStyle(fontSize: 13, color: Theme.of(context).accentColor,fontWeight:FontWeight.bold),
+        style: TextStyle(
+            fontSize: 13,
+            color: Theme.of(context).accentColor,
+            fontWeight: FontWeight.bold),
       ),
     );
     // return Tab(text: text,);
@@ -603,15 +609,15 @@ class _UserProfileState extends State<UserProfile>
     }
   }
 
-  Future<void> _onRefreshPage() async {
-    providers[_tabController.index]?.refresh();
-    var newAccount = await AccountsApi.getAccount(_account.id);
-    var newRelationShip = await AccountsApi.getRelationShip(_account.id);
+  Future<void> _onRefreshPage({bool firstRefresh = false}) async {
+    if (!firstRefresh) providers[_tabController.index]?.refresh();
+    var newAccount = await AccountsApi.getAccount(widget.accountId);
+    var newRelationShip = await AccountsApi.getRelationShip(widget.accountId);
     setState(() {
       _account = newAccount ?? _account;
       relationShip = newRelationShip ?? relationShip;
-      _getSliverExpandHeight = false;
-      _sliverExpandHeight = 10000;
+
+      _resetExpandHeight();
     });
   }
 
@@ -628,28 +634,33 @@ class _UserProfileState extends State<UserProfile>
           headerSliverBuilder: (context, boxIsScrolled) {
             return [
               SliverAppBar(
-
                 titleSpacing: 0,
                 title: _showAccountInfoInAppBar
-                    ? Container(
-                  width: double.infinity,
-                  color: Theme.of(context).backgroundColor,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              StringUtil.displayName(_account),
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
+                    ? _account == null
+                        ? Container()
+                        : Container(
+                            width: double.infinity,
+                            color: Theme.of(context).backgroundColor,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  _account != null
+                                      ? StringUtil.displayName(_account)
+                                      : '',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  '@' + _account.acct,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal),
+                                )
+                              ],
                             ),
-                            Text(
-                              '@' + _account.acct,
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.normal),
-                            )
-                          ],
-                        ),
-                    )
+                          )
                     : Container(),
                 centerTitle: false,
                 pinned: true,

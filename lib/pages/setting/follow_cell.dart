@@ -17,7 +17,7 @@ class _FollowCellState extends State<FollowCell> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        AppNavigate.push(context, UserProfile(account: widget.item));
+        AppNavigate.push(context, UserProfile(accountId: widget.item.id));
       },
       child: Container(
         color: MyColor.widgetDefaultColor,

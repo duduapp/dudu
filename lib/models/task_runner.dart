@@ -13,6 +13,8 @@ class TaskRunner {
   static StreamSubscription userNotificationEvents;
 
   static enableNotification() async {
+    var settings = SettingsProvider.getCurrentContextProvider().settings;
+    if (!settings['show_notifications']) return;
     userNotificationEvents?.cancel();
     
     LoginedUser user = LoginedUser();
@@ -23,7 +25,7 @@ class TaskRunner {
       if (message.name == 'notification') {
         NotificationItem item =
             NotificationItem.fromJson(json.decode(message.data));
-        var settings = SettingsProvider.getCurrentContextProvider().settings;
+
 
         if (settings['show_notifications'] == true && settings['show_notifications.${item.type}'] == true) {
           String title = '';

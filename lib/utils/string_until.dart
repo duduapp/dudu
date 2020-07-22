@@ -29,6 +29,10 @@ class StringUtil {
     return htmlText?.replaceAll(exp, '');
   }
 
+  static String urlToFullAccountAddress(String url) {
+
+  }
+
   static bool isUrl(String str) {
     return Uri.parse(str).isAbsolute;
   }

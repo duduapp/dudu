@@ -21,14 +21,14 @@ class StatusItemAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: noNavigateOnClick ? null : (){if(createdAt == null) AppNavigate.push(context, UserProfile(account: account));}, // 用作搜索页时，整个页面可点击
+      onTap: noNavigateOnClick ? null : (){if(createdAt == null) AppNavigate.push(context, UserProfile(accountId:account.id));}, // 用作搜索页时，整个页面可点击
       child: Row(
         children: <Widget>[
           Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
               child: InkWell(
                 onTap: noNavigateOnClick ? null : () {
-                  AppNavigate.push(context, UserProfile(account: account));
+                  AppNavigate.push(context, UserProfile(accountId: account.id));
                 },
                 child: Avatar(url: account.avatarStatic),
               )),
