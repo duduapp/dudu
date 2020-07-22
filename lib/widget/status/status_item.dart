@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
+import 'package:fastodon/pages/user_profile/user_profile.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/status/status_item_account.dart';
 import 'package:fastodon/widget/status/status_item_content.dart';
@@ -132,14 +133,17 @@ class _StatusItemState extends State<StatusItem> {
       str = '${StringUtil.displayName(widget.item.account)}转嘟了';
     }
 
-    return (icon != null && str != null) ? Container(
-      padding: EdgeInsets.only(top: 8),
-      child: Row(
-        children: <Widget>[
-          Icon(icon),
-          SizedBox(width: 5,),
-          Text(str)
-        ],
+    return (icon != null && str != null) ? InkWell(
+      onTap: () => AppNavigate.push(context, UserProfile(accountId: widget.item.account.id,)),
+      child: Container(
+        padding: EdgeInsets.only(top: 8),
+        child: Row(
+          children: <Widget>[
+            Icon(icon,color: Theme.of(context).buttonColor,),
+            SizedBox(width: 5,),
+            Text(str,)
+          ],
+        ),
       ),
     ) : Container();
   }

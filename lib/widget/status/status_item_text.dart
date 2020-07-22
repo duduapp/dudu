@@ -1,10 +1,10 @@
+import 'package:expand_widget/expand_widget.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/status/status_detail.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/common/html_content.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 
 class StatusItemText extends StatefulWidget {
@@ -52,9 +52,8 @@ class _StatusItemTextState extends State<StatusItemText> {
               onPressed: _onShowMorePressed,
             ),
           if (showMore)
-            Html(
-              data: widget.data.content,
-              blockSpacing: 0,
+            HtmlContent(
+               widget.data.content,
             )
         ]),
       ),

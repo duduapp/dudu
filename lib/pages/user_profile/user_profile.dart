@@ -15,13 +15,13 @@ import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/utils/list_view.dart';
 import 'package:fastodon/widget/common/bottom_sheet_item.dart';
 import 'package:fastodon/widget/common/colored_tab_bar.dart';
+import 'package:fastodon/widget/common/html_content.dart';
 import 'package:fastodon/widget/common/measure_size.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:fastodon/widget/other/avatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
 
@@ -392,8 +392,8 @@ class _UserProfileState extends State<UserProfile>
                         Container(
                             width: Screen.width(context) - 60,
                             child: Center(
-                              child: Html(
-                                data: _account.note,
+                              child: HtmlContent(
+                                _account.note,
                               ),
                             )),
                         headerFields(),
@@ -452,8 +452,8 @@ class _UserProfileState extends State<UserProfile>
           ),
           Expanded(
             flex: 7,
-            child: Html(
-              data: filed['value'],
+            child: HtmlContent(
+               filed['value'],
               //      shrinkToFit: true,
             ),
           )

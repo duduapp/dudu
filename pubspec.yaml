@@ -26,8 +26,6 @@ dependencies:
   flutter_spinkit: ^4.1.2+1
   fluttertoast: ^3.0.1
   flutter_webview_plugin: ^0.3.11
-  flutter_html:
-    path: ../flutter_html/
   url_launcher: ^5.0.2
   video_player: ^0.10.0+4
   image_picker: ^0.6.6+1
