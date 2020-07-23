@@ -1,5 +1,6 @@
 import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
+import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/user_profile/user_profile.dart';
 import 'package:fastodon/utils/app_navigate.dart';
 import 'package:fastodon/utils/date_until.dart';
@@ -52,13 +53,10 @@ class StatusItemAccount extends StatelessWidget {
                       ),
                       if (createdAt != null)
                       Flexible(
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 15),
-                          child: Text(DateUntil.dateTime(createdAt),
-                              style: TextStyle(
-                                  fontSize: 13, color: MyColor.greyText),
-                              overflow: TextOverflow.ellipsis),
-                        ),
+                        child: Text(DateUntil.dateTime(createdAt),
+                            style: TextStyle(
+                                fontSize: 13, color: MyColor.greyText),
+                            overflow: TextOverflow.ellipsis),
                       )
                     ],
                   ),
@@ -86,43 +84,34 @@ class SubStatusItemHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textSclae = SettingsProvider.getWithCurrentContext('text_scale');
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+//          Expanded(child: Text(StringUtil.displayName(data.account),maxLines: 1,overflow: TextOverflow.ellipsis,)),
+//          Expanded(child: Text( '@' + data.account.username,maxLines: 1,overflow: TextOverflow.ellipsis)),
+//          Spacer(),
+
           Expanded(
             child:
             RichText(
               maxLines: 1,
+              textScaleFactor: 1.0 + 0.18 * double.parse(textSclae),
               text: TextSpan(
                 text: StringUtil.displayName(data.account)+' ',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold,color: Colors.grey[850]),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: Colors.grey[850]),
                 children: <TextSpan>[
-                  TextSpan(text: '@' + data.account.username, style: TextStyle(fontSize: 13, color: MyColor.greyText))
+                  TextSpan(text: '@' + data.account.username, style: TextStyle(fontSize: 15, color: Theme.of(context).splashColor))
                 ]
               ),
               overflow: TextOverflow.ellipsis,
             )
-//            Row(
-//              children: <Widget>[
-//                Text(StringUtil.displayName(data.account),
-//                    style: TextStyle(
-//                        fontSize: 16, fontWeight: FontWeight.bold),
-//                    overflow: TextOverflow.ellipsis),
-//                SizedBox(width: 2,),
-//                Text('@' + data.account.username,
-//                    style:
-//                    TextStyle(fontSize: 13, color: MyColor.greyText),overflow: TextOverflow.ellipsis),
-//              ],
-//            ),
           ),
 
-          Padding(
-            padding: EdgeInsets.only(right: 15),
-            child: Text(DateUntil.dateTime(data.createdAt),
-                style: TextStyle(fontSize: 13, color: MyColor.greyText),
-                overflow: TextOverflow.ellipsis),
-          )
+          Text(DateUntil.dateTime(data.createdAt),
+              style: TextStyle(fontSize: 13, color: MyColor.greyText),
+              overflow: TextOverflow.ellipsis)
         ],
       ),
     );

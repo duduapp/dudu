@@ -55,6 +55,7 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
   }
 
   _onLinkTap(String link, dom.Node node) {
+    var linkText = node.nodes[0]?.text;
     var htmlClass = node.attributes['class'] ?? '';
     if (htmlClass.contains('mention')) {
       if (widget.statusData != null) {
@@ -71,19 +72,30 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
             }
           }
         }
+//        if (htmlClass.contains('hashtag')) {
+//          List tags = widget.statusData.tags;
+//          var tagInUrl = link.substring(link.lastIndexOf('/') + 1);
+//          for (var tag in tags) {
+//            if (tag['name'] == tagInUrl.toLowerCase()) {
+//              AppNavigate.push(null, HashtagTimeline(tagInUrl));
+//              return;
+//            }
+//          }
+//        }
+      } else {
         if (htmlClass.contains('hashtag')) {
-          List tags = widget.statusData.tags;
           var tagInUrl = link.substring(link.lastIndexOf('/') + 1);
-          for (var tag in tags) {
-            if (tag['name'] == tagInUrl.toLowerCase()) {
-              AppNavigate.push(null, HashtagTimeline(tagInUrl));
-              return;
-            }
-          }
+          AppNavigate.push(null, HashtagTimeline(tagInUrl));
+          return;
         }
       }
     } else {
-      AppNavigate.push(null, InnerBrowser(link));
+      if (linkText.startsWith('#')) {
+        AppNavigate.push(null, HashtagTimeline(linkText.substring(1)));
+        return;
+      }
     }
+    AppNavigate.push(null, InnerBrowser(link));
+
   }
 }

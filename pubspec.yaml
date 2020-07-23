@@ -47,6 +47,7 @@ dependencies:
   flutter_typeahead: ^1.8.5
   rich_text_controller: ^1.1.0
   flutter_local_notifications: ^1.4.4+2
+  intl: ^0.16.1
 
 
 

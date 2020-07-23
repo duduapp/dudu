@@ -58,12 +58,7 @@ class _NewStatusState extends State<NewStatus> {
   var focusNode = new FocusNode();
 
   int counter = 0;
-  static const Map<String, IconData> visibilityIcons = {
-    'public': Icons.public,
-    'unlisted': Icons.lock_open,
-    'private': Icons.lock_outline,
-    'direct': Icons.mail_outline
-  };
+
 
   @override
   void initState() {
@@ -107,7 +102,7 @@ class _NewStatusState extends State<NewStatus> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       SettingsProvider provider = Provider.of<SettingsProvider>(context,listen: false);
       _visibility =  provider.get('default_post_privacy');
-      _articleRange = Icon(visibilityIcons[_visibility]);
+      _articleRange = Icon(AppConfig.visibilityIcons[_visibility]);
       sensitive = provider.get('make_media_sensitive');
     });
   }
@@ -160,7 +155,7 @@ class _NewStatusState extends State<NewStatus> {
       _hasWarning = prefs.getBool(_spKey('has_warning'));
       _visibility = prefs.getString(_spKey('visibility'));
       _articleRange = Icon(
-        visibilityIcons[_visibility],
+        AppConfig.visibilityIcons[_visibility],
         size: 30,
       );
       images = prefs.getStringList(_spKey('images'));
@@ -192,7 +187,7 @@ class _NewStatusState extends State<NewStatus> {
     _warningController.text = params['spoiler_text'];
     _visibility = params['visibility'];
     _articleRange = Icon(
-      visibilityIcons[_visibility],
+      AppConfig.visibilityIcons[_visibility],
       size: 30,
     );
     for (var media in info['media_attachments']) {

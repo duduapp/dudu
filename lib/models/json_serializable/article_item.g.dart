@@ -6,7 +6,6 @@ part of 'article_item.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-
 StatusItemData _$StatusItemDataFromJson(Map<String, dynamic> json) {
   return StatusItemData(
       json['id'] as String,
@@ -82,11 +81,16 @@ Map<String, dynamic> _$StatusItemDataToJson(StatusItemData instance) =>
     };
 
 Application _$ApplicationFromJson(Map<String, dynamic> json) {
-  return Application(json['name'] as String);
+  return Application(json['name'] as String, json['website'] as String,
+      json['vapid_key'] as String);
 }
 
 Map<String, dynamic> _$ApplicationToJson(Application instance) =>
-    <String, dynamic>{'name': instance.name};
+    <String, dynamic>{
+      'name': instance.name,
+      'website': instance.website,
+      'vapid_key': instance.vapid_key
+    };
 
 Card _$CardFromJson(Map<String, dynamic> json) {
   return Card(

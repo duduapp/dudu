@@ -25,9 +25,9 @@ part 'notificate_item.g.dart';
 
   NotificationItem(this.id,this.type,this.createdAt,this.account,this.status,);
 
-  factory NotificationItem.fromJson(Map<String, dynamic> srcJson) => _$NotificateItemFromJson(srcJson);
+  factory NotificationItem.fromJson(Map<String, dynamic> srcJson) => _$NotificationItemFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$NotificateItemToJson(this);
+  Map<String, dynamic> toJson() => _$NotificationItemToJson(this);
 
 }
 

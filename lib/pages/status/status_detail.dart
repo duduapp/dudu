@@ -2,8 +2,10 @@
 
 import 'package:fastodon/api/status_api.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
+import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/utils/list_view.dart';
 import 'package:fastodon/widget/status/status_item.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
@@ -42,34 +44,30 @@ class _StatusDetailState extends State<StatusDetail> {
       _afterLayout("_");
     }
     if (_data.isEmpty) {
-      return StatusItem(item:widget.data);
+      return StatusItem(item:widget.data,primary:true,);
     }
     if (idx < _data['ancestors'].length) {
       return _buildStatusItem(StatusItemData.fromJson(_data['ancestors'][idx]),subStatus: true);
 
     } else if (idx == _data['ancestors'].length) {
-      return _buildStatusItem(widget.data);
+      return _buildStatusItem(widget.data,primary: true);
     } else {
       return _buildStatusItem(StatusItemData.fromJson(_data['descendants'][idx-_data['ancestors'].length-1]),subStatus: true,);
     }
 
   }
 
-  Widget _buildStatusItem(StatusItemData data,{bool subStatus}) {
+  Widget _buildStatusItem(StatusItemData data,{bool subStatus,bool primary}) {
     var gk = GlobalKey();
     keys.add(gk);
     return Container(
       key: gk,
-      child: StatusItem(item: data,subStatus: subStatus,),
+      child: StatusItem(item: data,subStatus: subStatus,primary: primary,),
     );
   }
   
-  Future<void> _onRefresh() {
-
-  }
-
-  Future<void> _onLoad() {
-
+  Future<void> _onRefresh() async{
+    await getData();
   }
 
   get childCount {
@@ -104,26 +102,34 @@ class _StatusDetailState extends State<StatusDetail> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance
         .addPostFrameCallback(_afterLayout);
+    var scale = SettingsProvider.getWithCurrentContext('text_scale');
     return Scaffold(
-      appBar: AppBar(),
-      body: EasyRefresh.custom(
-        slivers: [
+      appBar: AppBar(
+        title: Text('嘟文'),
+        centerTitle: false,
+      ),
+      body: MediaQuery(
+        data: MediaQuery.of(context)
+            .copyWith(textScaleFactor: 1.0 + 0.18 * double.parse(scale)),
+        child: EasyRefresh.custom(
+          slivers: [
 
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-                    (context,idx) {
-                  return _buildRow(idx);
-                },
-                childCount: childCount
-            ),
-          )
-        ],
-        header: ListViewUtil.getDefaultHeader(context),
-        footer: ListViewUtil.getDefaultFooter(context),
-        controller: _controller,
-        scrollController: _scrollController,
-        onRefresh: _onRefresh,
-        onLoad: _onLoad,
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                      (context,idx) {
+                    return _buildRow(idx);
+                  },
+                  childCount: childCount
+              ),
+            )
+          ],
+          header: ListViewUtil.getDefaultHeader(context),
+          footer: null,
+          controller: _controller,
+          scrollController: _scrollController,
+          onRefresh: _onRefresh,
+          onLoad: null,
+        ),
       ),
     );
   }

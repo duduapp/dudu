@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class DateUntil {
   static String dateTime(String timestamp) {
     DateTime now = new DateTime.now();
@@ -16,5 +18,10 @@ class DateUntil {
     } else {
       return '刚刚';
     }
+  }
+
+  static String absoluteTime(String datetime) {
+    var local =  DateFormat('yyyy-MM-ddTHH:mm:ssZ').parseUTC(datetime).toLocal();
+    return DateFormat('yyyy-MM-dd HH:mm').format(local);
   }
 }

@@ -97,8 +97,8 @@ class _StatusItemActionState extends State<StatusItemAction> {
         ? Api.FavouritesArticle(widget.item.id)
         : Api.UnFavouritesArticle(widget.item.id);
     try {
-      StatusItemData data =
-          StatusItemData.fromJson(await Request.post(url: url,showDialog: false));
+      StatusItemData data = StatusItemData.fromJson(
+          await Request.post(url: url, showDialog: false));
       widget.item.favourited = data.favourited;
     } catch (e) {
       print(e);
@@ -108,11 +108,11 @@ class _StatusItemActionState extends State<StatusItemAction> {
   @override
   Widget build(BuildContext context) {
     OwnerAccount myAccount = LoginedUser().account;
-    var buttonColor = Theme.of(context).splashColor;
+    var splashColor = Theme.of(context).splashColor;
     return Container(
       height: 38,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           InkWell(
             onTap: () {
@@ -122,42 +122,47 @@ class _StatusItemActionState extends State<StatusItemAction> {
               children: <Widget>[
                 Icon(
                   Icons.reply,
-                  color: buttonColor,
+                  color: splashColor,
                   size: 20,
                 ),
                 SizedBox(width: 3),
                 Text(
                   '${widget.item.repliesCount}',
-                  style: TextStyle(color: buttonColor, fontSize: 12),
+                  style: TextStyle(color: splashColor, fontSize: 12),
                 ),
               ],
             ),
           ),
           Spacer(),
           Row(children: [
-            LikeButton(
-              likeBuilder: (bool isLiked) {
-                return isLiked
-                    ? Icon(
-                        Icons.repeat_one,
-                        color: Colors.blue[800],
-                      )
-                    : Icon(
-                        Icons.repeat,
-                        color: buttonColor,
-                        size: 20,
-                      );
-              },
-              isLiked: widget.item.reblogged,
-              bubblesColor: BubblesColor(
-                  dotPrimaryColor: Colors.blue[700],
-                  dotSecondaryColor: Colors.blue[300]),
-              circleColor:
-                  CircleColor(start: Colors.blue[300], end: Colors.blue[700]),
-              onTap: _onPressReblog,
-            ),
-            Text('${widget.item.reblogsCount}',
-                style: TextStyle(color: buttonColor, fontSize: 12))
+            if (widget.item.visibility == 'private') Icon(Icons.lock,color: splashColor,size: 20,),
+            if (widget.item.visibility == 'direct') Icon(Icons.mail,color: splashColor,size: 20,),
+            if (widget.item.visibility != 'private' &&
+                widget.item.visibility != 'direct') ...[
+              LikeButton(
+                likeBuilder: (bool isLiked) {
+                  return isLiked
+                      ? Icon(
+                          Icons.repeat_one,
+                          color: Colors.blue[800],
+                        )
+                      : Icon(
+                          Icons.repeat,
+                          color: splashColor,
+                          size: 20,
+                        );
+                },
+                isLiked: widget.item.reblogged,
+                bubblesColor: BubblesColor(
+                    dotPrimaryColor: Colors.blue[700],
+                    dotSecondaryColor: Colors.blue[300]),
+                circleColor:
+                    CircleColor(start: Colors.blue[300], end: Colors.blue[700]),
+                onTap: _onPressReblog,
+              ),
+              Text('${widget.item.reblogsCount}',
+                  style: TextStyle(color: splashColor, fontSize: 12))
+            ]
           ]),
           Spacer(),
           LikeButton(
@@ -169,7 +174,7 @@ class _StatusItemActionState extends State<StatusItemAction> {
                     )
                   : Icon(
                       Icons.star_border,
-                      color: buttonColor,
+                      color: splashColor,
                       size: 20,
                     );
             },
@@ -185,7 +190,7 @@ class _StatusItemActionState extends State<StatusItemAction> {
                   ? Icon(Icons.bookmark, color: Colors.green[800])
                   : Icon(
                       Icons.bookmark_border,
-                      color: buttonColor,
+                      color: splashColor,
                       size: 20,
                     );
             },
@@ -202,12 +207,11 @@ class _StatusItemActionState extends State<StatusItemAction> {
             offset: Offset(0, 35),
             icon: Icon(
               Icons.more_horiz,
-              color: buttonColor,
+              color: splashColor,
               size: 20,
             ),
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              PopupMenuItem<String>(
-                  value: 'copy_url', child: new Text('复制链接')),
+              PopupMenuItem<String>(value: 'copy_url', child: new Text('复制链接')),
               PopupMenuItem<String>(
                   value: 'copy_content', child: new Text('复制嘟文')),
               PopupMenuItem<String>(value: 'hide', child: new Text('隐藏')),
@@ -245,9 +249,13 @@ class _StatusItemActionState extends State<StatusItemAction> {
                       onConfirm: _onPressRemove);
                   break;
                 case 'report':
-                  AppNavigate.push(context, UserReport(account: widget.item.account,fromStatusId: widget.item.id,));
+                  AppNavigate.push(
+                      context,
+                      UserReport(
+                        account: widget.item.account,
+                        fromStatusId: widget.item.id,
+                      ));
                   break;
-
               }
             },
           )

@@ -6,7 +6,7 @@ part of 'notificate_item.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-NotificationItem _$NotificateItemFromJson(Map<String, dynamic> json) {
+NotificationItem _$NotificationItemFromJson(Map<String, dynamic> json) {
   return NotificationItem(
       json['id'] as String,
       json['type'] as String,
@@ -19,7 +19,7 @@ NotificationItem _$NotificateItemFromJson(Map<String, dynamic> json) {
           : StatusItemData.fromJson(json['status'] as Map<String, dynamic>));
 }
 
-Map<String, dynamic> _$NotificateItemToJson(NotificationItem instance) =>
+Map<String, dynamic> _$NotificationItemToJson(NotificationItem instance) =>
     <String, dynamic>{
       'id': instance.id,
       'type': instance.type,

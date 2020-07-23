@@ -90,35 +90,34 @@ class StatusItemData extends Object {
   Poll poll;
 
   StatusItemData(
-    this.id,
-    this.createdAt,
-    this.inReplyToId,
-    this.inReplyToAccountId,
-    this.sensitive,
-    this.spoilerText,
-    this.visibility,
-    this.language,
-    this.uri,
-    this.content,
-    this.text,
-    this.url,
-    this.repliesCount,
-    this.reblogsCount,
-    this.favouritesCount,
-    this.favourited,
-    this.reblogged,
-    this.muted,
-    this.bookmarked,
-    this.reblog,
-    this.application,
-    this.account,
-    this.mediaAttachments,
-    this.mentions,
-    this.tags,
-    this.emojis,
-    this.card,
-    this.poll
-  );
+      this.id,
+      this.createdAt,
+      this.inReplyToId,
+      this.inReplyToAccountId,
+      this.sensitive,
+      this.spoilerText,
+      this.visibility,
+      this.language,
+      this.uri,
+      this.content,
+      this.text,
+      this.url,
+      this.repliesCount,
+      this.reblogsCount,
+      this.favouritesCount,
+      this.favourited,
+      this.reblogged,
+      this.muted,
+      this.bookmarked,
+      this.reblog,
+      this.application,
+      this.account,
+      this.mediaAttachments,
+      this.mentions,
+      this.tags,
+      this.emojis,
+      this.card,
+      this.poll);
 
   factory StatusItemData.fromJson(Map<String, dynamic> srcJson) =>
       _$StatusItemDataFromJson(srcJson);
@@ -131,9 +130,13 @@ class Application extends Object {
   @JsonKey(name: 'name')
   String name;
 
-  Application(
-    this.name,
-  );
+  @JsonKey(name: 'website')
+  String website;
+
+  @JsonKey(name: 'vapid_key')
+  String vapid_key;
+
+  Application(this.name, this.website, this.vapid_key);
 
   factory Application.fromJson(Map<String, dynamic> srcJson) =>
       _$ApplicationFromJson(srcJson);
@@ -233,7 +236,16 @@ class Poll extends Object {
   @JsonKey(name: 'emojis')
   List<dynamic> emojis;
 
-  Poll({this.id,this.expiresAt,this.expired,this.multiple,this.votesCount,this.voted,this.ownVotes,this.options,this.emojis});
+  Poll(
+      {this.id,
+      this.expiresAt,
+      this.expired,
+      this.multiple,
+      this.votesCount,
+      this.voted,
+      this.ownVotes,
+      this.options,
+      this.emojis});
 
   factory Poll.fromJson(Map<String, dynamic> srcJson) =>
       _$PollFromJson(srcJson);

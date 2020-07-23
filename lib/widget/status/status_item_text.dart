@@ -1,4 +1,4 @@
-import 'package:expand_widget/expand_widget.dart';
+
 import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/status/status_detail.dart';
@@ -9,8 +9,9 @@ import 'package:provider/provider.dart';
 
 class StatusItemText extends StatefulWidget {
   final StatusItemData data;
+  final navigateToDetail;
 
-  StatusItemText(this.data);
+  StatusItemText(this.data,{this.navigateToDetail = false});
 
   @override
   _StatusItemTextState createState() => _StatusItemTextState();
@@ -37,7 +38,7 @@ class _StatusItemTextState extends State<StatusItemText> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => AppNavigate.push(context, StatusDetail(widget.data)),
+      onTap: widget.navigateToDetail ?() => AppNavigate.push(context, StatusDetail(widget.data)):null,
       child: Padding(
         padding: const EdgeInsets.only(top: 8),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
