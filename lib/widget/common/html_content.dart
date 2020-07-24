@@ -45,6 +45,7 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
           onLinkTap: _onLinkTap,
           padding: EdgeInsets.all(0),
           blockSpacing: 5,
+          emojis: widget.statusData.emojis,
         ),
         if (needExpand)
           OutlineButton(child: Text(expanded?'折叠内容':'显示更多'),onPressed: () {setState(() {
@@ -72,16 +73,16 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
             }
           }
         }
-//        if (htmlClass.contains('hashtag')) {
-//          List tags = widget.statusData.tags;
-//          var tagInUrl = link.substring(link.lastIndexOf('/') + 1);
-//          for (var tag in tags) {
-//            if (tag['name'] == tagInUrl.toLowerCase()) {
-//              AppNavigate.push(null, HashtagTimeline(tagInUrl));
-//              return;
-//            }
-//          }
-//        }
+        if (htmlClass.contains('hashtag')) {
+          List tags = widget.statusData.tags;
+          var tagInUrl = link.substring(link.lastIndexOf('/') + 1);
+          for (var tag in tags) {
+            if (tag['name'] == tagInUrl.toLowerCase()) {
+              AppNavigate.push(null, HashtagTimeline(tagInUrl));
+              return;
+            }
+          }
+        }
       } else {
         if (htmlClass.contains('hashtag')) {
           var tagInUrl = link.substring(link.lastIndexOf('/') + 1);

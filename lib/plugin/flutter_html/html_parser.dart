@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:fastodon/widget/status/text_with_emoji.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
+import 'package:nav_router/nav_router.dart';
 
 typedef CustomRender = Widget Function(dom.Node node, List<Widget> children);
 typedef CustomTextStyle = TextStyle Function(
@@ -11,7 +13,7 @@ typedef CustomTextStyle = TextStyle Function(
   TextStyle baseStyle,
 );
 typedef CustomEdgeInsets = EdgeInsets Function(dom.Node node);
-typedef OnLinkTap = void Function(String url,dom.Node node);
+typedef OnLinkTap = void Function(String url, dom.Node node);
 
 const OFFSET_TAGS_FONT_SIZE_FACTOR =
     0.7; //The ratio of the parent font for each of the offset tags: sup or sub
@@ -43,7 +45,7 @@ class LinkTextSpan extends TextSpan {
             children: children ?? <TextSpan>[],
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                onLinkTap(url,null);
+                onLinkTap(url, null);
               });
 }
 
@@ -65,7 +67,7 @@ class LinkBlock extends Container {
             margin: margin,
             child: GestureDetector(
                 onTap: () {
-                  onLinkTap(url,null);
+                  onLinkTap(url, null);
                 },
                 child: Column(
                   children: children,
@@ -824,19 +826,19 @@ class HtmlRichTextParser extends StatelessWidget {
 }
 
 class HtmlOldParser extends StatelessWidget {
-  HtmlOldParser({
-    @required this.width,
-    this.onLinkTap,
-    this.renderNewlines = false,
-    this.customRender,
-    this.blockSpacing,
-    this.html,
-    this.onImageError,
-    this.linkStyle = const TextStyle(
-        decoration: TextDecoration.underline,
-        color: Colors.blueAccent,
-        decorationColor: Colors.blueAccent),
-  });
+  HtmlOldParser(
+      {@required this.width,
+      this.onLinkTap,
+      this.renderNewlines = false,
+      this.customRender,
+      this.blockSpacing,
+      this.html,
+      this.onImageError,
+      this.linkStyle = const TextStyle(
+          decoration: TextDecoration.underline,
+          color: Colors.blueAccent,
+          decorationColor: Colors.blueAccent),
+      this.emojis});
 
   final double width;
   final OnLinkTap onLinkTap;
@@ -846,6 +848,7 @@ class HtmlOldParser extends StatelessWidget {
   final String html;
   final ImageErrorListener onImageError;
   final TextStyle linkStyle;
+  final List emojis;
 
   static const _supportedElements = [
     "a",
@@ -971,7 +974,7 @@ class HtmlOldParser extends StatelessWidget {
               onTap: () {
                 if (node.attributes.containsKey('href') && onLinkTap != null) {
                   String url = node.attributes['href'];
-                  onLinkTap(url,node);
+                  onLinkTap(url, node);
                 }
               });
         case "abbr":
@@ -1703,9 +1706,18 @@ class HtmlOldParser extends StatelessWidget {
       //Temp fix for https://github.com/flutter/flutter/issues/736
       if (finalText.endsWith(" ")) {
         return Container(
-            padding: EdgeInsets.only(right: 2.0), child: Text(finalText));
+            padding: EdgeInsets.only(right: 2.0),
+            child: TextWithEmoji(
+                text: finalText,
+                emojis: emojis,
+                maxLines: 99999,
+            ));
       } else {
-        return Text(finalText);
+        return TextWithEmoji(
+            text: finalText,
+            emojis: emojis,
+            maxLines: 99999,
+        );
       }
     }
     return Wrap();

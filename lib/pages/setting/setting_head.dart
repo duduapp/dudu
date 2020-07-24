@@ -13,12 +13,12 @@ class SettingHead extends StatelessWidget {
   SettingHead({Key key, this.account}) : super(key: key);
   final OwnerAccount account;
 
-  Widget headerWidget() {
+  Widget userStatistics(BuildContext context) {
     if (account == null) {
       return Container();
     }
     return Container(
-      color: Theme.of(navGK.currentContext).primaryColor,
+      color: Theme.of(context).primaryColor,
       padding: const EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -92,7 +92,7 @@ class SettingHead extends StatelessWidget {
             ],
           ),
         ),
-        headerWidget()
+        userStatistics(context)
       ],
     );
   }

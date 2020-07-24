@@ -20,6 +20,7 @@ import 'package:fastodon/widget/common/html_content.dart';
 import 'package:fastodon/widget/common/measure_size.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:fastodon/widget/other/avatar.dart';
+import 'package:fastodon/widget/status/text_with_emoji.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -391,10 +392,8 @@ class _UserProfileState extends State<UserProfile>
                         height: 20,
                       ),
                       if (_account != null) ...[
-                        Text(
-                          StringUtil.displayName(_account),
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                        TextWithEmoji(
+                          text:StringUtil.displayName(_account),emojis: _account.emojis,
                         ),
                         Text(
                           '@' + _account.acct,

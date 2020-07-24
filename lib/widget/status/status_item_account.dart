@@ -6,6 +6,7 @@ import 'package:fastodon/utils/app_navigate.dart';
 import 'package:fastodon/utils/date_until.dart';
 import 'package:fastodon/utils/my_color.dart';
 import 'package:fastodon/utils/string_until.dart';
+import 'package:fastodon/widget/status/text_with_emoji.dart';
 import 'package:flutter/material.dart';
 
 import '../other/avatar.dart';
@@ -17,26 +18,35 @@ class StatusItemAccount extends StatelessWidget {
   final Widget action;
   final bool noNavigateOnClick;
 
-  StatusItemAccount(this.account,{this.createdAt,this.action,this.noNavigateOnClick = false});
+  StatusItemAccount(this.account,
+      {this.createdAt, this.action, this.noNavigateOnClick = false});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: noNavigateOnClick ? null : (){if(createdAt == null) AppNavigate.push(context, UserProfile(accountId:account.id));}, // 用作搜索页时，整个页面可点击
+      onTap: noNavigateOnClick
+          ? null
+          : () {
+              if (createdAt == null)
+                AppNavigate.push(context, UserProfile(accountId: account.id));
+            }, // 用作搜索页时，整个页面可点击
       child: Row(
         children: <Widget>[
           Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
               child: InkWell(
-                onTap: noNavigateOnClick ? null : () {
-                  AppNavigate.push(context, UserProfile(accountId: account.id));
-                },
+                onTap: noNavigateOnClick
+                    ? null
+                    : () {
+                        AppNavigate.push(
+                            context, UserProfile(accountId: account.id));
+                      },
                 child: Avatar(url: account.avatarStatic),
               )),
           Expanded(
             child: Container(
               height: 50,
-            //ns  margin: EdgeInsets.only(top: 8),
+              //ns  margin: EdgeInsets.only(top: 8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,32 +55,39 @@ class StatusItemAccount extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Flexible(
-                        child: Text(StringUtil.displayName(account),
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                            overflow: TextOverflow.ellipsis),
+                        child: TextWithEmoji(
+                          text: StringUtil.displayName(account),
+                          emojis: account.emojis,
+                          maxLines: 1,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color),
+                        ),
                         flex: 2,
                       ),
                       if (createdAt != null)
-                      Flexible(
-                        child: Text(DateUntil.dateTime(createdAt),
-                            style: TextStyle(
-                                fontSize: 13, color: MyColor.greyText),
-                            overflow: TextOverflow.ellipsis),
-                      )
+                        Flexible(
+                          child: Text(DateUntil.dateTime(createdAt),
+                              style: TextStyle(
+                                  fontSize: 13, color: MyColor.greyText),
+                              overflow: TextOverflow.ellipsis),
+                        )
                     ],
                   ),
                   Flexible(
-                    child: Text('@' + account.acct,
-                        style:
-                            TextStyle(fontSize: 13, color: MyColor.greyText),overflow: TextOverflow.ellipsis,),
+                    child: Text(
+                      '@' + account.acct,
+                      style: TextStyle(fontSize: 13, color: MyColor.greyText),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   )
                 ],
               ),
             ),
           ),
-          if (action != null)
-            action
+          if (action != null) action
         ],
       ),
     );
@@ -94,20 +111,29 @@ class SubStatusItemHeader extends StatelessWidget {
 //          Spacer(),
 
           Expanded(
-            child:
-            RichText(
-              maxLines: 1,
-              textScaleFactor: 1.0 + 0.18 * double.parse(textSclae),
-              text: TextSpan(
-                text: StringUtil.displayName(data.account)+' ',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: Colors.grey[850]),
-                children: <TextSpan>[
-                  TextSpan(text: '@' + data.account.username, style: TextStyle(fontSize: 15, color: Theme.of(context).splashColor))
-                ]
-              ),
-              overflow: TextOverflow.ellipsis,
-            )
-          ),
+              child: RichText(
+            maxLines: 1,
+            textScaleFactor: 1.0 + 0.18 * double.parse(textSclae),
+            text: TextSpan(
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[850]),
+                children: <InlineSpan>[
+                  ...TextWithEmoji.getTextSpans(
+                      text: StringUtil.displayName(data.account),
+                      emojis: data.account.emojis,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[850])),
+                  TextSpan(
+                      text: '@' + data.account.username,
+                      style: TextStyle(
+                          fontSize: 15, color: Theme.of(context).splashColor))
+                ]),
+            overflow: TextOverflow.ellipsis,
+          )),
 
           Text(DateUntil.dateTime(data.createdAt),
               style: TextStyle(fontSize: 13, color: MyColor.greyText),

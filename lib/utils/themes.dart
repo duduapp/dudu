@@ -11,7 +11,7 @@ var defaultTheme = ThemeData(
   buttonColor: Colors.blue,//Colors.grey[500],
   bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
   splashColor: Colors.grey[600],
-  accentColor: Color.fromRGBO(238, 238, 238, 1),
+  accentColor: Colors.grey[600],
   scaffoldBackgroundColor: Color.fromRGBO(238, 238, 238, 1)
 
 

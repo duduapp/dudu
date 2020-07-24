@@ -38,9 +38,12 @@ class _StatusItemState extends State<StatusItem> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-              child: Avatar(url: widget.item.account.avatarStatic),
+            InkWell(
+              onTap: () => AppNavigate.push(context, UserProfile(accountId: widget.item.account.id,)),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                child: Avatar(url: widget.item.account.avatarStatic),
+              ),
             ),
             Expanded(
               child: Column(

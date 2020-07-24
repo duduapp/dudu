@@ -86,7 +86,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
             title: '应用主题',
             onPress: () => showDialog(
                 context: context,
-                builder: (_) => ThemeConsumer(child: ThemeDialog(title: Text('选择主题'),hasDescription: false,))),
+                builder: (_) => ThemeConsumer(child: ThemeDialog(title: Text('选择主题'),hasDescription: false,selectedOverlayColor: Theme.of(context).buttonColor,))),
           ),
           ProviderSettingCell(
             providerKey: 'text_scale',

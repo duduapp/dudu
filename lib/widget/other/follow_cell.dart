@@ -23,7 +23,7 @@ class FollowCell extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(left: 15),
                 child: Center(
-                  child: Icon(Icons.remove_red_eye),
+                  child: Icon(Icons.remove_red_eye,color: Theme.of(context).buttonColor,),
                 ),
               ),
               SizedBox(width: 5,),

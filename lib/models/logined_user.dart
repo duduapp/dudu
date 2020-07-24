@@ -70,7 +70,7 @@ class AccountPreferences {
               'always_show_sensitive', false);
           break;
       }
-      SettingsProvider.updateWithCurrentContext('default_post_privacy', res['default_post_privacy']);
+      SettingsProvider.updateWithCurrentContext('default_post_privacy', res['posting:default:visibility']);
       SettingsProvider.updateWithCurrentContext('always_expand_tools', res['reading:expand:spoilers']);
     }
 

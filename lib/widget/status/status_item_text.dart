@@ -4,6 +4,7 @@ import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/status/status_detail.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/common/html_content.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -61,3 +62,5 @@ class _StatusItemTextState extends State<StatusItemText> {
     );
   }
 }
+
+
