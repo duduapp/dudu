@@ -7,11 +7,12 @@ var defaultTheme = ThemeData(
   dialogTheme: DialogTheme(),
   popupMenuTheme: PopupMenuThemeData(color: Colors.white),
   inputDecorationTheme: InputDecorationTheme(fillColor: Color.fromRGBO(240, 240, 240, 1)),
-  backgroundColor: Color.fromRGBO(240, 240, 240, 1),
+  backgroundColor: Color.fromRGBO(238, 238, 238, 1),
   buttonColor: Colors.blue,//Colors.grey[500],
   bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
   splashColor: Colors.grey[600],
-  accentColor: Colors.grey[600]
+  accentColor: Color.fromRGBO(238, 238, 238, 1),
+  scaffoldBackgroundColor: Color.fromRGBO(238, 238, 238, 1)
 
 
   

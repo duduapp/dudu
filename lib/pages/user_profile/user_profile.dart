@@ -7,6 +7,7 @@ import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/media/photo_gallery.dart';
+import 'package:fastodon/pages/setting/edit_user_profile.dart';
 import 'package:fastodon/pages/status/new_status.dart';
 import 'package:fastodon/pages/user_profile/user_follewers.dart';
 import 'package:fastodon/pages/user_profile/user_follewing.dart';
@@ -228,7 +229,10 @@ class _UserProfileState extends State<UserProfile>
   }
 
   _onPressButton() async {
-    if (relationShip.blocking) {
+    if (mine.account.id == _account.id) {
+      AppNavigate.push(context, EditUserProfile(_account));
+    }
+    else if (relationShip.blocking) {
       _unBlockUser();
     } else if (relationShip.following) {
       _showUnfollowConfrimDialog();
@@ -271,42 +275,45 @@ class _UserProfileState extends State<UserProfile>
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              BottomSheetItem(
-                  text: '提及',
-                  onTap: () {
-                    AppNavigate.pop(context);
-                    AppNavigate.push(
-                        context,
-                        NewStatus(
-                          prepareText: '@' + _account.acct + ' ',
-                        ),
-                        routeType: RouterType.material);
-                  }),
-              if (!relationShip.blocking && !relationShip.requested)
+              if (_account != null)
                 BottomSheetItem(
-                  text: relationShip.following ? '取消关注' : '关注',
-                  onTap: _onPressButton,
+                    text: '提及',
+                    onTap: () {
+                      AppNavigate.pop(context);
+                      AppNavigate.push(
+                          context,
+                          NewStatus(
+                            prepareText: '@' + _account.acct + ' ',
+                          ),
+                          routeType: RouterType.material);
+                    }),
+              if (_account != null && mine.account.id != _account.id) ...[
+                if (!relationShip.blocking && !relationShip.requested)
+                  BottomSheetItem(
+                    text: relationShip.following ? '取消关注' : '关注',
+                    onTap: _onPressButton,
+                  ),
+                BottomSheetItem(
+                  text: relationShip.muting ? '取消隐藏' : '隐藏',
+                  onTap: _onPressHideButton,
                 ),
-              BottomSheetItem(
-                text: relationShip.muting ? '取消隐藏' : '隐藏',
-                onTap: _onPressHideButton,
-              ),
-              BottomSheetItem(
-                text: relationShip.blocking ? '取消屏蔽' : '屏蔽',
-                onTap: _onPressBlockButton,
-              ),
-              BottomSheetItem(
-                text: '隐藏该用户所在域名',
-                onTap: () => DialogUtils.showSimpleAlertDialog(
-                    context: context,
-                    text:
-                        '你确定要屏蔽@${StringUtil.accountDomain(_account)}域名吗？你将不会在任何公共时间轴或通知中看到该域名的内容，而且该域名的关注者也会被删除',
-                    onConfirm: _onPressBlockDomain,
-                    popFirst: true),
-              ),
-              BottomSheetItem(
-                text: '举报',
-              ),
+                BottomSheetItem(
+                  text: relationShip.blocking ? '取消屏蔽' : '屏蔽',
+                  onTap: _onPressBlockButton,
+                ),
+                BottomSheetItem(
+                  text: '隐藏该用户所在域名',
+                  onTap: () => DialogUtils.showSimpleAlertDialog(
+                      context: context,
+                      text:
+                          '你确定要屏蔽@${StringUtil.accountDomain(_account)}域名吗？你将不会在任何公共时间轴或通知中看到该域名的内容，而且该域名的关注者也会被删除',
+                      onConfirm: _onPressBlockDomain,
+                      popFirst: true),
+                ),
+                BottomSheetItem(
+                  text: '举报',
+                )
+              ],
               Container(
                 height: 8,
                 color: Theme.of(context).backgroundColor,
@@ -363,15 +370,18 @@ class _UserProfileState extends State<UserProfile>
                             maintainAnimation: true,
                             maintainState: true,
                             child: RaisedButton(
+                              textColor: Colors.white,
                               child: Text(relationShip == null
                                   ? 'whatever'
-                                  : relationShip.blocking
-                                      ? '取消屏蔽'
-                                      : relationShip.requested
-                                          ? '已发送关注请求'
-                                          : relationShip.following
-                                              ? '取消关注'
-                                              : '关注'),
+                                  : mine.account.id == _account.id
+                                      ? '编辑资料'
+                                      : relationShip.blocking
+                                          ? '取消屏蔽'
+                                          : relationShip.requested
+                                              ? '已发送关注请求'
+                                              : relationShip.following
+                                                  ? '取消关注'
+                                                  : '关注'),
                               onPressed: _onPressButton,
                             ),
                           )
@@ -453,7 +463,7 @@ class _UserProfileState extends State<UserProfile>
           Expanded(
             flex: 7,
             child: HtmlContent(
-               filed['value'],
+              filed['value'],
               //      shrinkToFit: true,
             ),
           )
@@ -467,68 +477,66 @@ class _UserProfileState extends State<UserProfile>
 
   Widget headerFollowsAndFollowers() {
     return DefaultTextStyle(
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: Theme.of(context).accentColor),
+      style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+          color: Theme.of(context).accentColor),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          InkWell(
+            onTap: () => _tabController.animateTo(0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                InkWell(
-                  onTap: () => _tabController.animateTo(0),
-                  child: Row(
-                    children: <Widget>[
-                      Text(_account.statusesCount.toString()),
-                      SizedBox(
-                        width: 1,
-                      ),
-                      Text('嘟文'),
-                    ],
-                  ),
-                ),
+                Text(_account.statusesCount.toString()),
                 SizedBox(
-                  width: 10,
+                  width: 1,
                 ),
-                //   Text('|'),
-                SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                  onTap: () =>
-                      AppNavigate.push(context, UserFollowing(_account.id)),
-                  child: Row(
-                    children: <Widget>[
-                      Text(_account.followingCount.toString()),
-                      SizedBox(
-                        width: 1,
-                      ),
-                      Text('关注'),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                //   Text('|'),
-                SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                  onTap: () =>
-                      AppNavigate.push(context, UserFollowers(_account.id)),
-                  child: Row(
-                    children: <Widget>[
-                      Text(_account.followersCount.toString()),
-                      SizedBox(
-                        width: 1,
-                      ),
-                      Text('粉丝'),
-                    ],
-                  ),
-                )
+                Text('嘟文'),
               ],
             ),
-          );
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          //   Text('|'),
+          SizedBox(
+            width: 10,
+          ),
+          InkWell(
+            onTap: () => AppNavigate.push(context, UserFollowing(_account.id)),
+            child: Row(
+              children: <Widget>[
+                Text(_account.followingCount.toString()),
+                SizedBox(
+                  width: 1,
+                ),
+                Text('关注'),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          //   Text('|'),
+          SizedBox(
+            width: 10,
+          ),
+          InkWell(
+            onTap: () => AppNavigate.push(context, UserFollowers(_account.id)),
+            child: Row(
+              children: <Widget>[
+                Text(_account.followersCount.toString()),
+                SizedBox(
+                  width: 1,
+                ),
+                Text('粉丝'),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   Widget tabText(String text) {

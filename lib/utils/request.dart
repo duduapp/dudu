@@ -97,6 +97,7 @@ class Request {
     return await _request(
         requestType: RequestType.patch,
         url: url,
+        params: params,
         errMsg: errMsg,
         showDialog: showDialog,
         dialogMessage: dialogMessage);

@@ -54,7 +54,7 @@ class _StatusItemTextState extends State<StatusItemText> {
             ),
           if (showMore)
             HtmlContent(
-               widget.data.content,
+               widget.data.content,statusData: widget.data,
             )
         ]),
       ),

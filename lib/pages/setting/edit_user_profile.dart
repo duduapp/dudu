@@ -7,6 +7,7 @@ import 'package:fastodon/constant/api.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/dialog_util.dart';
+import 'package:fastodon/utils/media_util.dart';
 import 'package:fastodon/utils/request.dart';
 import 'package:fastodon/widget/common/bottom_sheet_item.dart';
 import 'package:flutter/cupertino.dart';
@@ -81,7 +82,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
 
   chooseHeader() async{
       AppNavigate.pop(context);
-      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      var image = await MediaUtil.pickAndCompressImage();
       if (image == null) {
         return;
       }
@@ -94,7 +95,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
 
   chooseAvatar() async {
     AppNavigate.pop(context);
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await MediaUtil.pickAndCompressImage();
     if (image == null) {
       return;
     }

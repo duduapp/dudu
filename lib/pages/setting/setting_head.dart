@@ -13,54 +13,13 @@ class SettingHead extends StatelessWidget {
   SettingHead({Key key, this.account}) : super(key: key);
   final OwnerAccount account;
 
-  Widget header(BuildContext context) {
-    if (account == null) {
-      return Container(
-        height: 150,
-      );
-    }
-    return Container(
-      height: 150,
-      child: CachedNetworkImage(
-        height: 150,
-        width: Screen.width(context),
-        imageUrl: account.header,
-        fit: BoxFit.cover,
-      ),
-    );
-  }
-
-  Widget displayName() {
-    if (account == null) {
-      return Container();
-    }
-    return Positioned(
-      top: 130,
-      left: 100,
-      child: Text(StringUtil.displayName(account),
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-    );
-  }
-
-  Widget userName() {
-    if (account == null) {
-      return Container();
-    }
-    return Positioned(
-      top: 5,
-      left: 100,
-      child: Text(StringUtil.accountFullAddress(account),
-          style: TextStyle(
-              color: Theme.of(navGK.currentContext).splashColor, fontSize: 15)),
-    );
-  }
-
   Widget headerWidget() {
     if (account == null) {
       return Container();
     }
-    return Padding(
-      padding: const EdgeInsets.only(top: 10),
+    return Container(
+      color: Theme.of(navGK.currentContext).primaryColor,
+      padding: const EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,52 +53,47 @@ class SettingHead extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Stack(
-            children: <Widget>[
-              Container(
-                height: 180,
-                child: Column(
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        header(context),
-                        Positioned(
-                          top: Screen.statusBarHeight(context) + 15,
-                          left: 0,
-                          width: Screen.width(context),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text('个人中心',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        ),
-                        displayName(),
-                      ],
-                    ),
-                    Stack(
-                      children: <Widget>[
-                        Container(
-                          height: 30,
-                        ),
-                        userName(),
-                      ],
-                    )
-                  ],
+    return Column(
+      children: [
+        Container(
+          height: 180,
+          width: Screen.width(context),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  fit: BoxFit.cover,
+                  colorFilter: new ColorFilter.mode(
+                      Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                  image: CachedNetworkImageProvider(
+                    account.header,
+                  ))),
+          child: Column(
+            children: [
+              SizedBox(height: 90,),
+              ListTile(
+                leading: InkWell(
+                  child: Avatar(
+                    url: account.avatar,
+                    width: 60,
+                    height: 60,
+                  ),
+                  onTap: () => AppNavigate.push(
+                      null,
+                      UserProfile(
+                        accountId: account.id,
+                      )),
                 ),
-              ),
-              Positioned(left: 40, top: 125, child: InkWell(child: Avatar(url: account.avatar),onTap: () => AppNavigate.push(null, UserProfile(accountId: account.id,)),))
+                title: Text(
+                  StringUtil.displayName(account),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(StringUtil.accountFullAddress(account),
+                    style: TextStyle(fontSize: 15)),
+              )
             ],
           ),
-          Container(height: 50, child: headerWidget()),
-        ],
-      ),
+        ),
+        headerWidget()
+      ],
     );
   }
 }

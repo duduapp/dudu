@@ -10,6 +10,7 @@ import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/models/vote.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/dialog_util.dart';
+import 'package:fastodon/utils/media_util.dart';
 import 'package:fastodon/widget/common/sized_icon_button.dart';
 import 'package:fastodon/widget/new_status/emoji_widget.dart';
 import 'package:fastodon/widget/new_status/handle_vote_dialog.dart';
@@ -348,7 +349,8 @@ class _NewStatusState extends State<NewStatus> {
   }
 
   Future chooseImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await MediaUtil.pickAndCompressImage();
+
     if (image == null) {
       return;
     }
