@@ -76,7 +76,7 @@ class _PhotoGalleryState extends State<PhotoGallery> {
               scrollDirection: widget.scrollDirection,
             ),
           )),
-      title: '${currentIndex + 1}/${widget.galleryItems.length}',
+      title: widget.galleryItems.length > 1 ?'${currentIndex + 1}/${widget.galleryItems.length}':'',
       onDownloadClick: downloadMedia,
     );
   }

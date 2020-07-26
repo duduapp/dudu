@@ -6,6 +6,7 @@ import 'package:fastodon/models/json_serializable/media_attachment.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
+import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/media/photo_gallery.dart';
 import 'package:fastodon/pages/setting/edit_user_profile.dart';
 import 'package:fastodon/pages/status/new_status.dart';
@@ -232,8 +233,7 @@ class _UserProfileState extends State<UserProfile>
   _onPressButton() async {
     if (mine.account.id == _account.id) {
       AppNavigate.push(context, EditUserProfile(_account));
-    }
-    else if (relationShip.blocking) {
+    } else if (relationShip.blocking) {
       _unBlockUser();
     } else if (relationShip.following) {
       _showUnfollowConfrimDialog();
@@ -349,92 +349,126 @@ class _UserProfileState extends State<UserProfile>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              headerImage(context),
+            //  headerImage(context),
               Stack(overflow: Overflow.visible, children: [
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(height: 10),
-                      Row(
+                Column(
+                  children: [
+                    headerImage(context),
+                    Container(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Spacer(),
-                          if (relationShip != null && relationShip.muting)
-                            IconButton(
-                              icon: Icon(Icons.volume_up),
-                              onPressed: _onPressUnmute,
+                          SizedBox(height: 10),
+                          Row(
+                            children: <Widget>[
+                              Spacer(),
+                              if (relationShip != null && relationShip.muting)
+                                IconButton(
+                                  icon: Icon(Icons.volume_up),
+                                  onPressed: _onPressUnmute,
+                                ),
+                              Visibility(
+                                visible: relationShip != null,
+                                maintainSize: true,
+                                maintainAnimation: true,
+                                maintainState: true,
+                                child: RaisedButton(
+                                  textColor: Colors.white,
+                                  child: Text(relationShip == null
+                                      ? 'whatever'
+                                      : mine.account.id == _account.id
+                                          ? '编辑资料'
+                                          : relationShip.blocking
+                                              ? '取消屏蔽'
+                                              : relationShip.requested
+                                                  ? '已发送关注请求'
+                                                  : relationShip.following
+                                                      ? '取消关注'
+                                                      : '关注'),
+                                  onPressed: _onPressButton,
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          if (_account != null) ...[
+                            TextWithEmoji(
+                              text: StringUtil.displayName(_account),
+                              emojis: _account.emojis,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
                             ),
-                          Visibility(
-                            visible: relationShip != null,
-                            maintainSize: true,
-                            maintainAnimation: true,
-                            maintainState: true,
-                            child: RaisedButton(
-                              textColor: Colors.white,
-                              child: Text(relationShip == null
-                                  ? 'whatever'
-                                  : mine.account.id == _account.id
-                                      ? '编辑资料'
-                                      : relationShip.blocking
-                                          ? '取消屏蔽'
-                                          : relationShip.requested
-                                              ? '已发送关注请求'
-                                              : relationShip.following
-                                                  ? '取消关注'
-                                                  : '关注'),
-                              onPressed: _onPressButton,
+                            MediaQuery(
+                              data: MediaQuery.of(context).copyWith(
+                                  textScaleFactor: Screen.scaleFromSetting(
+                                      SettingsProvider.getWithCurrentContext(
+                                          'text_scale'))),
+                              child: Text(
+                                '@' + _account.acct,
+                                style: TextStyle(fontSize: 16),
+                              ),
                             ),
+                            Container(
+                                width: Screen.width(context) - 60,
+                                child: Center(
+                                  child: HtmlContent(
+                                    _account.note,
+                                    emojis: _account.emojis,
+                                  ),
+                                )),
+                            headerFields(),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            headerFollowsAndFollowers()
+                          ],
+                          SizedBox(
+                            height: 10,
                           )
                         ],
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      if (_account != null) ...[
-                        TextWithEmoji(
-                          text:StringUtil.displayName(_account),emojis: _account.emojis,style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '@' + _account.acct,
-                        ),
-                        Container(
-                            width: Screen.width(context) - 60,
-                            child: Center(
-                              child: HtmlContent(
-                                _account.note,
-                                emojis: _account.emojis,
-                              ),
-                            )),
-                        headerFields(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        headerFollowsAndFollowers()
-                      ],
-                      SizedBox(
-                        height: 10,
-                      )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
                 Positioned(
-                    top: -50,
+                    top: 150,
                     left: 20,
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 4, color: Colors.white),
-                        borderRadius:
-                            new BorderRadius.all(Radius.circular(14.0)),
-                        shape: BoxShape.rectangle,
-                      ),
-                      child: Avatar(
-                        url: _account != null
-                            ? _account.avatar
-                            : LoginedUser().getHost() +
-                                '/avatars/original/missing.png',
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () => AppNavigate.push(
+                          context,
+                          PhotoGallery(
+                            galleryItems: [
+                              MediaAttachment.fromJson({
+                                'url': _account.avatar,
+                                'preview_url': _account.avatar,
+                                'id': 'user_avatar'
+                              })
+                            ],
+                            initialIndex: 0,
+                          ),
+                          routeType: RouterType.fade),
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 4, color: Colors.white),
+                          borderRadius:
+                              new BorderRadius.all(Radius.circular(14.0)),
+                          shape: BoxShape.rectangle,
+                        ),
+                        child: Hero(
+                          tag: 'user_avatar',
+                          child: Avatar(
+                            url: _account != null
+                                ? _account.avatar
+                                : LoginedUser().getHost() +
+                                    '/avatars/original/missing.png',
+                          ),
+                        ),
                       ),
                     )),
               ]),
