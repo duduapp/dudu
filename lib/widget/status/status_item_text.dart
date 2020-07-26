@@ -46,7 +46,7 @@ class _StatusItemTextState extends State<StatusItemText> {
           HtmlContent(
              widget.data.spoilerText.isEmpty
                 ? widget.data.content.trim()
-                : widget.data.spoilerText.trim(),statusData: widget.data,
+                : widget.data.spoilerText.trim(),statusData: widget.data,emojis: widget.data.emojis,
           ),
           if (widget.data.spoilerText.isNotEmpty)
             OutlineButton(
@@ -55,7 +55,7 @@ class _StatusItemTextState extends State<StatusItemText> {
             ),
           if (showMore)
             HtmlContent(
-               widget.data.content,statusData: widget.data,
+               widget.data.content,statusData: widget.data,emojis: widget.data.emojis,
             )
         ]),
       ),

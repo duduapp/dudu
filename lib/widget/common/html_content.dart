@@ -10,8 +10,9 @@ import 'package:flutter/material.dart';
 class HtmlContent extends StatefulWidget {
   final String content;
   final StatusItemData statusData;
+  final List emojis;
 
-  HtmlContent(this.content, {this.statusData});
+  HtmlContent(this.content, {this.statusData,this.emojis = const []});
 
   @override
   _HtmlContentState createState() => _HtmlContentState();
@@ -45,7 +46,9 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
           onLinkTap: _onLinkTap,
           padding: EdgeInsets.all(0),
           blockSpacing: 5,
-          emojis: widget.statusData.emojis,
+          emojis: widget.emojis,
+          renderNewlines: true,
+          useRichText: true//widget.emojis.isEmpty,
         ),
         if (needExpand)
           OutlineButton(child: Text(expanded?'折叠内容':'显示更多'),onPressed: () {setState(() {
@@ -56,7 +59,19 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
   }
 
   _onLinkTap(String link, dom.Node node) {
-    var linkText = node.nodes[0]?.text;
+    var linkText = '';
+    //最多遍历两层
+    for (var childNode in node.nodes) {
+      if (childNode is dom.Text) {
+        linkText += childNode.text;
+      } else {
+        for (var innerNode in childNode.nodes) {
+          if (innerNode is dom.Text) {
+            linkText += innerNode.text;
+          }
+        }
+      }
+    }
     var htmlClass = node.attributes['class'] ?? '';
     if (htmlClass.contains('mention')) {
       if (widget.statusData != null) {
@@ -90,12 +105,13 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
           return;
         }
       }
-    } else {
-      if (linkText.startsWith('#')) {
-        AppNavigate.push(null, HashtagTimeline(linkText.substring(1)));
-        return;
-      }
     }
+
+    if (linkText.startsWith('#')) {
+      AppNavigate.push(null, HashtagTimeline(linkText.substring(1)));
+      return;
+    }
+
     AppNavigate.push(null, InnerBrowser(link));
 
   }

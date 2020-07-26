@@ -25,4 +25,8 @@ class Screen {
   static updateStatusBarStyle(SystemUiOverlayStyle style) {
     SystemChrome.setSystemUIOverlayStyle(style);
   }
+
+  static scaleFromSetting(String textScale) {
+    return 1.0 + 0.18 * double.parse(textScale);
+  }
 }

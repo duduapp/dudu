@@ -61,6 +61,7 @@ class Html extends StatelessWidget {
                 html: data,
                 onImageError: onImageError,
                 linkStyle: linkStyle,
+                emojis:emojis
               )
             : HtmlOldParser(
                 width: width,

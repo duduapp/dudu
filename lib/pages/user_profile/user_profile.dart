@@ -393,7 +393,7 @@ class _UserProfileState extends State<UserProfile>
                       ),
                       if (_account != null) ...[
                         TextWithEmoji(
-                          text:StringUtil.displayName(_account),emojis: _account.emojis,
+                          text:StringUtil.displayName(_account),emojis: _account.emojis,style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
                           '@' + _account.acct,
@@ -403,6 +403,7 @@ class _UserProfileState extends State<UserProfile>
                             child: Center(
                               child: HtmlContent(
                                 _account.note,
+                                emojis: _account.emojis,
                               ),
                             )),
                         headerFields(),
@@ -463,6 +464,7 @@ class _UserProfileState extends State<UserProfile>
             flex: 7,
             child: HtmlContent(
               filed['value'],
+              emojis: _account.emojis,
               //      shrinkToFit: true,
             ),
           )

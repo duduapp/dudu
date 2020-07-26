@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:fastodon/models/provider/settings_provider.dart';
+import 'package:fastodon/utils/screen.dart';
 import 'package:fastodon/widget/status/text_with_emoji.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -38,14 +40,14 @@ class LinkTextSpan extends TextSpan {
       this.url,
       String text,
       OnLinkTap onLinkTap,
-      List<TextSpan> children})
+      List<TextSpan> children,dom.Node node})
       : super(
             style: style,
             text: text,
             children: children ?? <TextSpan>[],
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                onLinkTap(url, null);
+                onLinkTap(url, node);
               });
 }
 
@@ -62,12 +64,13 @@ class LinkBlock extends Container {
     EdgeInsets margin,
     OnLinkTap onLinkTap,
     this.children,
+    dom.Node node
   }) : super(
             padding: padding,
             margin: margin,
             child: GestureDetector(
                 onTap: () {
-                  onLinkTap(url, null);
+                  onLinkTap(url, node);
                 },
                 child: Column(
                   children: children,
@@ -159,6 +162,7 @@ class HtmlRichTextParser extends StatelessWidget {
       color: Colors.blueAccent,
       decorationColor: Colors.blueAccent,
     ),
+    this.emojis
   });
 
   final double indentSize = 10.0;
@@ -171,6 +175,7 @@ class HtmlRichTextParser extends StatelessWidget {
   final CustomEdgeInsets customEdgeInsets;
   final ImageErrorListener onImageError;
   final TextStyle linkStyle;
+  final List emojis;
 
   // style elements set a default style
   // for all child nodes
@@ -266,6 +271,7 @@ class HtmlRichTextParser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textScale = SettingsProvider.getWithCurrentContext('text_scale',listen: true);
     String data = html;
 
     if (renderNewlines) {
@@ -281,7 +287,7 @@ class HtmlRichTextParser extends StatelessWidget {
     );
 
     // don't ignore the top level "body"
-    _parseNode(body, parseContext, context);
+    _parseNode(body, parseContext, context,textScale);
 
     // filter out empty widgets
     List<Widget> children = [];
@@ -318,7 +324,7 @@ class HtmlRichTextParser extends StatelessWidget {
   //
   // each iteration creates a new parseContext as a copy of the previous one if it needs to
   void _parseNode(
-      dom.Node node, ParseContext parseContext, BuildContext buildContext) {
+      dom.Node node, ParseContext parseContext, BuildContext buildContext,String textScale) {
     // TEXT ONLY NODES
     // a text only node is a child of a tag with no inner html
     if (node is dom.Text) {
@@ -396,12 +402,13 @@ class HtmlRichTextParser extends StatelessWidget {
             child: RichText(
               textAlign: TextAlign.left,
               text: span,
+              textScaleFactor: Screen.scaleFromSetting(textScale),
             ),
           );
           parseContext.rootWidgetList.add(blockText);
         } else {
           parseContext.rootWidgetList
-              .add(BlockText(child: RichText(text: span)));
+              .add(BlockText(child: RichText(text: span,textScaleFactor: Screen.scaleFromSetting(textScale),)));
         }
 
         // this allows future items to be added as children of this item
@@ -409,18 +416,52 @@ class HtmlRichTextParser extends StatelessWidget {
 
         // if the parent is a LinkTextSpan, keep the main attributes of that span going.
       } else if (parseContext.parentElement is LinkTextSpan) {
+        dom.Node aNode = node.parentNode;
+        while ((aNode as dom.Element).localName != 'a') {
+          aNode = aNode.parentNode;
+        }
         // add this node to the parent as another LinkTextSpan
         parseContext.parentElement.children.add(LinkTextSpan(
           style:
               parseContext.parentElement.style.merge(parseContext.childStyle),
           url: parseContext.parentElement.url,
           text: finalText,
+          node: aNode,
           onLinkTap: onLinkTap,
         ));
 
         // if the parent is a normal span, just add this to that list
       } else if (!(parseContext.parentElement.children is List<Widget>)) {
-        parseContext.parentElement.children.add(span);
+        if (emojis.length > 0) {
+          // inlinespan may contain widget span, we must rebuld richtext
+          var children = parseContext.parentElement.children;
+          children.addAll(TextWithEmoji.getTextSpans(text: finalText, emojis: emojis,));
+
+          BlockText blockText = BlockText(
+            margin:
+                EdgeInsets.only(
+                          top: 8.0,
+//                          bottom: 8.0,
+                    left: parseContext.indentLevel * indentSize),
+            //    padding: EdgeInsets.all(2.0),
+            child: RichText(
+              textScaleFactor: Screen.scaleFromSetting(textScale),
+              maxLines: 9999,
+              textWidthBasis: TextWidthBasis.parent,
+              text: TextSpan(
+                style: parseContext.childStyle,
+                //  text: '',
+
+                children: children,
+              ),
+            ),
+          );
+          parseContext.rootWidgetList.removeLast();
+          parseContext.rootWidgetList.add(blockText);
+        } else {
+          parseContext.parentElement.children.addAll(
+              TextWithEmoji.getTextSpans(text: finalText, emojis: emojis,));
+        }
       } else {
         // Doing nothing... we shouldn't ever get here
       }
@@ -520,6 +561,7 @@ class HtmlRichTextParser extends StatelessWidget {
                     left: parseContext.indentLevel * indentSize),
                 onLinkTap: onLinkTap,
                 children: <Widget>[],
+                node: node,
               );
               nextContext.parentElement = linkContainer;
               nextContext.rootWidgetList.add(linkContainer);
@@ -530,6 +572,7 @@ class HtmlRichTextParser extends StatelessWidget {
                 url: url,
                 onLinkTap: onLinkTap,
                 children: <TextSpan>[],
+                node: node
               );
               if (parseContext.parentElement is TextSpan) {
                 nextContext.parentElement.children.add(span);
@@ -538,7 +581,7 @@ class HtmlRichTextParser extends StatelessWidget {
                 BlockText blockElement = BlockText(
                   margin: EdgeInsets.only(
                       left: parseContext.indentLevel * indentSize, top: 10.0),
-                  child: RichText(text: span),
+                  child: RichText(text: span,textScaleFactor: Screen.scaleFromSetting(textScale),),
                 );
                 parseContext.rootWidgetList.add(blockElement);
                 nextContext.inBlock = true;
@@ -760,18 +803,22 @@ class HtmlRichTextParser extends StatelessWidget {
               margin: node.localName != 'body'
                   ? _customEdgeInsets ??
                       EdgeInsets.only(
-                          top: 8.0,
-                          bottom: 8.0,
+                            top: 8.0,
+//                          bottom: 8.0,
                           left: parseContext.indentLevel * indentSize)
                   : EdgeInsets.zero,
-              padding: EdgeInsets.all(2.0),
+           //    padding: EdgeInsets.all(2.0),
               decoration: decoration,
               child: RichText(
+
+                textScaleFactor: Screen.scaleFromSetting(textScale),
+                maxLines: 9999,
+                textWidthBasis: TextWidthBasis.parent,
                 textAlign: textAlign,
                 text: TextSpan(
-                  text: '',
+                //  text: '',
                   style: nextContext.childStyle,
-                  children: <TextSpan>[],
+                  children: <InlineSpan>[],
                 ),
               ),
             );
@@ -783,7 +830,7 @@ class HtmlRichTextParser extends StatelessWidget {
       }
 
       node.nodes.forEach((dom.Node childNode) {
-        _parseNode(childNode, nextContext, buildContext);
+        _parseNode(childNode, nextContext, buildContext,textScale);
       });
     }
   }
