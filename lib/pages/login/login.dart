@@ -2,6 +2,7 @@ import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/local_account.dart';
 import 'package:fastodon/models/logined_user.dart';
+import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/home_page.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/common/loading_view.dart';
@@ -83,12 +84,13 @@ class _LoginState extends State<Login> {
         
 
         LoginedUser user = new LoginedUser();
-        user.setHost(hostUrl);
-        user.setToken(token);
+        user.loadFromLocalAccount(localAccount);
 
         OwnerAccount account = await AccountsApi.getMyAccount();
         user.account = account;
         await LocalStorageAccount.addOwnerAccount(account);
+
+        await SettingsProvider().load(); // load new settings
 
         pushAndRemoveUntil(HomePage());
 

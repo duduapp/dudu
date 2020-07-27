@@ -33,7 +33,7 @@ class _StatusItemState extends State<StatusItem> {
         color: Theme
             .of(context)
             .primaryColor,
-        padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+        padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
         margin: EdgeInsets.only(bottom: 8),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +63,7 @@ class _StatusItemState extends State<StatusItem> {
         color: Theme
             .of(context)
             .primaryColor,
-        padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+        padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
         margin: EdgeInsets.only(bottom: 8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -1,5 +1,6 @@
 import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
+import 'package:fastodon/models/local_account.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 
 class LoginedUser {
@@ -20,6 +21,12 @@ class LoginedUser {
       _instance = new LoginedUser._internal();
     }
     return _instance;
+  }
+
+  loadFromLocalAccount(LocalAccount localAccount) {
+    host = localAccount.hostUrl;
+    token = localAccount.token;
+    account = localAccount.account;
   }
 
   setHost(String host) {

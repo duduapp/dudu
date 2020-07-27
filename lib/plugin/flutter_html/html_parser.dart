@@ -440,8 +440,8 @@ class HtmlRichTextParser extends StatelessWidget {
           BlockText blockText = BlockText(
             margin:
                 EdgeInsets.only(
-                          top: 8.0,
-//                          bottom: 8.0,
+//                          top: 8.0,
+                          bottom: 8.0,
                     left: parseContext.indentLevel * indentSize),
             //    padding: EdgeInsets.all(2.0),
             child: RichText(
@@ -803,7 +803,7 @@ class HtmlRichTextParser extends StatelessWidget {
               margin: node.localName != 'body'
                   ? _customEdgeInsets ??
                       EdgeInsets.only(
-                            top: 8.0,
+                            bottom: 8.0,
 //                          bottom: 8.0,
                           left: parseContext.indentLevel * indentSize)
                   : EdgeInsets.zero,

@@ -8,20 +8,30 @@ import 'package:provider/provider.dart';
 
 enum SettingType {
   bool,
-  string
+  string,
+  string_list
 }
 
 class SettingsProvider extends ChangeNotifier {
+  static final SettingsProvider _singleton = SettingsProvider._internal();
+  factory SettingsProvider() {
+    return _singleton;
+  }
+
+  SettingsProvider._internal();
+
+  init() async{
+    await load();
+  }
+
   Map<String,dynamic> settings = {
   };
 
   String storageKey;
 
-  SettingsProvider(){
-    load();
-  }
 
-  load() {
+
+  load() async{
     settings = {
       'show_thumbnails':true,
       'always_show_sensitive':false,
@@ -36,11 +46,12 @@ class SettingsProvider extends ChangeNotifier {
       'show_notifications.follow_requests':true,
       'show_notifications.follow':true,
       'show_notifications.mention':true,
-      'show_notifications.poll':true
+      'show_notifications.poll':true,
+      'notification_display_type': ['reblog','favourite','follow_request','follow','mention','poll'],
 
 
     };
-    _loadFromStorage();
+   await _loadFromStorage();
   }
 
   _loadFromStorage() async{
@@ -66,12 +77,16 @@ class SettingsProvider extends ChangeNotifier {
           case SettingType.string:
             value = await Storage.getString('$storageKey.$key.value');
             break;
+          case SettingType.string_list:
+            value = await Storage.getStringList('$storageKey.$key.value');
+            break;
         }
         if (value != null) {
           settings[key] = value;
         }
       }
     }
+    notifyListeners();
   }
 
   update(String key,dynamic value) {
@@ -83,6 +98,10 @@ class SettingsProvider extends ChangeNotifier {
     } else if (value is bool) {
       Storage.saveString('$storageKey.$key.type', 'bool');
       Storage.saveBool('$storageKey.$key.value', value);
+      _saveKeys();
+    } else if (value is List) {
+      Storage.saveString('$storageKey.$key.type', 'string_list');
+      Storage.saveStringList('$storageKey.$key.value', value);
       _saveKeys();
     }
     notifyListeners();

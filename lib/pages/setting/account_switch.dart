@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fastodon/models/local_account.dart';
+import 'package:fastodon/models/logined_user.dart';
+import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/login/login.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/common/bottom_sheet_item.dart';
@@ -179,6 +181,8 @@ class _AccountSwitchState extends State<AccountSwitch> {
           AppNavigate.pop(context);
         } else {
           await LocalStorageAccount.setActiveAccount(accountInfo);
+          LoginedUser().loadFromLocalAccount(accountInfo);
+          await SettingsProvider().load();
           pushAndRemoveUntil(HomePage());
         }
       },

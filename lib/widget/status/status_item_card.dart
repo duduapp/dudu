@@ -36,7 +36,7 @@ class StatusItemCard extends StatelessWidget {
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(6),bottomLeft: Radius.circular(6)),
                     child: CachedNetworkImage(
                       width: 120,
-                      height: 150,
+                      height: 120,
                       imageUrl: statusData.card.image,
                       fit: BoxFit.cover,
                     ),
@@ -46,15 +46,21 @@ class StatusItemCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          statusData.card.title,
-                          style: TextStyle(fontSize: 15),
-                          softWrap: false,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 3,right: 5),
+                          child: Text(
+                            statusData.card.title,
+                            style: TextStyle(fontSize: 15),
+                            softWrap: false,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                         SizedBox(height: 5),
-                        Text(statusData.card.description, style: TextStyle(fontSize: 13),overflow: TextOverflow.fade,)
+                        Expanded(child: Padding(
+                          padding: const EdgeInsets.only(bottom:4.0,right: 5),
+                          child: Text(statusData.card.description, style: TextStyle(fontSize: 14),overflow: TextOverflow.ellipsis,maxLines: 4,),
+                        ))
                       ],
                     ),
                   ),

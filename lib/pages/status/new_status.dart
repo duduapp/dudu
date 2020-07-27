@@ -459,17 +459,8 @@ class _NewStatusState extends State<NewStatus> {
   }
 
   showVoteDialog() async {
-    Vote newVote = await showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            child: HandleVoteDialog(
-              vote: vote,
-            ),
-          );
-        });
+    Vote newVote = await DialogUtils.showRoundedDialog(content: HandleVoteDialog(vote: vote),context:context);
+
     if (newVote != null) {
       setState(() {
         vote = newVote;

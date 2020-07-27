@@ -60,6 +60,8 @@ class DialogUtils {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             content: Text(text),
             actions: <Widget>[
               FlatButton(
@@ -78,4 +80,18 @@ class DialogUtils {
   static showProgressDialog() {
 
   }
+
+  static showRoundedDialog({Widget content,BuildContext context}) async{
+     var res = await showDialog(
+        context: context,
+        builder: (context) {
+      return Dialog(
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        child: content,
+      );
+    });
+     return res;
+  }
+
 }

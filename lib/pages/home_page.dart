@@ -1,5 +1,6 @@
 import 'package:fastodon/models/local_account.dart';
 import 'package:fastodon/models/logined_user.dart';
+import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/models/task_runner.dart';
 import 'package:fastodon/public.dart';
 import 'package:flutter/cupertino.dart';
@@ -52,6 +53,7 @@ class _HomePageState extends State<HomePage> {
       if (data['name'] == AppConfig.ClientName) {
         eventBus.emit(EventBusKey.LoadLoginMegSuccess);
         TaskRunner.enableNotification();
+       // SettingsProvider.getCurrentContextProvider().load();
       } else {
         AppNavigate.pushAndRemoveUntil(context, Login(),
             routeType: RouterType.fade);

@@ -7,10 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 typedef ResultListDataHandler = Function(dynamic data);
-typedef RowBuilder = Function(int idx,List data,ResultListProvider provider);
+typedef RowBuilder = Function(int idx, List data, ResultListProvider provider);
 
 class ResultListProvider extends ChangeNotifier {
-  final String requestUrl;
+  String requestUrl;
   List<dynamic> list = [];
   final String mapKey;
   final bool offsetPagination; //search 里面的max id和 min id 不能用
@@ -43,11 +43,10 @@ class ResultListProvider extends ChangeNotifier {
       this.reverseData = false,
       this.listenBlockEvent = false,
       this.firstRefresh = false, // easy refresh 在 nestedscrollview 有问题
-        bool showHeader = true,// easy refresh 中只有当onrefresh 设为Null 时才能隐藏header
-        this.onlyMedia = false,
-        this.dataHandler,
-        this.cacheTimeInSeconds
-      }) {
+      bool showHeader = true, // easy refresh 中只有当onrefresh 设为Null 时才能隐藏header
+      this.onlyMedia = false,
+      this.dataHandler,
+      this.cacheTimeInSeconds}) {
     if (listenBlockEvent) {
       _addEvent(EventBusKey.blockAccount, (arg) {
         var accountId = arg['account_id'];
@@ -88,7 +87,6 @@ class ResultListProvider extends ChangeNotifier {
         nextUrl = null;
       }
     } else {
-
       String appendOffset = "";
       if (offsetPagination != null && offsetPagination) {
         appendOffset = "&offset=${list.length}";
@@ -102,44 +100,44 @@ class ResultListProvider extends ChangeNotifier {
     }
   }
 
-
-
   Future<void> _startRequest(String url, {bool refresh}) async {
     if (cacheTimeInSeconds != null) {
-      int cacheTime = await Storage.getIntWithAccount('cache_time'+url);
+      int cacheTime = await Storage.getIntWithAccount('cache_time' + url);
       if (cacheTime != null) {
-        if (DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(cacheTime)).inSeconds < cacheTimeInSeconds) {
-          list = json.decode(await Storage.getStringWithAccount('cache_data'+url));
+        if (DateTime.now()
+                .difference(DateTime.fromMillisecondsSinceEpoch(cacheTime))
+                .inSeconds <
+            cacheTimeInSeconds) {
+          list = json
+              .decode(await Storage.getStringWithAccount('cache_data' + url));
           notifyListeners();
           return;
         }
       }
     }
 
-    await Request.get1(url: url,cancelToken: requestCancelToken).then((response) {
+    await Request.get1(url: url,cancelToken: requestCancelToken)
+        .then((response) {
       if (response == null) {
         return;
       }
       var data = response.data;
 
       if (cacheTimeInSeconds != null) {
-        Storage.saveIntWithAccount('cache_time'+url, DateTime.now().millisecondsSinceEpoch);
-        Storage.saveStringWithAccount('cache_data'+url, json.encode(data));
+        Storage.saveIntWithAccount(
+            'cache_time' + url, DateTime.now().millisecondsSinceEpoch);
+        Storage.saveStringWithAccount('cache_data' + url, json.encode(data));
       }
 
       if (mapKey != null) {
         data = data[mapKey];
       }
 
-      if (data.length > 0)
-      lastCellId = data[data.length - 1]['id'];
+      if (data.length > 0) lastCellId = data[data.length - 1]['id'];
 
       if (dataHandler != null) {
         data = dataHandler(data);
       }
-
-
-
 
       // 下拉刷新的时候，只需要将新的数组赋值到数据list中
       // 上拉加载的时候，需要将新的数组添加到现有数据list中
@@ -147,6 +145,8 @@ class ResultListProvider extends ChangeNotifier {
         list = data;
         if (data.length == 0) {
           noResults = true;
+        } else {
+          noResults = false;
         }
       } else {
         list.addAll(data);
@@ -160,7 +160,6 @@ class ResultListProvider extends ChangeNotifier {
       if (reverseData && enableRefresh) {
         list = list.reversed;
       }
-
 
       if (headerLinkPagination != null && headerLinkPagination == true) {
         if (response.headers.map.containsKey('link')) {
@@ -232,6 +231,12 @@ class ResultListProvider extends ChangeNotifier {
 
   setAnimatedListKey(GlobalKey<SliverAnimatedListState> key) {
     listKey = key;
+  }
+
+  clearData() {
+    list.clear();
+    noResults = true;
+    notifyListeners();
   }
 
   @override

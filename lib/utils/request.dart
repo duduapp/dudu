@@ -215,4 +215,24 @@ class Request {
 
     return dio;
   }
+  
+  static String buildGetUrl(String url,Map params) {
+    if (params != null && params.isNotEmpty) {
+      StringBuffer sb = new StringBuffer("?");
+      params.forEach((key, value) {
+        if (value is List) {
+          for (var v in value) {
+            sb.write("$key[]" + "=" + "$v" + "&");
+          }
+        } else {
+          sb.write("$key" + "=" + "$value" + "&");
+        }
+      });
+      String paramStr = sb.toString();
+      paramStr = paramStr.substring(0, paramStr.length - 1);
+      url += paramStr;
+      return url;
+    }
+    return url;
+  }
 }
