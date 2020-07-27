@@ -130,12 +130,9 @@ class _NotificationsState extends State<Notifications>
         body: Column(
           children: [
             Expanded(
-              child: LoadingWidget(
-                endLoading: _canLoadWidget,
-                childWidget: ChangeNotifierProvider<ResultListProvider>.value(
-                  value: provider,
-                  child: ProviderEasyRefreshListView(),
-                ),
+              child: ChangeNotifierProvider<ResultListProvider>.value(
+                value: provider,
+                child: ProviderEasyRefreshListView(),
               ),
             )
           ],

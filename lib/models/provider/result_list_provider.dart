@@ -20,6 +20,8 @@ class ResultListProvider extends ChangeNotifier {
   bool finishRefresh = false;
   bool finishLoad = false;
   bool noResults = false;
+  bool isLoading = false;
+  DioError error;
   String nextUrl;
   final bool listenBlockEvent;
   GlobalKey<SliverAnimatedListState> listKey;
@@ -60,9 +62,9 @@ class ResultListProvider extends ChangeNotifier {
         notifyListeners();
       });
     }
-    if (firstRefresh) {
-      refresh();
-    }
+
+    refresh(showLoading: true);
+
     finishRefresh = !showHeader;
   }
 
@@ -71,8 +73,17 @@ class ResultListProvider extends ChangeNotifier {
     events[eventName] = callback;
   }
 
-  Future<void> refresh() async {
+  Future<void> refresh({bool showLoading = false}) async {
+    if (showLoading) {
+      error = null;
+      isLoading = true;
+      notifyListeners();
+    }
     await _startRequest(requestUrl, refresh: true);
+    if (showLoading) {
+      isLoading = false;
+      notifyListeners();
+    }
     if (!enableRefresh) {
       finishRefresh = true;
       finishLoad = true;
@@ -118,8 +129,15 @@ class ResultListProvider extends ChangeNotifier {
 
     await Request.get1(url: url,cancelToken: requestCancelToken)
         .then((response) {
-      if (response == null) {
+          //只有列表为空时，才显示错误，为了更好的用户体验
+      if (response is DioError && list.isEmpty) {
+        error = response;
+        notifyListeners();
         return;
+      } else if (response is DioError){
+        return;
+      } else {
+        error = null;
       }
       var data = response.data;
 
@@ -174,6 +192,9 @@ class ResultListProvider extends ChangeNotifier {
         }
       }
       notifyListeners();
+    }).catchError((e) {
+      print(e);
+      print('error');
     });
   }
 

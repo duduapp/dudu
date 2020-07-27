@@ -60,21 +60,15 @@ class _NewStatusState extends State<NewStatus> {
 
   int counter = 0;
 
-
   @override
   void initState() {
-    _controller = RichTextController(
-        {
-          RegExp(r"\B#[a-zA-Z0-9]+\b"):TextStyle(color:AppConfig.buttonColor),
-          RegExp(r"\B@[@\.a-zA-Z0-9]+\b"):TextStyle(color:AppConfig.buttonColor)
-        },
-        onMatch: (List<String> matches){
-        }
-    );
+    _controller = RichTextController({
+      RegExp(r"\B#[a-zA-Z0-9]+\b"): TextStyle(color: AppConfig.buttonColor),
+      RegExp(r"\B@[@\.a-zA-Z0-9]+\b"): TextStyle(color: AppConfig.buttonColor)
+    }, onMatch: (List<String> matches) {});
     super.initState();
     // 隐藏登录弹出页
     _myAcc = LoginedUser().account;
-
 
     if (widget.replyTo != null) {
       replyToId = widget.replyTo.id;
@@ -101,8 +95,9 @@ class _NewStatusState extends State<NewStatus> {
       }
     });
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      SettingsProvider provider = Provider.of<SettingsProvider>(context,listen: false);
-      _visibility =  provider.get('default_post_privacy');
+      SettingsProvider provider =
+          Provider.of<SettingsProvider>(context, listen: false);
+      _visibility = provider.get('default_post_privacy');
       _articleRange = Icon(AppConfig.visibilityIcons[_visibility]);
       sensitive = provider.get('make_media_sensitive');
     });
@@ -127,7 +122,8 @@ class _NewStatusState extends State<NewStatus> {
       prefs.setInt(_spKey('vote_expires_in'), vote.expiresIn);
       prefs.setBool(_spKey('multi_choice'), vote.multiChoice);
     }
-    prefs.setString(_spKey('scheduled_at'), scheduledAt.toIso8601String());
+
+    prefs.setString(_spKey('scheduled_at'), scheduledAt?.toIso8601String());
     prefs.setBool(_spKey('sensitive'), sensitive);
   }
 
@@ -173,7 +169,7 @@ class _NewStatusState extends State<NewStatus> {
       }
       var timeStr = prefs.get(_spKey('scheduled_at'));
       scheduledAt = timeStr != null ? DateTime.parse(timeStr) : null;
-      if (scheduledAt.difference(DateTime.now()).inSeconds < 300) {
+      if (scheduledAt != null && scheduledAt.difference(DateTime.now()).inSeconds < 300) {
         scheduledAt = null;
       }
       sensitive = prefs.getBool(_spKey('sensitive'));
@@ -216,38 +212,18 @@ class _NewStatusState extends State<NewStatus> {
     if (_controller.text.isNotEmpty ||
         images.length > 0 ||
         (vote != null && vote.canCreate())) {
-      showDialog(
+      DialogUtils.showSimpleAlertDialog(
           context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              content: Text('是否保存本次编辑'),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('不保留'),
-                  onPressed: () async {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    _clearDraft();
-                    AppNavigate.pop(context);
-                    AppNavigate.pop(context);
-                  },
-                ),
-                FlatButton(
-                  child: Text('保留'),
-                  onPressed: () {
-                    _saveToDraft();
-                    AppNavigate.pop(context);
-                    AppNavigate.pop(context);
-                  },
-                )
-              ],
-            );
-          });
+          popAfter: true,
+          text: '是否保留本次编辑',
+          onCancel: () {_clearDraft();AppNavigate.pop(context);},
+          onConfirm: () { _saveToDraft();AppNavigate.pop(context);},
+          cancelText: '不保留',
+          confirmText: '保留');
       return false;
     }
     return true;
   }
-
 
   showToast(String str) {
     Fluttertoast.showToast(
@@ -307,9 +283,11 @@ class _NewStatusState extends State<NewStatus> {
               dialogMessage: '嘟嘟中...',
               successMessage: '嘟文已发送')
           .then((data) {
-        AppNavigate.pop(context);
-        if (scheduledAt != null) {
-          eventBus.emit(EventBusKey.scheduledStatusPublished);
+        if (data != null) {
+          AppNavigate.pop(context);
+          if (scheduledAt != null) {
+            eventBus.emit(EventBusKey.scheduledStatusPublished);
+          }
         }
       });
     } on DioError catch (e) {
@@ -459,7 +437,8 @@ class _NewStatusState extends State<NewStatus> {
   }
 
   showVoteDialog() async {
-    Vote newVote = await DialogUtils.showRoundedDialog(content: HandleVoteDialog(vote: vote),context:context);
+    Vote newVote = await DialogUtils.showRoundedDialog(
+        content: HandleVoteDialog(vote: vote), context: context);
 
     if (newVote != null) {
       setState(() {
@@ -490,8 +469,6 @@ class _NewStatusState extends State<NewStatus> {
     PopupMenu.context = context;
     var inputFilledColor = Theme.of(context).inputDecorationTheme.fillColor;
     var primaryColor = Theme.of(context).primaryColor;
-
-
 
     return WillPopScope(
       onWillPop: _onWillPop,
@@ -684,7 +661,9 @@ class _NewStatusState extends State<NewStatus> {
                   visible: showEmojiKeyboard,
                   child: SizedBox(
                     height: keyboardHeight,
-                    child: EmojiKeyboard(onChoose: (e) => _controller.text = _controller.text +' :'+e+':'),
+                    child: EmojiKeyboard(
+                        onChoose: (e) => _controller.text =
+                            _controller.text + ' :' + e + ':'),
                   ),
                 )
               ]),

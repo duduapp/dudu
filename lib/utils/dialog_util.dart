@@ -42,25 +42,34 @@ class DialogUtils {
         });
   }
 
-  static showSimpleAlertDialog(
+  // only info 只是展示信息，不做其它操作
+  static showSimpleAlertDialog (
       {BuildContext context,
       String text,
+        Function onCancel,
       Function onConfirm,
       bool popFirst,
-      bool popAfter = true}) {
+      bool popAfter = true,
+      bool onlyInfo = false,
+      String cancelText,
+      String confirmText}) async{
     if (popFirst != null && popFirst == true) {
       AppNavigate.pop(context);
     }
-    Function callback;
+    Function onConfirmCallback;
     if (popAfter) {
-      callback = () async {
+      onConfirmCallback = () async {
         AppNavigate.pop(context);
         await onConfirm();
       };
     } else {
-      callback = onConfirm;
+      onConfirmCallback = onConfirm;
     }
-    showDialog(
+    if (onlyInfo) {
+      onConfirmCallback = () {AppNavigate.pop(context);};
+    }
+
+    return await showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -68,13 +77,19 @@ class DialogUtils {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             content: Text(text),
             actions: <Widget>[
+              if (!onlyInfo)
               FlatButton(
-                child: Text('取消'),
-                onPressed: () => AppNavigate.pop(context),
+                child: Text(cancelText ?? '取消'),
+                onPressed: () {
+                  if (onCancel != null) {
+                    onCancel();
+                  }
+                  AppNavigate.pop(context);
+                },
               ),
               FlatButton(
-                child: Text('确定'),
-                onPressed: callback,
+                child: Text(confirmText ?? '确定'),
+                onPressed: onConfirmCallback,
               )
             ],
           );

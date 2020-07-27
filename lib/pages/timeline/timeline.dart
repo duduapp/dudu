@@ -26,29 +26,15 @@ class Timeline extends StatefulWidget {
 }
 
 class _TimelineState extends State<Timeline> {
-  bool _showTab = false;
-
-  Function loginSuccess;
   @override
   void initState() {
-    loginSuccess = (arg) {
-      setState(() {
-        _showTab = true;
-      });
-    };
-    eventBus.on(
-        EventBusKey.LoadLoginMegSuccess,loginSuccess
-    );
     super.initState();
-
   }
 
   @override
   void dispose() {
-    eventBus.off(EventBusKey.LoadLoginMegSuccess,loginSuccess);
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -88,29 +74,25 @@ class _TimelineState extends State<Timeline> {
             IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
-                AppNavigate.push(context, NewStatus(),routeType: RouterType.material);
+                AppNavigate.push(context, NewStatus(),
+                    routeType: RouterType.material);
               },
             )
           ],
         ),
       ),
-      body: LoadingWidget(
-          childWidget: ChangeNotifierProvider<ResultListProvider>(
-              create: (context) => ResultListProvider(
-                requestUrl: url,
-                buildRow: ListViewUtil.statusRowFunction(),
-                listenBlockEvent: true,
-                dataHandler: ListViewUtil.dataHandlerPrefixIdFunction(widget.type.toString().split('.')[1])
-              ),
-            builder: (context, snapshot) {
-              return ProviderEasyRefreshListView(
-                type: widget.type,
-              );
-            }
-          ),
-          endLoading: _showTab),
+      body: ChangeNotifierProvider<ResultListProvider>(
+          create: (context) => ResultListProvider(
+              requestUrl: url,
+              buildRow: ListViewUtil.statusRowFunction(),
+              listenBlockEvent: true,
+              dataHandler: ListViewUtil.dataHandlerPrefixIdFunction(
+                  widget.type.toString().split('.')[1])),
+          builder: (context, snapshot) {
+            return ProviderEasyRefreshListView(
+              type: widget.type,
+            );
+          }),
     );
   }
-
-
 }

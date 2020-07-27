@@ -5,6 +5,7 @@ import 'package:fastodon/pages/timeline/timeline.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/list_view.dart';
 import 'package:fastodon/widget/common/empty_view.dart';
+import 'package:fastodon/widget/common/error_view.dart';
 import 'package:fastodon/widget/common/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -98,10 +99,16 @@ class _ProviderEasyRefreshListViewState
             GlobalKey<SliverAnimatedListState> listKey =
                 GlobalKey<SliverAnimatedListState>();
             provider.setAnimatedListKey(listKey);
+            if (provider.error != null) {
+              return ErrorView(
+                error: provider.error,
+                onClickRetry: () async{
+                  await provider.refresh(showLoading: true);
+                }
+              );
+            }
             // 初次可能从Provider 里面请求
-            return (provider.firstRefresh &&
-                    !provider.noResults &&
-                    provider.list.isEmpty)
+            return provider.isLoading
                 ? LoadingView()
                 : EasyRefresh.custom(
                     topBouncing: false,
@@ -130,9 +137,7 @@ class _ProviderEasyRefreshListViewState
                                       crossAxisCount: 3),
                             )
                     ],
-                    firstRefresh: provider.firstRefresh
-                        ? false
-                        : true, //在NestedScrollView 不用启用这个选项，而且不能设置scroll controller
+                    firstRefresh: false, //在NestedScrollView 不用启用这个选项，而且不能设置scroll controller
                     firstRefreshWidget: LoadingView(),
                     header:
                         widget.header ?? ListViewUtil.getDefaultHeader(context),

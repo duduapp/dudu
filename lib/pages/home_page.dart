@@ -33,32 +33,32 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _verifyToken() async {
-    LoginedUser user = LoginedUser();
-    LocalAccount localAccount = await LocalStorageAccount.getActiveAccount();
+//    LoginedUser user = LoginedUser();
+//    LocalAccount localAccount = await LocalStorageAccount.getActiveAccount();
+//
 
 
 
-
-    if (localAccount == null) {
-      AppNavigate.pushAndRemoveUntil(context, Login(),
-          routeType: RouterType.fade);
-    } else {
-      user.setHost(localAccount.hostUrl);
-      user.setToken(localAccount.token);
-      user.account = localAccount.account;
-    }
-
-
-    Request.get(url: Api.VerifyToken).then((data) {
-      if (data['name'] == AppConfig.ClientName) {
-        eventBus.emit(EventBusKey.LoadLoginMegSuccess);
-        TaskRunner.enableNotification();
-       // SettingsProvider.getCurrentContextProvider().load();
-      } else {
-        AppNavigate.pushAndRemoveUntil(context, Login(),
-            routeType: RouterType.fade);
-      }
-    });
+//    if (localAccount == null) {
+//      AppNavigate.pushAndRemoveUntil(context, Login(),
+//          routeType: RouterType.fade);
+//    } else {
+//      user.setHost(localAccount.hostUrl);
+//      user.setToken(localAccount.token);
+//      user.account = localAccount.account;
+//    }
+//
+//
+//    Request.get(url: Api.VerifyToken).then((data) {
+//      if (data != null && data['name'] == AppConfig.ClientName) {
+//        eventBus.emit(EventBusKey.LoadLoginMegSuccess);
+//        TaskRunner.enableNotification();
+//       // SettingsProvider.getCurrentContextProvider().load();
+//      } else {
+//        AppNavigate.pushAndRemoveUntil(context, Login(),
+//            routeType: RouterType.fade);
+//      }
+//    });
   }
 
 

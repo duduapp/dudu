@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/public.dart';
+import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/widget/dialog/loading_dialog.dart';
 import 'package:fastodon/widget/flutter_framework/progress_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,7 +20,7 @@ enum RequestType {
 class Request {
   static Future get({String url, Map params, Map header}) async {
     Response res = await get1(url: url, params: params, header: header);
-    return res.data;
+    return res?.data;
   }
 
   // response all instead of response data only
@@ -47,10 +48,27 @@ class Request {
         return response;
       }
     } catch (exception) {
+
       if (CancelToken.isCancel(exception)) {
         return;
       }
-      showTotast(exception.toString());
+      if (exception is DioError) {
+        // The access token is invalid
+        if (exception.response != null && exception.response.statusCode == 401) {
+          if (!AppConfig.dialogOpened) {
+            DialogUtils.showSimpleAlertDialog(
+                context: navGK.currentState.overlay.context,
+                text: '你的登录信息已失效，你可以退出重新登录',
+                onlyInfo: true).then((val){AppConfig.dialogOpened = false;});
+            AppConfig.dialogOpened = true;
+          }
+          return exception;
+        }
+        return exception;
+
+
+      }
+      //showTotast(exception.toString());
     }
   }
 
@@ -161,9 +179,23 @@ class Request {
         finished: true,
       ));
     } catch (e) {
-      if (errMsg != null) {
-        showTotast(errMsg);
+      if (e is DioError) {
+        dialog?.hide();
+        if (e.response != null && e.response.statusCode == 401) {
+          if (!AppConfig.dialogOpened) {
+            DialogUtils.showSimpleAlertDialog(
+                context: navGK.currentState.overlay.context,
+                text: '你的登录信息已失效，你可以退出重新登录',
+                onlyInfo: true).then((val){AppConfig.dialogOpened = false;});
+            AppConfig.dialogOpened = true;
+          }
+        }
+        return e;
       }
+      return null;
+//      if (errMsg != null) {
+//        showTotast(errMsg);
+//      }
     }
 
     if (closeDialogDelay == 0) {

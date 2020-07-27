@@ -120,9 +120,6 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    return LoadingWidget(
-      endLoading: _finishRequest,
-      childWidget: settingWidget(),
-    );
+    return settingWidget();
   }
 }
