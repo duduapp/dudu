@@ -1,6 +1,7 @@
 import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/setting/filter/common_filter_edit.dart';
+import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/widget/common/list_row.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
@@ -108,18 +109,25 @@ class _CommonFilterListState extends State<CommonFilterList> {
   _add(BuildContext context) {
     ResultListProvider provider = Provider.of<ResultListProvider>(context,listen: false);
     List phraseContext = [widget.type.toString().split('.')[1]];
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            contentPadding: EdgeInsets.all(8),
-            title: Text('添加新的过滤器'),
-            content: CommonFilterEdit(
-              context: phraseContext,
-              newFilter: true,
-              provider: provider,
-            ),
-          );
-        });
+
+    DialogUtils.showRoundedDialog(context: context,content: CommonFilterEdit(
+      context: phraseContext,
+      newFilter: true,
+      provider: provider,
+    ));
+
+//    showDialog(
+//        context: context,
+//        builder: (BuildContext context) {
+//          return AlertDialog(
+//            contentPadding: EdgeInsets.all(8),
+//            title: Text('添加新的过滤器'),
+//            content: CommonFilterEdit(
+//              context: phraseContext,
+//              newFilter: true,
+//              provider: provider,
+//            ),
+//          );
+//        });
   }
 }

@@ -14,7 +14,7 @@ class ListRow extends StatelessWidget {
       child: child,
       decoration: BoxDecoration(
           border:
-          Border(bottom: BorderSide(color: Theme.of(context).buttonColor))),
+          Border(bottom: BorderSide(color: Theme.of(context).dividerColor,))),
     );
   }
 }

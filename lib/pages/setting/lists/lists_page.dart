@@ -1,9 +1,11 @@
 import 'package:fastodon/api/lists_api.dart';
 import 'package:fastodon/constant/api.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
+import 'package:fastodon/pages/setting/lists/lists_add.dart';
 import 'package:fastodon/pages/setting/lists/lists_eidt.dart';
 import 'package:fastodon/pages/timeline/lists_timeline.dart';
 import 'package:fastodon/public.dart';
+import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/widget/common/list_row.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +50,7 @@ class _ListsPageState extends State<ListsPage> {
     );
   }
 
-  Widget _row(int idx, List data,ResultListProvider provider) {
+  Widget _row(int idx, List data, ResultListProvider provider) {
     var list = data[idx];
     return ListRow(
       child: InkWell(
@@ -93,79 +95,24 @@ class _ListsPageState extends State<ListsPage> {
   }
 
   _showEditDialog(String listId) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            child: ListsEdit(listId, ""),
-          );
-        });
+    DialogUtils.showRoundedDialog(
+        context: context, content: ListsEdit(listId, ""), radius: 3);
   }
 
   _showRenameDialog(String id, String title, ResultListProvider provider) {
-    TextEditingController _controller = TextEditingController(text: title);
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: TextField(
-              decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Theme.of(context).buttonColor))),
-              controller: _controller,
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('取消'),
-                onPressed: () => AppNavigate.pop(context),
-              ),
-              FlatButton(
-                child: Text('重命名列表'),
-                onPressed: () async {
-                  AppNavigate.pop(context);
-                  var data =
-                      await ListsApi.updateTitle(id, _controller.text.trim());
-                  provider.update(data);
-                },
-              )
-            ],
-          );
-        });
+
+    DialogUtils.showRoundedDialog(context: context,content: ListsRename(id: id,title: title,provider: provider,));
+
   }
 
   _showAddDialog() {
     ResultListProvider provider =
         Provider.of<ResultListProvider>(providerContext, listen: false);
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          TextEditingController _controller = TextEditingController();
-          return AlertDialog(
-            content: TextField(
-              controller: _controller,
-              decoration: InputDecoration(
-                  hintText: '列表名',
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Theme.of(context).buttonColor))),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('取消'),
-                onPressed: () => AppNavigate.pop(context),
-              ),
-              FlatButton(
-                child: Text('新建列表'),
-                onPressed: () async {
-                  AppNavigate.pop(context);
-                  var newList = await ListsApi.add(_controller.text.trim());
-                  provider.addToListWithAnimation(newList);
-                },
-              )
-            ],
-          );
-        });
+    DialogUtils.showRoundedDialog(
+        context: providerContext,
+        content: ListsAdd(
+          provider: provider,
+        ));
   }
 
   _remove(String id, ResultListProvider provider) async {
@@ -173,3 +120,63 @@ class _ListsPageState extends State<ListsPage> {
     provider.removeByIdWithAnimation(id);
   }
 }
+
+class ListsRename extends StatefulWidget {
+  final String id;
+  final String title;
+  final ResultListProvider provider;
+
+  const ListsRename({Key key, this.id, this.title,this.provider}) : super(key: key);
+  
+  @override
+  _ListsRenameState createState() => _ListsRenameState();
+}
+
+class _ListsRenameState extends State<ListsRename> {
+  TextEditingController _controller;
+  
+  @override
+  void initState() {
+    _controller = TextEditingController(text: widget.title);
+    super.initState();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(12,12,12,5),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          TextField(
+            decoration: InputDecoration(
+                focusedBorder: UnderlineInputBorder(
+                    borderSide:
+                    BorderSide(color: Theme.of(context).buttonColor))),
+            controller: _controller,
+          ),
+          SizedBox(height: 10,),
+          Row(
+            children: [
+              Spacer(),
+              FlatButton(
+                child: Text('取消',style: TextStyle(color: Theme.of(context).buttonColor)),
+                onPressed: () => AppNavigate.pop(context),
+              ),
+              FlatButton(
+                child: Text('重命名列表',style: TextStyle(color: Theme.of(context).buttonColor)),
+                onPressed: () async {
+                  AppNavigate.pop(context);
+                  var data =
+                  await ListsApi.updateTitle(widget.id, _controller.text.trim());
+                  widget.provider.update(data);
+                },
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+

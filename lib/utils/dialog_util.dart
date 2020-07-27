@@ -43,7 +43,11 @@ class DialogUtils {
   }
 
   static showSimpleAlertDialog(
-  {BuildContext context, String text, Function onConfirm,bool popFirst,bool popAfter = true}) {
+      {BuildContext context,
+      String text,
+      Function onConfirm,
+      bool popFirst,
+      bool popAfter = true}) {
     if (popFirst != null && popFirst == true) {
       AppNavigate.pop(context);
     }
@@ -61,7 +65,7 @@ class DialogUtils {
         builder: (BuildContext context) {
           return AlertDialog(
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             content: Text(text),
             actions: <Widget>[
               FlatButton(
@@ -77,21 +81,21 @@ class DialogUtils {
         });
   }
 
-  static showProgressDialog() {
 
-  }
 
-  static showRoundedDialog({Widget content,BuildContext context}) async{
-     var res = await showDialog(
+  static showProgressDialog() {}
+
+  static showRoundedDialog(
+      {Widget content, BuildContext context, double radius = 8}) async {
+    var res = await showDialog(
         context: context,
         builder: (context) {
-      return Dialog(
-        shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: content,
-      );
-    });
-     return res;
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(radius)),
+            child: content,
+          );
+        });
+    return res;
   }
-
 }

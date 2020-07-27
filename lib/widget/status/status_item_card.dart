@@ -20,7 +20,7 @@ class StatusItemCard extends StatelessWidget {
           onTap: () => AppNavigate.push(context, InnerBrowser(statusData.card.url)),
           child: Card(
             elevation: 3,
-    //        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.grey[50],
