@@ -8,6 +8,7 @@ import 'package:fastodon/pages/timeline/notification_display_type_dialog.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
+import 'package:fastodon/widget/other/follow_request_cell.dart';
 import 'package:fastodon/widget/status/status_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +90,9 @@ class _NotificationsState extends State<Notifications>
         refIcon: Icons.repeat,
         refString: '${StringUtil.displayName(item.account)}转嘟了你的嘟文',
       );
-    } else {
+    } else if (item.type == 'follow_request') {
+      return FollowRequestCell(item: item,);
+    }else {
       return Container();
     }
   }

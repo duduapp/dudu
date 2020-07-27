@@ -59,8 +59,8 @@ class _SettingNotificationState extends State<SettingNotification> {
               type: SettingType.bool,
             ),
             ProviderSettingCell(
-              providerKey: 'show_notifications.follow_requests',
-              title: '加好友请求',
+              providerKey: 'show_notifications.follow_request',
+              title: '关注请求',
               type: SettingType.bool,
             ),
             ProviderSettingCell(

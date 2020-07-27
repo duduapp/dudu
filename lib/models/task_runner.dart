@@ -50,6 +50,9 @@ class TaskRunner {
               title = '你发起或参与的投票已经完成了';
               body = StringUtil.removeAllHtmlTags(item.status.content);
               break;
+            case 'follow_request':
+              title = '${StringUtil.displayName(item.account)}请求关注你';
+              break;
           }
           NotificationUtil.show(title: title,body: body,payload: message.data);
         }

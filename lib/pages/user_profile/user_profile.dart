@@ -246,25 +246,11 @@ class _UserProfileState extends State<UserProfile>
   }
 
   _showUnfollowConfrimDialog() {
-    showDialog(
+    DialogUtils.showSimpleAlertDialog(
         context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: Text('不再关注此用户'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('取消'),
-                onPressed: () => AppNavigate.pop(context),
-              ),
-              FlatButton(
-                child: Text('确定'),
-                onPressed: () {
-                  AppNavigate.pop(context);
-                  _unfollowByid();
-                },
-              )
-            ],
-          );
+        text: '不再关注此用户',
+        onConfirm: () {
+          _unfollowByid();
         });
   }
 
@@ -349,7 +335,7 @@ class _UserProfileState extends State<UserProfile>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-            //  headerImage(context),
+              //  headerImage(context),
               Stack(overflow: Overflow.visible, children: [
                 Column(
                   children: [
@@ -406,10 +392,37 @@ class _UserProfileState extends State<UserProfile>
                                   textScaleFactor: Screen.scaleFromSetting(
                                       SettingsProvider.getWithCurrentContext(
                                           'text_scale'))),
-                              child: Text(
-                                '@' + _account.acct,
-                                style: TextStyle(fontSize: 16),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '@' + _account.acct,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  SizedBox(
+                                    width: 3,
+                                  ),
+                                  Visibility(
+                                    visible:
+                                        _account != null && _account.locked,
+                                    child: Icon(
+                                      Icons.lock,
+                                      size: 16,
+                                    ),
+                                  )
+                                ],
                               ),
+                            ),
+                            Visibility(
+                              visible: relationShip != null && relationShip.followedBy,
+                              child: Container(
+                                  padding: EdgeInsets.all(3),
+                                  margin: EdgeInsets.only(top: 5),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(),
+                                    borderRadius: BorderRadius.circular(12)
+                                  ),
+                                  child: Text('关注了你')),
+
                             ),
                             Container(
                                 width: Screen.width(context) - 60,

@@ -43,7 +43,7 @@ class SettingsProvider extends ChangeNotifier {
       'show_notifications':true,
       'show_notifications.reblog':true,
       'show_notifications.favourite': true,
-      'show_notifications.follow_requests':true,
+      'show_notifications.follow_request':true,
       'show_notifications.follow':true,
       'show_notifications.mention':true,
       'show_notifications.poll':true,

@@ -12,6 +12,7 @@ class AccountsApi {
   static const String filterUrl = '/api/v1/filters';
   static const String relationShipUrl = '/api/v1/accounts/relationships';
   static const String reportUrl = '/api/v1/reports';
+  static const String followRequestUrl = '/api/v1/follow_requests';
 
   static Future<OwnerAccount> getMyAccount() async{
     var data = await Request.get(url: url+'/verify_credentials');
@@ -143,5 +144,13 @@ class AccountsApi {
     }
 
     return await Request.post(url: reportUrl,params: params);
+  }
+
+  static acceptFollow(String accountId) async{
+    return await Request.post(url: '$followRequestUrl/$accountId/authorize');
+  }
+
+  static rejectFollow(String accountId) async {
+    return await Request.post(url: '$followRequestUrl/$accountId/reject',showDialog: false);
   }
 }
