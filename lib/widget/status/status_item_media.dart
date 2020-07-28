@@ -286,8 +286,18 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
           borderRadius: BorderRadius.circular(8.0),
           child: Hero(
             tag: image.id,
+            flightShuttleBuilder: (
+                BuildContext flightContext,
+                Animation<double> animation,
+                HeroFlightDirection flightDirection,
+                BuildContext fromHeroContext,
+                BuildContext toHeroContext,
+                ) {
+              final Hero hero = flightDirection == HeroFlightDirection.push ? fromHeroContext.widget : toHeroContext.widget;
+              return hero.child;
+            },
             child: CachedNetworkImage(
-                fit: BoxFit.cover,
+               fit: BoxFit.cover,
                 width: width,
                 height: height,
                 imageUrl: imageUrl,

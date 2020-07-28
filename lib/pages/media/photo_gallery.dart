@@ -63,13 +63,24 @@ class _PhotoGalleryState extends State<PhotoGallery> {
           child: Container(
             decoration: widget.backgroundDecoration,
             constraints: BoxConstraints.expand(
+              width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
             ),
             child: PhotoViewGallery.builder(
               scrollPhysics: const BouncingScrollPhysics(),
               builder: _buildItem,
               itemCount: widget.galleryItems.length,
-              loadingBuilder: widget.loadingBuilder,
+              loadingBuilder: (context, event) => Center(
+                child: Container(
+                  width: 20.0,
+                  height: 20.0,
+                  child: CircularProgressIndicator(
+                    value: event == null
+                        ? 0
+                        : event.cumulativeBytesLoaded / event.expectedTotalBytes,
+                  ),
+                ),
+              ),
               backgroundDecoration: widget.backgroundDecoration,
               pageController: widget.pageController,
               onPageChanged: onPageChanged,
@@ -94,29 +105,30 @@ class _PhotoGalleryState extends State<PhotoGallery> {
 
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
     var item = widget.galleryItems[index];
-    return PhotoViewGalleryPageOptions.customChild(
+    return PhotoViewGalleryPageOptions(
+      imageProvider: CachedNetworkImageProvider(item.url),
       heroAttributes: PhotoViewHeroAttributes(tag: item.id),
-      child: Container(
-        child: CachedNetworkImage(
-          fit: BoxFit.fitWidth,
-          imageUrl: item.url,
-          progressIndicatorBuilder: (context, url, downloadProgress) =>
-              Container(
-                child: Center(
-                  child: SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: CircularProgressIndicator(
-                        value: downloadProgress.progress),
-                  ),
-                ),
-              ),
-        ),
-      ),
+//      child: Container(
+//        child: CachedNetworkImage(
+//          fit: BoxFit.fitWidth,
+//          imageUrl: item.url,
+//          progressIndicatorBuilder: (context, url, downloadProgress) =>
+//              Container(
+//                child: Center(
+//                  child: SizedBox(
+//                    width: 100,
+//                    height: 100,
+//                    child: CircularProgressIndicator(
+//                        value: downloadProgress.progress),
+//                  ),
+//                ),
+//              ),
+//        ),
+//      ),
       //  childSize: const Size(300, 300),
-      initialScale: PhotoViewComputedScale.covered ,
-      minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
-      maxScale: PhotoViewComputedScale.covered * 3.0,
+      initialScale: PhotoViewComputedScale.contained ,
+      minScale: PhotoViewComputedScale.contained * 0.5,
+      maxScale: PhotoViewComputedScale.contained * 3.0,
      // heroAttributes: PhotoViewHeroAttributes(tag: item.id),
     );
   }

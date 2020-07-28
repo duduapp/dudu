@@ -21,7 +21,8 @@ dependencies:
   cupertino_icons: ^0.1.2
   dio: ^3.0.9
   json_serializable: ^2.0.0
-  cached_network_image: ^2.2.0+1
+  cached_network_image:
+    path: ../flutter_cached_network_image/
   shared_preferences: ^0.5.1+1
   flutter_spinkit: ^4.1.2+1
   fluttertoast: ^3.0.1
