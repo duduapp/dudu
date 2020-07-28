@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Color activeColor = AppConfig.buttonColor;
+    Color activeColor = Theme.of(context).toggleableActiveColor;
 
     return AppRetainWidget(
       child: Scaffold(

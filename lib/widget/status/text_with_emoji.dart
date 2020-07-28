@@ -17,9 +17,10 @@ class TextWithEmoji extends StatelessWidget {
 
   static List<InlineSpan> getTextSpans(
   {String text, List emojis,TextStyle style}) {
-    if (emojis.length == 0) {
+    if (emojis.length == 0 || text.trim().isEmpty) {
       return [TextSpan(text: text)];
     }
+
     var matches = regExp.allMatches(text);
     if (matches.length == 0) {
       return [TextSpan(text: text)];

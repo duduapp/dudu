@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class AppConfig {
-  static String ClientName = 'masfto';
+  static String ClientName = '嘟嘟';
   static String RedirectUris = 'https://google.com';
   static String Scopes = 'read write follow push';
 

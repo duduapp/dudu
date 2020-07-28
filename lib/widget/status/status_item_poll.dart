@@ -166,7 +166,7 @@ class _StatusItemPollState extends State<StatusItemPoll> {
                     SizedBox(
                       width: 5,
                     ),
-                    Text(title)
+                    Flexible(child: Text(title,overflow: TextOverflow.ellipsis,maxLines: 3,))
                   ],
                 ),
               )

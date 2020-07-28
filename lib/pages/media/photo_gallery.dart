@@ -95,24 +95,22 @@ class _PhotoGalleryState extends State<PhotoGallery> {
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
     var item = widget.galleryItems[index];
     return PhotoViewGalleryPageOptions.customChild(
+      heroAttributes: PhotoViewHeroAttributes(tag: item.id),
       child: Container(
-        child: Hero(
-          tag: item.id,
-          child: CachedNetworkImage(
-            fit: BoxFit.fitWidth,
-            imageUrl: item.url,
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                Container(
-                  child: Center(
-                    child: SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: CircularProgressIndicator(
-                          value: downloadProgress.progress),
-                    ),
+        child: CachedNetworkImage(
+          fit: BoxFit.fitWidth,
+          imageUrl: item.url,
+          progressIndicatorBuilder: (context, url, downloadProgress) =>
+              Container(
+                child: Center(
+                  child: SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: CircularProgressIndicator(
+                        value: downloadProgress.progress),
                   ),
                 ),
-          ),
+              ),
         ),
       ),
       //  childSize: const Size(300, 300),

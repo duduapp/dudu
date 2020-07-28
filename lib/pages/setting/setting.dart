@@ -23,7 +23,6 @@ class Setting extends StatefulWidget {
 
 class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
   OwnerAccount _account;
-  bool _finishRequest = false;
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -36,11 +35,9 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
     super.initState();
     _account = LoginedUser().account;
 
-    loginSuccess = (arg) async{
-      await _getMyAccount();
-    };
-    eventBus.on(EventBusKey.LoadLoginMegSuccess, loginSuccess);
-
+    if (_account == null) {
+      _getMyAccount();
+    }
     eventBus.on(EventBusKey.accountUpdated,(arg) {
       _getMyAccount();
     });
@@ -58,7 +55,6 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
     LocalStorageAccount.addOwnerAccount(account);
     LoginedUser().account = account;
     setState(() {
-      _finishRequest = true;
       _account = account;
     });
   }

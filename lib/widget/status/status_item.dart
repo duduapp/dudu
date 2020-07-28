@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
+import 'package:fastodon/pages/status/status_detail.dart';
 import 'package:fastodon/pages/user_profile/user_profile.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/status/status_item_account.dart';
@@ -29,54 +30,60 @@ class _StatusItemState extends State<StatusItem> {
   @override
   Widget build(BuildContext context) {
     if (widget.subStatus != null && widget.subStatus) {
-      return Container(
-        color: Theme
-            .of(context)
-            .primaryColor,
-        padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
-        margin: EdgeInsets.only(bottom: 8),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            InkWell(
-              onTap: () => AppNavigate.push(context, UserProfile(accountId: widget.item.account.id,)),
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                child: Avatar(url: widget.item.account.avatarStatic),
+      return InkWell(
+        onTap: () => AppNavigate.push(context, StatusDetail(widget.item)),
+        child: Container(
+          color: Theme
+              .of(context)
+              .primaryColor,
+          padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
+          margin: EdgeInsets.only(bottom: 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              InkWell(
+                onTap: () => AppNavigate.push(context, UserProfile(accountId: widget.item.account.id,)),
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                  child: Avatar(url: widget.item.account.avatarStatic),
+                ),
               ),
-            ),
-            Expanded(
-              child: Column(
-                children: <Widget>[
-                  SubStatusItemHeader(widget.item),
-                  StatusItemContent(widget.item),
-                  StatusItemAction(item:widget.item)
-                ],
-              ),
-            )
-          ],
+              Expanded(
+                child: Column(
+                  children: <Widget>[
+                    SubStatusItemHeader(widget.item),
+                    StatusItemContent(widget.item),
+                    StatusItemAction(item:widget.item)
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       );
     } else {
       StatusItemData data = widget.item.reblog ?? widget.item;
-      return Container(
-        color: Theme
-            .of(context)
-            .primaryColor,
-        padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
-        margin: EdgeInsets.only(bottom: 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            refHeader(),
-            StatusItemAccount(data.account,createdAt:widget.primary ?null :data.createdAt),
-            StatusItemContent(data,primary: widget.primary,),
-            StatusItemCard(data),
-            if (widget.primary) StatusItemPrimaryBottom(data),
-            StatusItemAction(
-              item: data
-            ),
-          ],
+      return InkWell(
+        onTap: () => AppNavigate.push(context, StatusDetail(widget.item)),
+        child: Container(
+          color: Theme
+              .of(context)
+              .primaryColor,
+          padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
+          margin: EdgeInsets.only(bottom: 8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              refHeader(),
+              StatusItemAccount(data.account,createdAt:widget.primary ?null :data.createdAt),
+              StatusItemContent(data,primary: widget.primary,),
+              StatusItemCard(data),
+              if (widget.primary) StatusItemPrimaryBottom(data),
+              StatusItemAction(
+                item: data
+              ),
+            ],
+          ),
         ),
       );
     }

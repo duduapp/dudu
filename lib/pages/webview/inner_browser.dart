@@ -25,13 +25,19 @@ class _InnerBrowserState extends State<InnerBrowser> {
       });
     });
 
+    _flutterWebviewPlugin.onUrlChanged.listen((event) {
+      print(event);
+    });
+
     _flutterWebviewPlugin.onStateChanged.listen((WebViewStateChanged st) async {
       String currentWebviewTitle = await _flutterWebviewPlugin.evalJavascript("window.document.title");
       setState(() => {title = currentWebviewTitle});
     });
 
     return WebviewScaffold(
+      userAgent: 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Mobile Safari/537.36',
       url: widget.url,
+      withJavascript: true,
       appBar: AppBar(
         leading: IconButton(icon: Icon(Icons.clear,size: 30,),onPressed: ()=>AppNavigate.pop(context),),
         title: Text(title),

@@ -29,11 +29,12 @@ class _StatusTextEditorState extends State<StatusTextEditor> {
     return MeasureSize(
       onChange: (size) {
         if (currentWidgetHeight != size.height) {
-            _boxController.resize();
+          try {
+            _boxController?.resize();
+          } catch (e) {
 
-
+          }
         }
-        print(size.height);
       },
       child: TypeAheadField(
         suggestionsBoxVerticalOffset: 5,

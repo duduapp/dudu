@@ -28,7 +28,7 @@ class StatusItemCard extends StatelessWidget {
 
               ),
 
-              height: 120,
+              height: 130,
 
               child: Row(
                 children: <Widget>[
@@ -36,7 +36,7 @@ class StatusItemCard extends StatelessWidget {
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(6),bottomLeft: Radius.circular(6)),
                     child: CachedNetworkImage(
                       width: 120,
-                      height: 120,
+                      height: 130,
                       imageUrl: statusData.card.image,
                       fit: BoxFit.cover,
                     ),
@@ -46,20 +46,28 @@ class StatusItemCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 3,right: 5),
-                          child: Text(
-                            statusData.card.title,
-                            style: TextStyle(fontSize: 15),
-                            softWrap: false,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                        Flexible(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 5,right: 5),
+                            child: Text(
+                              statusData.card.title,
+                              style: TextStyle(fontSize: 14),
+                              softWrap: false,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                         SizedBox(height: 5),
-                        Expanded(child: Padding(
+                        Flexible(flex:3,child: Padding(
                           padding: const EdgeInsets.only(bottom:4.0,right: 5),
-                          child: Text(statusData.card.description, style: TextStyle(fontSize: 14),overflow: TextOverflow.ellipsis,maxLines: 4,),
+                          child: Text(statusData.card.description, style: TextStyle(fontSize: 14),overflow: TextOverflow.ellipsis,maxLines: 3,),
+                        )),
+                        SizedBox(height: 5,),
+                        Flexible(flex:1,child: Padding(
+                          padding: const EdgeInsets.only(bottom:4.0,right: 5),
+                          child: Text(statusData.card.url, style: TextStyle(fontSize: 14,color: Theme.of(context).accentColor),overflow: TextOverflow.ellipsis,maxLines: 1,),
                         ))
                       ],
                     ),

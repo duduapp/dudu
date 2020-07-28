@@ -69,7 +69,7 @@ class Request {
     }
   }
 
-  static Future get2({String url,Object params,bool showDialog = false,bool returnAll}) async{
+  static Future get2({String url,Object params,bool showDialog = false,bool returnAll = false}) async{
     return await _request(requestType: RequestType.get,url: url,params: params,showDialog: showDialog,returnAll: returnAll);
   }
 

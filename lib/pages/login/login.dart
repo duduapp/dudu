@@ -5,6 +5,7 @@ import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/home_page.dart';
 import 'package:fastodon/public.dart';
+import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/widget/common/loading_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,14 @@ class _LoginState extends State<Login> {
     paramsMap['scopes'] = AppConfig.Scopes;
 
     var data = await Request.post(url: '$hostUrl' + Api.Apps, params: paramsMap,showDialog: false);
+    setState(() {
+      _clickButton = false;
+    });
+    if (data == null) {
+      DialogUtils.showSimpleAlertDialog(context: navGK.currentState.overlay.context,text: '无法连接到服务器',onlyInfo: true);
+      return;
+    }
+
     AppCredential model = AppCredential.fromJson(data);
     setState(() {
       _clickButton = false;
@@ -215,7 +224,7 @@ class _LoginState extends State<Login> {
                               child: TextField(
                                 controller: _controller,
                                 decoration: new InputDecoration(
-                                    hintText: '例如：cmx.im',
+                                    hintText: '例如：mao.mastodonhub.com',
                                     disabledBorder: InputBorder.none,
                                     enabledBorder: InputBorder.none,
                                     focusedBorder: InputBorder.none,
@@ -262,18 +271,18 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                           ),
-                          InkWell(
-                            onTap: () {
-                              _chooseServer(context);
-                            },
-                            child: Container(
-                              child: Center(
-                                child: Text('选择域名',
-                                    style:
-                                        TextStyle(color: MyColor.loginWhite)),
-                              ),
-                            ),
-                          ),
+//                          InkWell(
+//                            onTap: () {
+//                              _chooseServer(context);
+//                            },
+//                            child: Container(
+//                              child: Center(
+//                                child: Text('选择域名',
+//                                    style:
+//                                        TextStyle(color: MyColor.loginWhite)),
+//                              ),
+//                            ),
+//                          ),
                         ],
                       ),
                     ),

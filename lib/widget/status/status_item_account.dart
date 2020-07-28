@@ -17,79 +17,89 @@ class StatusItemAccount extends StatelessWidget {
   final String createdAt;
   final Widget action;
   final bool noNavigateOnClick;
+  final StatusItemData statusData;
 
   StatusItemAccount(this.account,
-      {this.createdAt, this.action, this.noNavigateOnClick = false});
+      {this.createdAt, this.action, this.statusData,this.noNavigateOnClick = false});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: noNavigateOnClick
-          ? null
-          : () {
-              if (createdAt == null)
-                AppNavigate.push(context, UserProfile(accountId: account.id));
-            }, // 用作搜索页时，整个页面可点击
-      child: Row(
-        children: <Widget>[
-          Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-              child: InkWell(
-                onTap: noNavigateOnClick
-                    ? null
-                    : () {
-                        AppNavigate.push(
-                            context, UserProfile(accountId: account.id));
-                      },
-                child: Avatar(url: account.avatarStatic),
-              )),
-          Expanded(
-            child: Container(
-              height: 50,
-              //ns  margin: EdgeInsets.only(top: 8),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Flexible(
-                        child: TextWithEmoji(
-                          text: StringUtil.displayName(account),
-                          emojis: account.emojis,
-                          maxLines: 1,
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color:
-                                  Theme.of(context).textTheme.bodyText1.color),
-                        ),
-                        flex: 2,
+    if (noNavigateOnClick) {
+      return InkWell(
+        onTap: noNavigateOnClick
+            ? null
+            : () {
+          if (createdAt == null)
+            AppNavigate.push(context, UserProfile(accountId: account.id));
+        }, // 用作搜索页时，整个页面可点击
+        child: accountWidget(context),
+      );
+    } else {
+      return accountWidget(context);
+    }
+
+  }
+
+  Widget accountWidget(BuildContext context) {
+    return  Row(
+      children: <Widget>[
+        Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
+            child: InkWell(
+              onTap: noNavigateOnClick
+                  ? null
+                  : () {
+                AppNavigate.push(
+                    context, UserProfile(accountId: account.id));
+              },
+              child: Avatar(url: account.avatarStatic),
+            )),
+        Expanded(
+          child: Container(
+            height: 50,
+            //ns  margin: EdgeInsets.only(top: 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Flexible(
+                      child: TextWithEmoji(
+                        text: StringUtil.displayName(account),
+                        emojis: account.emojis,
+                        maxLines: 1,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color:
+                            Theme.of(context).textTheme.bodyText1.color),
                       ),
-                      if (createdAt != null)
-                        Flexible(
-                          child: Text(DateUntil.dateTime(createdAt),
-                              style: TextStyle(
-                                  fontSize: 13, color: MyColor.greyText),
-                              overflow: TextOverflow.ellipsis),
-                        )
-                    ],
-                  ),
-                  Flexible(
-                    child: Text(
-                      '@' + account.acct,
-                      style: TextStyle(fontSize: 13, color: MyColor.greyText),
-                      overflow: TextOverflow.ellipsis,
+                      flex: 2,
                     ),
-                  )
-                ],
-              ),
+                    if (createdAt != null)
+                      Flexible(
+                        child: Text(DateUntil.dateTime(createdAt),
+                            style: TextStyle(
+                                fontSize: 13, color: MyColor.greyText),
+                            overflow: TextOverflow.ellipsis),
+                      )
+                  ],
+                ),
+                Flexible(
+                  child: Text(
+                    '@' + account.acct,
+                    style: TextStyle(fontSize: 13, color: MyColor.greyText),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
+              ],
             ),
           ),
-          if (action != null) action
-        ],
-      ),
+        ),
+        if (action != null) action
+      ],
     );
   }
 }

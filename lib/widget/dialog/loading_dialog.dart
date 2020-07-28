@@ -12,11 +12,9 @@ class LoadingDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget loadingIcon;
     if (finished) {
-      loadingIcon = Icon(Icons.check_circle_outline,size: 40,color: Colors.white,);
+      loadingIcon = Icon(Icons.check_circle_outline,size: 40,color: Theme.of(context).accentColor,);
     } else {
-      loadingIcon =             SpinKitFadingCircle(
-        size: 40,
-        color: Colors.white,
+      loadingIcon =             CircularProgressIndicator(
       );
     }
     return ClipRRect(

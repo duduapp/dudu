@@ -53,7 +53,7 @@ class SettingHead extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return account == null? Container(height: 180,):Column(
       children: [
         Container(
           height: 180,
