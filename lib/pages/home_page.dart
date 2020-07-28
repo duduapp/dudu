@@ -3,6 +3,7 @@ import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/models/task_runner.dart';
 import 'package:fastodon/public.dart';
+import 'package:fastodon/widget/other/app_retain_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
@@ -116,37 +117,39 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Color activeColor = AppConfig.buttonColor;
 
-    return Scaffold(
+    return AppRetainWidget(
+      child: Scaffold(
 
-        body: IndexedStack(
-          children: <Widget>[Timeline(TimelineType.home), Timeline(TimelineType.local), Timeline(TimelineType.federated),Notifications(), Setting()],
-          index: _tabIndex,
-        ),
-        bottomNavigationBar: CupertinoTabBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: getTabIcon(0, activeColor),
-                title: getTabTitle(0, activeColor)),
-            BottomNavigationBarItem(
-                icon: getTabIcon(1, activeColor),
-                title: getTabTitle(1, activeColor)),
-            BottomNavigationBarItem(
-                icon: getTabIcon(2, activeColor),
-                title: getTabTitle(2, activeColor)),
-            BottomNavigationBarItem(
-                icon: getTabIcon(3, activeColor),
-                title: getTabTitle(3, activeColor)),
-            BottomNavigationBarItem(
-                icon: getTabIcon(4, activeColor),
-                title: getTabTitle(4, activeColor)),
-          ],
-          currentIndex: _tabIndex,
-          onTap: (index) {
-            setState(() {
-              _tabIndex = index;
-            });
-          },
-        ),
+          body: IndexedStack(
+            children: <Widget>[Timeline(TimelineType.home), Timeline(TimelineType.local), Timeline(TimelineType.federated),Notifications(), Setting()],
+            index: _tabIndex,
+          ),
+          bottomNavigationBar: CupertinoTabBar(
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: getTabIcon(0, activeColor),
+                  title: getTabTitle(0, activeColor)),
+              BottomNavigationBarItem(
+                  icon: getTabIcon(1, activeColor),
+                  title: getTabTitle(1, activeColor)),
+              BottomNavigationBarItem(
+                  icon: getTabIcon(2, activeColor),
+                  title: getTabTitle(2, activeColor)),
+              BottomNavigationBarItem(
+                  icon: getTabIcon(3, activeColor),
+                  title: getTabTitle(3, activeColor)),
+              BottomNavigationBarItem(
+                  icon: getTabIcon(4, activeColor),
+                  title: getTabTitle(4, activeColor)),
+            ],
+            currentIndex: _tabIndex,
+            onTap: (index) {
+              setState(() {
+                _tabIndex = index;
+              });
+            },
+          ),
+      ),
     );
   }
 }

@@ -1,6 +1,6 @@
 
 
-import 'package:fastodon/models/vote.dart';
+import 'package:fastodon/models/json_serializable/vote.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/screen.dart';
 import 'package:flutter/material.dart';

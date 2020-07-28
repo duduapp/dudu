@@ -1,11 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class AppConfig {
   static String ClientName = 'masfto';
   static String RedirectUris = 'https://google.com';
   static String Scopes = 'read write follow push';
-
-  static bool dialogOpened = false;
 
   static const Color buttonColor = Colors.blue;
 

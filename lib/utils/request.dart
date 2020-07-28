@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fastodon/models/logined_user.dart';
+import 'package:fastodon/models/runtime_config.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/widget/dialog/loading_dialog.dart';
@@ -9,13 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nav_router/nav_router.dart';
 
-enum RequestType {
-  get,
-  post,
-  put,
-  delete,
-  patch
-}
+enum RequestType { get, post, put, delete, patch }
 
 class Request {
   static Future get({String url, Map params, Map header}) async {
@@ -24,7 +19,8 @@ class Request {
   }
 
   // response all instead of response data only
-  static Future get1({String url, Map params, Map header,CancelToken cancelToken}) async {
+  static Future get1(
+      {String url, Map params, Map header, CancelToken cancelToken}) async {
     if (params != null && params.isNotEmpty) {
       StringBuffer sb = new StringBuffer("?");
       params.forEach((key, value) {
@@ -40,7 +36,7 @@ class Request {
       dio.options.headers = header;
     }
     try {
-      Response response = await dio.get(url,cancelToken: cancelToken);
+      Response response = await dio.get(url, cancelToken: cancelToken);
       if (response.statusCode != 200) {
         var errorMsg = "网络请求错误,状态码:" + response.statusCode.toString();
         showTotast(errorMsg);
@@ -48,28 +44,33 @@ class Request {
         return response;
       }
     } catch (exception) {
-
       if (CancelToken.isCancel(exception)) {
         return;
       }
       if (exception is DioError) {
         // The access token is invalid
-        if (exception.response != null && exception.response.statusCode == 401) {
-          if (!AppConfig.dialogOpened) {
+        if (exception.response != null &&
+            exception.response.statusCode == 401) {
+          if (!RuntimeConfig.dialogOpened) {
             DialogUtils.showSimpleAlertDialog(
-                context: navGK.currentState.overlay.context,
-                text: '你的登录信息已失效，你可以退出重新登录',
-                onlyInfo: true).then((val){AppConfig.dialogOpened = false;});
-            AppConfig.dialogOpened = true;
+                    context: navGK.currentState.overlay.context,
+                    text: '你的登录信息已失效，你可以退出重新登录',
+                    onlyInfo: true)
+                .then((val) {
+              RuntimeConfig.dialogOpened = false;
+            });
+            RuntimeConfig.dialogOpened = true;
           }
-          return exception;
         }
-        return exception;
-
-
+        RuntimeConfig.error = exception;
+        return null;
       }
       //showTotast(exception.toString());
     }
+  }
+
+  static Future get2({String url,Object params,bool showDialog = false,bool returnAll}) async{
+    return await _request(requestType: RequestType.get,url: url,params: params,showDialog: showDialog,returnAll: returnAll);
   }
 
   static Future post(
@@ -87,8 +88,8 @@ class Request {
         errMsg: errMsg,
         showDialog: showDialog,
         dialogMessage: dialogMessage,
-    successMessage: successMessage,
-    closeDialogDelay: closeDilogDelay);
+        successMessage: successMessage,
+        closeDialogDelay: closeDilogDelay);
   }
 
   static Future put(
@@ -136,7 +137,7 @@ class Request {
         dialogMessage: dialogMessage);
   }
 
-  static Future _request (
+  static Future _request(
       {String url,
       @required RequestType requestType,
       Object params,
@@ -144,12 +145,14 @@ class Request {
       bool showDialog,
       String dialogMessage,
       String successMessage,
-      int closeDialogDelay}) async {
+      int closeDialogDelay,
+      bool returnAll = false}) async {
     ProgressDialog dialog;
     Response response;
     if (showDialog != null && showDialog == true) {
       dialog = ProgressDialog(navGK.currentState.overlay.context,
-          isDismissible: false, customBody: LoadingDialog(text: dialogMessage ?? '处理中...'));
+          isDismissible: false,
+          customBody: LoadingDialog(text: dialogMessage ?? '处理中...'));
       dialog.style(borderRadius: 20);
       await dialog.show();
     }
@@ -169,33 +172,34 @@ class Request {
           response = await dio.delete(url, data: params);
           break;
         case RequestType.patch:
-          response = await dio.patch(url,data: params);
+          response = await dio.patch(url, data: params);
           break;
       }
       if (closeDialogDelay != 0)
-      dialog?.update(
-          customBody: LoadingDialog(
-            text: successMessage ?? '已完成',
-        finished: true,
-      ));
+        dialog?.update(
+            customBody: LoadingDialog(
+          text: successMessage ?? '已完成',
+          finished: true,
+        ));
     } catch (e) {
       if (e is DioError) {
         dialog?.hide();
         if (e.response != null && e.response.statusCode == 401) {
-          if (!AppConfig.dialogOpened) {
+          if (!RuntimeConfig.dialogOpened) {
             DialogUtils.showSimpleAlertDialog(
-                context: navGK.currentState.overlay.context,
-                text: '你的登录信息已失效，你可以退出重新登录',
-                onlyInfo: true).then((val){AppConfig.dialogOpened = false;});
-            AppConfig.dialogOpened = true;
+                    context: navGK.currentState.overlay.context,
+                    text: '你的登录信息已失效，你可以退出重新登录',
+                    onlyInfo: true)
+                .then((val) {
+              RuntimeConfig.dialogOpened = false;
+            });
+            RuntimeConfig.dialogOpened = true;
           }
         }
-        return e;
+        RuntimeConfig.error = e;
       }
       return null;
-//      if (errMsg != null) {
-//        showTotast(errMsg);
-//      }
+
     }
 
     if (closeDialogDelay == 0) {
@@ -205,7 +209,7 @@ class Request {
         dialog?.hide();
       });
     }
-    return response.data;
+    return returnAll ? response: response.data;
   }
 
   static void showTotast(String errorMsg) {
@@ -247,8 +251,8 @@ class Request {
 
     return dio;
   }
-  
-  static String buildGetUrl(String url,Map params) {
+
+  static String buildGetUrl(String url, Map params) {
     if (params != null && params.isNotEmpty) {
       StringBuffer sb = new StringBuffer("?");
       params.forEach((key, value) {

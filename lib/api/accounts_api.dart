@@ -15,13 +15,13 @@ class AccountsApi {
   static const String followRequestUrl = '/api/v1/follow_requests';
 
   static Future<OwnerAccount> getMyAccount() async{
-    var data = await Request.get(url: url+'/verify_credentials');
+    var data = await Request.get2(url: url+'/verify_credentials');
     return OwnerAccount.fromJson(data);
   }
 
   static Future<OwnerAccount> getAccount(String id) async {
     var api = '$url/$id';
-    var res =  await Request.get(url: api);
+    var res =  await Request.get2(url: api);
     if (res == null) {
       return null;
     } else {
@@ -33,7 +33,7 @@ class AccountsApi {
     var params = {
       'id[]':id
     };
-    var res = await Request.get(url: relationShipUrl,params: params);
+    var res = await Request.get2(url: relationShipUrl,params: params);
     if (res == null) {
       return null;
     } else {
@@ -42,7 +42,7 @@ class AccountsApi {
   }
 
   static getPreferences() async {
-    return await Request.get(url: preferencesUrl);
+    return await Request.get2(url: preferencesUrl);
   }
 
   static follow(String id,{bool receiveReblogs = true}) async{

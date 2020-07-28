@@ -25,7 +25,7 @@ class _ServerListState extends State<ServerList>  {
     Map<String, dynamic> header = Map();
     header['Authorization'] = 'Bearer pEpudHDXGCMgCKtDky37mdO6mwtynpbIU07pi3SsMhGLA4pDlB7nnS5Yzbs5JzbT59pkIajfXINxKDZvloVTnNfzlx9GOrODP0ytRhIey1xxizEK0dqZgX9GGz427K4e';
     
-    Request.get(url: Api.ServerList, header: header).then((data) {
+    Request.get2(url: Api.ServerList).then((data) {
       List allServer = data['instances'];
       if(this.mounted) {
         setState(() {

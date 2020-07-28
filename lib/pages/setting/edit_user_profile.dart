@@ -54,15 +54,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
     }
     
   }
-
-  Future<void> _getMyAccount() async {
-    Request.get(url: Api.OwnerAccount).then((data) {
-      OwnerAccount account = OwnerAccount.fromJson(data);
-      setState(() {
-        this.account = account;
-      });
-    });
-  }
+  
 
   Widget headerView() {
     if (Uri.parse(header).isAbsolute) {

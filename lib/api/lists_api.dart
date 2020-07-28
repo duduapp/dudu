@@ -7,7 +7,7 @@ class ListsApi {
   static const String timelineUrl = '/api/v1/timelines/list';
 
   static Future<List<OwnerAccount>> getMembers(String listId) async{
-    List<dynamic> res = await Request.get(url: url+'/'+listId+'/accounts');
+    List<dynamic> res = await Request.get2(url: url+'/'+listId+'/accounts');
     List<OwnerAccount> accounts= [];
     for (dynamic acc in res) {
       accounts.add(OwnerAccount.fromJson(acc));

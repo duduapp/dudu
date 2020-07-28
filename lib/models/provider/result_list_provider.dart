@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:fastodon/models/runtime_config.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/request.dart';
 import 'package:flutter/foundation.dart';
@@ -127,11 +128,11 @@ class ResultListProvider extends ChangeNotifier {
       }
     }
 
-    await Request.get1(url: url,cancelToken: requestCancelToken)
+    await Request.get2(url: url,returnAll: true)
         .then((response) {
           //只有列表为空时，才显示错误，为了更好的用户体验
-      if (response is DioError && list.isEmpty) {
-        error = response;
+      if (response == null && list.isEmpty) {
+        error = RuntimeConfig.error;
         notifyListeners();
         return;
       } else if (response is DioError){

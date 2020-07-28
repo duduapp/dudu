@@ -23,7 +23,7 @@ class SearchApi {
     if (following != null) {
       params['following'] = following;
     }
-    return await Request.get(url: accountSearchUrl, params: params);
+    return await Request.get2(url: accountSearchUrl, params: params);
   }
 
   static searchHashtags(String q, {int maxId}) {
@@ -41,7 +41,7 @@ class SearchApi {
     if (following != null) {
       params['following'] = following;
     }
-    return await Request.get(url: Api.search, params: params);
+    return await Request.get2(url: Api.search, params: params);
   }
 
   static get statusUrl {
