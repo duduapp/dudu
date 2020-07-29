@@ -183,7 +183,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
           await LocalStorageAccount.setActiveAccount(accountInfo);
           LoginedUser().loadFromLocalAccount(accountInfo);
           await SettingsProvider().load();
-          pushAndRemoveUntil(HomePage());
+          AppNavigate.pushAndRemoveUntil(context,HomePage(),routeType: RouterType.scale);
         }
       },
       child: Container(

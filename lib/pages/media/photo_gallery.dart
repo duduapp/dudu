@@ -109,8 +109,9 @@ class _PhotoGalleryState extends State<PhotoGallery> {
       imageProvider: CachedNetworkImageProvider(item.url),
       heroAttributes: PhotoViewHeroAttributes(tag: item.id),
 //      child: Container(
+//        width: double.infinity,
 //        child: CachedNetworkImage(
-//          fit: BoxFit.fitWidth,
+//          fit: BoxFit.contain,
 //          imageUrl: item.url,
 //          progressIndicatorBuilder: (context, url, downloadProgress) =>
 //              Container(

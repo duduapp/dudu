@@ -296,25 +296,48 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
               final Hero hero = flightDirection == HeroFlightDirection.push ? fromHeroContext.widget : toHeroContext.widget;
               return hero.child;
             },
-            child: CachedNetworkImage(
-               fit: BoxFit.cover,
-                width: width,
-                height: height,
-                imageUrl: imageUrl,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    Container(
-                      width: width,
-                      height: height,
-                      child: Center(
-                        child: SizedBox(
-                          width: indicatorSize,
-                          height: indicatorSize,
-                          child: CircularProgressIndicator(
-                              value: downloadProgress.progress),
-                        ),
-                      ),
+            child: Image(
+              width: width,
+              height: height,
+              fit: BoxFit.cover,
+              loadingBuilder:  (context, widget,chunk) {
+                if (chunk == null) {
+                  return widget;
+                }
+                return Container(
+                  width: width,
+                  height: height,
+                  child: Center(
+                    child: SizedBox(
+                      width: indicatorSize,
+                      height: indicatorSize,
+                      child: CircularProgressIndicator(
+                          ),
                     ),
-                errorWidget: (context, url, error) => Icon(Icons.error)),
+                  ),
+                );
+              },
+              image: CachedNetworkImageProvider(imageUrl),
+            ),
+//            child: CachedNetworkImage(
+//               fit: BoxFit.cover,
+//                width: width,
+//                height: height,
+//                imageUrl: imageUrl,
+//                progressIndicatorBuilder: (context, url, downloadProgress) =>
+//                    Container(
+//                      width: width,
+//                      height: height,
+//                      child: Center(
+//                        child: SizedBox(
+//                          width: indicatorSize,
+//                          height: indicatorSize,
+//                          child: CircularProgressIndicator(
+//                              value: downloadProgress.progress),
+//                        ),
+//                      ),
+//                    ),
+//                errorWidget: (context, url, error) => Icon(Icons.error)),
           ),
         ),
         if (hideImage)
