@@ -89,21 +89,14 @@ class _CommonFilterListState extends State<CommonFilterList> {
       List phraseContext,
       bool wholeWord,
       ResultListProvider provider}) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            contentPadding: EdgeInsets.all(8),
-            title: Text('编辑过滤器'),
-            content: CommonFilterEdit(
-              id: id,
-              phrase: phrase,
-              context: phraseContext,
-              wholeWord: wholeWord,
-              provider: provider,
-            ),
-          );
-        });
+    DialogUtils.showRoundedDialog(context: context,content: CommonFilterEdit(
+      id: id,
+      phrase: phrase,
+      context: phraseContext,
+      wholeWord: wholeWord,
+      provider: provider,
+    ));
+
   }
 
   _add(BuildContext context) {

@@ -69,7 +69,7 @@ class Request {
     }
   }
 
-  static Future get2({String url,Object params,bool showDialog = false,bool returnAll = false}) async{
+  static Future get2({String url,Map params,bool showDialog = false,bool returnAll = false}) async{
     return await _request(requestType: RequestType.get,url: url,params: params,showDialog: showDialog,returnAll: returnAll);
   }
 
@@ -160,7 +160,10 @@ class Request {
     try {
       switch (requestType) {
         case RequestType.get:
-          response = await dio.get(url, queryParameters: params);
+          Map<String,dynamic> queryParams;
+          if (params != null )
+            queryParams =  Map.from(params);
+          response = await dio.get(url, queryParameters: queryParams);
           break;
         case RequestType.post:
           response = await dio.post(url, data: params);

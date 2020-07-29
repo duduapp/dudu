@@ -4,10 +4,10 @@ class ColoredTabBar extends Container implements PreferredSizeWidget {
   ColoredTabBar({this.color, this.tabBar});
 
   final Color color;
-  final TabBar tabBar;
+  final Widget tabBar;
 
   @override
-  Size get preferredSize => tabBar.preferredSize;
+  Size get preferredSize =>  Size.fromHeight(50);
 
   @override
   Widget build(BuildContext context) => Container(

@@ -17,6 +17,7 @@ class ResultListProvider extends ChangeNotifier {
   final bool offsetPagination; //search 里面的max id和 min id 不能用
   final bool headerLinkPagination;
   final bool enableRefresh;
+  final bool enableLoad;
   final bool reverseData;
   bool finishRefresh = false;
   bool finishLoad = false;
@@ -43,13 +44,17 @@ class ResultListProvider extends ChangeNotifier {
       this.offsetPagination,
       this.headerLinkPagination = false,
       this.enableRefresh = true,
+        this.enableLoad = true,
       this.reverseData = false,
       this.listenBlockEvent = false,
       this.firstRefresh = false, // easy refresh 在 nestedscrollview 有问题
       bool showHeader = true, // easy refresh 中只有当onrefresh 设为Null 时才能隐藏header
       this.onlyMedia = false,
       this.dataHandler,
+        bool showLoading = true,
+        List holderList, // 给list 第一次赋值，刷新后用结果值
       this.cacheTimeInSeconds}) {
+    list = holderList ?? list;
     if (listenBlockEvent) {
       _addEvent(EventBusKey.blockAccount, (arg) {
         var accountId = arg['account_id'];
@@ -64,7 +69,7 @@ class ResultListProvider extends ChangeNotifier {
       });
     }
 
-    refresh(showLoading: true);
+    refresh(showLoading: showLoading);
 
     finishRefresh = !showHeader;
   }
@@ -87,6 +92,10 @@ class ResultListProvider extends ChangeNotifier {
     }
     if (!enableRefresh) {
       finishRefresh = true;
+      finishLoad = true;
+      notifyListeners();
+    }
+    if (!enableLoad) {
       finishLoad = true;
       notifyListeners();
     }
@@ -152,11 +161,13 @@ class ResultListProvider extends ChangeNotifier {
         data = data[mapKey];
       }
 
-      if (data.length > 0) lastCellId = data[data.length - 1]['id'];
 
       if (dataHandler != null) {
         data = dataHandler(data);
       }
+
+      if (data.length > 0) lastCellId = data[data.length - 1]['id'];
+
 
       // 下拉刷新的时候，只需要将新的数组赋值到数据list中
       // 上拉加载的时候，需要将新的数组添加到现有数据list中
@@ -242,6 +253,10 @@ class ResultListProvider extends ChangeNotifier {
   addToListWithAnimation(dynamic data) {
     if (data == null) {
       return;
+    }
+    if (noResults) {
+      noResults = false;
+      notifyListeners();
     }
     list.insert(0, data);
     listKey?.currentState?.insertItem(0);

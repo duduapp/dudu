@@ -22,12 +22,16 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return ChangeNotifierProvider<SettingsProvider>(
       create: (context) => SettingsProvider(),
       child: ThemeProvider(
           themes: [
-            AppTheme(id: '普通模式', data: defaultTheme, description: ''),
-            AppTheme(id: '深色模式', data: darTheme, description: ''),
+            AppTheme(id: '普通模式', data: ThemeUtil.lightTheme(context), description: ''),
+            AppTheme(id: '深色模式', data: ThemeUtil.darkTheme(context), description: ''),
           ],
           saveThemesOnChange: true,
           loadThemeOnInit: true,

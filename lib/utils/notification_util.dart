@@ -39,7 +39,7 @@ class NotificationUtil {
 
   static show({String title,String body,String payload}) {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'your channel id', 'your channel name', 'your channel description',
+        'channel0', '通知通道', '',
         importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(

@@ -69,7 +69,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                       child: Text(
                         manageMode ? '取消' : '关闭',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.normal),
+                            fontSize: 16, color:Theme.of(context).textTheme.bodyText1.color,fontWeight: FontWeight.normal),
                       )),
                   Spacer(),
                   if (!manageMode)
@@ -78,7 +78,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                         child: Text(
                           '管理',
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.normal),
+                              fontSize: 16, color:Theme.of(context).textTheme.bodyText1.color,fontWeight: FontWeight.normal),
                         ))
                 ],
               ),
@@ -118,7 +118,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                       Icon(
                         Icons.add,
                         size: 25,
-                        color: Theme.of(context).buttonColor,
+                        color: Theme.of(context).splashColor,
                       ),
                       SizedBox(
                         width: 6,
@@ -126,7 +126,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                       Text(
                         '添加账号',
                         style: TextStyle(
-                            fontSize: 20, color: Theme.of(context).buttonColor),
+                            fontSize: 20, color: Theme.of(context).splashColor),
                       )
                     ],
                   ),
@@ -201,7 +201,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
               if (accountInfo.active)
                 Text(
                   '当前使用',
-                  style: TextStyle(color: Colors.green),
+                  style: TextStyle(color: Theme.of(context).buttonColor),
                 )
             ],
           ),

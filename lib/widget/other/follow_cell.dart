@@ -2,6 +2,7 @@ import 'package:fastodon/models/json_serializable/notificate_item.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/other/avatar.dart';
 import 'package:fastodon/widget/status/status_item_account.dart';
+import 'package:fastodon/widget/status/text_with_emoji.dart';
 import 'package:flutter/material.dart';
 
 
@@ -31,12 +32,12 @@ class FollowCell extends StatelessWidget {
                 ),
                 SizedBox(width: 5,),
                 Expanded(
-                  child: Text(StringUtil.displayName(item.account) + '开始关注你了', style: TextStyle(fontSize: 14),),
+                  child: TextWithEmoji(text: StringUtil.displayName(item.account) + '开始关注你了',emojis: item.account.emojis,),
                 ),
               ],
             ),
           ),
-          StatusItemAccount(item.account)
+          StatusItemAccount(item.account,noNavigateOnClick: false,)
         ],
       ),
     );

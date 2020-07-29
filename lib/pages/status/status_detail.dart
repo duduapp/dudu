@@ -84,8 +84,9 @@ class _StatusDetailState extends State<StatusDetail> {
     }
     double totalHeight = 0;
     for (int i = 0; i < _data['ancestors'].length; i++) {
-      RenderBox renderBox = keys[i].currentContext.findRenderObject();
+
       try {
+        RenderBox renderBox = keys[i].currentContext.findRenderObject();
         totalHeight += renderBox.size.height;
       } catch (e) {
 
@@ -112,6 +113,7 @@ class _StatusDetailState extends State<StatusDetail> {
         data: MediaQuery.of(context)
             .copyWith(textScaleFactor: 1.0 + 0.18 * double.parse(scale)),
         child: EasyRefresh.custom(
+          cacheExtent: 10000,
           slivers: [
 
             SliverList(

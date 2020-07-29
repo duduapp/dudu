@@ -26,6 +26,8 @@ class Timeline extends StatefulWidget {
 }
 
 class _TimelineState extends State<Timeline> {
+  ScrollController _scrollController = ScrollController();
+  
   @override
   void initState() {
     super.initState();
@@ -60,7 +62,7 @@ class _TimelineState extends State<Timeline> {
         child: AppBar(
           title: InkWell(
             child: Text(title),
-            onTap: () => eventBus.emit(widget.type),
+            onTap: () => _scrollController.jumpTo(0),
           ),
           centerTitle: true,
           actions: <Widget>[
@@ -91,6 +93,7 @@ class _TimelineState extends State<Timeline> {
           builder: (context, snapshot) {
             return ProviderEasyRefreshListView(
               type: widget.type,
+              scrollController: _scrollController,
             );
           }),
     );

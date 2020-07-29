@@ -70,14 +70,16 @@ class _PhotoGalleryState extends State<PhotoGallery> {
               scrollPhysics: const BouncingScrollPhysics(),
               builder: _buildItem,
               itemCount: widget.galleryItems.length,
-              loadingBuilder: (context, event) => Center(
-                child: Container(
-                  width: 20.0,
-                  height: 20.0,
-                  child: CircularProgressIndicator(
-                    value: event == null
-                        ? 0
-                        : event.cumulativeBytesLoaded / event.expectedTotalBytes,
+              loadingBuilder: (context, event) => Container(
+                child: Center(
+                  child: Container(
+                    width: 100.0,
+                    height: 100.0,
+                    child: CircularProgressIndicator(
+                      value: event == null
+                          ? 0
+                          : event.cumulativeBytesLoaded / event.expectedTotalBytes,
+                    ),
                   ),
                 ),
               ),

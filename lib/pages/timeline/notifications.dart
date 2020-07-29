@@ -73,7 +73,8 @@ class _NotificationsState extends State<Notifications>
       return StatusItem(
           item: item.status,
           refIcon: Icons.star,
-          refString: '${StringUtil.displayName(item.account)}收藏了你的嘟文');
+          refString: '${StringUtil.displayName(item.account)} 收藏了你的嘟文',
+          refAccount: item.account,);
     } else if (item.type == 'mention') {
       return StatusItem(
         item: item.status,
@@ -88,7 +89,8 @@ class _NotificationsState extends State<Notifications>
       return StatusItem(
         item: item.status,
         refIcon: Icons.repeat,
-        refString: '${StringUtil.displayName(item.account)}转嘟了你的嘟文',
+        refString: '${StringUtil.displayName(item.account)} 转嘟了你的嘟文',
+        refAccount: item.account,
       );
     } else if (item.type == 'follow_request') {
       return FollowRequestCell(item: item,);

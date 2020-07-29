@@ -11,8 +11,9 @@ class HtmlContent extends StatefulWidget {
   final String content;
   final StatusItemData statusData;
   final List emojis;
+  final foldConetent;
 
-  HtmlContent(this.content, {this.statusData,this.emojis = const []});
+  HtmlContent(this.content, {this.statusData,this.emojis = const [],this.foldConetent = true});
 
   @override
   _HtmlContentState createState() => _HtmlContentState();
@@ -24,7 +25,7 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
 
   @override
   void initState() {
-    if (StringUtil.removeAllHtmlTags(widget.content).length > 500) {
+    if (widget.foldConetent && StringUtil.removeAllHtmlTags(widget.content).length > 500) {
       expanded = false;
       needExpand = true;
     }

@@ -1,6 +1,7 @@
 import 'package:fastodon/api/lists_api.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/utils/app_navigate.dart';
+import 'package:fastodon/widget/common/normal_flat_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,22 +40,18 @@ class _ListsAddState extends State<ListsAdd> {
           Row(
             children: <Widget>[
               Spacer(),
-              FlatButton(
-                child: Text(
-                  '取消',
-                  style: TextStyle(color: Theme.of(context).buttonColor),
-                ),
-                onPressed: () => AppNavigate.pop(context),
+              NormalFlatButton(
+                text: '',
               ),
-              FlatButton(
-                child: Text('新建列表',
-                    style: TextStyle(color: Theme.of(context).buttonColor)),
+              NormalCancelFlatButton(),
+              NormalFlatButton(
+                text: '新建列表',
                 onPressed: () async {
                   AppNavigate.pop(context);
                   var newList = await ListsApi.add(_controller.text.trim());
                   widget.provider.addToListWithAnimation(newList);
                 },
-              ),
+              )
             ],
           )
         ],

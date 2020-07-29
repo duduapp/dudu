@@ -157,7 +157,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
 
           Container(height: 8,color: Theme.of(context).backgroundColor,),
 
-          BottomSheetItem(text: '取消',onTap: () => AppNavigate.pop(context),height: Screen.bottomSafeHeight(context) + 26,)
+          BottomSheetItem(text: '取消',onTap: () => AppNavigate.pop(context),safeArea: true,)
 
 
         ],
@@ -180,7 +180,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
       ),
       body:SingleChildScrollView(
         child: Theme(
-          data: Theme.of(context).copyWith(primaryColor: Colors.black),
+          data: Theme.of(context).copyWith(primaryColor: Theme.of(context).buttonColor),
           child: Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,7 +189,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                   onTap: () =>showSheet(context),
                   child: Container(
                     width: double.infinity,
-                    color: Colors.grey,
+                    color: Theme.of(context).accentColor,
                     height: 200,
                     child: Stack(
                       children: <Widget>[
@@ -208,12 +208,12 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         TextField(
                           controller: nameController,
                           decoration: InputDecoration(hintText: '昵称',labelText: '昵称',helperText: '',counterText: '',enabledBorder: OutlineInputBorder(
-                          ),focusedBorder: OutlineInputBorder()),
+                          ),focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).buttonColor))),
                           maxLength: 30,
                         ),
                         TextField(
                           controller: noteController,
-                          decoration: InputDecoration(hintText: '简介',labelText: '简介',enabledBorder: OutlineInputBorder(),focusedBorder: OutlineInputBorder()),
+                          decoration: InputDecoration(hintText: '简介',labelText: '简介',enabledBorder: OutlineInputBorder(),focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).buttonColor))),
                           maxLength: 500,
                           maxLines: null,
                         ),

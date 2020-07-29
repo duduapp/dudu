@@ -7,8 +7,11 @@ import 'package:path_provider/path_provider.dart';
 class MediaUtil {
   static Future<File> pickAndCompressImage()  async{
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (image == null) {
+      return null;
+    }
     final directory = await getTemporaryDirectory();
-    var targetPath = directory.path + '/' + image.path.split('/').last;
+    var targetPath = directory.path + '/compress_' + image.path.split('/').last;
     var result = await FlutterImageCompress.compressAndGetFile(
       image.absolute.path, targetPath,
       quality: 50,

@@ -7,6 +7,7 @@ import 'package:fastodon/pages/timeline/lists_timeline.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/widget/common/list_row.dart';
+import 'package:fastodon/widget/common/normal_flat_button.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -159,12 +160,9 @@ class _ListsRenameState extends State<ListsRename> {
           Row(
             children: [
               Spacer(),
-              FlatButton(
-                child: Text('取消',style: TextStyle(color: Theme.of(context).buttonColor)),
-                onPressed: () => AppNavigate.pop(context),
-              ),
-              FlatButton(
-                child: Text('重命名列表',style: TextStyle(color: Theme.of(context).buttonColor)),
+              NormalCancelFlatButton(),
+              NormalFlatButton(
+                text: '重命名列表',
                 onPressed: () async {
                   AppNavigate.pop(context);
                   var data =

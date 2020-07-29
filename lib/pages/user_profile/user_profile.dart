@@ -385,7 +385,7 @@ class _UserProfileState extends State<UserProfile>
                               text: StringUtil.displayName(_account),
                               emojis: _account.emojis,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 18),
+                                  fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyText1.color, fontSize: 18),
                             ),
                             MediaQuery(
                               data: MediaQuery.of(context).copyWith(
@@ -424,12 +424,14 @@ class _UserProfileState extends State<UserProfile>
                                   child: Text('关注了你')),
 
                             ),
+                            SizedBox(height: 10,),
                             Container(
                                 width: Screen.width(context) - 60,
                                 child: Center(
                                   child: HtmlContent(
                                     _account.note,
                                     emojis: _account.emojis,
+                                    foldConetent: false,
                                   ),
                                 )),
                             headerFields(),
@@ -588,17 +590,17 @@ class _UserProfileState extends State<UserProfile>
   }
 
   Widget tabText(String text) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: Text(
-        text,
-        style: TextStyle(
-            fontSize: 13,
-            color: Theme.of(context).accentColor,
-            fontWeight: FontWeight.bold),
-      ),
-    );
-    // return Tab(text: text,);
+//    return Container(
+//      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+//      child: Text(
+//        text,
+//        style: TextStyle(
+//            fontSize: 18,
+//            color: Theme.of(context).accentColor,
+//            fontWeight: FontWeight.normal),
+//      ),
+//    );
+     return Tab(text: text,);
   }
 
   Widget contentView() {
@@ -649,9 +651,21 @@ class _UserProfileState extends State<UserProfile>
           routeType: RouterType.fade),
       child: Hero(
         tag: media.id,
-        child: CachedNetworkImage(
+        flightShuttleBuilder: (
+            BuildContext flightContext,
+            Animation<double> animation,
+            HeroFlightDirection flightDirection,
+            BuildContext fromHeroContext,
+            BuildContext toHeroContext,
+            ) {
+          final Hero hero = flightDirection == HeroFlightDirection.push ? fromHeroContext.widget : toHeroContext.widget;
+          return hero.child;
+        },
+        child: Image(
           fit: BoxFit.cover,
-          imageUrl: media.previewUrl,
+          image: CachedNetworkImageProvider(
+            media.previewUrl,
+          ),
         ),
       ),
     );
@@ -696,7 +710,7 @@ class _UserProfileState extends State<UserProfile>
                         ? Container()
                         : Container(
                             width: double.infinity,
-                            color: Theme.of(context).backgroundColor,
+                            color: Theme.of(context).appBarTheme.color,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
@@ -737,18 +751,26 @@ class _UserProfileState extends State<UserProfile>
                       ),
                 expandedHeight: _sliverExpandHeight,
                 bottom: ColoredTabBar(
-                  color: Theme.of(context).backgroundColor,
-                  tabBar: TabBar(
-                    tabs: [
-                      tabText('嘟文'),
-                      tabText('嘟文和回复'),
-                      tabText('已置顶'),
-                      tabText('媒体'),
-                    ],
-                    onTap: (index) {
-                      setState(() {});
-                    },
-                    controller: _tabController,
+                  color: Theme.of(context).appBarTheme.color,
+                  tabBar: Align(
+                    alignment: Alignment.centerLeft,
+                    child: TabBar(
+                      labelColor: Theme.of(context).buttonColor,
+                      unselectedLabelColor: Theme.of(context).accentColor,
+                      labelStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.normal),
+                      isScrollable: true,
+                      indicatorColor: Theme.of(context).buttonColor,
+                      tabs: [
+                        tabText('嘟文'),
+                        tabText('嘟文和回复'),
+                        tabText('已置顶'),
+                        tabText('媒体'),
+                      ],
+                      onTap: (index) {
+                        setState(() {});
+                      },
+                      controller: _tabController,
+                    ),
                   ),
                 ),
               )

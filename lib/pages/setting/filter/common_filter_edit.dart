@@ -1,6 +1,7 @@
 import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/public.dart';
+import 'package:fastodon/widget/common/normal_flat_button.dart';
 import 'package:flutter/material.dart';
 
 class CommonFilterEdit extends StatefulWidget {
@@ -36,7 +37,7 @@ class _CommonFilterEditState extends State<CommonFilterEdit> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text('添加新的过滤器',style: TextStyle(fontSize: 20),),
+          Text(widget.newFilter?'添加新的过滤器':'编辑过滤器',style: TextStyle(fontSize: 20),),
           TextField(
             controller: phraseController,
             decoration: InputDecoration(
@@ -63,20 +64,17 @@ class _CommonFilterEditState extends State<CommonFilterEdit> {
           ),
           Row(
             children: <Widget>[
-              FlatButton(
-                child: Text('取消',style: TextStyle(color: Theme.of(context).buttonColor),),
-                onPressed: () => AppNavigate.pop(context),
-              ),
+              NormalCancelFlatButton(),
               Spacer(),
               if (!widget.newFilter)
-              FlatButton(
-                child: Text('移除',style: TextStyle(color: Theme.of(context).buttonColor)),
-                onPressed: _remove,
-              ),
-              FlatButton(
-                child: Text(widget.newFilter ?'新建':'更新',style: TextStyle(color: Theme.of(context).buttonColor)),
+                NormalFlatButton(
+                  text: '移除',
+                  onPressed: _remove,
+                ),
+              NormalFlatButton(
+                text: widget.newFilter ?'新建':'更新',
                 onPressed: _updateOrCreate,
-              ),
+              )
             ],
           )
         ],

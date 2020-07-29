@@ -3,6 +3,7 @@
 import 'package:fastodon/models/json_serializable/vote.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/screen.dart';
+import 'package:fastodon/widget/common/normal_flat_button.dart';
 import 'package:flutter/material.dart';
 
 class HandleVoteDialog extends StatefulWidget {
@@ -32,7 +33,7 @@ class _HandleVoteDialogState extends State<HandleVoteDialog> {
   Widget build(BuildContext context) {
     var textWidth = Screen.width(context) * 0.6;
     return Theme(
-      data: ThemeData(primaryColor: Theme.of(context).toggleableActiveColor),
+      data: Theme.of(context).copyWith(primaryColor: Theme.of(context).buttonColor),
       child: Container(
         width: Screen.width(context) * 0.9,
         padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
@@ -42,12 +43,12 @@ class _HandleVoteDialogState extends State<HandleVoteDialog> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Icon(Icons.poll),
+                Icon(Icons.poll,color: Theme.of(context).buttonColor,size: 30,),
                 SizedBox(width: 5,),
                 Text('投票',style: TextStyle(fontSize: 20),)
               ],
             ),
-            SizedBox(height: 15,),
+            SizedBox(height: 20,),
             Container(
               width: textWidth,
               child: TextField(
@@ -214,8 +215,8 @@ class _HandleVoteDialogState extends State<HandleVoteDialog> {
             ),
             Row(children: <Widget>[
               Spacer(),
-              FlatButton(child: Text('取消'),onPressed: () => AppNavigate.pop(context),),
-              FlatButton(child: Text('确定'),onPressed: canCreate ?() => AppNavigate.pop(context,param: newVote) :null,)
+              NormalFlatButton(text: '取消',onPressed: () => AppNavigate.pop(context),),
+              NormalFlatButton(text: '确定',onPressed: canCreate ?() => AppNavigate.pop(context,param: newVote) :null,)
             ],)
           ],
         ),

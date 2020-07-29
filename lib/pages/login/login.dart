@@ -179,7 +179,8 @@ class _LoginState extends State<Login> {
     Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: widget.showBackButton,
-          backgroundColor: Colors.transparent
+          backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
         extendBodyBehindAppBar:true,
             resizeToAvoidBottomPadding: false,

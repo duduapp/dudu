@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class BottomSheetItem extends StatelessWidget {
@@ -7,7 +9,12 @@ class BottomSheetItem extends StatelessWidget {
   final bool safeArea;
   final bool bottomBorder;
 
-  BottomSheetItem({this.text, this.onTap, this.height, this.safeArea = false,this.bottomBorder});
+  BottomSheetItem(
+      {this.text,
+      this.onTap,
+      this.height,
+      this.safeArea = false,
+      this.bottomBorder});
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +23,13 @@ class BottomSheetItem extends StatelessWidget {
         onTap: onTap,
         child: SafeArea(
           child: Container(
-
             height: height,
             width: double.infinity,
-            //  color: Theme.of(context).bottomSheetTheme.backgroundColor,
-            padding: EdgeInsets.all(12),
+            padding: Platform.isAndroid ?  EdgeInsets.fromLTRB(12, 12, 12, 20) : EdgeInsets.all(12),
             child: Align(
               child: Text(
                 text,
-                style: TextStyle(fontSize: 16),
+                style:  TextStyle(fontSize: 16),
               ),
               alignment: Alignment.topCenter,
             ),
@@ -35,7 +40,6 @@ class BottomSheetItem extends StatelessWidget {
       return InkWell(
         onTap: onTap,
         child: Container(
-
           height: height,
           width: double.infinity,
           //  color: Theme.of(context).bottomSheetTheme.backgroundColor,

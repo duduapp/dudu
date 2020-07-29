@@ -302,7 +302,7 @@ class _NewStatusState extends State<NewStatus> {
     });
     var response;
     try {
-      response = await Request.post(url: Api.attachMedia, params: formData);
+      response = await Request.post(url: Api.attachMedia, params: formData,showDialog: false);
     } on DioError catch (e) {
       images.remove(file);
       Fluttertoast.showToast(msg: '文件上传失败');
@@ -321,7 +321,7 @@ class _NewStatusState extends State<NewStatus> {
       Map<String, dynamic> paramsMap = Map();
       paramsMap['description'] = title;
       var response = await Request.put(
-          url: Api.attachMedia + '/' + fileId, params: paramsMap);
+          url: Api.attachMedia + '/' + fileId, params: paramsMap,showDialog: false);
       print(response);
     }
   }

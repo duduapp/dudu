@@ -18,7 +18,10 @@ class ProviderEasyRefreshListView extends StatefulWidget {
       this.emptyWidget,
       this.controller,
       this.header,
-      this.usingGrid = false})
+      this.usingGrid = false,
+      this.scrollController,
+      this.cacheExtent,
+      this.enableLoad = true})
       : super(key: key);
   final TimelineType type;
 
@@ -26,7 +29,9 @@ class ProviderEasyRefreshListView extends StatefulWidget {
   final EasyRefreshController controller;
   final Header header;
   final usingGrid;
-
+  final ScrollController scrollController;
+  final double cacheExtent;
+  final bool enableLoad; // 有时Provider 无法完全使list不load,在刷新后马上jump page 会使页面刷新
   @override
   _ProviderEasyRefreshListViewState createState() =>
       _ProviderEasyRefreshListViewState();
@@ -143,13 +148,15 @@ class _ProviderEasyRefreshListViewState
                         widget.header ?? ListViewUtil.getDefaultHeader(context),
                     footer: ListViewUtil.getDefaultFooter(context),
                     controller: _controller,
-                    scrollController:
-                        widget.type == null ? null : _scrollController,
+
+                    scrollController:widget.scrollController,
+//                        widget.type == null ? null : _scrollController,
                     onRefresh: provider.finishRefresh ? null : provider.refresh,
-                    onLoad: provider.finishLoad ? null : provider.load,
+                    onLoad: widget.enableLoad ?(provider.finishLoad ? null : provider.load ):null,
                     emptyWidget: provider.noResults
                         ? widget.emptyWidget ?? EmptyView()
                         : null,
+                    cacheExtent: widget.cacheExtent,
                   );
           }),
         );

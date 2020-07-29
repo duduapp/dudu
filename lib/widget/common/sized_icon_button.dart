@@ -6,7 +6,7 @@ class SizedIconButton extends StatelessWidget {
   final double width;
   final double height;
 
-  SizedIconButton({this.icon,this.onPressed,this.width = 40,this.height = 50});
+  SizedIconButton({this.icon,this.onPressed,this.width = 32,this.height = 50});
 
   @override
   Widget build(BuildContext context) {
