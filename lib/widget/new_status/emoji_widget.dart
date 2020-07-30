@@ -18,7 +18,6 @@ class EmojiKeyboard extends StatelessWidget {
     return ChangeNotifierProvider<ResultListProvider>(
       create: (context) => ResultListProvider(
           requestUrl: Api.CustomEmojis,
-          firstRefresh: true,
           buildRow: _buildEmojiItem,
           cacheTimeInSeconds: 3600,
           dataHandler: (data) {

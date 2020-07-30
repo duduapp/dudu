@@ -47,7 +47,7 @@ class _ListsAddState extends State<ListsAdd> {
               NormalFlatButton(
                 text: '新建列表',
                 onPressed: () async {
-                  AppNavigate.pop(context);
+                  AppNavigate.pop();
                   var newList = await ListsApi.add(_controller.text.trim());
                   widget.provider.addToListWithAnimation(newList);
                 },

@@ -43,6 +43,7 @@ class _ListsPageState extends State<ListsPage> {
               requestUrl: Api.lists,
               buildRow: _row,
               enableRefresh: false,
+              enableLoad: false,
               reverseData: true),
           builder: (context, snapshot) {
             providerContext = context;
@@ -55,7 +56,7 @@ class _ListsPageState extends State<ListsPage> {
     var list = data[idx];
     return ListRow(
       child: InkWell(
-        onTap: () => AppNavigate.push(context, ListTimeline(list['id'])),
+        onTap: () => AppNavigate.push(ListTimeline(list['id'])),
         child: Row(children: [
           Icon(
             Icons.list,
@@ -164,7 +165,7 @@ class _ListsRenameState extends State<ListsRename> {
               NormalFlatButton(
                 text: '重命名列表',
                 onPressed: () async {
-                  AppNavigate.pop(context);
+                  AppNavigate.pop();
                   var data =
                   await ListsApi.updateTitle(widget.id, _controller.text.trim());
                   widget.provider.update(data);

@@ -39,7 +39,7 @@ class StatusItemPrimaryBottom extends StatelessWidget {
                 ),
                 onTap: data.application.website != null
                     ? () => AppNavigate.push(
-                        context, InnerBrowser(data.application.website))
+                         InnerBrowser(data.application.website))
                     : null)]
           ],
         ),

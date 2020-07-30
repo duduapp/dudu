@@ -117,7 +117,7 @@ class _StatusDetailState extends State<StatusDetail> {
           create: (context) => ResultListProvider(
               requestUrl: '${StatusApi.url}/${widget.data.id}/context',
               buildRow: _buildRow,
-              holderList: [widget.data.toJson()],
+          //    holderList: [widget.data.toJson()],
               showLoading: false,
               enableLoad: false,
               dataHandler: (data) {

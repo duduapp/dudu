@@ -28,7 +28,7 @@ class NormalCancelFlatButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return NormalFlatButton(
       text: '取消',
-      onPressed: () => AppNavigate.pop(context),
+      onPressed: () => AppNavigate.pop(),
     );
   }
 }

@@ -39,7 +39,7 @@ class _InnerBrowserState extends State<InnerBrowser> {
       url: widget.url,
       withJavascript: true,
       appBar: AppBar(
-        leading: IconButton(icon: Icon(Icons.clear,size: 30,),onPressed: ()=>AppNavigate.pop(context),),
+        leading: IconButton(icon: Icon(Icons.clear,size: 30,),onPressed: ()=>AppNavigate.pop(),),
         title: Text(title),
         bottom: progress == 1
             ? null

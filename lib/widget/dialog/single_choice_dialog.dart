@@ -25,7 +25,7 @@ class SingleChoiceDialog extends StatelessWidget {
         ),
         onTap: () {
           onChoose(choices.indexOf(choice));
-          AppNavigate.pop(context);
+          AppNavigate.pop();
         },
       ));
     }

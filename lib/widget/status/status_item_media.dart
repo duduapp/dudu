@@ -110,7 +110,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   Widget audio() {
     return InkWell(
       onTap: () {
-        AppNavigate.push(context, VideoPlay(widget.images[0]));
+        AppNavigate.push(VideoPlay(widget.images[0]));
       },
       child: ListTile(
         leading: Icon(Icons.music_note),
@@ -397,7 +397,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
 //        },
 //      ),
 //    );
-    AppNavigate.push(context, to, routeType: RouterType.fade);
+    AppNavigate.push(to, routeType: RouterType.fade);
   }
 
   @override

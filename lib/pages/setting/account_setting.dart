@@ -32,25 +32,23 @@ class _AccountSettingState extends State<AccountSetting> {
           SettingCell(
             leftIcon: Icon(Icons.notifications),
             title: '通知设置',
-            onPress: () => AppNavigate.push(context, SettingNotification()),
+            onPress: () => AppNavigate.push(SettingNotification()),
           ),
           SettingCell(
             leftIcon: Icon(Icons.volume_off),
             title: '被隐藏的用户',
-            onPress: () =>
-                AppNavigate.push(context, CommonBlockList(BlockType.mute)),
+            onPress: () => AppNavigate.push(CommonBlockList(BlockType.mute)),
           ),
           SettingCell(
             leftIcon: Icon(Icons.block),
             title: '被屏蔽的用户',
-            onPress: () =>
-                AppNavigate.push(context, CommonBlockList(BlockType.block)),
+            onPress: () => AppNavigate.push(CommonBlockList(BlockType.block)),
           ),
           SettingCell(
             leftIcon: Icon(Icons.volume_off),
             title: '隐藏域名',
-            onPress: () => AppNavigate.push(
-                context, CommonBlockList(BlockType.hideDomain)),
+            onPress: () =>
+                AppNavigate.push(CommonBlockList(BlockType.hideDomain)),
           ),
           Container(
             child: Text('发布'),
@@ -103,22 +101,21 @@ class _AccountSettingState extends State<AccountSetting> {
           SettingCell(
             title: '公共时间轴',
             onPress: () =>
-                AppNavigate.push(context, CommonFilterList(FilterType.public)),
+                AppNavigate.push(CommonFilterList(FilterType.public)),
           ),
           SettingCell(
             title: '通知',
-            onPress: () => AppNavigate.push(
-                context, CommonFilterList(FilterType.notifications)),
+            onPress: () =>
+                AppNavigate.push(CommonFilterList(FilterType.notifications)),
           ),
           SettingCell(
             title: '主页',
-            onPress: () =>
-                AppNavigate.push(context, CommonFilterList(FilterType.home)),
+            onPress: () => AppNavigate.push(CommonFilterList(FilterType.home)),
           ),
           SettingCell(
             title: '对话',
             onPress: () =>
-                AppNavigate.push(context, CommonFilterList(FilterType.thread)),
+                AppNavigate.push(CommonFilterList(FilterType.thread)),
           ),
           SizedBox(
             height: 30,

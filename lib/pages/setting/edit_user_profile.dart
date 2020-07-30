@@ -73,7 +73,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
   }
 
   chooseHeader() async{
-      AppNavigate.pop(context);
+      AppNavigate.pop();
       var image = await MediaUtil.pickAndCompressImage();
       if (image == null) {
         return;
@@ -86,7 +86,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
   }
 
   chooseAvatar() async {
-    AppNavigate.pop(context);
+    AppNavigate.pop();
     var image = await MediaUtil.pickAndCompressImage();
     if (image == null) {
       return;
@@ -125,7 +125,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
       return;
     }
     eventBus.emit(EventBusKey.accountUpdated);
-    AppNavigate.pop(context);
+    AppNavigate.pop();
   }
 
 
@@ -157,7 +157,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
 
           Container(height: 8,color: Theme.of(context).backgroundColor,),
 
-          BottomSheetItem(text: '取消',onTap: () => AppNavigate.pop(context),safeArea: true,)
+          BottomSheetItem(text: '取消',onTap: () => AppNavigate.pop(),safeArea: true,)
 
 
         ],

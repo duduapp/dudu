@@ -116,7 +116,7 @@ class _StatusItemActionState extends State<StatusItemAction> {
         children: <Widget>[
           InkWell(
             onTap: () {
-              AppNavigate.push(context, NewStatus(replyTo: widget.item));
+              AppNavigate.push(NewStatus(replyTo: widget.item));
             },
             child: Row(
               children: <Widget>[
@@ -250,7 +250,6 @@ class _StatusItemActionState extends State<StatusItemAction> {
                   break;
                 case 'report':
                   AppNavigate.push(
-                      context,
                       UserReport(
                         account: widget.item.account,
                         fromStatusId: widget.item.id,

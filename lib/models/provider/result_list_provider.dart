@@ -29,7 +29,6 @@ class ResultListProvider extends ChangeNotifier {
   GlobalKey<SliverAnimatedListState> listKey;
   final RowBuilder buildRow;
   Map<String, dynamic> events = {};
-  final bool firstRefresh;
   final bool onlyMedia;
   final ResultListDataHandler dataHandler;
   String lastCellId = '0';
@@ -44,17 +43,14 @@ class ResultListProvider extends ChangeNotifier {
       this.offsetPagination,
       this.headerLinkPagination = false,
       this.enableRefresh = true,
-        this.enableLoad = true,
+      this.enableLoad = true,
       this.reverseData = false,
       this.listenBlockEvent = false,
-      this.firstRefresh = false, // easy refresh 在 nestedscrollview 有问题
-      bool showHeader = true, // easy refresh 中只有当onrefresh 设为Null 时才能隐藏header
       this.onlyMedia = false,
       this.dataHandler,
-        bool showLoading = true,
-        List holderList, // 给list 第一次赋值，刷新后用结果值
+      bool showLoading = true, // 给list 第一次赋值，刷新后用结果值
       this.cacheTimeInSeconds}) {
-    list = holderList ?? list;
+
     if (listenBlockEvent) {
       _addEvent(EventBusKey.blockAccount, (arg) {
         var accountId = arg['account_id'];
@@ -71,7 +67,6 @@ class ResultListProvider extends ChangeNotifier {
 
     refresh(showLoading: showLoading);
 
-    finishRefresh = !showHeader;
   }
 
   _addEvent(String eventName, EventCallback callback) {
@@ -92,7 +87,7 @@ class ResultListProvider extends ChangeNotifier {
     }
     if (!enableRefresh) {
       finishRefresh = true;
-      finishLoad = true;
+     // finishLoad = true;
       notifyListeners();
     }
     if (!enableLoad) {
@@ -137,14 +132,13 @@ class ResultListProvider extends ChangeNotifier {
       }
     }
 
-    await Request.get2(url: url,returnAll: true)
-        .then((response) {
-          //只有列表为空时，才显示错误，为了更好的用户体验
+    await Request.get2(url: url, returnAll: true).then((response) {
+      //只有列表为空时，才显示错误，为了更好的用户体验
       if (response == null && list.isEmpty) {
         error = RuntimeConfig.error;
         notifyListeners();
         return;
-      } else if (response is DioError){
+      } else if (response is DioError) {
         return;
       } else {
         error = null;
@@ -161,13 +155,11 @@ class ResultListProvider extends ChangeNotifier {
         data = data[mapKey];
       }
 
-
       if (dataHandler != null) {
         data = dataHandler(data);
       }
 
       if (data.length > 0) lastCellId = data[data.length - 1]['id'];
-
 
       // 下拉刷新的时候，只需要将新的数组赋值到数据list中
       // 上拉加载的时候，需要将新的数组添加到现有数据list中

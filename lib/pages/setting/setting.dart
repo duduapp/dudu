@@ -68,7 +68,7 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
         GestureDetector(
           onTap: () {
            // AppNavigate.push(context, UserMessage(account: _account,));
-            AppNavigate.push(context, EditUserProfile(_account));
+            AppNavigate.push( EditUserProfile(_account));
           },
           child: SettingHead(
             account: _account,
@@ -78,34 +78,34 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
         SettingCell(
           title: '收藏',
           leftIcon: Icon(Icons.favorite),
-          onPress: () => AppNavigate.push(context, FavouritesList()),
+          onPress: () => AppNavigate.push(FavouritesList()),
         ),
         SettingCell(
           title: '书签',
           leftIcon: Icon(Icons.bookmark),
-          onPress: () => AppNavigate.push(context, BookmarksList()),
+          onPress: () => AppNavigate.push(BookmarksList()),
         ),
         SettingCell(
           title: '列表',
           leftIcon: Icon(Icons.list),
-          onPress: () => AppNavigate.push(context, ListsPage()),
+          onPress: () => AppNavigate.push(ListsPage()),
         ),
         SettingCell(
           title: '定时嘟文',
           leftIcon: Icon(Icons.access_time),
-          onPress: () => AppNavigate.push(context, ScheduledStatusesList()),
+          onPress: () => AppNavigate.push(ScheduledStatusesList()),
         ),
 
         SizedBox(height: 10,),
         SettingCell(
           title: '账号设置',
           leftIcon: Icon(Icons.account_box),
-          onPress: () => AppNavigate.push(context, AccountSetting()),
+          onPress: () => AppNavigate.push(AccountSetting()),
         ),
         SettingCell(
           title: '通用',
           leftIcon: Icon(Icons.settings),
-          onPress: () => AppNavigate.push(context, GeneralSetting()),
+          onPress: () => AppNavigate.push(GeneralSetting()),
         ),
 
         SizedBox(height: 10),

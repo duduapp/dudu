@@ -40,7 +40,7 @@ class _CommonFilterListState extends State<CommonFilterList> {
         create: (context) => ResultListProvider(
             requestUrl: AccountsApi.filterUrl,
             buildRow: _buildRow,
-            enableRefresh: false),
+            enableRefresh: false,enableLoad: false),
         builder: (context, snapshot) {
           return Scaffold(
             appBar: AppBar(

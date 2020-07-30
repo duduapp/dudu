@@ -63,7 +63,7 @@ class _ServerListState extends State<ServerList>  {
 
     return GestureDetector(
       onTap: () {
-        AppNavigate.pop(context, param: item);
+        AppNavigate.pop(param: item);
       },
       child: Container(
         color: MyColor.loginWhite,

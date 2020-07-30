@@ -51,10 +51,10 @@ class _UserReportState extends State<UserReport> {
             child: Row(
               children: <Widget>[
                 Spacer(),
-                OutlineButton(textColor:Theme.of(context).buttonColor,child: Text('取消'),onPressed: (){AppNavigate.pop(context);},),
+                OutlineButton(textColor:Theme.of(context).buttonColor,child: Text('取消'),onPressed: (){AppNavigate.pop();},),
                 SizedBox(width: 5,),
                 RaisedButton(textColor:Colors.white,child: Text('继续'),onPressed: () {
-                  AppNavigate.push(context, UserReportMessage(chooseStatuses: chooseStatues,account: widget.account,));
+                  AppNavigate.push(UserReportMessage(chooseStatuses: chooseStatues,account: widget.account,));
                 },),
                 SizedBox(width: 20,)
               ],

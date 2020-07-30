@@ -116,10 +116,12 @@ class _ProviderEasyRefreshListViewState
             return provider.isLoading
                 ? LoadingView()
                 : EasyRefresh.custom(
+
                     topBouncing: false,
                     slivers: [
                       !widget.usingGrid
                           ? SliverAnimatedList(
+
                               key: listKey,
                               initialItemCount: provider.list.length,
                               itemBuilder: (context, index, animation) {

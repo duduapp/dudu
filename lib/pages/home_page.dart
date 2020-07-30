@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void showNewArtical() {
-    AppNavigate.push(context, NewStatus());
+    AppNavigate.push(NewStatus());
     // eventBus.emit(EventBusKey.ShowNewArticalWidget);
   }
 

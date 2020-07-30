@@ -60,7 +60,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
               ),
               BottomSheetItem(
                 text: '取消',
-                onTap: () => AppNavigate.pop(context),
+                onTap: () => AppNavigate.pop(),
                 safeArea: true,
               )
             ],
@@ -99,7 +99,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
           SizedBox(height: 30,),
           SettingCellText(
             text: Text('切换账号',style: TextStyle(fontSize: 16),),
-            onPressed: () => AppNavigate.push(context, AccountSwitch(),routeType: RouterType.material),
+            onPressed: () => AppNavigate.push(AccountSwitch(),routeType: RouterType.material),
           ),
           SizedBox(height: 10,),
           SettingCellText(

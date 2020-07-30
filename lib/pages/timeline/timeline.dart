@@ -76,7 +76,7 @@ class _TimelineState extends State<Timeline> {
             IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
-                AppNavigate.push(context, NewStatus(),
+                AppNavigate.push(NewStatus(),
                     routeType: RouterType.material);
               },
             )

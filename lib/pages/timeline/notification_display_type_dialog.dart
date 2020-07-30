@@ -58,7 +58,7 @@ class _NotificationDisplayTypeDialogState
             InkWell(
               onTap: () {
                 SettingsProvider.updateWithCurrentContext('notification_display_type', displayType);
-                AppNavigate.pop(context,param: displayType);
+                AppNavigate.pop(param: displayType);
               },
               child: Container(
                 width: double.infinity,

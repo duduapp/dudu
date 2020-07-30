@@ -17,13 +17,14 @@ class StatusItemCard extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.only(top: 8),
         child: InkWell(
-          onTap: () => AppNavigate.push(context, InnerBrowser(statusData.card.url)),
+          onTap: () => AppNavigate.push(InnerBrowser(statusData.card.url)),
           child: Card(
             elevation: 3,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.grey[50],
+
+             //   color: Colors.grey[50],
 //              border: Border.all(color: Theme.of(context).accentColor),
 
               ),

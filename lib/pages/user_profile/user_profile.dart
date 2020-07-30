@@ -80,29 +80,25 @@ class _UserProfileState extends State<UserProfile>
       ResultListProvider(
           requestUrl: Api.UersArticle(widget.accountId, 'exclude_replies=true'),
           buildRow: ListViewUtil.statusRowFunction(),
-          firstRefresh: true,
           dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('status_'),
-          showHeader: false),
+          enableRefresh: false),
       ResultListProvider(
           requestUrl: AccountsApi.accountStatusUrl(widget.accountId),
           buildRow: ListViewUtil.statusRowFunction(),
-          firstRefresh: true,
           dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('replies_'),
-          showHeader: false),
+          enableRefresh: false),
       ResultListProvider(
         requestUrl: AccountsApi.accountStatusUrl(widget.accountId,
             param: 'pinned=true'),
         buildRow: ListViewUtil.statusRowFunction(),
-        firstRefresh: true,
         dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('pinned_'),
-        showHeader: false,
+        enableRefresh: false,
       ),
       ResultListProvider(
           requestUrl: AccountsApi.accountStatusUrl(widget.accountId,
               param: 'only_media=true'),
           buildRow: _buildGridItem,
-          firstRefresh: true,
-          showHeader: false,
+          enableRefresh: false,
           dataHandler: (data) {
             var handledData = [];
             for (var row in data) {
@@ -193,7 +189,7 @@ class _UserProfileState extends State<UserProfile>
   }
 
   _onPressBlockButton() async {
-    AppNavigate.pop(context);
+    AppNavigate.pop();
     if (relationShip.blocking) {
       _unBlockUser();
     } else {
@@ -205,7 +201,7 @@ class _UserProfileState extends State<UserProfile>
   }
 
   _onPressHideButton() async {
-    AppNavigate.pop(context);
+    AppNavigate.pop();
     if (relationShip.muting) {
       _onPressUnmute();
     } else {
@@ -232,7 +228,7 @@ class _UserProfileState extends State<UserProfile>
 
   _onPressButton() async {
     if (mine.account.id == _account.id) {
-      AppNavigate.push(context, EditUserProfile(_account));
+      AppNavigate.push(EditUserProfile(_account));
     } else if (relationShip.blocking) {
       _unBlockUser();
     } else if (relationShip.following) {
@@ -266,9 +262,8 @@ class _UserProfileState extends State<UserProfile>
                 BottomSheetItem(
                     text: '提及',
                     onTap: () {
-                      AppNavigate.pop(context);
+                      AppNavigate.pop();
                       AppNavigate.push(
-                          context,
                           NewStatus(
                             prepareText: '@' + _account.acct + ' ',
                           ),
@@ -307,7 +302,7 @@ class _UserProfileState extends State<UserProfile>
               ),
               BottomSheetItem(
                 text: '取消',
-                onTap: () => AppNavigate.pop(context),
+                onTap: () => AppNavigate.pop(),
                 safeArea: true,
               )
             ],
@@ -454,7 +449,6 @@ class _UserProfileState extends State<UserProfile>
                     child: GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () => AppNavigate.push(
-                          context,
                           PhotoGallery(
                             galleryItems: [
                               MediaAttachment.fromJson({
@@ -554,7 +548,7 @@ class _UserProfileState extends State<UserProfile>
             width: 10,
           ),
           InkWell(
-            onTap: () => AppNavigate.push(context, UserFollowing(_account.id)),
+            onTap: () => AppNavigate.push(UserFollowing(_account.id)),
             child: Row(
               children: <Widget>[
                 Text(_account.followingCount.toString()),
@@ -573,7 +567,7 @@ class _UserProfileState extends State<UserProfile>
             width: 10,
           ),
           InkWell(
-            onTap: () => AppNavigate.push(context, UserFollowers(_account.id)),
+            onTap: () => AppNavigate.push(UserFollowers(_account.id)),
             child: Row(
               children: <Widget>[
                 Text(_account.followersCount.toString()),
@@ -642,7 +636,6 @@ class _UserProfileState extends State<UserProfile>
     MediaAttachment media = MediaAttachment.fromJson(data[idx]);
     return InkWell(
       onTap: () => AppNavigate.push(
-          context,
           PhotoGallery(
             initialIndex: idx,
             galleryItems:

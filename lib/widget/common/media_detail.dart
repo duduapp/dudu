@@ -28,7 +28,7 @@ class MediaDetail extends StatelessWidget {
               color: Colors.white,
             ),
             onPressed: () {
-              AppNavigate.pop(context);
+              AppNavigate.pop();
             },
           ),
           title: Text(

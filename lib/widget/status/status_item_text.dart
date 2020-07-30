@@ -39,7 +39,7 @@ class _StatusItemTextState extends State<StatusItemText> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: widget.navigateToDetail ?() => AppNavigate.push(context, StatusDetail(widget.data)):null,
+      onTap: widget.navigateToDetail ?() => AppNavigate.push(StatusDetail(widget.data)):null,
       child: Padding(
         padding: const EdgeInsets.only(top: 8),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

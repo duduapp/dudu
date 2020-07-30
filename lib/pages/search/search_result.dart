@@ -37,7 +37,7 @@ class _SearchResultState extends State<SearchResult>
       case SearchType.hashtags:
         return InkWell(
           onTap: () =>
-              AppNavigate.push(context, HashtagTimeline(data[idx]['name'])),
+              AppNavigate.push(HashtagTimeline(data[idx]['name'])),
           child: ListRow(child: Text('#' + data[idx]['name'], style: TextStyle(fontSize: 18)),padding: 18,),
         );
     }

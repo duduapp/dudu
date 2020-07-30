@@ -216,8 +216,8 @@ class _NewStatusState extends State<NewStatus> {
           context: context,
           popAfter: true,
           text: '是否保留本次编辑',
-          onCancel: () {_clearDraft();AppNavigate.pop(context);},
-          onConfirm: () { _saveToDraft();AppNavigate.pop(context);},
+          onCancel: () {_clearDraft();AppNavigate.pop();},
+          onConfirm: () { _saveToDraft();AppNavigate.pop();},
           cancelText: '不保留',
           confirmText: '保留');
       return false;
@@ -284,7 +284,7 @@ class _NewStatusState extends State<NewStatus> {
               successMessage: '嘟文已发送')
           .then((data) {
         if (data != null) {
-          AppNavigate.pop(context);
+          AppNavigate.pop();
           if (scheduledAt != null) {
             eventBus.emit(EventBusKey.scheduledStatusPublished);
           }
@@ -825,7 +825,7 @@ class _NewStatusState extends State<NewStatus> {
                     '取消',
                     style: TextStyle(color: color),
                   ),
-                  onPressed: () => AppNavigate.pop(context),
+                  onPressed: () => AppNavigate.pop(),
                 ),
                 FlatButton(
                   child: Text(
@@ -835,7 +835,7 @@ class _NewStatusState extends State<NewStatus> {
                   onPressed: () {
                     imageTitles[file] = controller.text;
                     updateImageTitle(file, controller.text);
-                    AppNavigate.pop(context);
+                    AppNavigate.pop();
                   },
                 )
               ],

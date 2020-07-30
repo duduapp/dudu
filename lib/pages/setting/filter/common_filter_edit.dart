@@ -83,7 +83,7 @@ class _CommonFilterEditState extends State<CommonFilterEdit> {
   }
 
   _remove() async{
-    AppNavigate.pop(context);
+    AppNavigate.pop();
     var res = await AccountsApi.removeFilter(widget.id);
     if (res != null) {
       widget.provider.removeByIdWithAnimation(widget.id);
@@ -91,7 +91,7 @@ class _CommonFilterEditState extends State<CommonFilterEdit> {
   }
 
   _updateOrCreate() async{
-    AppNavigate.pop(context);
+    AppNavigate.pop();
     if (widget.newFilter) {
       var res = await AccountsApi.addFilter(phraseController.text.trim(), widget.context, wholeWord);
       if (res != null) {

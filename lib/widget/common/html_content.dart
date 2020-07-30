@@ -81,7 +81,6 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
           for (var mention in mentions) {
             if (mention['url'] == link) {
               AppNavigate.push(
-                  null,
                   UserProfile(
                     accountId: mention['id'],
                   ));
@@ -94,7 +93,7 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
           var tagInUrl = link.substring(link.lastIndexOf('/') + 1);
           for (var tag in tags) {
             if (tag['name'] == tagInUrl.toLowerCase()) {
-              AppNavigate.push(null, HashtagTimeline(tagInUrl));
+              AppNavigate.push(HashtagTimeline(tagInUrl));
               return;
             }
           }
@@ -102,18 +101,18 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
       } else {
         if (htmlClass.contains('hashtag')) {
           var tagInUrl = link.substring(link.lastIndexOf('/') + 1);
-          AppNavigate.push(null, HashtagTimeline(tagInUrl));
+          AppNavigate.push(HashtagTimeline(tagInUrl));
           return;
         }
       }
     }
 
     if (linkText.startsWith('#')) {
-      AppNavigate.push(null, HashtagTimeline(linkText.substring(1)));
+      AppNavigate.push(HashtagTimeline(linkText.substring(1)));
       return;
     }
 
-    AppNavigate.push(null, InnerBrowser(link));
+    AppNavigate.push(InnerBrowser(link));
 
   }
 }

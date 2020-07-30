@@ -215,8 +215,8 @@ class _HandleVoteDialogState extends State<HandleVoteDialog> {
             ),
             Row(children: <Widget>[
               Spacer(),
-              NormalFlatButton(text: '取消',onPressed: () => AppNavigate.pop(context),),
-              NormalFlatButton(text: '确定',onPressed: canCreate ?() => AppNavigate.pop(context,param: newVote) :null,)
+              NormalFlatButton(text: '取消',onPressed: () => AppNavigate.pop(),),
+              NormalFlatButton(text: '确定',onPressed: canCreate ?() => AppNavigate.pop(param: newVote) :null,)
             ],)
           ],
         ),

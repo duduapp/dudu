@@ -62,7 +62,7 @@ class _LoginState extends State<Login> {
     setState(() {
       _clickButton = false;
     });
-    final result = await AppNavigate.push(context, WebLogin(serverItem: model, hostUrl: hostUrl),);
+    final result = await AppNavigate.push(WebLogin(serverItem: model, hostUrl: hostUrl),);
 
     if (result == null) {
       return;
@@ -120,7 +120,7 @@ class _LoginState extends State<Login> {
 
 // 跳转到选择节点页面
   void _chooseServer(BuildContext context) {
-    AppNavigate.push(context, ServerList(), callBack: (ServerItem item) {
+    AppNavigate.push(ServerList(), callBack: (ServerItem item) {
       if (item != null) {
         _controller.text = item.name;
         _checkInputText();

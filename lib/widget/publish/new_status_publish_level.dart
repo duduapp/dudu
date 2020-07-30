@@ -22,7 +22,7 @@ class NewStatusPublishLevel extends StatelessWidget {
     return InkWell(
       onTap: () {
         onSelect(leftIcon);
-        AppNavigate.pop(context);
+        AppNavigate.pop();
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),

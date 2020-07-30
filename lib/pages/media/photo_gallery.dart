@@ -58,7 +58,7 @@ class _PhotoGalleryState extends State<PhotoGallery> {
     return MediaDetail(
       child: InkWell(
           onTap: () {
-            AppNavigate.pop(context);
+            AppNavigate.pop();
           },
           child: Container(
             decoration: widget.backgroundDecoration,

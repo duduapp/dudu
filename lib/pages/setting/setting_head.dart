@@ -26,15 +26,15 @@ class SettingHead extends StatelessWidget {
         children: <Widget>[
           InkWell(
             child: headerSection(account.statusesCount, '嘟文'),
-            onTap: () => AppNavigate.push(null, UserStatus(account.id)),
+            onTap: () => AppNavigate.push(UserStatus(account.id)),
           ),
           InkWell(
             child: headerSection(account.followingCount, '关注'),
-            onTap: () => AppNavigate.push(null, UserFollowing(account.id)),
+            onTap: () => AppNavigate.push(UserFollowing(account.id)),
           ),
           InkWell(
             child: headerSection(account.followersCount, '粉丝'),
-            onTap: () => AppNavigate.push(null, UserFollowers(account.id)),
+            onTap: () => AppNavigate.push(UserFollowers(account.id)),
           ),
         ],
       ),
@@ -77,7 +77,6 @@ class SettingHead extends StatelessWidget {
                     height: 60,
                   ),
                   onTap: () => AppNavigate.push(
-                      null,
                       UserProfile(
                         accountId: account.id,
                       )),

@@ -30,7 +30,7 @@ class StatusItemAccount extends StatelessWidget {
             ? null
             : () {
           if (createdAt == null)
-            AppNavigate.push(context, UserProfile(accountId: account.id));
+            AppNavigate.push(UserProfile(accountId: account.id));
         }, // 用作搜索页时，整个页面可点击
         child: accountWidget(context),
       );
@@ -50,7 +50,7 @@ class StatusItemAccount extends StatelessWidget {
                   ? null
                   : () {
                 AppNavigate.push(
-                    context, UserProfile(accountId: account.id));
+                     UserProfile(accountId: account.id));
               },
               child: Avatar(url: account.avatarStatic),
             )),

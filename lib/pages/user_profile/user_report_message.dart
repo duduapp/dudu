@@ -94,7 +94,7 @@ class _UserReportMessageState extends State<UserReportMessage> {
                       textColor: Theme.of(context).buttonColor,
                       child: Text('返回'),
                       onPressed: () {
-                        AppNavigate.pop(context);
+                        AppNavigate.pop();
                       },
                     ),
                     SizedBox(
@@ -106,8 +106,8 @@ class _UserReportMessageState extends State<UserReportMessage> {
                       onPressed: () async{
                         var res = await AccountsApi.reportUser(widget.account.id, widget.chooseStatuses, _controller.text, forward);
                         if (res != null) {
-                          AppNavigate.pop(context);
-                          AppNavigate.pop(context);
+                          AppNavigate.pop();
+                          AppNavigate.pop();
                         }
                       },
                     ),

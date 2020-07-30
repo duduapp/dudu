@@ -34,7 +34,7 @@ class _StatusItemState extends State<StatusItem> {
   Widget build(BuildContext context) {
     if (widget.subStatus != null && widget.subStatus) {
       return InkWell(
-        onTap: () => AppNavigate.push(context, StatusDetail(widget.item)),
+        onTap: () => AppNavigate.push(StatusDetail(widget.item)),
         child: Container(
           color: Theme
               .of(context)
@@ -45,7 +45,7 @@ class _StatusItemState extends State<StatusItem> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               InkWell(
-                onTap: () => AppNavigate.push(context, UserProfile(accountId: widget.item.account.id,)),
+                onTap: () => AppNavigate.push(UserProfile(accountId: widget.item.account.id,)),
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
                   child: Avatar(url: widget.item.account.avatarStatic),
@@ -66,28 +66,31 @@ class _StatusItemState extends State<StatusItem> {
       );
     } else {
       StatusItemData data = widget.item.reblog ?? widget.item;
-      return InkWell(
-        onTap: () => AppNavigate.push(context, StatusDetail(widget.item)),
-        child: Container(
-          color: Theme
-              .of(context)
-              .primaryColor,
-          padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
-          margin: EdgeInsets.only(bottom: 8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              refHeader(),
-              StatusItemAccount(data.account,createdAt:widget.primary ?null :data.createdAt),
-              StatusItemContent(data,primary: widget.primary,),
-              StatusItemCard(data),
-              if (widget.primary) StatusItemPrimaryBottom(data),
-              StatusItemAction(
-                item: data
-              ),
-            ],
+      return Column(
+        children: [InkWell(
+          splashColor: Colors.transparent,
+          onTap: () => AppNavigate.push(StatusDetail(widget.item)),
+          child: Ink(
+          color: Colors.white,
+            padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
+            //margin: EdgeInsets.only(bottom: 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                refHeader(),
+                StatusItemAccount(data.account,createdAt:widget.primary ?null :data.createdAt),
+                StatusItemContent(data,primary: widget.primary,),
+                StatusItemCard(data),
+                if (widget.primary) StatusItemPrimaryBottom(data),
+                StatusItemAction(
+                  item: data
+                ),
+              ],
+            ),
           ),
         ),
+          SizedBox(height: 8,)
+        ]
       );
     }
   }
@@ -102,7 +105,7 @@ class _StatusItemState extends State<StatusItem> {
     }
 
     return (icon != null && str != null) ? InkWell(
-      onTap: () => AppNavigate.push(context, UserProfile(accountId: widget.refAccount?.id ??widget.item.account.id,)),
+      onTap: () => AppNavigate.push(UserProfile(accountId: widget.refAccount?.id ??widget.item.account.id,)),
       child: Container(
         padding: EdgeInsets.only(top: 3,bottom: 8),
         child: Row(

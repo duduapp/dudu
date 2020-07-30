@@ -40,7 +40,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
         manageMode = false;
       });
     } else {
-      AppNavigate.pop(context);
+      AppNavigate.pop();
     }
   }
 
@@ -109,7 +109,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
             //SizedBox(height: 10,),
             if (!manageMode)
               InkWell(
-                onTap: () => AppNavigate.push(context,Login(showBackButton: true,),routeType:RouterType.material),
+                onTap: () => AppNavigate.push(Login(showBackButton: true,),routeType:RouterType.material),
                 child: Container(
                   padding: EdgeInsets.all(25),
                   color: primaryColor,
@@ -157,7 +157,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                   ),
                   BottomSheetItem(
                     text: '取消',
-                    onTap: () => AppNavigate.pop(context),
+                    onTap: () => AppNavigate.pop(),
                     safeArea: true,
                   )
                 ],
@@ -171,14 +171,14 @@ class _AccountSwitchState extends State<AccountSwitch> {
     setState(() {
       manageMode = false;
     });
-    AppNavigate.pop(context);
+    AppNavigate.pop();
   }
 
   Widget accountRow(LocalAccount accountInfo) {
     return InkWell(
       onTap: () async {
         if (accountInfo.active) {
-          AppNavigate.pop(context);
+          AppNavigate.pop();
         } else {
           await LocalStorageAccount.setActiveAccount(accountInfo);
           LoginedUser().loadFromLocalAccount(accountInfo);

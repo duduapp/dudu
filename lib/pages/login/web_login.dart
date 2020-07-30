@@ -23,7 +23,7 @@ class WebLogin extends StatelessWidget {
       List<String> urlList = url.split("?");
       if (urlList[0].contains(serverItem.redirectUri) && urlList[1].length != 0) {
         List<String> codeList = url.split("=");
-        AppNavigate.pop(context, param: codeList[1]);
+        AppNavigate.pop(param: codeList[1]);
       }
     });
 

@@ -32,7 +32,7 @@ class NotificationUtil {
     if (payload != null) {
       NotificationItem item = NotificationItem.fromJson(json.decode(payload));
       if (item.type == 'mention' || item.type == 'poll') {
-        AppNavigate.push(null, StatusDetail(item.status));
+        AppNavigate.push(StatusDetail(item.status));
       }
     }
   }

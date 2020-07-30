@@ -56,7 +56,6 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
               icon: Icon(Icons.edit),
               onPressed: () {
                 AppNavigate.push(
-                    context,
                     NewStatus(
                       scheduleInfo: row,
                     ),routeType: RouterType.material);

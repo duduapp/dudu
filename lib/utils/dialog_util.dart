@@ -35,7 +35,7 @@ class DialogUtils {
             actions: <Widget>[
               FlatButton(
                 child: Text('确定'),
-                onPressed: () => AppNavigate.pop(context),
+                onPressed: () => AppNavigate.pop(),
               )
             ],
           );
@@ -54,19 +54,19 @@ class DialogUtils {
       String cancelText,
       String confirmText}) async{
     if (popFirst != null && popFirst == true) {
-      AppNavigate.pop(context);
+      AppNavigate.pop();
     }
     Function onConfirmCallback;
     if (popAfter) {
       onConfirmCallback = () async {
-        AppNavigate.pop(context);
+        AppNavigate.pop();
         await onConfirm();
       };
     } else {
       onConfirmCallback = onConfirm;
     }
     if (onlyInfo) {
-      onConfirmCallback = () {AppNavigate.pop(context);};
+      onConfirmCallback = () {AppNavigate.pop();};
     }
 
     return await showDialog(
@@ -84,7 +84,7 @@ class DialogUtils {
                   if (onCancel != null) {
                     onCancel();
                   }
-                  AppNavigate.pop(context);
+                  AppNavigate.pop();
                 },
               ),
               FlatButton(
