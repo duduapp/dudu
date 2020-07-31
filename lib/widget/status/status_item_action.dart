@@ -4,10 +4,12 @@ import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
+import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/status/new_status.dart';
 import 'package:fastodon/pages/user_profile/user_report.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/dialog_util.dart';
+import 'package:fastodon/utils/list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:like_button/like_button.dart';
@@ -15,10 +17,12 @@ import 'package:provider/provider.dart';
 
 class StatusItemAction extends StatefulWidget {
   StatusItemAction({
+    this.subStatus,
     Key key,
     this.item,
   }) : super(key: key);
   final StatusItemData item;
+  final bool subStatus;
 
   @override
   _StatusItemActionState createState() => _StatusItemActionState();
@@ -54,19 +58,31 @@ class _StatusItemActionState extends State<StatusItemAction> {
     return !isLiked;
   }
 
-  _onPressHide() async {
+  _onPressMute() async {
     var provider = Provider.of<ResultListProvider>(context, listen: false);
-    var res = await AccountsApi.mute(widget.item.account.id);
-
-    var statusId = widget.item.id;
-    var accountId = widget.item.account.id;
-    if (res != null) {
-      provider.removeByIdWithAnimation(widget.item.id);
-      // 防止和上面的语句冲突
-      Future.delayed(Duration(seconds: 1), () {
-        eventBus.emit(EventBusKey.muteAccount,
-            {'account_id': accountId, 'from_status_id': statusId});
-      });
+    if (SettingsProvider().statusDetailProviders.contains(provider)) {
+      // user is in status detail page
+      if (widget.subStatus) {
+        // 当前页的的字嘟文是否和主嘟文是同一个作者
+        var sameAccount = provider.list.firstWhere((element) =>
+            element.isNotEmpty &&
+            !element.containsKey('__sub') &&
+            element['account']['id'] == widget.item.account.id,orElse: () => null);
+        if (sameAccount == null)
+          ListViewUtil.muteUser(context: context, status: widget.item);
+        else
+          AppNavigate.pop(param:{
+            'operation':'mute',
+            'status':widget.item
+          });
+      } else {
+        AppNavigate.pop(param:{
+          'operation':'mute',
+          'status':widget.item
+        });
+      }
+    } else {
+      ListViewUtil.muteUser(context: context, status: widget.item);
     }
   }
 
@@ -135,8 +151,18 @@ class _StatusItemActionState extends State<StatusItemAction> {
           ),
           Spacer(),
           Row(children: [
-            if (widget.item.visibility == 'private') Icon(Icons.lock,color: splashColor,size: 20,),
-            if (widget.item.visibility == 'direct') Icon(Icons.mail,color: splashColor,size: 20,),
+            if (widget.item.visibility == 'private')
+              Icon(
+                Icons.lock,
+                color: splashColor,
+                size: 20,
+              ),
+            if (widget.item.visibility == 'direct')
+              Icon(
+                Icons.mail,
+                color: splashColor,
+                size: 20,
+              ),
             if (widget.item.visibility != 'private' &&
                 widget.item.visibility != 'direct') ...[
               LikeButton(
@@ -234,7 +260,7 @@ class _StatusItemActionState extends State<StatusItemAction> {
                   DialogUtils.showSimpleAlertDialog(
                       context: context,
                       text: '确定要隐藏@${widget.item.account.acct}吗',
-                      onConfirm: _onPressHide);
+                      onConfirm: _onPressMute);
                   break;
                 case "block":
                   DialogUtils.showSimpleAlertDialog(
@@ -249,11 +275,10 @@ class _StatusItemActionState extends State<StatusItemAction> {
                       onConfirm: _onPressRemove);
                   break;
                 case 'report':
-                  AppNavigate.push(
-                      UserReport(
-                        account: widget.item.account,
-                        fromStatusId: widget.item.id,
-                      ));
+                  AppNavigate.push(UserReport(
+                    account: widget.item.account,
+                    fromStatusId: widget.item.id,
+                  ));
                   break;
               }
             },

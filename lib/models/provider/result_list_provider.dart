@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/models/runtime_config.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/request.dart';
@@ -159,7 +160,9 @@ class ResultListProvider extends ChangeNotifier {
         data = dataHandler(data);
       }
 
-      if (data.length > 0) lastCellId = data[data.length - 1]['id'];
+      if (data.length > 0 && data[data.length - 1].isNotEmpty) {
+        lastCellId = data[data.length - 1]['id'];
+      }
 
       // 下拉刷新的时候，只需要将新的数组赋值到数据list中
       // 上拉加载的时候，需要将新的数组添加到现有数据list中
@@ -209,13 +212,18 @@ class ResultListProvider extends ChangeNotifier {
     }
     listKey?.currentState?.removeItem(idx, (context, animation) {
       var copyList = List.from(list);
-      list.removeWhere((element) => element['id'] == id);
+      list.removeWhere((element) => element is Map && element['id'] == id);
       return SizeTransition(
         axis: Axis.vertical,
         sizeFactor: animation,
         child: buildRow(idx, copyList, this),
       );
     });
+  }
+
+  removeWhere(Function where) {
+    list.removeWhere(where);
+    notifyListeners();
   }
 
   removeByValueWithAnimation(dynamic value) {
@@ -255,7 +263,7 @@ class ResultListProvider extends ChangeNotifier {
   }
 
   _indexOfId(String id) {
-    return list.indexWhere((element) => element['id'] == id);
+    return list.indexWhere((element) => element is Map && element['id'] == id);
   }
 
   setAnimatedListKey(GlobalKey<SliverAnimatedListState> key) {
@@ -274,6 +282,7 @@ class ResultListProvider extends ChangeNotifier {
     events.forEach((key, value) {
       eventBus.off(key, value);
     });
+    SettingsProvider.getCurrentContextProvider().statusDetailProviders.remove(this);
     super.dispose();
   }
 }

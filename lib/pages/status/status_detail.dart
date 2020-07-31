@@ -1,14 +1,17 @@
-
+import 'dart:async';
 
 import 'package:fastodon/api/status_api.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
+import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/utils/list_view.dart';
+import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:fastodon/widget/status/status_item.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-
+import 'package:provider/provider.dart';
 
 class StatusDetail extends StatefulWidget {
   final StatusItemData data;
@@ -22,87 +25,71 @@ class _StatusDetailState extends State<StatusDetail> {
   final ScrollController _scrollController = ScrollController();
   final EasyRefreshController _controller = EasyRefreshController();
   final List<GlobalKey> keys = [];
+  int itemPosition = 0;
 
   @override
   void initState() {
-    getData();
-//    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+    //getData();
     super.initState();
   }
 
-  getData() async{
+  getData() async {
     var _res = await StatusApi.getContext(widget.data.id);
     keys.clear();
     setState(() {
       _data = _res;
     });
-
   }
 
-  Widget _buildRow(int idx) {
-    if (childCount != 1 && (idx == childCount-1)) {
-      _afterLayout("_");
+  Widget _buildRow(int idx, List data, ResultListProvider provider) {
+    var row = data[idx];
+    if (row.isEmpty) {
+      return _buildStatusItem(widget.data, primary: true,subStatus: false);
     }
-    if (_data.isEmpty) {
-      return StatusItem(item:widget.data,primary:true,);
-    }
-    if (idx < _data['ancestors'].length) {
-      return _buildStatusItem(StatusItemData.fromJson(_data['ancestors'][idx]),subStatus: true);
 
-    } else if (idx == _data['ancestors'].length) {
-      return _buildStatusItem(widget.data,primary: true);
-    } else {
-      return _buildStatusItem(StatusItemData.fromJson(_data['descendants'][idx-_data['ancestors'].length-1]),subStatus: true,);
+    if (row.containsKey('__sub')) {
+      return _buildStatusItem(
+        StatusItemData.fromJson(row),
+        subStatus: true,
+      );
     }
 
   }
 
-  Widget _buildStatusItem(StatusItemData data,{bool subStatus,bool primary}) {
+  Widget _buildStatusItem(StatusItemData data, {bool subStatus, bool primary}) {
     var gk = GlobalKey();
     keys.add(gk);
     return Container(
       key: gk,
-      child: StatusItem(item: data,subStatus: subStatus,primary: primary,),
+      child: StatusItem(
+        item: data,
+        subStatus: subStatus,
+        primary: primary,
+      ),
     );
   }
-  
-  Future<void> _onRefresh() async{
-    await getData();
-  }
 
-  get childCount {
-    if (_data.length == 0) {
-      return 1;
-    } else {
-      return _data['ancestors'].length + _data['descendants'].length + 1;
-    }
-  }
 
   _afterLayout(_) {
-    if (childCount == 1) {
-      return;
-    }
     double totalHeight = 0;
-    for (int i = 0; i < _data['ancestors'].length; i++) {
-
+    for (int i = 1; i <= itemPosition; i++) {
       try {
         RenderBox renderBox = keys[i].currentContext.findRenderObject();
         totalHeight += renderBox.size.height;
       } catch (e) {
-
+       // print(e);
       }
-
     }
     if (totalHeight == 0) {
       return;
     }
-    _scrollController.jumpTo(totalHeight-50);
+    _scrollController.jumpTo(totalHeight - 50);
   }
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance
-        .addPostFrameCallback(_afterLayout);
+
+
     var scale = SettingsProvider.getWithCurrentContext('text_scale');
     return Scaffold(
       appBar: AppBar(
@@ -112,26 +99,45 @@ class _StatusDetailState extends State<StatusDetail> {
       body: MediaQuery(
         data: MediaQuery.of(context)
             .copyWith(textScaleFactor: 1.0 + 0.18 * double.parse(scale)),
-        child: EasyRefresh.custom(
-          cacheExtent: 10000,
-          slivers: [
+        child: ChangeNotifierProvider<ResultListProvider>(
+          create: (context)
+          {
+            var provider =  ResultListProvider(
+              requestUrl: '${StatusApi.url}/${widget.data.id}/context',
+              buildRow: _buildRow,
+              //    holderList: [widget.data.toJson()],
+              showLoading: false,
+              enableLoad: false,
+              dataHandler: (data) {
+                List res = [];
+                for (var d in data['ancestors']) {
+                  d['__sub'] = true;
+                  res.add(d);
+                }
+                res.add([]);
+                // res.add(widget.data.toJson());
+                itemPosition = data['ancestors'].length;
+                for (var d in data['descendants']) {
+                  d['__sub'] = true;
+                  res.add(d);
+                }
 
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                      (context,idx) {
-                    return _buildRow(idx);
-                  },
-                  childCount: childCount
-              ),
-            )
-          ],
-          header: ListViewUtil.getDefaultHeader(context),
-          footer: null,
-          controller: _controller,
-          scrollController: _scrollController,
-          onRefresh: _onRefresh,
-          onLoad: null,
+                return res;
+              }
+          );
+            SettingsProvider.getCurrentContextProvider().statusDetailProviders.add(provider);
+            return provider;
+          },
+          builder: (context, snapshot) {
+            return ProviderEasyRefreshListView(
+              scrollController: _scrollController,
+              cacheExtent: 10000,
+              enableLoad: false,
+              afterBuild: _afterLayout,
+            );
+          },
         ),
+
       ),
     );
   }

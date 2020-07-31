@@ -21,7 +21,9 @@ class ProviderEasyRefreshListView extends StatefulWidget {
       this.usingGrid = false,
       this.scrollController,
       this.cacheExtent,
-      this.enableLoad = true})
+      this.enableLoad = true,
+      this.addToSliverCount = 0,
+      this.afterBuild})
       : super(key: key);
   final TimelineType type;
 
@@ -31,7 +33,9 @@ class ProviderEasyRefreshListView extends StatefulWidget {
   final usingGrid;
   final ScrollController scrollController;
   final double cacheExtent;
-  final bool enableLoad; // 有时Provider 无法完全使list不load,在刷新后马上jump page 会使页面刷新
+  final bool enableLoad;// 有时Provider 无法完全使list不load,在刷新后马上jump page 会使页面刷新
+  final int addToSliverCount;
+  final Function afterBuild;
   @override
   _ProviderEasyRefreshListViewState createState() =>
       _ProviderEasyRefreshListViewState();
@@ -101,6 +105,9 @@ class _ProviderEasyRefreshListViewState
               .copyWith(textScaleFactor: 1.0 + 0.18 * double.parse(scale)),
           child:
               Consumer<ResultListProvider>(builder: (context, provider, child) {
+                if (widget.afterBuild != null) {
+                  WidgetsBinding.instance.addPostFrameCallback(widget.afterBuild);
+                }
             GlobalKey<SliverAnimatedListState> listKey =
                 GlobalKey<SliverAnimatedListState>();
             provider.setAnimatedListKey(listKey);
@@ -123,7 +130,7 @@ class _ProviderEasyRefreshListViewState
                           ? SliverAnimatedList(
 
                               key: listKey,
-                              initialItemCount: provider.list.length,
+                              initialItemCount: provider.list.length+widget.addToSliverCount,
                               itemBuilder: (context, index, animation) {
                                 return SizeTransition(
                                   axis: Axis.vertical,
@@ -138,7 +145,7 @@ class _ProviderEasyRefreshListViewState
                                   SliverChildBuilderDelegate((context, idx) {
                                 return provider.buildRow(
                                     idx, provider.list, provider);
-                              }, childCount: provider.list.length),
+                              }, childCount: provider.list.length+widget.addToSliverCount),
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 3),
@@ -155,7 +162,7 @@ class _ProviderEasyRefreshListViewState
 //                        widget.type == null ? null : _scrollController,
                     onRefresh: provider.finishRefresh ? null : provider.refresh,
                     onLoad: widget.enableLoad ?(provider.finishLoad ? null : provider.load ):null,
-                    emptyWidget: provider.noResults
+                    emptyWidget: provider.noResults && widget.addToSliverCount == 0
                         ? widget.emptyWidget ?? EmptyView()
                         : null,
                     cacheExtent: widget.cacheExtent,

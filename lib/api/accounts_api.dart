@@ -59,7 +59,7 @@ class AccountsApi {
 
   static mute(String id) async{
     var api = '$url/$id/mute';
-    return await Request.post(url: api,errMsg: '隐藏用户$id失败');
+    return await Request.post(url: api,errMsg: '隐藏用户$id失败',showDialog: false);
   }
 
   static unMute(String id) async{

@@ -1,4 +1,5 @@
 import 'package:fastodon/models/logined_user.dart';
+import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/local_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -28,6 +29,14 @@ class SettingsProvider extends ChangeNotifier {
   };
 
   String storageKey;
+
+  List<ResultListProvider> statusDetailProviders = [];
+
+  ResultListProvider homeProvider;
+  ResultListProvider localProvider;
+  ResultListProvider notificationProvider;
+  ResultListProvider federatedProvider;
+
 
 
 

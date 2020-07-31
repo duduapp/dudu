@@ -4,6 +4,7 @@ import 'package:fastodon/constant/event_bus_key.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
+import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/widget/common/list_row.dart';
 import 'package:fastodon/widget/status/status_item.dart';
 import 'package:fastodon/widget/status/status_item_account.dart';
@@ -84,14 +85,24 @@ class ListViewUtil {
     }
   }
 
-  static hideUser({BuildContext context,StatusItemData status}) async{
-    var provider = Provider.of<ResultListProvider>(context, listen: false);
+  static muteUser({BuildContext context,StatusItemData status}) async{
+    ResultListProvider provider;
+    if (context == null) {
+      provider = SettingsProvider().statusDetailProviders.last;
+      if (provider == null)
+        return;
+    } else {
+      provider = Provider.of<ResultListProvider>(context, listen: false);
+    }
     var res = await AccountsApi.mute(status.account.id);
 
     var statusId = status.id;
     var accountId = status.account.id;
     if (res != null) {
       provider.removeByIdWithAnimation(status.id);
+      for (ResultListProvider provider in SettingsProvider().statusDetailProviders) {
+        provider.removeWhere((e) => e.isNotEmpty && e['account']['id'] == status.account.id);
+      }
       // 防止和上面的语句冲突
       Future.delayed(Duration(seconds: 1), () {
         eventBus.emit(EventBusKey.muteAccount,

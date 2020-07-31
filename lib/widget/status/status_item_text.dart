@@ -38,27 +38,24 @@ class _StatusItemTextState extends State<StatusItemText> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: widget.navigateToDetail ?() => AppNavigate.push(StatusDetail(widget.data)):null,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 8),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          HtmlContent(
-             widget.data.spoilerText.isEmpty
-                ? widget.data.content.trim()
-                : widget.data.spoilerText.trim(),statusData: widget.data,emojis: widget.data.emojis,
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        HtmlContent(
+           widget.data.spoilerText.isEmpty
+              ? widget.data.content.trim()
+              : widget.data.spoilerText.trim(),statusData: widget.data,emojis: widget.data.emojis,
+        ),
+        if (widget.data.spoilerText.isNotEmpty)
+          OutlineButton(
+            child: Text(showMore ? '折叠内容' : '显示更多'),
+            onPressed: _onShowMorePressed,
           ),
-          if (widget.data.spoilerText.isNotEmpty)
-            OutlineButton(
-              child: Text(showMore ? '折叠内容' : '显示更多'),
-              onPressed: _onShowMorePressed,
-            ),
-          if (showMore)
-            HtmlContent(
-               widget.data.content,statusData: widget.data,emojis: widget.data.emojis,
-            )
-        ]),
-      ),
+        if (showMore)
+          HtmlContent(
+             widget.data.content,statusData: widget.data,emojis: widget.data.emojis,
+          )
+      ]),
     );
   }
 }
