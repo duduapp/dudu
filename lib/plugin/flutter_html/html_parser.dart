@@ -402,13 +402,13 @@ class HtmlRichTextParser extends StatelessWidget {
             child: RichText(
               textAlign: TextAlign.left,
               text: span,
-              textScaleFactor: Screen.scaleFromSetting(textScale),
+              textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
             ),
           );
           parseContext.rootWidgetList.add(blockText);
         } else {
           parseContext.rootWidgetList
-              .add(BlockText(child: RichText(text: span,textScaleFactor: Screen.scaleFromSetting(textScale),)));
+              .add(BlockText(child: RichText(text: span,textScaleFactor: ScreenUtil.scaleFromSetting(textScale),)));
         }
 
         // this allows future items to be added as children of this item
@@ -445,7 +445,7 @@ class HtmlRichTextParser extends StatelessWidget {
                     left: parseContext.indentLevel * indentSize),
             //    padding: EdgeInsets.all(2.0),
             child: RichText(
-              textScaleFactor: Screen.scaleFromSetting(textScale),
+              textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
               maxLines: 9999,
               textWidthBasis: TextWidthBasis.parent,
               text: TextSpan(
@@ -581,7 +581,7 @@ class HtmlRichTextParser extends StatelessWidget {
                 BlockText blockElement = BlockText(
                   margin: EdgeInsets.only(
                       left: parseContext.indentLevel * indentSize, top: 10.0),
-                  child: RichText(text: span,textScaleFactor: Screen.scaleFromSetting(textScale),),
+                  child: RichText(text: span,textScaleFactor: ScreenUtil.scaleFromSetting(textScale),),
                 );
                 parseContext.rootWidgetList.add(blockElement);
                 nextContext.inBlock = true;
@@ -811,7 +811,7 @@ class HtmlRichTextParser extends StatelessWidget {
               decoration: decoration,
               child: RichText(
 
-                textScaleFactor: Screen.scaleFromSetting(textScale),
+                textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
                 maxLines: 9999,
                 textWidthBasis: TextWidthBasis.parent,
                 textAlign: textAlign,

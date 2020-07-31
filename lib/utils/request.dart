@@ -69,8 +69,8 @@ class Request {
     }
   }
 
-  static Future get2({String url,Map params,bool showDialog = false,bool returnAll = false}) async{
-    return await _request(requestType: RequestType.get,url: url,params: params,showDialog: showDialog,returnAll: returnAll);
+  static Future get2({String url,Map params,bool showDialog = false,bool returnAll = false,Map header}) async{
+    return await _request(requestType: RequestType.get,url: url,params: params,showDialog: showDialog,returnAll: returnAll,header: header);
   }
 
   static Future post(
@@ -146,7 +146,8 @@ class Request {
       String dialogMessage,
       String successMessage,
       int closeDialogDelay,
-      bool returnAll = false}) async {
+      bool returnAll = false,
+      Map header}) async {
     ProgressDialog dialog;
     Response response;
     if (showDialog != null && showDialog == true) {
@@ -157,6 +158,9 @@ class Request {
       await dialog.show();
     }
     var dio = Request.createDio();
+    if (header != null && header.isNotEmpty) {
+      dio.options.headers = header;
+    }
     try {
       switch (requestType) {
         case RequestType.get:
@@ -221,8 +225,8 @@ class Request {
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIos: 1,
-        backgroundColor: MyColor.error,
-        textColor: MyColor.loginWhite,
+        backgroundColor: Colors.red,
+        textColor: Theme.of(navGK.currentContext).primaryColor,
         fontSize: 16.0);
     throw (errorMsg);
   }

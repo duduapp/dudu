@@ -46,7 +46,7 @@ class SettingHead extends StatelessWidget {
       children: <Widget>[
         Text('$number',
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-        Text(title, style: TextStyle(fontSize: 13, color: MyColor.greyText))
+        Text(title, style: TextStyle(fontSize: 13,color: Theme.of(navGK.currentContext).accentColor))
       ],
     );
   }
@@ -57,7 +57,7 @@ class SettingHead extends StatelessWidget {
       children: [
         Container(
           height: 180,
-          width: Screen.width(context),
+          width: ScreenUtil.width(context),
           decoration: BoxDecoration(
               image: DecorationImage(
                   fit: BoxFit.cover,

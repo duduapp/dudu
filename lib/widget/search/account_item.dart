@@ -2,7 +2,6 @@ import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/pages/user_profile/user_profile.dart';
 import 'package:fastodon/utils/app_navigate.dart';
 import 'package:fastodon/utils/date_until.dart';
-import 'package:fastodon/utils/my_color.dart';
 import 'package:fastodon/utils/string_until.dart';
 import 'package:fastodon/widget/other/avatar.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +45,7 @@ class AccountItem extends StatelessWidget {
                         padding: EdgeInsets.only(right: 15),
                         child: Text(DateUntil.dateTime(account.createdAt),
                             style: TextStyle(
-                                fontSize: 13, color: MyColor.greyText),
+                                fontSize: 13, color: Theme.of(context).accentColor),
                             overflow: TextOverflow.ellipsis),
                       ),
                     )
@@ -57,7 +56,7 @@ class AccountItem extends StatelessWidget {
                   children: <Widget>[
                     Text('@' + account.username,
                         style:
-                        TextStyle(fontSize: 13, color: MyColor.greyText)),
+                        TextStyle(fontSize: 13, color: Theme.of(context).accentColor)),
                   ],
                 )
               ],

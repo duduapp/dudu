@@ -18,8 +18,8 @@ class ArticleMedia extends StatelessWidget {
       if(media.type == 'image') {
         picList.add(GestureDetector(
           child: Container(
-            width: (Screen.width(context) - 50) / 3,
-            height: (Screen.width(context) - 50) / 3,
+            width: (ScreenUtil.width(context) - 50) / 3,
+            height: (ScreenUtil.width(context) - 50) / 3,
             child: CachedNetworkImage(
               imageUrl: media.previewUrl,
             ),
@@ -38,7 +38,7 @@ class ArticleMedia extends StatelessWidget {
   @override
   Widget build(BuildContext context) { 
     return Container(
-      width: Screen.width(context),
+      width: ScreenUtil.width(context),
       padding: EdgeInsets.all(15),
       child: Wrap(
         alignment: WrapAlignment.start,

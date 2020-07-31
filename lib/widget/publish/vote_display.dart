@@ -11,7 +11,7 @@ class VoteDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
-      constraints: BoxConstraints(maxWidth: Screen.width(context) - 60),
+      constraints: BoxConstraints(maxWidth: ScreenUtil.width(context) - 60),
       decoration: BoxDecoration(
           border: Border.all(),
           borderRadius: BorderRadius.all(Radius.circular(5))),

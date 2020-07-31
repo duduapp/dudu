@@ -1,3 +1,6 @@
+import 'package:fastodon/api/accounts_api.dart';
+import 'package:fastodon/api/status_api.dart';
+import 'package:fastodon/constant/event_bus_key.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
@@ -7,6 +10,9 @@ import 'package:fastodon/widget/status/status_item_account.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:provider/provider.dart';
+
+import 'event_bus.dart';
 
 class ListViewUtil {
   static Header getDefaultHeader(BuildContext context) {
@@ -54,5 +60,43 @@ class ListViewUtil {
       data.forEach((e) => e['media_attachments'].forEach((e) => e['id'] = prefix+e['id']));
       return data;
     };
+  }
+
+  static removeStatus({BuildContext context,StatusItemData status}) {
+    var provider = Provider.of<ResultListProvider>(context, listen: false);
+    provider.removeByIdWithAnimation(status.id);
+    StatusApi.remove(status.id);
+  }
+
+  static blockUser({BuildContext context,StatusItemData status}) async{
+    var provider = Provider.of<ResultListProvider>(context, listen: false);
+    var res = await AccountsApi.block(status.account.id);
+
+    var statusId = status.id;
+    var accountId = status.account.id;
+    if (res != null) {
+      provider.removeByIdWithAnimation(status.id);
+      // 防止和上面的语句冲突
+      Future.delayed(Duration(seconds: 2), () {
+        eventBus.emit(EventBusKey.blockAccount,
+            {'account_id': accountId, 'from_status_id': statusId});
+      });
+    }
+  }
+
+  static hideUser({BuildContext context,StatusItemData status}) async{
+    var provider = Provider.of<ResultListProvider>(context, listen: false);
+    var res = await AccountsApi.mute(status.account.id);
+
+    var statusId = status.id;
+    var accountId = status.account.id;
+    if (res != null) {
+      provider.removeByIdWithAnimation(status.id);
+      // 防止和上面的语句冲突
+      Future.delayed(Duration(seconds: 1), () {
+        eventBus.emit(EventBusKey.muteAccount,
+            {'account_id': accountId, 'from_status_id': statusId});
+      });
+    }
   }
 }

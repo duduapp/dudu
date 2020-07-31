@@ -119,24 +119,23 @@ class _LoginState extends State<Login> {
   }
 
 // 跳转到选择节点页面
-  void _chooseServer(BuildContext context) {
-    AppNavigate.push(ServerList(), callBack: (ServerItem item) {
-      if (item != null) {
-        _controller.text = item.name;
-        _checkInputText();
-      }
-    });
+  void _chooseServer(BuildContext context) async{
+    ServerItem item = await AppNavigate.push(ServerList());
+    if (item != null) {
+      _controller.text = item.name;
+      _checkInputText();
+    }
   }
 
   Widget _showButtonLoading(BuildContext context) {
     if (_clickButton) {
       return SpinKitThreeBounce(
-        color: MyColor.loginPrimary,
+        color: Theme.of(context).buttonColor,
         size: 23,
       );
     }
     return Text('登录Mastodon账号',
-        style: TextStyle(fontSize: 16, color: MyColor.loginPrimary));
+        style: TextStyle(fontSize: 16, color: Theme.of(context).buttonColor));
   }
 
   void _showAboutSheet(BuildContext context) {
@@ -184,7 +183,7 @@ class _LoginState extends State<Login> {
       ),
         extendBodyBehindAppBar:true,
             resizeToAvoidBottomPadding: false,
-        backgroundColor: MyColor.loginPrimary,
+        backgroundColor: Color.fromRGBO(115, 167, 238, 1),
             body: GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
@@ -249,7 +248,7 @@ class _LoginState extends State<Login> {
                                 padding: EdgeInsets.all(10),
                                 child: _showButtonLoading(context),
                               ),
-                              color: MyColor.loginWhite,
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                         ],
@@ -268,22 +267,22 @@ class _LoginState extends State<Login> {
                               child: Center(
                                 child: Text('关于Mastodon',
                                     style:
-                                        TextStyle(color: MyColor.loginWhite)),
+                                        TextStyle(color: Theme.of(context).primaryColor)),
                               ),
                             ),
                           ),
-//                          InkWell(
-//                            onTap: () {
-//                              _chooseServer(context);
-//                            },
-//                            child: Container(
-//                              child: Center(
-//                                child: Text('选择域名',
-//                                    style:
-//                                        TextStyle(color: MyColor.loginWhite)),
-//                              ),
-//                            ),
-//                          ),
+                          InkWell(
+                            onTap: () {
+                              _chooseServer(context);
+                            },
+                            child: Container(
+                              child: Center(
+                                child: Text('选择域名',
+                                    style:
+                                        TextStyle(color: Theme.of(context).primaryColor)),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

@@ -26,7 +26,7 @@ class NewStatusPublishLevel extends StatelessWidget {
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-        width: Screen.width(context),
+        width: ScreenUtil.width(context),
         child: Row(
           children: <Widget>[
             Padding(

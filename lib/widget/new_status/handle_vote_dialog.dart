@@ -31,11 +31,11 @@ class _HandleVoteDialogState extends State<HandleVoteDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var textWidth = Screen.width(context) * 0.6;
+    var textWidth = ScreenUtil.width(context) * 0.6;
     return Theme(
       data: Theme.of(context).copyWith(primaryColor: Theme.of(context).buttonColor),
       child: Container(
-        width: Screen.width(context) * 0.9,
+        width: ScreenUtil.width(context) * 0.9,
         padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
         child: Column(
           mainAxisSize: MainAxisSize.min,

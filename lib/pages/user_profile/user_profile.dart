@@ -152,7 +152,7 @@ class _UserProfileState extends State<UserProfile>
       color: Theme.of(context).splashColor,
       child: CachedNetworkImage(
         height: 200,
-        width: Screen.width(context),
+        width: ScreenUtil.width(context),
         imageUrl: _account.header,
         fit: BoxFit.cover,
       ),
@@ -384,7 +384,7 @@ class _UserProfileState extends State<UserProfile>
                             ),
                             MediaQuery(
                               data: MediaQuery.of(context).copyWith(
-                                  textScaleFactor: Screen.scaleFromSetting(
+                                  textScaleFactor: ScreenUtil.scaleFromSetting(
                                       SettingsProvider.getWithCurrentContext(
                                           'text_scale'))),
                               child: Row(
@@ -421,7 +421,7 @@ class _UserProfileState extends State<UserProfile>
                             ),
                             SizedBox(height: 10,),
                             Container(
-                                width: Screen.width(context) - 60,
+                                width: ScreenUtil.width(context) - 60,
                                 child: Center(
                                   child: HtmlContent(
                                     _account.note,

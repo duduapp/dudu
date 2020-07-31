@@ -15,12 +15,12 @@ class Avatar extends StatelessWidget {
   final double height;
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
+    //ToDo replace replace holder with default avatar
     if (url == null) {
       return Container(
         width: width,
         height: height,
-        color: MyColor.unLoadWidgetInstead,
       );
     }
     return ClipRRect(

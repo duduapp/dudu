@@ -84,7 +84,7 @@ class _RefreshLoadListViewState extends State<RefreshLoadListView> {
         height: 40,
         child: Center(
           child: SpinKitThreeBounce(
-            color: MyColor.mainColor,
+            color: Theme.of(context).buttonColor,
             size: 23,
           ),
         ),
@@ -128,7 +128,7 @@ class _RefreshLoadListViewState extends State<RefreshLoadListView> {
           },
           itemCount: _dataList.length,
           separatorBuilder: (BuildContext context, int index) {
-            return Divider(height: 1.0, color: MyColor.dividerLineColor);
+            return Divider(height: 1.0);
           },
         ),
       )

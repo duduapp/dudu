@@ -25,7 +25,7 @@ class _ServerListState extends State<ServerList>  {
     Map<String, dynamic> header = Map();
     header['Authorization'] = 'Bearer pEpudHDXGCMgCKtDky37mdO6mwtynpbIU07pi3SsMhGLA4pDlB7nnS5Yzbs5JzbT59pkIajfXINxKDZvloVTnNfzlx9GOrODP0ytRhIey1xxizEK0dqZgX9GGz427K4e';
     
-    Request.get2(url: Api.ServerList).then((data) {
+    Request.get2(url: Api.ServerList,header: header).then((data) {
       List allServer = data['instances'];
       if(this.mounted) {
         setState(() {
@@ -53,12 +53,13 @@ class _ServerListState extends State<ServerList>  {
       shortDes = item.info.shortDescription;
     }
     double users = int.parse(item.users) / 1000;
-    List userNum = users.toString().split(".");
+    List<String> userNum = users.toString().split(".");
     String showUsers = '';
-    if (userNum[0] == '0') {
+    if (userNum[0] != '0') {
       showUsers = userNum[0] + 'K用户';
     } else {
-      showUsers = userNum[1] + '用户';
+
+      showUsers = int.parse(userNum[1]).toString() + '用户';
     }
 
     return GestureDetector(
@@ -66,7 +67,6 @@ class _ServerListState extends State<ServerList>  {
         AppNavigate.pop(param: item);
       },
       child: Container(
-        color: MyColor.loginWhite,
         child: Row(
           children: <Widget>[
             Container(
@@ -98,11 +98,11 @@ class _ServerListState extends State<ServerList>  {
                         height: 12,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(6)),
-                          color: MyColor.aLiveColor
+                          color: Theme.of(context).buttonColor
                         ),
                       ),
                       SizedBox(width: 5),
-                      Text('稳定', style: TextStyle(color: MyColor.aLiveColor)),
+                      Text('稳定', style: TextStyle(color: Theme.of(context).buttonColor)),
                     ],
                   ),
                   Row(
@@ -112,11 +112,11 @@ class _ServerListState extends State<ServerList>  {
                         height: 12,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(6)),
-                          color: MyColor.aLiveColor
+                          color: Theme.of(context).buttonColor
                         ),
                       ),
                       SizedBox(width: 5),
-                      Text(showUsers, style: TextStyle(color: MyColor.aLiveColor))
+                      Text(showUsers, style: TextStyle(color: Theme.of(context).buttonColor))
                     ],
                   ),
                 ],
@@ -131,7 +131,7 @@ class _ServerListState extends State<ServerList>  {
   Widget _loadingRequest(BuildContext context) {
     if(_serverList.length == 0) {
       return SpinKitThreeBounce(
-        color: MyColor.loginPrimary,
+        color: Theme.of(context).buttonColor,
         size: 50.0,
       );
     }
@@ -140,7 +140,7 @@ class _ServerListState extends State<ServerList>  {
         child: Column(
           children: <Widget>[
             Container(
-              color: MyColor.loginBackgroundColor,
+              color: Theme.of(context).scaffoldBackgroundColor,
               padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
               child: Text(noticeString, style: TextStyle(fontSize: 12),), 
             ),
@@ -154,7 +154,7 @@ class _ServerListState extends State<ServerList>  {
                 separatorBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    child: Divider(height: 1.0, color: MyColor.loginBackgroundColor),
+                    child: Divider(height: 1.0),
                   );
                 },
               ),
@@ -167,16 +167,13 @@ class _ServerListState extends State<ServerList>  {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColor.loginWhite,
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        backgroundColor: MyColor.loginPrimary,
-        title: Text('选择节点', style: TextStyle(color: MyColor.loginWhite),),
+        title: Text('选择节点',),
+        centerTitle: false,
         toolbarOpacity: 1,
         actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(15),
-            child: Icon(Icons.search),
-          )
+
         ],
       ),
       body: _loadingRequest(context),

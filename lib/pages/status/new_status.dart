@@ -231,8 +231,8 @@ class _NewStatusState extends State<NewStatus> {
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIos: 1,
-        backgroundColor: MyColor.error,
-        textColor: MyColor.loginWhite,
+        backgroundColor: Colors.red,
+        textColor: Theme.of(context).primaryColor,
         fontSize: 16.0);
   }
 
@@ -431,7 +431,7 @@ class _NewStatusState extends State<NewStatus> {
                   },
                   currentIcon: _articleRange,
                 ),
-                SizedBox(height: Screen.bottomSafeHeight(context))
+                SizedBox(height: ScreenUtil.bottomSafeHeight(context))
               ]);
         });
   }
@@ -817,7 +817,7 @@ class _NewStatusState extends State<NewStatus> {
                   maxLength: 450,
                   maxLines: null,
                 ),
-                width: Screen.width(context),
+                width: ScreenUtil.width(context),
               ),
               actions: <Widget>[
                 FlatButton(

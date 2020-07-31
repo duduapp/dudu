@@ -80,7 +80,7 @@ class TextWithEmoji extends StatelessWidget {
     } else {
       // 参考https://stackoverflow.com/questions/51379194/richtext-does-not-style-text-as-expected
       return RichText(
-        textScaleFactor: Screen.scaleFromSetting(textScale),
+        textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
         maxLines: maxLines,
         overflow: overflow,
         text:

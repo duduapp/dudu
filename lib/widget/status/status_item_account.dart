@@ -4,7 +4,6 @@ import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/user_profile/user_profile.dart';
 import 'package:fastodon/utils/app_navigate.dart';
 import 'package:fastodon/utils/date_until.dart';
-import 'package:fastodon/utils/my_color.dart';
 import 'package:fastodon/utils/string_until.dart';
 import 'package:fastodon/widget/status/text_with_emoji.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +81,7 @@ class StatusItemAccount extends StatelessWidget {
                       Flexible(
                         child: Text(DateUntil.dateTime(createdAt),
                             style: TextStyle(
-                                fontSize: 13, color: MyColor.greyText),
+                                fontSize: 13, color: Theme.of(context).accentColor),
                             overflow: TextOverflow.ellipsis),
                       )
                   ],
@@ -90,7 +89,7 @@ class StatusItemAccount extends StatelessWidget {
                 Flexible(
                   child: Text(
                     '@' + account.acct,
-                    style: TextStyle(fontSize: 13, color: MyColor.greyText),
+                    style: TextStyle(fontSize: 13, color: Theme.of(context).accentColor),
                     overflow: TextOverflow.ellipsis,
                   ),
                 )
@@ -146,7 +145,7 @@ class SubStatusItemHeader extends StatelessWidget {
           )),
 
           Text(DateUntil.dateTime(data.createdAt),
-              style: TextStyle(fontSize: 13, color: MyColor.greyText),
+              style: TextStyle(fontSize: 13, color: Theme.of(context).accentColor),
               overflow: TextOverflow.ellipsis)
         ],
       ),

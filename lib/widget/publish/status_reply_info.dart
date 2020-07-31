@@ -22,7 +22,7 @@ class StatusReplyInfo extends StatelessWidget {
     }
     return Container(
       margin: EdgeInsets.only(top:30),
-      width: Screen.width(context) - 30,
+      width: ScreenUtil.width(context) - 30,
       padding: EdgeInsets.only(top: 6,bottom: 7),
       color: primaryColor,
       child: ListTile(

@@ -9,7 +9,6 @@ export 'package:fastodon/utils/app_navigate.dart';
 export 'package:fastodon/utils/date_until.dart';
 export 'package:fastodon/utils/event_bus.dart';
 export 'package:fastodon/utils/local_storage.dart';
-export 'package:fastodon/utils/my_color.dart';
 export 'package:fastodon/utils/open_url.dart';
 export 'package:fastodon/utils/request.dart';
 export 'package:fastodon/utils/screen.dart';
