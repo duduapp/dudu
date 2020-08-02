@@ -58,56 +58,95 @@ class ListViewUtil {
 
   static ResultListDataHandler dataHandlerPrefixIdFunction(String prefix) {
     return (data) {
-      data.forEach((e) => e['media_attachments'].forEach((e) => e['id'] = prefix+e['id']));
+      data.forEach((e) =>
+          e['media_attachments'].forEach((e) => e['id'] = prefix + e['id']));
       return data;
     };
   }
 
-  static removeStatus({BuildContext context,StatusItemData status}) {
+  static deleteStatus({BuildContext context, StatusItemData status}) async{
     var provider = Provider.of<ResultListProvider>(context, listen: false);
     provider.removeByIdWithAnimation(status.id);
-    StatusApi.remove(status.id);
-  }
-
-  static blockUser({BuildContext context,StatusItemData status}) async{
-    var provider = Provider.of<ResultListProvider>(context, listen: false);
-    var res = await AccountsApi.block(status.account.id);
-
-    var statusId = status.id;
-    var accountId = status.account.id;
+    var res = await StatusApi.remove(status.id);
     if (res != null) {
-      provider.removeByIdWithAnimation(status.id);
-      // 防止和上面的语句冲突
-      Future.delayed(Duration(seconds: 2), () {
-        eventBus.emit(EventBusKey.blockAccount,
-            {'account_id': accountId, 'from_status_id': statusId});
+      Future.delayed(Duration(seconds: 1), () {
+        _removeStatusFromProviderByStatusId(status.id);
       });
     }
   }
 
-  static muteUser({BuildContext context,StatusItemData status}) async{
+  static blockUser({BuildContext context, StatusItemData status}) async {
     ResultListProvider provider;
     if (context == null) {
       provider = SettingsProvider().statusDetailProviders.last;
-      if (provider == null)
-        return;
+      if (provider == null) return;
     } else {
       provider = Provider.of<ResultListProvider>(context, listen: false);
     }
-    var res = await AccountsApi.mute(status.account.id);
-
-    var statusId = status.id;
     var accountId = status.account.id;
+    var res = await AccountsApi.block(accountId);
+
     if (res != null) {
       provider.removeByIdWithAnimation(status.id);
-      for (ResultListProvider provider in SettingsProvider().statusDetailProviders) {
-        provider.removeWhere((e) => e.isNotEmpty && e['account']['id'] == status.account.id);
-      }
       // 防止和上面的语句冲突
       Future.delayed(Duration(seconds: 1), () {
-        eventBus.emit(EventBusKey.muteAccount,
-            {'account_id': accountId, 'from_status_id': statusId});
+        _removeStatusFromProvider(accountId);
       });
+    }
+  }
+
+  static muteUser({BuildContext context, StatusItemData status}) async {
+    ResultListProvider provider;
+    if (context == null) {
+      provider = SettingsProvider().statusDetailProviders.last;
+      if (provider == null) return;
+    } else {
+      provider = Provider.of<ResultListProvider>(context, listen: false);
+    }
+    var accountId = status.account.id;
+    var res = await AccountsApi.mute(accountId);
+
+    if (res != null) {
+      provider.removeByIdWithAnimation(status.id);
+
+      // 防止和上面的语句冲突
+      await Future.delayed(Duration(seconds: 1), () {
+        _removeStatusFromProvider(accountId);
+      });
+    }
+  }
+
+  static _removeStatusFromProvider(String accountId) {
+    for (ResultListProvider provider
+    in SettingsProvider().statusDetailProviders) {
+      provider.removeWhere(
+              (e) => e.isNotEmpty && e['account']['id'] == accountId);
+    }
+
+    for (ResultListProvider provider in [
+      SettingsProvider().localProvider,
+      SettingsProvider().homeProvider,
+      SettingsProvider().federatedProvider,
+      SettingsProvider().notificationProvider
+    ]) {
+      provider.removeWhere((e) =>
+          (e.containsKey('reblog') && e['reblog'] != null && e['reblog'].containsKey('account') &&
+              e['reblog']['account']['id'] == accountId) ||
+          e['account']['id'] == accountId);
+    }
+  }
+
+  static _removeStatusFromProviderByStatusId(String statusId) {
+    for (ResultListProvider provider in [
+      SettingsProvider().localProvider,
+      SettingsProvider().homeProvider,
+      SettingsProvider().federatedProvider,
+      SettingsProvider().notificationProvider
+    ]) {
+      provider.removeWhere((e) =>
+      (e.containsKey('reblog') && e['reblog'] != null && e['reblog'].containsKey('id') &&
+          e['reblog']['id'] == statusId) ||
+          e['id'] == statusId);
     }
   }
 }

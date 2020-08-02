@@ -71,7 +71,7 @@ Map<String, dynamic> _$StatusItemDataToJson(StatusItemData instance) =>
       'bookmarked': instance.bookmarked,
       'reblog': instance.reblog,
       'application': instance.application,
-      'account': instance.account,
+      'account': instance.account.toJson(),
       'media_attachments': instance.mediaAttachments,
       'mentions': instance.mentions,
       'tags': instance.tags,

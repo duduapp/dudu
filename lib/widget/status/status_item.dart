@@ -122,8 +122,12 @@ class _StatusItemState extends State<StatusItem> {
           ListViewUtil.muteUser(context: context,status: status);
           break;
         case 'block':
+          var status = res['status'];
+          ListViewUtil.blockUser(context: context,status: status);
           break;
         case 'delete':
+          var status = res['status'];
+          ListViewUtil.deleteStatus(context: context,status: status);
           break;
       }
     }

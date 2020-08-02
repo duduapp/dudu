@@ -43,15 +43,15 @@ class _StatusDetailState extends State<StatusDetail> {
 
   Widget _buildRow(int idx, List data, ResultListProvider provider) {
     var row = data[idx];
-    if (row.isEmpty) {
-      return _buildStatusItem(widget.data, primary: true,subStatus: false);
-    }
+
 
     if (row.containsKey('__sub')) {
       return _buildStatusItem(
         StatusItemData.fromJson(row),
         subStatus: true,
       );
+    } else {
+      return _buildStatusItem(widget.data, primary: true,subStatus: false);
     }
 
   }
@@ -114,8 +114,8 @@ class _StatusDetailState extends State<StatusDetail> {
                   d['__sub'] = true;
                   res.add(d);
                 }
-                res.add([]);
-                // res.add(widget.data.toJson());
+              //  res.add();
+                 res.add(widget.data.toJson());
                 itemPosition = data['ancestors'].length;
                 for (var d in data['descendants']) {
                   d['__sub'] = true;

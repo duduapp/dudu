@@ -88,24 +88,50 @@ class _StatusItemActionState extends State<StatusItemAction> {
 
   _onPressBlock() async {
     var provider = Provider.of<ResultListProvider>(context, listen: false);
-    var res = await AccountsApi.block(widget.item.account.id);
-
-    var statusId = widget.item.id;
-    var accountId = widget.item.account.id;
-    if (res != null) {
-      provider.removeByIdWithAnimation(widget.item.id);
-      // 防止和上面的语句冲突
-      Future.delayed(Duration(seconds: 2), () {
-        eventBus.emit(EventBusKey.blockAccount,
-            {'account_id': accountId, 'from_status_id': statusId});
-      });
+    if (SettingsProvider().statusDetailProviders.contains(provider)) {
+      // user is in status detail page
+      if (widget.subStatus) {
+        // 当前页的的字嘟文是否和主嘟文是同一个作者
+        var sameAccount = provider.list.firstWhere((element) =>
+        element.isNotEmpty &&
+            !element.containsKey('__sub') &&
+            element['account']['id'] == widget.item.account.id,orElse: () => null);
+        if (sameAccount == null)
+          ListViewUtil.muteUser(context: context, status: widget.item);
+        else
+          AppNavigate.pop(param:{
+            'operation':'block',
+            'status':widget.item
+          });
+      } else {
+        AppNavigate.pop(param:{
+          'operation':'block',
+          'status':widget.item
+        });
+      }
+    } else {
+      ListViewUtil.muteUser(context: context, status: widget.item);
     }
   }
 
   _onPressRemove() async {
     var provider = Provider.of<ResultListProvider>(context, listen: false);
-    provider.removeByIdWithAnimation(widget.item.id);
-    StatusApi.remove(widget.item.id);
+    if (SettingsProvider().statusDetailProviders.contains(provider)) {
+      // user is in status detail page
+      if (widget.subStatus) {
+          ListViewUtil.deleteStatus(context: context, status: widget.item);
+      } else {
+        AppNavigate.pop(param:{
+          'operation':'delete',
+          'status':widget.item
+        });
+      }
+    } else {
+      ListViewUtil.deleteStatus(context: context, status: widget.item);
+    }
+//    var provider = Provider.of<ResultListProvider>(context, listen: false);
+//    provider.removeByIdWithAnimation(widget.item.id);
+//    StatusApi.remove(widget.item.id);
   }
 
   requestFavorite(bool isLiked) async {

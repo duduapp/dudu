@@ -1,4 +1,5 @@
 import 'package:fastodon/models/provider/result_list_provider.dart';
+import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/search/search_page_delegate.dart';
 import 'package:fastodon/pages/status/new_status.dart';
 import 'package:fastodon/public.dart';
@@ -27,7 +28,7 @@ class Timeline extends StatefulWidget {
 
 class _TimelineState extends State<Timeline> {
   ScrollController _scrollController = ScrollController();
-  
+
   @override
   void initState() {
     super.initState();
@@ -76,26 +77,37 @@ class _TimelineState extends State<Timeline> {
             IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
-                AppNavigate.push(NewStatus(),
-                    routeType: RouterType.material);
+                AppNavigate.push(NewStatus(), routeType: RouterType.material);
               },
             )
           ],
         ),
       ),
-      body: ChangeNotifierProvider<ResultListProvider>(
-          create: (context) => ResultListProvider(
-              requestUrl: url,
-              buildRow: ListViewUtil.statusRowFunction(),
-              listenBlockEvent: true,
-              dataHandler: ListViewUtil.dataHandlerPrefixIdFunction(
-                  widget.type.toString().split('.')[1])),
-          builder: (context, snapshot) {
-            return ProviderEasyRefreshListView(
-              type: widget.type,
-              scrollController: _scrollController,
-            );
-          }),
+      body: ChangeNotifierProvider<ResultListProvider>(create: (context) {
+        var provider = ResultListProvider(
+            requestUrl: url,
+            buildRow: ListViewUtil.statusRowFunction(),
+            listenBlockEvent: true,
+            dataHandler: ListViewUtil.dataHandlerPrefixIdFunction(
+                widget.type.toString().split('.')[1]));
+        switch(widget.type) {
+          case TimelineType.home:
+            SettingsProvider().homeProvider = provider;
+            break;
+          case TimelineType.local:
+            SettingsProvider().localProvider = provider;
+            break;
+          case TimelineType.federated:
+            SettingsProvider().federatedProvider = provider;
+            break; 
+        }
+        return provider;
+      }, builder: (context, snapshot) {
+        return ProviderEasyRefreshListView(
+          type: widget.type,
+          scrollController: _scrollController,
+        );
+      }),
     );
   }
 }

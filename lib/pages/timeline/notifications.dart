@@ -41,6 +41,7 @@ class _NotificationsState extends State<Notifications>
         requestUrl: Request.buildGetUrl(Api.Notifications, getRequestParams(displayType)),
         buildRow: row,
     );
+    SettingsProvider().notificationProvider = provider;
         super.initState();
     loginSuccess = (arg) {
       setState(() {

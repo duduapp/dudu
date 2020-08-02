@@ -70,7 +70,7 @@ class AccountsApi {
 
   static block(String id) async{
     var api = '$url/$id/block';
-    return await Request.post(url: api,errMsg: '屏蔽用户$id失败');
+    return await Request.post(url: api,errMsg: '屏蔽用户$id失败',showDialog: false);
   }
 
   static unBlock(String id) async{
