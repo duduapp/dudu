@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 import 'event_bus.dart';
 
 class ListViewUtil {
+
   static Header getDefaultHeader(BuildContext context) {
     return ClassicalHeader(
         refreshText: '下拉刷新',
@@ -116,6 +117,51 @@ class ListViewUtil {
     }
   }
 
+  static reblogStatus(StatusItemData data) {
+    _handleAllStatuses((e) {
+      e['reblogged'] = true;
+      e['reblogs_count'] = e['reblogs_count'] + 1;
+    }, _sameStatusCondition(data));
+  }
+
+  static unreblogStatus(StatusItemData data) {
+    _handleAllStatuses((e) {
+      e['favourited'] = true;
+      e['favourites_count'] = e['favourites_count'] + 1;
+    }, _sameStatusCondition(data));
+  }
+
+  static favouriteStatus(StatusItemData data) {
+    _handleAllStatuses((e) {
+      e['favourited'] = true;
+      e['favourites_count'] = e['favourites_count'] + 1;
+    }, _sameStatusCondition(data));
+  }
+
+  static unfavouriteStatus(StatusItemData data) {
+    _handleAllStatuses((e) {
+      e['favourited'] = false;
+      e['favourites_count'] = e['favourites_count'] - 1;
+    }, _sameStatusCondition(data));
+  }
+
+  static _sameStatusCondition(StatusItemData data) {
+    return (e) => e['id'] == data.id || (e['reblog'] != null && e['reblog']['id'] == data.id);
+  }
+
+  static _handleAllStatuses(handle(dynamic e),bool test(dynamic e)) {
+    for (ResultListProvider provider in _getRootProviders()) {
+      for (var row in provider.list.where(test)){
+          handle(row);
+      }
+    }
+    for (ResultListProvider provider in SettingsProvider().statusDetailProviders) {
+      for (var row in provider.list.where(test)){
+        handle(row);
+      }
+    }
+  }
+
   static _removeStatusFromProvider(String accountId) {
     for (ResultListProvider provider
     in SettingsProvider().statusDetailProviders) {
@@ -123,17 +169,21 @@ class ListViewUtil {
               (e) => e.isNotEmpty && e['account']['id'] == accountId);
     }
 
-    for (ResultListProvider provider in [
-      SettingsProvider().localProvider,
-      SettingsProvider().homeProvider,
-      SettingsProvider().federatedProvider,
-      SettingsProvider().notificationProvider
-    ]) {
+    for (ResultListProvider provider in _getRootProviders()) {
       provider.removeWhere((e) =>
           (e.containsKey('reblog') && e['reblog'] != null && e['reblog'].containsKey('account') &&
               e['reblog']['account']['id'] == accountId) ||
           e['account']['id'] == accountId);
     }
+  }
+
+  static List _getRootProviders() {
+    return [
+      SettingsProvider().localProvider,
+      SettingsProvider().homeProvider,
+      SettingsProvider().federatedProvider,
+      SettingsProvider().notificationProvider
+    ];
   }
 
   static _removeStatusFromProviderByStatusId(String statusId) {

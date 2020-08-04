@@ -1,13 +1,16 @@
 import 'package:fastodon/api/status_api.dart';
 import 'package:fastodon/constant/api.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
+import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/status/new_status.dart';
 import 'package:fastodon/plugin/event_source.dart';
 import 'package:fastodon/utils/app_navigate.dart';
+import 'package:fastodon/utils/list_view.dart';
 import 'package:fastodon/utils/request.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
 
 class StatusItemActionW extends StatelessWidget {
   final StatusItemData status;
@@ -18,8 +21,6 @@ class StatusItemActionW extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool favorited = status.favourited;
-    bool reblogged = status.reblogged;
     Color color = Theme.of(context).accentColor;
     double fontSize = 12;
     return Container(
@@ -83,7 +84,7 @@ class StatusItemActionW extends StatelessWidget {
                     SizedBox(width: 5,),
                     Text(
                       '快转',
-                      style: TextStyle(fontSize: fontSize, color: reblogged ? Colors.blue[800]: Theme.of(context).accentColor),
+                      style: TextStyle(fontSize: fontSize, color: status.reblogged ? Colors.blue[800]: Theme.of(context).accentColor),
                     ),
                     SizedBox(width: 2,),
                     count
@@ -91,7 +92,7 @@ class StatusItemActionW extends StatelessWidget {
                 );
               },
               likeBuilder: (bool isLiked) {
-                reblogged = !isLiked;
+                status.reblogged = !isLiked;
                 return isLiked
                     ? Icon(
                         Icons.repeat_one,
@@ -130,7 +131,7 @@ class StatusItemActionW extends StatelessWidget {
                   SizedBox(width: 5,),
                   Text(
                     '赞',
-                    style: TextStyle(fontSize: fontSize, color: favorited ? Colors.yellow[800] :Theme.of(context).accentColor),
+                    style: TextStyle(fontSize: fontSize, color: status.favourited ? Colors.yellow[800] :Theme.of(context).accentColor),
                   ),
                   SizedBox(width: 2,),
                   count
@@ -138,7 +139,6 @@ class StatusItemActionW extends StatelessWidget {
               );
             },
             likeBuilder: (bool isLiked) {
-              favorited = !isLiked;
 
               return isLiked
                   ? Icon(
@@ -154,7 +154,7 @@ class StatusItemActionW extends StatelessWidget {
             },
             isLiked: status.favourited,
 
-            onTap: _onPressFavoutite,
+            onTap:(isLiked) =>  _onPressFavoutite(isLiked),
           ),
         ],
       ),
@@ -162,17 +162,25 @@ class StatusItemActionW extends StatelessWidget {
   }
 
   Future<bool> _onPressReblog(bool isLiked) async {
-    if (isLiked)
+    if (isLiked) {
       StatusApi.unReblog(status.id);
-    else
+      status.reblogged = false;
+      status.reblogsCount = status.reblogsCount - 1;
+      ListViewUtil.unreblogStatus(status);
+    } else {
       StatusApi.reblog(status.id);
-    status.reblogged = !isLiked;
+      status.reblogged = true;
+      status.reblogsCount = status.reblogsCount + 1;
+      ListViewUtil.reblogStatus(status);
+    }
+
     return !isLiked;
   }
 
-  Future<bool> _onPressFavoutite(bool isLiked) async {
+  Future<bool> _onPressFavoutite(bool isLiked,{BuildContext context}) async {
     requestFavorite(isLiked);
-
+    status.favourited = !isLiked;
+    status.favouritesCount = status.favouritesCount + (!isLiked ? 1 : -1);
     return !isLiked;
   }
 
@@ -183,7 +191,12 @@ class StatusItemActionW extends StatelessWidget {
     try {
       StatusItemData data = StatusItemData.fromJson(
           await Request.post(url: url, showDialog: false));
-      status.favourited = data.favourited;
+      if (isLiked) {
+        ListViewUtil.unfavouriteStatus(data);
+      } else {
+        ListViewUtil.favouriteStatus(data);
+      }
+   //   status.favourited = data.favourited;
     } catch (e) {
       print(e);
     }
