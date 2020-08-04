@@ -20,7 +20,7 @@ class AccountItem extends StatelessWidget {
               onTap: () {
                 AppNavigate.push(UserProfile(accountId: account.id));
               },
-              child: Avatar(url: account.avatarStatic),
+              child: Avatar(account: account,),
             )),
         Expanded(
           child: Container(

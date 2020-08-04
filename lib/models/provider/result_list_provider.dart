@@ -7,6 +7,7 @@ import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/request.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 typedef ResultListDataHandler = Function(dynamic data);
 typedef RowBuilder = Function(int idx, List data, ResultListProvider provider);
@@ -35,6 +36,8 @@ class ResultListProvider extends ChangeNotifier {
   String lastCellId = '0';
   CancelToken requestCancelToken = CancelToken();
   final int cacheTimeInSeconds;
+
+  EasyRefreshController refreshController;
 
   /// map key 的优先级高于 data handler
   ResultListProvider(

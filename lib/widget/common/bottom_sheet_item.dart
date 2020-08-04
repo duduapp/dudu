@@ -1,58 +1,84 @@
 import 'dart:io';
 
+import 'package:fastodon/public.dart';
 import 'package:flutter/material.dart';
 
 class BottomSheetItem extends StatelessWidget {
   final String text;
+  final String subText;
   final Function onTap;
   final double height;
   final bool safeArea;
   final bool bottomBorder;
+  final IconData icon;
+  final bool border;
 
   BottomSheetItem(
       {this.text,
+      this.subText,
+      this.icon = Icons.insert_emoticon,
       this.onTap,
       this.height,
       this.safeArea = false,
-      this.bottomBorder});
+      this.bottomBorder,
+      this.border});
 
   @override
   Widget build(BuildContext context) {
-    if (safeArea) {
-      return InkWell(
-        onTap: onTap,
-        child: SafeArea(
-          child: Container(
-            height: height,
-            width: double.infinity,
-            padding: Platform.isAndroid ?  EdgeInsets.fromLTRB(12, 12, 12, 20) : EdgeInsets.all(12),
-            child: Align(
-              child: Text(
-                text,
-                style:  TextStyle(fontSize: 16),
+    return InkWell(
+      splashColor: Colors.transparent,
+      onTap: onTap,
+      child: Container(
+   //     height: height,
+        width: double.infinity,
+        padding: EdgeInsets.all(12),
+        child: Row(
+          children: <Widget>[
+            SizedBox(
+              width: 10,
+            ),
+            Icon(icon,color: Theme.of(context).accentColor,size: 22,),
+            SizedBox(
+              width: 20,
+            ),
+            if (subText != null) ...[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(text,style: TextStyle(fontSize: 16),),
+                  Text(subText,style: TextStyle(fontSize: 12,color: Theme.of(context).accentColor),)
+                ],
               ),
-              alignment: Alignment.topCenter,
-            ),
-          ),
+            ] else ...[
+              Text(
+                text,
+                style: TextStyle(fontSize: 16),
+              )
+            ],
+          ],
         ),
-      );
-    } else {
-      return InkWell(
-        onTap: onTap,
+      ),
+    );
+  }
+}
+
+class BottomSheetCancelItem extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => AppNavigate.pop(),
+      child: SafeArea(
         child: Container(
-          height: height,
           width: double.infinity,
-          //  color: Theme.of(context).bottomSheetTheme.backgroundColor,
-          padding: EdgeInsets.all(12),
+          padding: Platform.isAndroid
+              ? EdgeInsets.fromLTRB(12, 12, 12, 20)
+              : EdgeInsets.all(12),
           child: Align(
-            child: Text(
-              text,
-              style: TextStyle(fontSize: 16),
-            ),
-            alignment: Alignment.topCenter,
+            child: Text('取消'),
+            alignment: Alignment.center,
           ),
         ),
-      );
-    }
+      ),
+    );
   }
 }

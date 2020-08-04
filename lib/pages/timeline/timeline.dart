@@ -6,6 +6,7 @@ import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/list_view.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +29,7 @@ class Timeline extends StatefulWidget {
 
 class _TimelineState extends State<Timeline> {
   ScrollController _scrollController = ScrollController();
+  EasyRefreshController refreshController = EasyRefreshController();
 
   @override
   void initState() {
@@ -101,11 +103,13 @@ class _TimelineState extends State<Timeline> {
             SettingsProvider().federatedProvider = provider;
             break; 
         }
+        provider.refreshController = refreshController;
         return provider;
       }, builder: (context, snapshot) {
         return ProviderEasyRefreshListView(
           type: widget.type,
           scrollController: _scrollController,
+          controller: refreshController,
         );
       }),
     );

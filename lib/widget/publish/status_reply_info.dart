@@ -18,7 +18,7 @@ class StatusReplyInfo extends StatelessWidget {
     if (item.mediaAttachments.length > 0 && item.mediaAttachments[0]['type'] == 'image') {
       image = CachedNetworkImage(imageUrl:  item.mediaAttachments[0]['preview_url']);
     } else {
-      image = Avatar(url: item.account.avatarStatic);
+      image = Avatar(account: item.account,);
     }
     return Container(
       margin: EdgeInsets.only(top:30),

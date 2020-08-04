@@ -44,15 +44,7 @@ class StatusItemAccount extends StatelessWidget {
       children: <Widget>[
         Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-            child: InkWell(
-              onTap: noNavigateOnClick
-                  ? null
-                  : () {
-                AppNavigate.push(
-                     UserProfile(accountId: account.id));
-              },
-              child: Avatar(url: account.avatarStatic),
-            )),
+            child: Avatar(account: account,)),
         Expanded(
           child: Container(
             height: 50,

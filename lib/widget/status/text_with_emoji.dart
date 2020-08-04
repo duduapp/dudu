@@ -18,12 +18,12 @@ class TextWithEmoji extends StatelessWidget {
   static List<InlineSpan> getTextSpans(
   {String text, List emojis,TextStyle style}) {
     if (emojis.length == 0 || text.trim().isEmpty) {
-      return [TextSpan(text: text)];
+      return [TextSpan(text: text,style: style)];
     }
 
     var matches = regExp.allMatches(text);
     if (matches.length == 0) {
-      return [TextSpan(text: text)];
+      return [TextSpan(text: text,style: style)];
     } else {
       List<InlineSpan> widgets = [];
       List<int> splitInt = [0];
@@ -45,8 +45,8 @@ class TextWithEmoji extends StatelessWidget {
             if (emoji['shortcode'] == shortcode) {
               widgets.add(WidgetSpan(
                   child: SizedBox(
-                      width: 20,
-                      height: 20,
+                      width: 15,
+                      height: 15,
                       child: CachedNetworkImage(imageUrl: emoji['url']))));
               break;
             }

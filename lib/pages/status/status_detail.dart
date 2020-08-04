@@ -21,29 +21,32 @@ class StatusDetail extends StatefulWidget {
 }
 
 class _StatusDetailState extends State<StatusDetail> {
-  Map _data = {};
+
   final ScrollController _scrollController = ScrollController();
-  final EasyRefreshController _controller = EasyRefreshController();
   final List<GlobalKey> keys = [];
   int itemPosition = 0;
+  StatusItemData status;
+
+
 
   @override
   void initState() {
-    //getData();
+    //deep copy media attachments
+    var data = widget.data.toJson();
+    var copyAttachments = [];
+    for (var m in data['media_attachments']) {
+      copyAttachments.add(Map<String,dynamic>.from(m));
+    }
+    data['media_attachments'] = copyAttachments;
+    data['media_attachments'].forEach((e) => e['id'] = "c_" + e['id']);
+
+    status = StatusItemData.fromJson(data);
     super.initState();
   }
 
-  getData() async {
-    var _res = await StatusApi.getContext(widget.data.id);
-    keys.clear();
-    setState(() {
-      _data = _res;
-    });
-  }
 
   Widget _buildRow(int idx, List data, ResultListProvider provider) {
     var row = data[idx];
-
 
     if (row.containsKey('__sub')) {
       return _buildStatusItem(
@@ -51,9 +54,8 @@ class _StatusDetailState extends State<StatusDetail> {
         subStatus: true,
       );
     } else {
-      return _buildStatusItem(widget.data, primary: true,subStatus: false);
+      return _buildStatusItem(status, primary: true, subStatus: false);
     }
-
   }
 
   Widget _buildStatusItem(StatusItemData data, {bool subStatus, bool primary}) {
@@ -69,7 +71,6 @@ class _StatusDetailState extends State<StatusDetail> {
     );
   }
 
-
   _afterLayout(_) {
     double totalHeight = 0;
     for (int i = 1; i <= itemPosition; i++) {
@@ -77,7 +78,7 @@ class _StatusDetailState extends State<StatusDetail> {
         RenderBox renderBox = keys[i].currentContext.findRenderObject();
         totalHeight += renderBox.size.height;
       } catch (e) {
-       // print(e);
+        // print(e);
       }
     }
     if (totalHeight == 0) {
@@ -88,8 +89,6 @@ class _StatusDetailState extends State<StatusDetail> {
 
   @override
   Widget build(BuildContext context) {
-
-
     var scale = SettingsProvider.getWithCurrentContext('text_scale');
     return Scaffold(
       appBar: AppBar(
@@ -100,32 +99,37 @@ class _StatusDetailState extends State<StatusDetail> {
         data: MediaQuery.of(context)
             .copyWith(textScaleFactor: 1.0 + 0.18 * double.parse(scale)),
         child: ChangeNotifierProvider<ResultListProvider>(
-          create: (context)
-          {
-            var provider =  ResultListProvider(
-              requestUrl: '${StatusApi.url}/${widget.data.id}/context',
-              buildRow: _buildRow,
-              //    holderList: [widget.data.toJson()],
-              showLoading: false,
-              enableLoad: false,
-              dataHandler: (data) {
-                List res = [];
-                for (var d in data['ancestors']) {
-                  d['__sub'] = true;
-                  res.add(d);
-                }
-              //  res.add();
-                 res.add(widget.data.toJson());
-                itemPosition = data['ancestors'].length;
-                for (var d in data['descendants']) {
-                  d['__sub'] = true;
-                  res.add(d);
-                }
+          create: (context) {
+            var provider = ResultListProvider(
+                requestUrl: '${StatusApi.url}/${widget.data.id}/context',
+                buildRow: _buildRow,
+                //    holderList: [widget.data.toJson()],
+                showLoading: false,
+                enableLoad: false,
+                dataHandler: (data) {
+                  List res = [];
+                  for (var d in data['ancestors']) {
+                    d['__sub'] = true;
 
-                return res;
-              }
-          );
-            SettingsProvider.getCurrentContextProvider().statusDetailProviders.add(provider);
+                    d['media_attachments']
+                        .forEach((e) => e['id'] = "c_" + e['id']);
+                    res.add(d);
+                  }
+                  //  res.add();
+                  res.add(widget.data.toJson());
+                  itemPosition = data['ancestors'].length;
+                  for (var d in data['descendants']) {
+                    d['__sub'] = true;
+                    d['media_attachments']
+                        .forEach((e) => e['id'] = "c_" + e['id']);
+                    res.add(d);
+                  }
+
+                  return res;
+                });
+            SettingsProvider.getCurrentContextProvider()
+                .statusDetailProviders
+                .add(provider);
             return provider;
           },
           builder: (context, snapshot) {
@@ -137,7 +141,6 @@ class _StatusDetailState extends State<StatusDetail> {
             );
           },
         ),
-
       ),
     );
   }

@@ -144,9 +144,27 @@ class _HomePageState extends State<HomePage> {
             ],
             currentIndex: _tabIndex,
             onTap: (index) {
-              setState(() {
-                _tabIndex = index;
-              });
+              // 选中状态后继续点击，开启刷新
+              if (index == _tabIndex) {
+                switch (index) {
+                  case 0:
+                    SettingsProvider().homeProvider.refreshController.callRefresh();
+                    break;
+                  case 1:
+                    SettingsProvider().localProvider.refreshController.callRefresh();
+                    break;
+                  case 2:
+                    SettingsProvider().federatedProvider.refreshController.callRefresh();
+                    break;
+                  case 3:
+                    SettingsProvider().notificationProvider.refreshController.callRefresh();
+                    break;
+                }
+              } else {
+                setState(() {
+                  _tabIndex = index;
+                });
+              }
             },
           ),
       ),

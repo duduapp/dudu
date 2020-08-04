@@ -6,6 +6,8 @@ import 'package:fastodon/pages/user_profile/user_profile.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/list_view.dart';
 import 'package:fastodon/widget/status/status_item_account.dart';
+import 'package:fastodon/widget/status/status_item_account_w.dart';
+import 'package:fastodon/widget/status/status_item_action_w.dart';
 import 'package:fastodon/widget/status/status_item_card.dart';
 import 'package:fastodon/widget/status/status_item_content.dart';
 import 'package:fastodon/widget/status/status_item_primary_bottom.dart';
@@ -56,7 +58,7 @@ class _StatusItemState extends State<StatusItem> {
                // onTap: _onStatusClicked,
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                  child: Avatar(url: widget.item.account.avatarStatic),
+                  child: Avatar(account: widget.item.account,),
                 ),
               ),
               Expanded(
@@ -90,18 +92,22 @@ class _StatusItemState extends State<StatusItem> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 refHeader(),
-                StatusItemAccount(data.account,
-                    createdAt: widget.primary ? null : data.createdAt),
+                StatusItemAccountW(
+                  status: data,
+                ),
+//                StatusItemAccount(data.account,
+//                    createdAt: widget.primary ? null : data.createdAt),
                 StatusItemContent(
                   data,
                   primary: widget.primary,
                 ),
                 StatusItemCard(data),
                 if (widget.primary) StatusItemPrimaryBottom(data),
-                StatusItemAction(
-                  item: data,
-                  subStatus: widget.subStatus,
-                ),
+                StatusItemActionW(status: data,)
+//                StatusItemAction(
+//                  item: data,
+//                  subStatus: widget.subStatus,
+//                ),
               ],
             ),
           ),

@@ -25,7 +25,9 @@ import 'package:fastodon/widget/status/text_with_emoji.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nav_router/nav_router.dart';
+import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../setting/model/relation_ship.dart';
@@ -253,14 +255,16 @@ class _UserProfileState extends State<UserProfile>
   _showMore() {
     showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         builder: (BuildContext context) {
           return new Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              if (_account != null)
+              if (_account != null) ...[
                 BottomSheetItem(
                     text: '提及',
+                    icon: OMIcons.alternateEmail,
                     onTap: () {
                       AppNavigate.pop();
                       AppNavigate.push(
@@ -269,21 +273,44 @@ class _UserProfileState extends State<UserProfile>
                           ),
                           routeType: RouterType.material);
                     }),
+                Divider(
+                  indent: 60,
+                  height: 0,
+                )
+              ],
               if (_account != null && mine.account.id != _account.id) ...[
-                if (!relationShip.blocking && !relationShip.requested)
+                if (!relationShip.blocking && !relationShip.requested) ...[
                   BottomSheetItem(
                     text: relationShip.following ? '取消关注' : '关注',
                     onTap: _onPressButton,
                   ),
+                  Divider(
+                    indent: 60,
+                    height: 0,
+                  )
+                ],
                 BottomSheetItem(
+                  icon: OMIcons.volumeOff,
                   text: relationShip.muting ? '取消隐藏' : '隐藏',
+                  subText: '隐藏后该用户的嘟文将不会显示在你的时间轴中',
                   onTap: _onPressHideButton,
                 ),
-                BottomSheetItem(
-                  text: relationShip.blocking ? '取消屏蔽' : '屏蔽',
-                  onTap: _onPressBlockButton,
+                Divider(
+                  indent: 60,
+                  height: 0,
                 ),
                 BottomSheetItem(
+                  icon: Icons.block,
+                  text: relationShip.blocking ? '取消屏蔽' : '屏蔽',
+                  subText: '屏蔽后该用户将无法看到你发的嘟文',
+                  onTap: _onPressBlockButton,
+                ),
+                Divider(
+                  indent: 60,
+                  height: 0,
+                ),
+                BottomSheetItem(
+                  icon: Icons.link_off,
                   text: '隐藏该用户所在域名',
                   onTap: () => DialogUtils.showSimpleAlertDialog(
                       context: context,
@@ -292,7 +319,12 @@ class _UserProfileState extends State<UserProfile>
                       onConfirm: _onPressBlockDomain,
                       popFirst: true),
                 ),
+                Divider(
+                  indent: 60,
+                  height: 0,
+                ),
                 BottomSheetItem(
+                  icon: OMIcons.reportProblem,
                   text: '举报',
                 )
               ],
@@ -300,11 +332,7 @@ class _UserProfileState extends State<UserProfile>
                 height: 8,
                 color: Theme.of(context).backgroundColor,
               ),
-              BottomSheetItem(
-                text: '取消',
-                onTap: () => AppNavigate.pop(),
-                safeArea: true,
-              )
+              BottomSheetCancelItem()
             ],
           );
         });
@@ -380,7 +408,12 @@ class _UserProfileState extends State<UserProfile>
                               text: StringUtil.displayName(_account),
                               emojis: _account.emojis,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyText1.color, fontSize: 18),
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .color,
+                                  fontSize: 18),
                             ),
                             MediaQuery(
                               data: MediaQuery.of(context).copyWith(
@@ -408,18 +441,19 @@ class _UserProfileState extends State<UserProfile>
                               ),
                             ),
                             Visibility(
-                              visible: relationShip != null && relationShip.followedBy,
+                              visible: relationShip != null &&
+                                  relationShip.followedBy,
                               child: Container(
                                   padding: EdgeInsets.all(3),
                                   margin: EdgeInsets.only(top: 5),
                                   decoration: BoxDecoration(
-                                    border: Border.all(),
-                                    borderRadius: BorderRadius.circular(12)
-                                  ),
+                                      border: Border.all(),
+                                      borderRadius: BorderRadius.circular(12)),
                                   child: Text('关注了你')),
-
                             ),
-                            SizedBox(height: 10,),
+                            SizedBox(
+                              height: 10,
+                            ),
                             Container(
                                 width: ScreenUtil.width(context) - 60,
                                 child: Center(
@@ -472,10 +506,7 @@ class _UserProfileState extends State<UserProfile>
                         child: Hero(
                           tag: 'user_avatar',
                           child: Avatar(
-                            url: _account != null
-                                ? _account.avatar
-                                : LoginedUser().getHost() +
-                                    '/avatars/original/missing.png',
+                            account: _account,
                           ),
                         ),
                       ),
@@ -594,7 +625,9 @@ class _UserProfileState extends State<UserProfile>
 //            fontWeight: FontWeight.normal),
 //      ),
 //    );
-     return Tab(text: text,);
+    return Tab(
+      text: text,
+    );
   }
 
   Widget contentView() {
@@ -645,13 +678,15 @@ class _UserProfileState extends State<UserProfile>
       child: Hero(
         tag: media.id,
         flightShuttleBuilder: (
-            BuildContext flightContext,
-            Animation<double> animation,
-            HeroFlightDirection flightDirection,
-            BuildContext fromHeroContext,
-            BuildContext toHeroContext,
-            ) {
-          final Hero hero = flightDirection == HeroFlightDirection.push ? fromHeroContext.widget : toHeroContext.widget;
+          BuildContext flightContext,
+          Animation<double> animation,
+          HeroFlightDirection flightDirection,
+          BuildContext fromHeroContext,
+          BuildContext toHeroContext,
+        ) {
+          final Hero hero = flightDirection == HeroFlightDirection.push
+              ? fromHeroContext.widget
+              : toHeroContext.widget;
           return hero.child;
         },
         child: Image(
@@ -750,7 +785,8 @@ class _UserProfileState extends State<UserProfile>
                     child: TabBar(
                       labelColor: Theme.of(context).buttonColor,
                       unselectedLabelColor: Theme.of(context).accentColor,
-                      labelStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.normal),
+                      labelStyle: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.normal),
                       isScrollable: true,
                       indicatorColor: Theme.of(context).buttonColor,
                       tabs: [

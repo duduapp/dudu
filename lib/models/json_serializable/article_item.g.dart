@@ -70,14 +70,14 @@ Map<String, dynamic> _$StatusItemDataToJson(StatusItemData instance) =>
       'muted': instance.muted,
       'bookmarked': instance.bookmarked,
       'reblog': instance.reblog,
-      'application': instance.application,
-      'account': instance.account.toJson(),
+      'application': instance.application?.toJson(),
+      'account': instance.account?.toJson(),
       'media_attachments': instance.mediaAttachments,
       'mentions': instance.mentions,
       'tags': instance.tags,
       'emojis': instance.emojis,
-      'card': instance.card,
-      'poll': instance.poll
+      'card': instance.card?.toJson(),
+      'poll': instance.poll?.toJson()
     };
 
 Application _$ApplicationFromJson(Map<String, dynamic> json) {

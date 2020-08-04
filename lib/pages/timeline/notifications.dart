@@ -12,6 +12,7 @@ import 'package:fastodon/widget/other/follow_request_cell.dart';
 import 'package:fastodon/widget/status/status_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:provider/provider.dart';
 
 import '../../widget/other/follow_cell.dart';
@@ -24,11 +25,11 @@ class Notifications extends StatefulWidget {
 class _NotificationsState extends State<Notifications>
     with AutomaticKeepAliveClientMixin {
     ResultListProvider provider;
+    EasyRefreshController refreshController = EasyRefreshController();
 
 
   List displayType;
 
-  bool _canLoadWidget = false;
   @override
   bool get wantKeepAlive => false;
 
@@ -41,12 +42,10 @@ class _NotificationsState extends State<Notifications>
         requestUrl: Request.buildGetUrl(Api.Notifications, getRequestParams(displayType)),
         buildRow: row,
     );
+    provider.refreshController = refreshController;
     SettingsProvider().notificationProvider = provider;
         super.initState();
     loginSuccess = (arg) {
-      setState(() {
-        _canLoadWidget = true;
-      });
     };
 
     eventBus.on(EventBusKey.LoadLoginMegSuccess, loginSuccess);
@@ -135,7 +134,9 @@ class _NotificationsState extends State<Notifications>
             Expanded(
               child: ChangeNotifierProvider<ResultListProvider>.value(
                 value: provider,
-                child: ProviderEasyRefreshListView(),
+                child: ProviderEasyRefreshListView(
+                  controller: refreshController,
+                ),
               ),
             )
           ],

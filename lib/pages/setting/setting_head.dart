@@ -70,16 +70,10 @@ class SettingHead extends StatelessWidget {
             children: [
               SizedBox(height: 90,),
               ListTile(
-                leading: InkWell(
-                  child: Avatar(
-                    url: account.avatar,
-                    width: 60,
-                    height: 60,
-                  ),
-                  onTap: () => AppNavigate.push(
-                      UserProfile(
-                        accountId: account.id,
-                      )),
+                leading: Avatar(
+                  account: account,
+                  width: 60,
+                  height: 60,
                 ),
                 title: Text(
                   StringUtil.displayName(account),
