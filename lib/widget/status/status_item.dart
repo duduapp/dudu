@@ -4,7 +4,9 @@ import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/pages/status/status_detail.dart';
 import 'package:fastodon/pages/user_profile/user_profile.dart';
 import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/list_view.dart';
+import 'package:fastodon/utils/view/list_view_util.dart';
+import 'package:fastodon/utils/view/status_action_util.dart';
+import 'package:fastodon/widget/common/no_splash_ink_well.dart';
 import 'package:fastodon/widget/status/status_item_account.dart';
 import 'package:fastodon/widget/status/status_item_account_w.dart';
 import 'package:fastodon/widget/status/status_item_action_w.dart';
@@ -41,51 +43,59 @@ class StatusItem extends StatefulWidget {
 }
 
 class _StatusItemState extends State<StatusItem> {
-
   @override
   Widget build(BuildContext context) {
     if (widget.subStatus != null && widget.subStatus) {
-      return InkWell(
-        onTap: _onStatusClicked,
-        child: Container(
-          color: Theme.of(context).primaryColor,
-          padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
-          margin: EdgeInsets.only(bottom: 8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              InkWell(
-               // onTap: _onStatusClicked,
-                child: Padding(
+      return Column(children: [
+        NoSplashInkWell(
+          onTap: _onStatusClicked,
+          onLongPress: () => StatusActionUtil.showBottomSheetAction(
+              context, widget.item, widget.subStatus),
+          child: Ink(
+            color: Theme.of(context).primaryColor,
+            padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
+            // margin: EdgeInsets.only(bottom: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
                   padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                  child: Avatar(account: widget.item.account,),
+                  child: Avatar(
+                    width: 40,
+                    height: 40,
+                    account: widget.item.account,
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  children: <Widget>[
-                    SubStatusItemHeader(widget.item),
-                    StatusItemContent(widget.item),
-                    StatusItemCard(widget.item),
-                    StatusItemAction(
-                      item: widget.item,
-                      subStatus: widget.subStatus,
-                    )
-                  ],
-                ),
-              )
-            ],
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      SubStatusAccountW(status:widget.item),
+                      StatusItemContent(widget.item),
+                      StatusItemCard(widget.item),
+                      StatusItemActionW(
+                        status: widget.item,
+                        subStatus: widget.subStatus,
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
-      );
+        SizedBox(
+          height: 8,
+        )
+      ]);
     } else {
       StatusItemData data = widget.item.reblog ?? widget.item;
       return Column(children: [
-        InkWell(
-          splashColor: Colors.transparent,
-          onTap: _onStatusClicked,
+        NoSplashInkWell(
+          onTap: widget.primary ? null :_onStatusClicked,
+          onLongPress: () => StatusActionUtil.showBottomSheetAction(
+              context, data, widget.subStatus),
           child: Ink(
-            color: Colors.white,
+            color: Theme.of(context).primaryColor,
             padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
             //margin: EdgeInsets.only(bottom: 8),
             child: Column(
@@ -94,6 +104,8 @@ class _StatusItemState extends State<StatusItem> {
                 refHeader(),
                 StatusItemAccountW(
                   status: data,
+                  subStatus: widget.subStatus,
+                  primary: widget.primary,
                 ),
 //                StatusItemAccount(data.account,
 //                    createdAt: widget.primary ? null : data.createdAt),
@@ -102,8 +114,11 @@ class _StatusItemState extends State<StatusItem> {
                   primary: widget.primary,
                 ),
                 StatusItemCard(data),
-                if (widget.primary) StatusItemPrimaryBottom(data),
-                StatusItemActionW(status: data,)
+                // if (widget.primary) StatusItemPrimaryBottom(data),
+                StatusItemActionW(
+                  status: data,
+                  subStatus: widget.subStatus,
+                )
 //                StatusItemAction(
 //                  item: data,
 //                  subStatus: widget.subStatus,
@@ -119,21 +134,21 @@ class _StatusItemState extends State<StatusItem> {
     }
   }
 
-  _onStatusClicked() async{
+  _onStatusClicked() async {
     var res = await AppNavigate.push(StatusDetail(widget.item));
     if (res is Map && res.containsKey('operation')) {
-      switch(res['operation']) {
+      switch (res['operation']) {
         case 'mute':
           var status = res['status'];
-          ListViewUtil.muteUser(context: context,status: status);
+          ListViewUtil.muteUser(context: context, status: status);
           break;
         case 'block':
           var status = res['status'];
-          ListViewUtil.blockUser(context: context,status: status);
+          ListViewUtil.blockUser(context: context, status: status);
           break;
         case 'delete':
           var status = res['status'];
-          ListViewUtil.deleteStatus(context: context,status: status);
+          ListViewUtil.deleteStatus(context: context, status: status);
           break;
       }
     }

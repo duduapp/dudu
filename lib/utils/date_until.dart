@@ -21,7 +21,14 @@ class DateUntil {
   }
 
   static String absoluteTime(String datetime) {
-    var local =  DateFormat('yyyy-MM-ddTHH:mm:ssZ').parseUTC(datetime).toLocal();
-    return DateFormat('yyyy-MM-dd HH:mm').format(local);
+    DateTime time = DateTime.parse(datetime).toLocal();
+    DateTime now = DateTime.now().toLocal();
+
+
+    if (now.year == time.year) {
+      return DateFormat('MM-dd HH:mm').format(time);
+    } else {
+      return DateFormat('yyyy-MM-dd HH:mm').format(time);
+    }
   }
 }

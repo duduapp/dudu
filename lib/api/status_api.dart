@@ -13,14 +13,24 @@ class StatusApi {
     Request.post(url: api,showDialog: false);
   }
 
-  static bookmark(String statusId) {
-    var api = url+'/'+statusId+'/bookmark';
+  static favourite(String statusId) {
+    var api = url+'/'+statusId+'/favourite';
     Request.post(url: api,showDialog: false);
   }
 
-  static unBookmark(String statusId) {
-    var api = url+'/'+statusId+'/unbookmark';
+  static unfavourite(String statusId) {
+    var api = url+'/'+statusId+'/unfavourite';
     Request.post(url: api,showDialog: false);
+  }
+
+  static bookmark(String statusId) async{
+    var api = url+'/'+statusId+'/bookmark';
+    return await Request.post(url: api,showDialog: false);
+  }
+
+  static unBookmark(String statusId) async{
+    var api = url+'/'+statusId+'/unbookmark';
+    return await Request.post(url: api,showDialog: false);
   }
 
   static getContext(String statusId) async{

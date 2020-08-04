@@ -39,7 +39,7 @@ class _StatusItemTextState extends State<StatusItemText> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.only(bottom: 4),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         HtmlContent(
            widget.data.spoilerText.isEmpty

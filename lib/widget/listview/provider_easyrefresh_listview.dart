@@ -3,7 +3,7 @@ import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/timeline/timeline.dart';
 import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/list_view.dart';
+import 'package:fastodon/utils/view/list_view_util.dart';
 import 'package:fastodon/widget/common/empty_view.dart';
 import 'package:fastodon/widget/common/error_view.dart';
 import 'package:fastodon/widget/common/loading_view.dart';

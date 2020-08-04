@@ -1,6 +1,7 @@
 import 'package:fastodon/models/local_account.dart';
 import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
+import 'package:fastodon/models/runtime_config.dart';
 import 'package:fastodon/models/task_runner.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/other/app_retain_widget.dart';

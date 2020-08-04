@@ -14,7 +14,7 @@ import 'package:fastodon/pages/user_profile/user_follewers.dart';
 import 'package:fastodon/pages/user_profile/user_follewing.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/dialog_util.dart';
-import 'package:fastodon/utils/list_view.dart';
+import 'package:fastodon/utils/view/list_view_util.dart';
 import 'package:fastodon/widget/common/bottom_sheet_item.dart';
 import 'package:fastodon/widget/common/colored_tab_bar.dart';
 import 'package:fastodon/widget/common/html_content.dart';
@@ -256,6 +256,8 @@ class _UserProfileState extends State<UserProfile>
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12)),
         builder: (BuildContext context) {
           return new Column(
             mainAxisSize: MainAxisSize.min,

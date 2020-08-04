@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:fastodon/public.dart';
+import 'package:fastodon/widget/common/no_splash_ink_well.dart';
 import 'package:flutter/material.dart';
 
 class BottomSheetItem extends StatelessWidget {
@@ -12,6 +13,7 @@ class BottomSheetItem extends StatelessWidget {
   final bool bottomBorder;
   final IconData icon;
   final bool border;
+  final Color color;
 
   BottomSheetItem(
       {this.text,
@@ -21,7 +23,8 @@ class BottomSheetItem extends StatelessWidget {
       this.height,
       this.safeArea = false,
       this.bottomBorder,
-      this.border});
+      this.border,
+      this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +34,13 @@ class BottomSheetItem extends StatelessWidget {
       child: Container(
    //     height: height,
         width: double.infinity,
-        padding: EdgeInsets.all(12),
+        padding: EdgeInsets.all(16),
         child: Row(
           children: <Widget>[
             SizedBox(
               width: 10,
             ),
-            Icon(icon,color: Theme.of(context).accentColor,size: 22,),
+            Icon(icon,color: color ?? Theme.of(context).accentColor,size: 22,),
             SizedBox(
               width: 20,
             ),
@@ -52,7 +55,7 @@ class BottomSheetItem extends StatelessWidget {
             ] else ...[
               Text(
                 text,
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16,color: color),
               )
             ],
           ],
@@ -65,7 +68,7 @@ class BottomSheetItem extends StatelessWidget {
 class BottomSheetCancelItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return NoSplashInkWell(
       onTap: () => AppNavigate.pop(),
       child: SafeArea(
         child: Container(

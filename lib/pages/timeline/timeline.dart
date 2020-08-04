@@ -3,7 +3,7 @@ import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/search/search_page_delegate.dart';
 import 'package:fastodon/pages/status/new_status.dart';
 import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/list_view.dart';
+import 'package:fastodon/utils/view/list_view_util.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';

@@ -69,7 +69,7 @@ Map<String, dynamic> _$StatusItemDataToJson(StatusItemData instance) =>
       'reblogged': instance.reblogged,
       'muted': instance.muted,
       'bookmarked': instance.bookmarked,
-      'reblog': instance.reblog,
+      'reblog': instance.reblog?.toJson(),
       'application': instance.application?.toJson(),
       'account': instance.account?.toJson(),
       'media_attachments': instance.mediaAttachments,

@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:provider/provider.dart';
 
-import 'event_bus.dart';
+import '../event_bus.dart';
 
 class ListViewUtil {
 
@@ -85,15 +85,15 @@ class ListViewUtil {
       provider = Provider.of<ResultListProvider>(context, listen: false);
     }
     var accountId = status.account.id;
-    var res = await AccountsApi.block(accountId);
+    AccountsApi.block(accountId);
 
-    if (res != null) {
-      provider.removeByIdWithAnimation(status.id);
-      // 防止和上面的语句冲突
-      Future.delayed(Duration(seconds: 1), () {
-        _removeStatusFromProvider(accountId);
-      });
-    }
+
+    provider.removeByIdWithAnimation(status.id);
+    // 防止和上面的语句冲突
+    Future.delayed(Duration(seconds: 1), () {
+      _removeStatusFromProvider(accountId);
+    });
+
   }
 
   static muteUser({BuildContext context, StatusItemData status}) async {
@@ -105,51 +105,51 @@ class ListViewUtil {
       provider = Provider.of<ResultListProvider>(context, listen: false);
     }
     var accountId = status.account.id;
-    var res = await AccountsApi.mute(accountId);
+    AccountsApi.mute(accountId);
 
-    if (res != null) {
+   // if (res != null) {
       provider.removeByIdWithAnimation(status.id);
 
       // 防止和上面的语句冲突
       await Future.delayed(Duration(seconds: 1), () {
         _removeStatusFromProvider(accountId);
       });
-    }
+   // }
   }
 
-  static reblogStatus(StatusItemData data) {
-    _handleAllStatuses((e) {
+  static reblogStatusInAllProvider(StatusItemData data) {
+    handleAllStatuses((e) {
       e['reblogged'] = true;
       e['reblogs_count'] = e['reblogs_count'] + 1;
-    }, _sameStatusCondition(data));
+    }, sameStatusCondition(data));
   }
 
-  static unreblogStatus(StatusItemData data) {
-    _handleAllStatuses((e) {
+  static unreblogStatusInAllProvider(StatusItemData data) {
+    handleAllStatuses((e) {
+      e['reblogged'] = false;
+      e['reblogs_count'] = e['reblogs_count'] - 1;
+    }, sameStatusCondition(data));
+  }
+
+  static favouriteStatusInAllProvider(StatusItemData data) {
+    handleAllStatuses((e) {
       e['favourited'] = true;
       e['favourites_count'] = e['favourites_count'] + 1;
-    }, _sameStatusCondition(data));
+    }, sameStatusCondition(data));
   }
 
-  static favouriteStatus(StatusItemData data) {
-    _handleAllStatuses((e) {
-      e['favourited'] = true;
-      e['favourites_count'] = e['favourites_count'] + 1;
-    }, _sameStatusCondition(data));
-  }
-
-  static unfavouriteStatus(StatusItemData data) {
-    _handleAllStatuses((e) {
+  static unfavouriteStatusInAllProvider(StatusItemData data) {
+    handleAllStatuses((e) {
       e['favourited'] = false;
       e['favourites_count'] = e['favourites_count'] - 1;
-    }, _sameStatusCondition(data));
+    }, sameStatusCondition(data));
   }
 
-  static _sameStatusCondition(StatusItemData data) {
+  static sameStatusCondition(StatusItemData data) {
     return (e) => e['id'] == data.id || (e['reblog'] != null && e['reblog']['id'] == data.id);
   }
 
-  static _handleAllStatuses(handle(dynamic e),bool test(dynamic e)) {
+  static handleAllStatuses(handle(dynamic e),bool test(dynamic e)) {
     for (ResultListProvider provider in _getRootProviders()) {
       for (var row in provider.list.where(test)){
           handle(row);

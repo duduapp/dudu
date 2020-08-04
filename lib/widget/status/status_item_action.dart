@@ -9,7 +9,7 @@ import 'package:fastodon/pages/status/new_status.dart';
 import 'package:fastodon/pages/user_profile/user_report.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/dialog_util.dart';
-import 'package:fastodon/utils/list_view.dart';
+import 'package:fastodon/utils/view/list_view_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:like_button/like_button.dart';

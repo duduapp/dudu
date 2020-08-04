@@ -2,6 +2,7 @@ import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/pages/webview/inner_browser.dart';
 import 'package:fastodon/public.dart';
+import 'package:fastodon/utils/view/status_action_util.dart';
 import 'package:fastodon/widget/other/avatar.dart';
 import 'package:fastodon/widget/status/text_with_emoji.dart';
 import 'package:flutter/gestures.dart';
@@ -10,8 +11,11 @@ import 'package:flutter/rendering.dart';
 
 class StatusItemAccountW extends StatelessWidget {
   final StatusItemData status;
+  final bool subStatus;
+  final bool primary;
 
-  const StatusItemAccountW({Key key, this.status}) : super(key: key);
+  const StatusItemAccountW({Key key, this.status, this.subStatus,this.primary})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,7 @@ class StatusItemAccountW extends StatelessWidget {
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(left: 8),
+            padding: const EdgeInsets.only(left: 8,bottom: 6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -53,7 +57,7 @@ class StatusItemAccountW extends StatelessWidget {
                 RichText(
                   text: TextSpan(children: [
                     TextSpan(
-                        text: DateUntil.dateTime(status.createdAt),
+                        text: primary? DateUntil.absoluteTime(status.createdAt):DateUntil.dateTime(status.createdAt),
                         style: TextStyle(
                             color: Theme.of(context).accentColor,
                             fontSize: 12)),
@@ -65,33 +69,25 @@ class StatusItemAccountW extends StatelessWidget {
             ),
           ),
         ),
-      SizedBox(
-        width: 25,
-        height: 25,
-        child: IconButton(
-          onPressed: () {},
-          focusColor: Colors.red,
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          padding: EdgeInsets.all(0),
-          icon: Icon(
+        SizedBox(
+          width: 25,
+          height: 25,
+          child: IconButton(
+            onPressed: () {
+              StatusActionUtil.showBottomSheetAction(
+                  context, status, subStatus);
+            },
+            focusColor: Colors.red,
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            padding: EdgeInsets.all(0),
+            icon: Icon(
               Icons.expand_more,
               color: Theme.of(context).accentColor,
               size: 30,
             ),
-        ),
-      )
-//        InkWell(
-//          focusColor: Colors.transparent,
-//          splashColor: Colors.transparent,
-//          highlightColor: Theme.of(context).buttonColor,
-//          child: Icon(
-//            Icons.expand_more,
-//            color: Theme.of(context).accentColor,
-//            size: 30,
-//          ),
-//          onTap: () {},
-//        )
+          ),
+        )
       ],
     );
   }
@@ -125,5 +121,36 @@ class StatusItemAccountW extends StatelessWidget {
     } else {
       return [];
     }
+  }
+}
+
+class SubStatusAccountW extends StatelessWidget {
+  final StatusItemData status;
+
+  const SubStatusAccountW({Key key, this.status}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.only(bottom: 6),
+      child: RichText(
+        text: TextSpan(children: [
+          ...TextWithEmoji.getTextSpans(
+              text: StringUtil.displayName(status.account),
+              emojis: status.account.emojis,
+              style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).accentColor)),
+          TextSpan(text: " "),
+          TextSpan(
+              text: '@' + status.account.acct,
+              style:
+                  TextStyle(color: Theme.of(context).accentColor))
+        ]),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
   }
 }

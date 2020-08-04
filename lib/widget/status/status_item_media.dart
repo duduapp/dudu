@@ -208,7 +208,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   Widget imageWrapper(Widget widget) {
     var primaryColor = Theme.of(context).primaryColor;
     return Padding(
-      padding: EdgeInsets.only(top: 7),
+      padding: EdgeInsets.only(top: 7,bottom: 10),
       child: Stack(
         children: <Widget>[
           widget,
