@@ -40,6 +40,13 @@ class StatusItemCard extends StatelessWidget {
                       height: 130,
                       imageUrl: statusData.card.image,
                       fit: BoxFit.cover,
+                      placeholder: (context,str) {
+                        return Container(
+                          color: Theme.of(context).backgroundColor,
+                          width: 120,
+                          height: 130,
+                        );
+                      },
                     ),
                   ),
                   SizedBox(width: 10),

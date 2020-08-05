@@ -70,18 +70,34 @@ class _PhotoGalleryState extends State<PhotoGallery> {
               scrollPhysics: const BouncingScrollPhysics(),
               builder: _buildItem,
               itemCount: widget.galleryItems.length,
-              loadingBuilder: (context, event) => Container(
-                child: Center(
-                  child: Container(
-                    width: 100.0,
-                    height: 100.0,
-                    child: CircularProgressIndicator(
-                      value: event == null
-                          ? 0
-                          : event.cumulativeBytesLoaded / event.expectedTotalBytes,
+              loadingBuilder: (context, event) => Stack(
+                children: [
+                  Container(
+                    color: Colors.black,
+                    child: PhotoView(
+                      imageProvider: CachedNetworkImageProvider(
+                          widget.galleryItems[currentIndex].previewUrl),
+                      heroAttributes: PhotoViewHeroAttributes(
+                          tag: widget.galleryItems[currentIndex].id),
+                      initialScale: PhotoViewComputedScale.contained,
                     ),
                   ),
-                ),
+                  Center(
+                    child: Container(
+                      width: 30.0,
+                      height: 30.0,
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.transparent,
+                        valueColor: new AlwaysStoppedAnimation<Color>(Colors.white.withOpacity(0.5)),
+                        strokeWidth: 30,
+                        value: event == null
+                            ? 0
+                            : event.cumulativeBytesLoaded /
+                                event.expectedTotalBytes,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               backgroundDecoration: widget.backgroundDecoration,
               pageController: widget.pageController,
@@ -89,7 +105,9 @@ class _PhotoGalleryState extends State<PhotoGallery> {
               scrollDirection: widget.scrollDirection,
             ),
           )),
-      title: widget.galleryItems.length > 1 ?'${currentIndex + 1}/${widget.galleryItems.length}':'',
+      title: widget.galleryItems.length > 1
+          ? '${currentIndex + 1}/${widget.galleryItems.length}'
+          : '',
       onDownloadClick: downloadMedia,
     );
   }
@@ -102,8 +120,6 @@ class _PhotoGalleryState extends State<PhotoGallery> {
     final result =
         await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
   }
-
-
 
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
     var item = widget.galleryItems[index];
@@ -129,10 +145,10 @@ class _PhotoGalleryState extends State<PhotoGallery> {
 //        ),
 //      ),
       //  childSize: const Size(300, 300),
-      initialScale: PhotoViewComputedScale.contained ,
+      initialScale: PhotoViewComputedScale.contained,
       minScale: PhotoViewComputedScale.contained * 0.5,
       maxScale: PhotoViewComputedScale.contained * 3.0,
-     // heroAttributes: PhotoViewHeroAttributes(tag: item.id),
+      // heroAttributes: PhotoViewHeroAttributes(tag: item.id),
     );
   }
 }

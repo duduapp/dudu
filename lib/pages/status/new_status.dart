@@ -293,9 +293,7 @@ class _NewStatusState extends State<NewStatus> {
           .then((data) {
         if (data != null) {
           AppNavigate.pop();
-          if (scheduledAt != null) {
-            eventBus.emit(EventBusKey.scheduledStatusPublished);
-          }
+          SettingsProvider().homeProvider.addToListWithAnimation(data);
         }
       });
     } on DioError catch (e) {
@@ -475,6 +473,20 @@ class _NewStatusState extends State<NewStatus> {
     return mentionStr;
   }
 
+  bool get canToot {
+    if (_controller.text.length == 0 && images.length == 0) {
+      return false;
+    }
+    for (String image in images) {
+      if (imageIds[image] == null) {
+       // showToast("请等待图片上传完毕");
+        return false;
+      }
+    }
+    return true;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     PopupMenu.context = context;
@@ -526,15 +538,9 @@ class _NewStatusState extends State<NewStatus> {
                     disabledColor: Theme.of(context).buttonColor.withOpacity(0.5),
                     color: Theme.of(context).buttonColor,
                     textColor: Colors.white,
-                    onPressed: _controller.text.length == 0 && images.length == 0
+                    onPressed: !canToot
                         ? null
                         : () {
-                            for (String image in images) {
-                              if (imageIds[image] == null) {
-                                showToast("请等待图片上传完毕");
-                                return;
-                              }
-                            }
                             _pushNewToot();
                           },
                     child: Text('嘟嘟'),

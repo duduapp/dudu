@@ -7,6 +7,7 @@ import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/media/photo_gallery.dart';
 import 'package:fastodon/pages/media/video_play.dart';
 import 'package:fastodon/public.dart';
+import 'package:fastodon/widget/common/no_splash_ink_well.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:nav_router/nav_router.dart';
@@ -264,9 +265,9 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
     if (type == 'video' || type == 'gifv') {
       imageUrl = image.previewUrl;
     } else {
-      imageUrl = image.url;
+      imageUrl = image.previewUrl;
     }
-    return InkWell(
+    return NoSplashInkWell(
       onTap: () {
         if (sensitive && hideImage == true) {
           setState(() {
@@ -305,16 +306,10 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
                   return widget;
                 }
                 return Container(
+                  color: Theme.of(context).backgroundColor,
                   width: width,
                   height: height,
-                  child: Center(
-                    child: SizedBox(
-                      width: indicatorSize,
-                      height: indicatorSize,
-                      child: CircularProgressIndicator(
-                          ),
-                    ),
-                  ),
+                  
                 );
               },
               image: CachedNetworkImageProvider(imageUrl),
