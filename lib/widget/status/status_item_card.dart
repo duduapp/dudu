@@ -15,7 +15,7 @@ class StatusItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     if (statusData.card != null && statusData.card.image != null) {
       return Padding(
-        padding: const EdgeInsets.only(top: 8),
+        padding: const EdgeInsets.only(top: 8,bottom: 8),
         child: InkWell(
           onTap: () => AppNavigate.push(InnerBrowser(statusData.card.url)),
           child: Card(

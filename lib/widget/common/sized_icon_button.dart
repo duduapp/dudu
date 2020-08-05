@@ -10,14 +10,9 @@ class SizedIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      height: height,
-      child: IconButton(
-        padding: new EdgeInsets.all(0.0),
-        icon: icon,
-        onPressed: onPressed,
-      ),
+    return IconButton(
+      icon: icon,
+      onPressed: onPressed,
     );
   }
 }

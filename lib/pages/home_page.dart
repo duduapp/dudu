@@ -8,6 +8,7 @@ import 'package:fastodon/widget/other/app_retain_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
+import 'package:outline_material_icons/outline_material_icons.dart';
 
 import 'login/login.dart';
 import 'setting/setting.dart';
@@ -73,11 +74,11 @@ class _HomePageState extends State<HomePage> {
 
 
   List<IconData> _tabIcons = [
-    Icons.home,
-    Icons.people,
-    Icons.public,
-    Icons.notifications,
-    Icons.person
+    OMIcons.home,
+    Icons.people_outline,
+    Icons.language,
+    OMIcons.notifications,
+    Icons.person_outline
   ];
 
   List<String> _tabTitles = ['首页', '本站', '跨站', '消息', '我'];

@@ -13,6 +13,7 @@ import 'package:fastodon/widget/common/no_splash_ink_well.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
 
 class StatusItemActionW extends StatelessWidget {
@@ -50,7 +51,7 @@ class StatusItemActionW extends StatelessWidget {
               onTap: () => AppNavigate.push(NewStatus(replyTo: status)),
               child: Row(
                 children: <Widget>[
-                  Icon(MdiIcons.replyOutline, size: 18, color: color),
+                  Icon(OMIcons.launch, size: 18, color: color),
                   SizedBox(
                     width: 5,
                   ),
@@ -72,13 +73,13 @@ class StatusItemActionW extends StatelessWidget {
             SizedBox(width: 10,),
             if (status.visibility == 'private')
               Icon(
-                Icons.lock,
+                Icons.lock_outline,
                 color: Theme.of(context).splashColor,
                 size: 20,
               ),
             if (status.visibility == 'direct')
               Icon(
-                Icons.mail,
+                Icons.mail_outline,
                 color: Theme.of(context).splashColor,
                 size: 20,
               ),
@@ -176,12 +177,12 @@ class StatusItemActionW extends StatelessWidget {
               likeBuilder: (bool isLiked) {
                 return isLiked
                     ? Icon(
-                        MdiIcons.thumbUpOutline,
+                        OMIcons.thumbUp,
                         color: Colors.yellow[800],
                         size: 16,
                       )
                     : Icon(
-                        MdiIcons.thumbUpOutline,
+                        OMIcons.thumbUp,
                         color: Theme.of(context).splashColor,
                         size: 16,
                       );

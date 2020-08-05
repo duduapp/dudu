@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:provider/provider.dart';
@@ -169,7 +170,8 @@ class _NewStatusState extends State<NewStatus> {
       }
       var timeStr = prefs.get(_spKey('scheduled_at'));
       scheduledAt = timeStr != null ? DateTime.parse(timeStr) : null;
-      if (scheduledAt != null && scheduledAt.difference(DateTime.now()).inSeconds < 300) {
+      if (scheduledAt != null &&
+          scheduledAt.difference(DateTime.now()).inSeconds < 300) {
         scheduledAt = null;
       }
       sensitive = prefs.getBool(_spKey('sensitive'));
@@ -216,8 +218,14 @@ class _NewStatusState extends State<NewStatus> {
           context: context,
           popAfter: true,
           text: '是否保留本次编辑',
-          onCancel: () {_clearDraft();AppNavigate.pop();},
-          onConfirm: () { _saveToDraft();AppNavigate.pop();},
+          onCancel: () {
+            _clearDraft();
+            AppNavigate.pop();
+          },
+          onConfirm: () {
+            _saveToDraft();
+            AppNavigate.pop();
+          },
           cancelText: '不保留',
           confirmText: '保留');
       return false;
@@ -302,7 +310,8 @@ class _NewStatusState extends State<NewStatus> {
     });
     var response;
     try {
-      response = await Request.post(url: Api.attachMedia, params: formData,showDialog: false);
+      response = await Request.post(
+          url: Api.attachMedia, params: formData, showDialog: false);
     } on DioError catch (e) {
       images.remove(file);
       Fluttertoast.showToast(msg: '文件上传失败');
@@ -321,7 +330,9 @@ class _NewStatusState extends State<NewStatus> {
       Map<String, dynamic> paramsMap = Map();
       paramsMap['description'] = title;
       var response = await Request.put(
-          url: Api.attachMedia + '/' + fileId, params: paramsMap,showDialog: false);
+          url: Api.attachMedia + '/' + fileId,
+          params: paramsMap,
+          showDialog: false);
       print(response);
     }
   }
@@ -386,7 +397,7 @@ class _NewStatusState extends State<NewStatus> {
                 NewStatusPublishLevel(
                   title: '公开',
                   description: '所有人可见，并且会出现在公共时间轴上',
-                  leftIcon: Icon(Icons.public, size: 26),
+                  leftIcon: Icon(Icons.language, size: 26),
                   onSelect: (Icon icons) {
                     setState(() {
                       _articleRange = icons;
@@ -467,33 +478,71 @@ class _NewStatusState extends State<NewStatus> {
   @override
   Widget build(BuildContext context) {
     PopupMenu.context = context;
+    var appbarColor = Theme.of(context).appBarTheme.color;
     var inputFilledColor = Theme.of(context).inputDecorationTheme.fillColor;
     var primaryColor = Theme.of(context).primaryColor;
 
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.replyTo == null ? '发嘟' : '回复'),
-          centerTitle: true,
-          actions: <Widget>[
-            Container(
-              child: Text(StringUtil.displayName(_myAcc)),
-              padding: EdgeInsets.only(top: 20, right: 10),
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 5, bottom: 5, right: 10),
-              child: ClipRRect(
-                child: CachedNetworkImage(
-                  imageUrl: _myAcc.avatarStatic,
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.cover,
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(45.0),
+          child: AppBar(
+            leading: Container(
+              padding: EdgeInsets.fromLTRB(20, 15, 0, 0),
+              child: GestureDetector(
+                onTap: () => AppNavigate.pop(),
+                child: Text(
+                  '取消',
+                  style: TextStyle(fontSize: 15),
                 ),
-                borderRadius: BorderRadius.circular(5.0),
               ),
             ),
-          ],
+            titleSpacing: 0,
+            backgroundColor: Color.fromRGBO(appbarColor.red - 4,
+                appbarColor.green - 4, appbarColor.blue - 4, 1),
+            title: Column(mainAxisSize: MainAxisSize.min,
+                children: [
+              Text(
+                widget.replyTo == null ? '发嘟' : '回复',
+                style: TextStyle(fontSize: 16),
+              ),
+              Text(
+                StringUtil.displayName(LoginedUser().account),
+                style:
+                    TextStyle(fontSize: 12, color: Theme.of(context).accentColor),
+              )
+            ]),
+            centerTitle: true,
+            actions: <Widget>[
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 8, 12,6),
+                child: ButtonTheme(
+                  minWidth: 60,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: RaisedButton(
+                    disabledTextColor: Colors.white.withOpacity(0.5),
+                    disabledColor: Theme.of(context).buttonColor.withOpacity(0.5),
+                    color: Theme.of(context).buttonColor,
+                    textColor: Colors.white,
+                    onPressed: _controller.text.length == 0 && images.length == 0
+                        ? null
+                        : () {
+                            for (String image in images) {
+                              if (imageIds[image] == null) {
+                                showToast("请等待图片上传完毕");
+                                return;
+                              }
+                            }
+                            _pushNewToot();
+                          },
+                    child: Text('嘟嘟'),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
         resizeToAvoidBottomInset: showEmojiKeyboard ? false : true,
         body: Container(
@@ -502,7 +551,7 @@ class _NewStatusState extends State<NewStatus> {
             children: <Widget>[
               Container(
                 height: double.infinity,
-                color: inputFilledColor,
+                color: Theme.of(context).primaryColor,
                 padding: EdgeInsets.only(bottom: 50),
                 child: SingleChildScrollView(
                   child: Container(
@@ -534,125 +583,116 @@ class _NewStatusState extends State<NewStatus> {
                 ),
               ),
               Column(mainAxisSize: MainAxisSize.min, children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                      padding: EdgeInsets.fromLTRB(0, 0, 15, 10),
+                      child: Text(
+                        counter > 0 ? counter.toString() : '',
+                        style: TextStyle(color: Theme.of(context).accentColor),
+                      )),
+                ),
+                Divider(
+                  height: 0,
+                  color: Theme.of(context).accentColor,
+                ),
                 Container(
-                  color: primaryColor,
+                  width: double.infinity,
+                  color: Color.fromRGBO(appbarColor.red - 3,
+                      appbarColor.green - 3, appbarColor.blue - 3, 1),
                   padding: EdgeInsets.fromLTRB(10, 5, 15, 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          SizedIconButton(
-                            width: 35,
-                            icon: Icon(Icons.attach_file),
-                            onPressed: vote != null
-                                ? null
-                                : () {
-                                    chooseImage();
-                                  },
-                          ),
-                          SizedIconButton(
-                            onPressed: () {
-                              showBottomSheet();
-                            },
-                            icon: _articleRange,
-                          ),
-                          if (images.isNotEmpty)
-                            SizedIconButton(
-                              icon: sensitive
-                                  ? Icon(
-                                      Icons.visibility_off,
-                                      color: Colors.blue,
-                                    )
-                                  : Icon(Icons.visibility),
-                              onPressed: () {
-                                setState(() {
-                                  sensitive = !sensitive;
-                                });
+                      SizedIconButton(
+                        width: 35,
+                        icon: Icon(OMIcons.insertPhoto),
+                        onPressed: vote != null
+                            ? null
+                            : () {
+                                chooseImage();
                               },
-                            ),
-                          SizedIconButton(
-                            icon: Icon(
-                              Icons.list,
-                              size: 30,
-                            ),
-                            onPressed: images.length > 0
-                                ? null
-                                : () {
-                                    showVoteDialog();
-                                  },
-                          ),
-                          SizedIconButton(
-                            onPressed: () {
-                              setState(() {
-                                _hasWarning = !_hasWarning;
-                              });
-                            },
-                            icon: Icon(Icons.feedback),
+                      ),
+                      SizedIconButton(
+                        onPressed: () {
+                          showBottomSheet();
+                        },
+                        icon: _articleRange,
+                      ),
+                      if (images.isNotEmpty)
+                        SizedIconButton(
+                          icon: sensitive
+                              ? Icon(
+                                  OMIcons.visibilityOff,
+                                  color: Colors.blue,
+                                )
+                              : Icon(OMIcons.visibility),
+                          onPressed: () {
+                            setState(() {
+                              sensitive = !sensitive;
+                            });
+                          },
+                        ),
+                      SizedIconButton(
+                        icon: Icon(
+                          OMIcons.insertChart,
+                          size: 26,
+                        ),
+                        onPressed: images.length > 0
+                            ? null
+                            : () {
+                                showVoteDialog();
+                              },
+                      ),
+                      SizedIconButton(
+                        onPressed: () {
+                          setState(() {
+                            _hasWarning = !_hasWarning;
+                          });
+                        },
+                        icon: Icon(OMIcons.feedback,color: _hasWarning ? Theme.of(context).buttonColor: null,),
 //                            child: Text('cw',
 //                                style: TextStyle(
 //                                    fontWeight: FontWeight.bold, fontSize: 20)),
-                          ),
-                          SizedIconButton(
-                            onPressed: () {
-                              DatePicker.showDateTimePicker(context,
-                                  showTitleActions: true,
-                                  minTime:
-                                      DateTime.now().add(Duration(minutes: 8)),
-                                  maxTime: null,
-                                  onChanged: (date) {}, onConfirm: (date) {
-                                if (date.difference(DateTime.now()).inSeconds >
-                                    300) {
-                                  setState(() {
-                                    scheduledAt = date;
-                                  });
-                                } else {
-                                  DialogUtils.toastErrorInfo('时间必须是五分钟后');
-                                  setState(() {
-                                    scheduledAt = null;
-                                  });
-                                }
-                              }, onCancel: () {
-                                setState(() {
-                                  scheduledAt = null;
-                                });
-                              },
-                                  currentTime: scheduledAt ??
-                                      DateTime.now().add(Duration(minutes: 10)),
-                                  locale: LocaleType.zh);
-                            },
-                            icon: Icon(
-                              Icons.access_time,
-                              color: scheduledAt != null
-                                  ? Colors.blue
-                                  : Colors.black,
-                            ),
-                          ),
-                          SizedIconButton(
-                            icon: Icon(Icons.insert_emoticon),
-                            onPressed: _toggleEmoji,
-                          )
-                        ],
                       ),
-                      Text(counter.toString()),
-                      RaisedButton(
-                        color: AppConfig.buttonColor,
-                        textColor: Colors.white,
+                      SizedIconButton(
                         onPressed: () {
-                          if (_controller.text.length == 0 &&
-                              images.length == 0) {
-                            showToast("说点什么吧");
-                          } else {
-                            for (String image in images) {
-                              if (imageIds[image] == null) {
-                                showToast("请等待图片上传完毕");
-                                return;
-                              }
+                          DatePicker.showDateTimePicker(context,
+                              showTitleActions: true,
+                              minTime:
+                                  DateTime.now().add(Duration(minutes: 8)),
+                              maxTime: null,
+                              onChanged: (date) {}, onConfirm: (date) {
+                            if (date.difference(DateTime.now()).inSeconds >
+                                300) {
+                              setState(() {
+                                scheduledAt = date;
+                              });
+                            } else {
+                              DialogUtils.toastErrorInfo('时间必须是五分钟后');
+                              setState(() {
+                                scheduledAt = null;
+                              });
                             }
-                            _pushNewToot();
-                          }
+                          }, onCancel: () {
+                            setState(() {
+                              scheduledAt = null;
+                            });
+                          },
+                              currentTime: scheduledAt ??
+                                  DateTime.now().add(Duration(minutes: 10)),
+                              locale: LocaleType.zh);
                         },
-                        child: Text('嘟嘟!'),
+                        icon: Icon(
+                          Icons.access_time,
+                          color: scheduledAt != null
+                              ? Colors.blue
+                              : Colors.black,
+                        ),
+                      ),
+                      SizedIconButton(
+                        icon: Icon(Icons.insert_emoticon),
+                        onPressed: _toggleEmoji,
                       )
                     ],
                   ),

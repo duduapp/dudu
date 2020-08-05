@@ -17,6 +17,7 @@ class ThemeUtil {
       bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
       splashColor: Colors.grey[600],
       accentColor: Colors.grey[600],
+      bottomAppBarColor: Color.fromRGBO(246, 246, 246, 1),
       scaffoldBackgroundColor: Color.fromRGBO(238, 238, 238, 1),
       buttonTheme: ButtonThemeData(
         buttonColor: Colors.blue,
