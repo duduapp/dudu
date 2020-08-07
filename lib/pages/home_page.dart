@@ -2,7 +2,8 @@ import 'package:fastodon/models/local_account.dart';
 import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/models/runtime_config.dart';
-import 'package:fastodon/models/task_runner.dart';
+import 'package:fastodon/models/task/notification_task.dart';
+import 'package:fastodon/models/task/update_task.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/other/app_retain_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,7 +17,7 @@ import 'status/new_status.dart';
 import 'timeline/notifications.dart';
 import 'timeline/timeline.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatefulWidget{
   const HomePage(
       {Key key})
       : super(key: key);
@@ -25,48 +26,28 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      UpdateTask.check();
+    }
+  }
 
   int _tabIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _verifyToken();
-  }
-
-  Future<void> _verifyToken() async {
-//    LoginedUser user = LoginedUser();
-//    LocalAccount localAccount = await LocalStorageAccount.getActiveAccount();
-//
-
-
-
-//    if (localAccount == null) {
-//      AppNavigate.pushAndRemoveUntil(context, Login(),
-//          routeType: RouterType.fade);
-//    } else {
-//      user.setHost(localAccount.hostUrl);
-//      user.setToken(localAccount.token);
-//      user.account = localAccount.account;
-//    }
-//
-//
-//    Request.get(url: Api.VerifyToken).then((data) {
-//      if (data != null && data['name'] == AppConfig.ClientName) {
-//        eventBus.emit(EventBusKey.LoadLoginMegSuccess);
-//        TaskRunner.enableNotification();
-//       // SettingsProvider.getCurrentContextProvider().load();
-//      } else {
-//        AppNavigate.pushAndRemoveUntil(context, Login(),
-//            routeType: RouterType.fade);
-//      }
-//    });
+    UpdateTask.check();
+    WidgetsBinding.instance.addObserver(this);
   }
 
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     eventBus.off(EventBusKey.ShowLoginWidget);
     super.dispose();
   }
@@ -108,12 +89,6 @@ class _HomePageState extends State<HomePage> {
     // eventBus.emit(EventBusKey.ShowNewArticalWidget);
   }
 
-  @override
-  void didChangeDependencies() {
-
-
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {

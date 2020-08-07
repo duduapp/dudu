@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 
 class StringUtil {
@@ -36,4 +38,10 @@ class StringUtil {
   static bool isUrl(String str) {
     return Uri.parse(str).isAbsolute;
   }
+
+  static const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  static Random _rnd = Random();
+
+  static String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 }

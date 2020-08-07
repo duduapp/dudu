@@ -1,5 +1,5 @@
 import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/models/task_runner.dart';
+import 'package:fastodon/models/task/notification_task.dart';
 import 'package:fastodon/widget/setting/setting_cell.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,9 +38,9 @@ class _SettingNotificationState extends State<SettingNotification> {
                 enableNotification = value;
               });
               if (value) {
-                TaskRunner.enableNotification();
+                NotificationTask.enable();
               } else {
-                TaskRunner.disableNotification();
+                NotificationTask.disable();
               }
             },
           ),

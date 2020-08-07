@@ -8,6 +8,7 @@ import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/models/json_serializable/vote.dart';
+import 'package:fastodon/models/task/update_task.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/utils/media_util.dart';

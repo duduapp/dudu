@@ -7,12 +7,12 @@ import 'package:fastodon/plugin/event_source.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/notification_util.dart';
 
-import 'json_serializable/notificate_item.dart';
+import '../json_serializable/notificate_item.dart';
 
-class TaskRunner {
+class NotificationTask {
   static StreamSubscription userNotificationEvents;
 
-  static enableNotification() async {
+  static enable() async {
     var settings = SettingsProvider.getCurrentContextProvider().settings;
     if (!settings['show_notifications']) return;
     userNotificationEvents?.cancel();
@@ -60,7 +60,7 @@ class TaskRunner {
     });
   }
   
-  static disableNotification() {
+  static disable() {
     userNotificationEvents?.cancel();
   }
 }

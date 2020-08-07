@@ -64,7 +64,8 @@ class DialogUtils {
       bool popAfter = true,
       bool onlyInfo = false,
       String cancelText,
-      String confirmText}) async{
+      String confirmText,
+      bool barrierDismissible = true}) async{
     if (popFirst != null && popFirst == true) {
       AppNavigate.pop();
     }
@@ -82,6 +83,7 @@ class DialogUtils {
     }
 
     return await showDialog(
+      barrierDismissible: barrierDismissible,
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
