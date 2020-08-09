@@ -6,6 +6,16 @@ class ScreenUtil {
     return MediaQuery.of(context).size.width;
   }
 
+  static height(BuildContext context) {
+    return MediaQuery.of(context).size.height;
+  }
+
+  static heightWithoutAppBar(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    var padding = MediaQuery.of(context).padding;
+    return height - padding.top - kToolbarHeight;
+  }
+
   static navigationBarHeight(BuildContext context) {
     return MediaQuery.of(context).padding.top + 44;
   }

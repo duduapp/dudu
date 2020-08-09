@@ -4,6 +4,7 @@ import 'package:fastodon/api/status_api.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
+import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/view/list_view_util.dart';
 import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:fastodon/widget/status/status_item.dart';
@@ -26,8 +27,9 @@ class _StatusDetailState extends State<StatusDetail> {
   final List<GlobalKey> keys = [];
   int itemPosition = 0;
   StatusItemData status;
-
-
+  ResultListProvider provider;
+  OverlayEntry overlayEntry;
+  bool overlayRemoved = true;
 
   @override
   void initState() {
@@ -44,6 +46,18 @@ class _StatusDetailState extends State<StatusDetail> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _removeOverlay();
+    super.dispose();
+  }
+
+  _removeOverlay() {
+    if (!overlayRemoved) {
+      overlayEntry?.remove();
+      overlayRemoved = true;
+    }
+  }
 
   Widget _buildRow(int idx, List data, ResultListProvider provider) {
     var row = data[idx];
@@ -72,19 +86,65 @@ class _StatusDetailState extends State<StatusDetail> {
   }
 
   _afterLayout(_) {
-    double totalHeight = 0;
-    for (int i = 1; i <= itemPosition; i++) {
+    double ancestorsHeight = 0;
+    double itemHeight = 0;
+    double descendantsHeight = 0;
+    for (int i = 0; i < itemPosition; i++) {
       try {
         RenderBox renderBox = keys[i].currentContext.findRenderObject();
-        totalHeight += renderBox.size.height;
+        ancestorsHeight += renderBox.size.height;
       } catch (e) {
         // print(e);
       }
     }
-    if (totalHeight == 0) {
-      return;
+
+    try {
+      RenderBox renderBox = keys[itemPosition].currentContext.findRenderObject();
+      itemHeight =  renderBox.size.height;
+    } catch (e) {
+      // print(e);
     }
-    _scrollController.jumpTo(totalHeight - 50);
+
+    for (int i = itemPosition + 1; i < keys.length; i++) {
+      try {
+        RenderBox renderBox = keys[i].currentContext.findRenderObject();
+        descendantsHeight += renderBox.size.height;
+      } catch (e) {
+        // print(e);
+      }
+    }
+
+    if (ancestorsHeight + itemHeight + descendantsHeight < ScreenUtil.heightWithoutAppBar(context)) {
+      return;
+    } else if (itemHeight + descendantsHeight < ScreenUtil.heightWithoutAppBar(context)){
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      _insertOverlay(itemHeight, ScreenUtil.height(context) - descendantsHeight - itemHeight);
+
+    } else {
+      if (ancestorsHeight > 0) {
+        _insertOverlay(itemHeight, ScreenUtil.height(context) - descendantsHeight - itemHeight);
+      }
+      _scrollController.jumpTo(ancestorsHeight);
+    }
+  }
+
+  _insertOverlay(double height,double top) {
+    overlayEntry = OverlayEntry(builder: (context) {
+      return Positioned(
+        width: ScreenUtil.width(context),
+        height: height - 8,
+        top: top,
+        child: Container(
+          color: Colors.red.withOpacity(0.15),
+        ),
+      );
+    });
+
+    Overlay.of(context).insert(overlayEntry);
+    overlayRemoved = false;
+    Future.delayed(Duration(milliseconds: 2000),() {
+      _removeOverlay();
+    });
   }
 
   @override
@@ -130,6 +190,7 @@ class _StatusDetailState extends State<StatusDetail> {
             SettingsProvider.getCurrentContextProvider()
                 .statusDetailProviders
                 .add(provider);
+            this.provider = provider;
             return provider;
           },
           builder: (context, snapshot) {

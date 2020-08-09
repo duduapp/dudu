@@ -8,6 +8,7 @@ import 'package:fastodon/widget/common/empty_view.dart';
 import 'package:fastodon/widget/common/error_view.dart';
 import 'package:fastodon/widget/common/loading_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:provider/provider.dart';
 
@@ -130,11 +131,10 @@ class _ProviderEasyRefreshListViewState
                     onNotification: (ScrollNotification notification) {
                       double progress = notification.metrics.pixels /
                           notification.metrics.maxScrollExtent;
-                      if (progress > 0.7) {
-                        if (provider.list.length != requestLoadSize) {
+                      if (progress > 0.7 && provider.list.length != requestLoadSize && provider.enableLoad ) {
                           provider.load();
                           requestLoadSize = provider.list.length;
-                        }
+
                       //
                       }
 
