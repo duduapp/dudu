@@ -23,7 +23,7 @@ class _ServerListState extends State<ServerList>  {
 
   Future<void> _getServerList() async {
     Map<String, dynamic> header = Map();
-    header['Authorization'] = 'Bearer pEpudHDXGCMgCKtDky37mdO6mwtynpbIU07pi3SsMhGLA4pDlB7nnS5Yzbs5JzbT59pkIajfXINxKDZvloVTnNfzlx9GOrODP0ytRhIey1xxizEK0dqZgX9GGz427K4e';
+    header['Authorization'] = 'Bearer KxUopN7M0Vtkg2lTz2Svy01H5AfjGOAp4KzC2cKNFFJCrh4APAQauPQOC8Nr7ppR513cHYOfsAXg6l4gqnrTCEF9UxkHUNxRup2H7yVUAb2KAPYHmPsQDamBsXHylE4b';
     
     Request.get2(url: Api.ServerList,header: header).then((data) {
       List allServer = data['instances'];

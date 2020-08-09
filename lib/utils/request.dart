@@ -69,8 +69,8 @@ class Request {
     }
   }
 
-  static Future get2({String url,Map params,bool showDialog = false,bool returnAll = false,Map header}) async{
-    return await _request(requestType: RequestType.get,url: url,params: params,showDialog: showDialog,returnAll: returnAll,header: header);
+  static Future get2({String url,Map params,bool showDialog = false,bool returnAll = false,Map header,CancelToken cancelToken}) async{
+    return await _request(requestType: RequestType.get,url: url,params: params,showDialog: showDialog,returnAll: returnAll,header: header,cancelToken: cancelToken);
   }
 
   static Future post(
@@ -89,7 +89,7 @@ class Request {
         showDialog: showDialog,
         dialogMessage: dialogMessage,
         successMessage: successMessage,
-        closeDialogDelay: closeDilogDelay);
+        closeDialogDelay: closeDilogDelay,);
   }
 
   static Future put(
@@ -147,7 +147,8 @@ class Request {
       String successMessage,
       int closeDialogDelay,
       bool returnAll = false,
-      Map header}) async {
+      Map header,
+      CancelToken cancelToken}) async {
     ProgressDialog dialog;
     Response response;
     if (showDialog != null && showDialog == true) {
@@ -167,19 +168,19 @@ class Request {
           Map<String,dynamic> queryParams;
           if (params != null )
             queryParams =  Map.from(params);
-          response = await dio.get(url, queryParameters: queryParams);
+          response = await dio.get(url, queryParameters: queryParams,cancelToken: cancelToken);
           break;
         case RequestType.post:
-          response = await dio.post(url, data: params);
+          response = await dio.post(url, data: params,cancelToken: cancelToken);
           break;
         case RequestType.put:
-          response = await dio.put(url, data: params);
+          response = await dio.put(url, data: params,cancelToken: cancelToken);
           break;
         case RequestType.delete:
-          response = await dio.delete(url, data: params);
+          response = await dio.delete(url, data: params,cancelToken: cancelToken);
           break;
         case RequestType.patch:
-          response = await dio.patch(url, data: params);
+          response = await dio.patch(url, data: params,cancelToken: cancelToken);
           break;
       }
       if (closeDialogDelay != 0)

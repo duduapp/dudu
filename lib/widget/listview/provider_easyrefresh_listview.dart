@@ -63,6 +63,8 @@ class _ProviderEasyRefreshListViewState
   String nextUrl; // 用header link 时分页有用
   int textScale = 1;
   Function onTextScaleChanged;
+  int requestLoadSize = 0;
+
 
   @override
   void initState() {
@@ -83,6 +85,7 @@ class _ProviderEasyRefreshListViewState
     eventBus.on(widget.type, (arg) {
       _scrollController.jumpTo(0);
     });
+    
 
     onTextScaleChanged = (arg) {
       setState(() {
@@ -122,51 +125,67 @@ class _ProviderEasyRefreshListViewState
             // 初次可能从Provider 里面请求
             return provider.isLoading
                 ? LoadingView()
-                : EasyRefresh.custom(
+                : Scrollbar(
+                  child: NotificationListener<ScrollNotification>(
+                    onNotification: (ScrollNotification notification) {
+                      double progress = notification.metrics.pixels /
+                          notification.metrics.maxScrollExtent;
+                      if (progress > 0.7) {
+                        if (provider.list.length != requestLoadSize) {
+                          provider.load();
+                          requestLoadSize = provider.list.length;
+                        }
+                      //
+                      }
 
-                    topBouncing: false,
-                    slivers: [
-                      !widget.usingGrid
-                          ? SliverAnimatedList(
+                    },
+                    child: EasyRefresh.custom(
 
-                              key: listKey,
-                              initialItemCount: provider.list.length+widget.addToSliverCount,
-                              itemBuilder: (context, index, animation) {
-                                return SizeTransition(
-                                  axis: Axis.vertical,
-                                  sizeFactor: animation,
-                                  child: provider.buildRow(
-                                      index, provider.list, provider),
-                                );
-                              },
-                            )
-                          : SliverGrid(
-                              delegate:
-                                  SliverChildBuilderDelegate((context, idx) {
-                                return provider.buildRow(
-                                    idx, provider.list, provider);
-                              }, childCount: provider.list.length+widget.addToSliverCount),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3),
-                            )
-                    ],
-                    firstRefresh: false, //在NestedScrollView 不用启用这个选项，而且不能设置scroll controller
-                    firstRefreshWidget: LoadingView(),
-                    header:
-                        widget.header ?? ListViewUtil.getDefaultHeader(context),
-                    footer: ListViewUtil.getDefaultFooter(context),
-                    controller: _controller,
+                        topBouncing: false,
+                        slivers: [
+                          !widget.usingGrid
+                              ? SliverAnimatedList(
 
-                    scrollController:widget.scrollController,
+                                  key: listKey,
+                                  initialItemCount: provider.list.length+widget.addToSliverCount,
+                                  itemBuilder: (context, index, animation) {
+                                    return SizeTransition(
+                                      axis: Axis.vertical,
+                                      sizeFactor: animation,
+                                      child: provider.buildRow(
+                                          index, provider.list, provider),
+                                    );
+                                  },
+                                )
+                              : SliverGrid(
+                                  delegate:
+                                      SliverChildBuilderDelegate((context, idx) {
+                                    return provider.buildRow(
+                                        idx, provider.list, provider);
+                                  }, childCount: provider.list.length+widget.addToSliverCount),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 3),
+                                )
+                        ],
+                        firstRefresh: false, //在NestedScrollView 不用启用这个选项，而且不能设置scroll controller
+                        firstRefreshWidget: LoadingView(),
+                        header:
+                            widget.header ?? ListViewUtil.getDefaultHeader(context),
+                        footer: ListViewUtil.getDefaultFooter(context),
+                        controller: _controller,
+
+                        scrollController:widget.scrollController,
 //                        widget.type == null ? null : _scrollController,
-                    onRefresh: provider.finishRefresh ? null : provider.refresh,
-                    onLoad: widget.enableLoad ?(provider.finishLoad ? null : provider.load ):null,
-                    emptyWidget: provider.noResults && widget.addToSliverCount == 0
-                        ? widget.emptyWidget ?? EmptyView()
-                        : null,
-                    cacheExtent: widget.cacheExtent,
-                  );
+                        onRefresh: provider.finishRefresh ? null : provider.refresh,
+                        onLoad: widget.enableLoad ?(provider.finishLoad ? null : provider.load ):null,
+                        emptyWidget: provider.noResults && widget.addToSliverCount == 0
+                            ? widget.emptyWidget ?? EmptyView()
+                            : null,
+                        cacheExtent: widget.cacheExtent ?? 5000,
+                      ),
+                  ),
+                );
           }),
         );
       },

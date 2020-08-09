@@ -135,7 +135,7 @@ class _LoginState extends State<Login> {
       );
     }
     return Text('登录Mastodon账号',
-        style: TextStyle(fontSize: 16, color: Theme.of(context).buttonColor));
+        style: TextStyle(fontSize: 16, color: Color.fromRGBO(80, 125, 175, 1)));
   }
 
   void _showAboutSheet(BuildContext context) {
@@ -143,8 +143,8 @@ class _LoginState extends State<Login> {
         context: context,
         builder: (BuildContext context) {
           return Container(
-            height: 200,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
@@ -159,7 +159,7 @@ class _LoginState extends State<Login> {
                 Padding(
                   padding: EdgeInsets.all(10),
                   child: Text(
-                      'Mastodon（官方中文译万象，网民又称长毛象）是一个免费开源的去中心化的分布式微博客社交网络。它的用户界面和操作方式跟推特类似，但是整个网络并非由单一机构运作，却是由多个由不同营运者独立运作的服务器以联邦方式交换数据而组成的去中心化社交网络。'),
+                      'Mastodon（长毛象）是由多个不同的营运者独立运作的服务器（实例）彼此链接组成的分布式微博客社交网络。网友可自主访问目标实例并注册成为该实例的用户。请注意，每个实例的用户协议和交流风格是该实例的所有者（站长）所自行定义的，注册的时候应仔细了解该实例的用户协议以免误入。Mastodon实例可以由Web浏览器输入域名直接访问，或者通过第三方客户端来访问。这些客户端包括但不限于本客户端以及tusky、Twidere、Amaroq、Tootdon。另外，Mastodon.social是Mastodon官方运营的实例。Mastodon.online实例是"This is a brand new server run by the main developers of the project as a spin-off of mastodon.social. It is not focused on any particular niche interest."'),
                 )
               ],
             ),
@@ -183,7 +183,7 @@ class _LoginState extends State<Login> {
       ),
         extendBodyBehindAppBar:true,
             resizeToAvoidBottomPadding: false,
-        backgroundColor: Color.fromRGBO(115, 167, 238, 1),
+        backgroundColor: Color.fromRGBO(0, 71, 122, 1),
             body: GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
@@ -224,7 +224,7 @@ class _LoginState extends State<Login> {
                               child: TextField(
                                 controller: _controller,
                                 decoration: new InputDecoration(
-                                    hintText: '例如：mao.mastodonhub.com',
+                                    hintText: '例如：mastodon.online',
                                     disabledBorder: InputBorder.none,
                                     enabledBorder: InputBorder.none,
                                     focusedBorder: InputBorder.none,
@@ -277,7 +277,7 @@ class _LoginState extends State<Login> {
                             },
                             child: Container(
                               child: Center(
-                                child: Text('选择域名',
+                                child: Text('选择实例',
                                     style:
                                         TextStyle(color: Theme.of(context).primaryColor)),
                               ),

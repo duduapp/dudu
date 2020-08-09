@@ -33,6 +33,7 @@ class ListViewUtil {
     return ClassicalFooter(
       showInfo: false,
       enableInfiniteLoad: true,
+      triggerDistance:500,
       loadText: '拉动加载',
       loadReadyText: '释放加载',
       loadingText: '加载中...',

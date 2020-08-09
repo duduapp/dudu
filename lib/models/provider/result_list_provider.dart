@@ -34,8 +34,8 @@ class ResultListProvider extends ChangeNotifier {
   final bool onlyMedia;
   final ResultListDataHandler dataHandler;
   String lastCellId = '0';
-  CancelToken requestCancelToken = CancelToken();
   final int cacheTimeInSeconds;
+  CancelToken token = CancelToken();
 
   EasyRefreshController refreshController;
 
@@ -103,7 +103,7 @@ class ResultListProvider extends ChangeNotifier {
   Future<void> load() async {
     if (headerLinkPagination != null && headerLinkPagination == true) {
       if (nextUrl != null) {
-        _startRequest(nextUrl);
+       await _startRequest(nextUrl);
         nextUrl = null;
       }
     } else {
@@ -136,7 +136,7 @@ class ResultListProvider extends ChangeNotifier {
       }
     }
 
-    await Request.get2(url: url, returnAll: true).then((response) {
+    await Request.get2(url: url, returnAll: true,cancelToken: token).then((response) {
       //只有列表为空时，才显示错误，为了更好的用户体验
       if (response == null && list.isEmpty) {
         error = RuntimeConfig.error;
@@ -281,7 +281,7 @@ class ResultListProvider extends ChangeNotifier {
 
   @override
   void dispose() {
-    requestCancelToken.cancel('canceld');
+    token.cancel('canceld');
     events.forEach((key, value) {
       eventBus.off(key, value);
     });

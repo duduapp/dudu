@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extend;
 import 'package:fastodon/api/accounts_api.dart';
@@ -53,10 +54,13 @@ class _UserProfileState extends State<UserProfile>
   bool _showAccountInfoInAppBar = false;
   List<ResultListProvider> providers = [];
 
+  CancelToken cancelToken = CancelToken();
+
   ScrollController _scrollController;
   @override
   void dispose() {
     super.dispose();
+    cancelToken.cancel('canceld');
     _scrollController.dispose();
     _tabController.dispose();
   }
@@ -710,8 +714,9 @@ class _UserProfileState extends State<UserProfile>
 
   Future<void> _onRefreshPage({bool firstRefresh = false}) async {
     if (!firstRefresh) providers[_tabController.index]?.refresh();
-    var newAccount = await AccountsApi.getAccount(widget.accountId);
-    var newRelationShip = await AccountsApi.getRelationShip(widget.accountId);
+    var newAccount = await AccountsApi.getAccount(widget.accountId,cancelToken: cancelToken);
+    var newRelationShip = await AccountsApi.getRelationShip(widget.accountId,cancelToken: cancelToken);
+    if (newAccount != null && newRelationShip != null)
     setState(() {
       _account = newAccount ?? _account;
       relationShip = newRelationShip ?? relationShip;
