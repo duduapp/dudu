@@ -50,6 +50,13 @@ class StatusActionUtil {
       BuildContext context, StatusItemData data, bool subStatus) {
     OwnerAccount myAccount = LoginedUser().account;
     BuildContext modalContext = context;
+    ResultListProvider provider = Provider.of<ResultListProvider>(context,listen: false);
+    bool mentioned = false;
+    for (var row in data.mentions) {
+      if (row['acct'] == myAccount.acct) {
+        mentioned = true;
+      }
+    }
     showModalBottomSheet(
         context: modalContext,
         isScrollControlled: true,
@@ -66,6 +73,19 @@ class StatusActionUtil {
                 onTap: () => onPressBookmark(data),
               ),
               Divider(indent: 60, height: 0),
+              if (mentioned)
+                ...[
+                  BottomSheetItem(
+                    icon: OMIcons.volumeOff,
+                    text: data.muted ? '取消隐藏该对话' : '隐藏该对话',
+                    subText: '隐藏后将不会从该对话中接收到通知',
+                    onTap: () {
+                      AppNavigate.pop();
+                      _onPressMuteConversation(data);
+                    },
+                  ),
+                  Divider(indent: 60, height: 0),
+                ],
               BottomSheetItem(
                 icon: Icons.link,
                 text: '复制链接',
@@ -88,7 +108,7 @@ class StatusActionUtil {
               if (myAccount.id != data.account.id) ...[
                 BottomSheetItem(
                   icon: OMIcons.volumeOff,
-                  text: '隐藏 ',
+                  text: '隐藏 @'+data.account.username,
                   subText: '隐藏后该用户的嘟文将不会显示在你的时间轴中',
                   onTap: () {
                     AppNavigate.pop();
@@ -102,7 +122,7 @@ class StatusActionUtil {
                     _onPressBlock(modalContext, data, subStatus);
                   },
                   icon: Icons.block,
-                  text: '屏蔽 ',
+                  text: '屏蔽 @'+data.account.username,
                   subText: '屏蔽后该用户将无法看到你发的嘟文',
                 ),
                 Divider(
@@ -175,6 +195,19 @@ class StatusActionUtil {
     }
     data.bookmarked = !data.bookmarked;
     ListViewUtil.handleAllStatuses((e) => e['bookmarked'] = data.bookmarked,
+        ListViewUtil.sameStatusCondition(data));
+  }
+
+  static _onPressMuteConversation(StatusItemData data) {
+    if (data.muted) {
+      StatusApi.numuteConversation(data.id);
+      DialogUtils.toastFinishedInfo('已取消隐藏对话');
+    } else {
+      StatusApi.muteConversation(data.id);
+      DialogUtils.toastFinishedInfo('已隐藏对话');
+    }
+    data.muted = !data.muted;
+    ListViewUtil.handleAllStatuses((e) => e['muted'] = data.muted,
         ListViewUtil.sameStatusCondition(data));
   }
 

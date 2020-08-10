@@ -156,6 +156,18 @@ class ListViewUtil {
           handle(row);
       }
     }
+
+    // notification会包裹status
+    List notificationStatus = [];
+    for (var row in SettingsProvider().notificationProvider.list) {
+      if (row['status'] != null) {
+        notificationStatus.add(row['status']);
+      }
+    }
+    for (var row in notificationStatus.where(test)) {
+      handle(row);
+    }
+
     for (ResultListProvider provider in SettingsProvider().statusDetailProviders) {
       for (var row in provider.list.where(test)){
         handle(row);
@@ -183,7 +195,7 @@ class ListViewUtil {
       SettingsProvider().localProvider,
       SettingsProvider().homeProvider,
       SettingsProvider().federatedProvider,
-      SettingsProvider().notificationProvider
+    //  SettingsProvider().notificationProvider
     ];
   }
 

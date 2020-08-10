@@ -8,9 +8,11 @@ import 'package:fastodon/pages/setting/edit_user_profile.dart';
 import 'package:fastodon/pages/setting/general_setting.dart';
 import 'package:fastodon/pages/setting/lists/lists_page.dart';
 import 'package:fastodon/pages/status/scheduled_statuses_list.dart';
+import 'package:fastodon/pages/timeline/conversations_timeline.dart';
 import 'package:fastodon/public.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:outline_material_icons/outline_material_icons.dart';
 
 import '../../widget/setting/setting_cell.dart';
 import 'favourites_list.dart';
@@ -76,13 +78,18 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
         ),
         SizedBox(height: 10),
         SettingCell(
-          title: '收藏',
-          leftIcon: Icon(Icons.favorite),
+          title: '私信',
+          leftIcon: Icon(Icons.mail_outline),
+          onPress: () => AppNavigate.push(ConversationTimeline()),
+        ),
+        SettingCell(
+          title: '赞',
+          leftIcon: Icon(OMIcons.thumbUp),
           onPress: () => AppNavigate.push(FavouritesList()),
         ),
         SettingCell(
           title: '书签',
-          leftIcon: Icon(Icons.bookmark),
+          leftIcon: Icon(Icons.bookmark_border),
           onPress: () => AppNavigate.push(BookmarksList()),
         ),
         SettingCell(
@@ -99,12 +106,12 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
         SizedBox(height: 10,),
         SettingCell(
           title: '账号设置',
-          leftIcon: Icon(Icons.account_box),
+          leftIcon: Icon(OMIcons.accountBox),
           onPress: () => AppNavigate.push(AccountSetting()),
         ),
         SettingCell(
           title: '通用',
-          leftIcon: Icon(Icons.settings),
+          leftIcon: Icon(OMIcons.settings),
           onPress: () => AppNavigate.push(GeneralSetting()),
         ),
 

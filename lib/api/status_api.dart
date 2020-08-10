@@ -33,6 +33,16 @@ class StatusApi {
     return await Request.post(url: api,showDialog: false);
   }
 
+  static muteConversation(String statusId) async{
+    var api = '$url/$statusId/mute';
+    return await Request.post(url: api,showDialog: false);
+  }
+
+  static numuteConversation(String statusId) async {
+    var api = '$url/$statusId/unmute';
+    return await Request.post(url: api,showDialog: false);
+  }
+
   static getContext(String statusId) async{
     var api = '$url/$statusId/context';
     return await Request.get2(url: api);

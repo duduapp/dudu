@@ -25,8 +25,8 @@ class _FavouritesListState extends State<FavouritesList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('我的收藏'),
-        centerTitle: true,
+        title: Text('我的赞'),
+        centerTitle: false,
       ),
       body: ChangeNotifierProvider<ResultListProvider>(
           create: (context) => ResultListProvider(

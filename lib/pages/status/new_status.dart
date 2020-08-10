@@ -294,6 +294,7 @@ class _NewStatusState extends State<NewStatus> {
           .then((data) {
         if (data != null) {
           AppNavigate.pop();
+          if (!data.containsKey('scheduled_at'))
           SettingsProvider().homeProvider.addToListWithAnimation(data);
         }
       });

@@ -42,6 +42,10 @@ class _StatusDetailState extends State<StatusDetail> {
     data['media_attachments'] = copyAttachments;
     data['media_attachments'].forEach((e) => e['id'] = "c_" + e['id']);
 
+    _scrollController.addListener(() {
+      _removeOverlay();
+    });
+
     status = StatusItemData.fromJson(data);
     super.initState();
   }
