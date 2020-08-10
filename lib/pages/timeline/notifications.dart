@@ -41,6 +41,7 @@ class _NotificationsState extends State<Notifications>
     provider = ResultListProvider(
         requestUrl: Request.buildGetUrl(Api.Notifications, getRequestParams(displayType)),
         buildRow: row,
+      tag: 'notifications'
     );
     provider.refreshController = refreshController;
     SettingsProvider().notificationProvider = provider;

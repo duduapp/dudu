@@ -1,6 +1,7 @@
 import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/public.dart';
+import 'package:fastodon/utils/filter_util.dart';
 import 'package:fastodon/widget/common/normal_flat_button.dart';
 import 'package:flutter/material.dart';
 
@@ -87,6 +88,7 @@ class _CommonFilterEditState extends State<CommonFilterEdit> {
     var res = await AccountsApi.removeFilter(widget.id);
     if (res != null) {
       widget.provider.removeByIdWithAnimation(widget.id);
+      FilterUtil.getFiltersAndApply();
     }
   }
 
@@ -96,12 +98,14 @@ class _CommonFilterEditState extends State<CommonFilterEdit> {
       var res = await AccountsApi.addFilter(phraseController.text.trim(), widget.context, wholeWord);
       if (res != null) {
         widget.provider.addToListWithAnimation(res);
+        FilterUtil.getFiltersAndApply();
       }
     } else {
       var res = await AccountsApi.updateFilter(
           widget.id, phraseController.text.trim(), widget.context, wholeWord);
       if (res != null) {
         widget.provider.update(res);
+        FilterUtil.getFiltersAndApply();
       }
     }
 

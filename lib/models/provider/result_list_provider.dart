@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/models/runtime_config.dart';
 import 'package:fastodon/public.dart';
+import 'package:fastodon/utils/filter_util.dart';
 import 'package:fastodon/utils/request.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,7 @@ class ResultListProvider extends ChangeNotifier {
   String lastCellId = '0';
   final int cacheTimeInSeconds;
   CancelToken token = CancelToken();
+  final String tag;
 
   EasyRefreshController refreshController;
 
@@ -53,7 +55,8 @@ class ResultListProvider extends ChangeNotifier {
       this.onlyMedia = false,
       this.dataHandler,
       bool showLoading = true, // 给list 第一次赋值，刷新后用结果值
-      this.cacheTimeInSeconds}) {
+      this.cacheTimeInSeconds,
+      this.tag}) {
 
     if (listenBlockEvent) {
       _addEvent(EventBusKey.blockAccount, (arg) {
@@ -70,7 +73,24 @@ class ResultListProvider extends ChangeNotifier {
     }
 
     refresh(showLoading: showLoading);
+  }
 
+
+
+  reConstructFilterList() {
+    list = _filterData(list);
+    notifyListeners();
+  }
+
+  _filterData(List data) {
+    if (['home','notifications','thread'].contains(tag)) {
+      return FilterUtil.filterData(data, tag);
+    }
+
+    if (['local','federated'].contains(tag)) {
+      return FilterUtil.filterData(data, 'public');
+    }
+    return List.from(data);
   }
 
   _addEvent(String eventName, EventCallback callback) {
@@ -170,14 +190,14 @@ class ResultListProvider extends ChangeNotifier {
       // 下拉刷新的时候，只需要将新的数组赋值到数据list中
       // 上拉加载的时候，需要将新的数组添加到现有数据list中
       if (refresh == true) {
-        list = data;
+        list = _filterData(data);
         if (data.length == 0) {
           noResults = true;
         } else {
           noResults = false;
         }
       } else {
-        list.addAll(data);
+        list.addAll(_filterData(data));
       }
 
       if (data.length == 0) {
@@ -186,7 +206,7 @@ class ResultListProvider extends ChangeNotifier {
         finishLoad = false;
       }
       if (reverseData && enableRefresh) {
-        list = list.reversed;
+        list = _filterData(list.reversed);
       }
 
       if (headerLinkPagination != null && headerLinkPagination == true) {

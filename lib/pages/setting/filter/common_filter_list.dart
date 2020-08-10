@@ -108,19 +108,5 @@ class _CommonFilterListState extends State<CommonFilterList> {
       newFilter: true,
       provider: provider,
     ));
-
-//    showDialog(
-//        context: context,
-//        builder: (BuildContext context) {
-//          return AlertDialog(
-//            contentPadding: EdgeInsets.all(8),
-//            title: Text('添加新的过滤器'),
-//            content: CommonFilterEdit(
-//              context: phraseContext,
-//              newFilter: true,
-//              provider: provider,
-//            ),
-//          );
-//        });
   }
 }

@@ -88,6 +88,7 @@ class _TimelineState extends State<Timeline> {
       body: ChangeNotifierProvider<ResultListProvider>(create: (context) {
         var provider = ResultListProvider(
             requestUrl: url,
+            tag: widget.type.toString().split('.').last,
             buildRow: ListViewUtil.statusRowFunction(),
             listenBlockEvent: true,
             dataHandler: ListViewUtil.dataHandlerPrefixIdFunction(

@@ -151,7 +151,7 @@ class ListViewUtil {
   }
 
   static handleAllStatuses(handle(dynamic e),bool test(dynamic e)) {
-    for (ResultListProvider provider in _getRootProviders()) {
+    for (ResultListProvider provider in getRootProviders()) {
       for (var row in provider.list.where(test)){
           handle(row);
       }
@@ -182,7 +182,7 @@ class ListViewUtil {
               (e) => e.isNotEmpty && e['account']['id'] == accountId);
     }
 
-    for (ResultListProvider provider in _getRootProviders()) {
+    for (ResultListProvider provider in getRootProviders()) {
       provider.removeWhere((e) =>
           (e.containsKey('reblog') && e['reblog'] != null && e['reblog'].containsKey('account') &&
               e['reblog']['account']['id'] == accountId) ||
@@ -190,7 +190,7 @@ class ListViewUtil {
     }
   }
 
-  static List _getRootProviders() {
+  static List getRootProviders() {
     return [
       SettingsProvider().localProvider,
       SettingsProvider().homeProvider,

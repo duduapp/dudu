@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fastodon/models/json_serializable/filter_item.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/pages/setting/model/relation_ship.dart';
 import 'package:fastodon/utils/request.dart';
@@ -102,6 +103,15 @@ class AccountsApi {
 //        'fields_attributes': fieldsAttributes
 //      };
       await Request.patch(url:api,params: FormData.fromMap(params));
+  }
+
+  static Future<List<FilterItem>> getFilters() async{
+    List<FilterItem> filters = [];
+    var res = await Request.get2(url: filterUrl);
+    for (var row in res) {
+      filters.add(FilterItem.fromJson(row));
+    }
+    return filters;
   }
 
   static removeFilter(String id) async {

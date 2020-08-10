@@ -1,3 +1,4 @@
+import 'package:fastodon/models/json_serializable/filter_item.dart';
 import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/public.dart';
@@ -37,7 +38,12 @@ class SettingsProvider extends ChangeNotifier {
   ResultListProvider notificationProvider;
   ResultListProvider federatedProvider;
 
-
+  Map<String,List<FilterItem>> filters = {
+    'home' : [],
+    'notifications' : [],
+    'public' : [],
+    'thread' :[]
+  };
 
 
   load() async{
@@ -123,6 +129,7 @@ class SettingsProvider extends ChangeNotifier {
   get(String key) {
     return settings[key];
   }
+
 
   static SettingsProvider getCurrentContextProvider({listen = false}) {
     return Provider.of<SettingsProvider>(navGK.currentContext,listen: listen);
