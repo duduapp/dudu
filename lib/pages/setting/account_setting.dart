@@ -1,4 +1,5 @@
 import 'package:fastodon/api/accounts_api.dart';
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/setting/common_block_list.dart';
@@ -30,22 +31,22 @@ class _AccountSettingState extends State<AccountSetting> {
       body: ListView(
         children: <Widget>[
           SettingCell(
-            leftIcon: Icon(Icons.notifications),
+            leftIcon: Icon(IconFont.notification),
             title: '通知设置',
             onPress: () => AppNavigate.push(SettingNotification()),
           ),
           SettingCell(
-            leftIcon: Icon(Icons.volume_off),
+            leftIcon: Icon(IconFont.volumeOff),
             title: '被隐藏的用户',
             onPress: () => AppNavigate.push(CommonBlockList(BlockType.mute)),
           ),
           SettingCell(
-            leftIcon: Icon(Icons.block),
+            leftIcon: Icon(IconFont.block),
             title: '被屏蔽的用户',
             onPress: () => AppNavigate.push(CommonBlockList(BlockType.block)),
           ),
           SettingCell(
-            leftIcon: Icon(Icons.volume_off),
+            leftIcon: Icon(IconFont.www),
             title: '隐藏域名',
             onPress: () =>
                 AppNavigate.push(CommonBlockList(BlockType.hideDomain)),
@@ -56,7 +57,7 @@ class _AccountSettingState extends State<AccountSetting> {
           ),
           ProviderSettingCell(
             providerKey: 'default_post_privacy',
-            leftIcon: Icon(Icons.public),
+            leftIcon: Icon(IconFont.earth),
             title: '嘟文默认可见范围',
             type: SettingType.string,
             displayOptions: ['公开', '不公开', '仅关注者'],
@@ -65,7 +66,7 @@ class _AccountSettingState extends State<AccountSetting> {
           ),
           ProviderSettingCell(
             providerKey: 'make_media_sensitive',
-            leftIcon: Icon(Icons.remove_red_eye),
+            leftIcon: Icon(IconFont.eye),
             title: '自动标记媒体为敏感内容',
             type: SettingType.bool,
             onPressed: (value) {

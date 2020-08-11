@@ -58,6 +58,7 @@ class _NewStatusState extends State<NewStatus> {
   String replyToId;
   bool showEmojiKeyboard = false;
   double keyboardHeight = 0;
+  bool textEdited = false;
   var focusNode = new FocusNode();
 
   int counter = 0;
@@ -77,6 +78,7 @@ class _NewStatusState extends State<NewStatus> {
     }
     if (widget.replyTo != null) {
       _controller.text = getMentionString();
+      counter = _controller.text.length;
     }
 
     if (widget.scheduleInfo != null) {
@@ -211,27 +213,43 @@ class _NewStatusState extends State<NewStatus> {
     setState(() {});
   }
 
-  Future<bool> _onWillPop() async {
-    if (_controller.text.isNotEmpty ||
+  bool get tootEdited {
+    return (textEdited && _controller.text.isNotEmpty )||
         images.length > 0 ||
-        (vote != null && vote.canCreate())) {
-      DialogUtils.showSimpleAlertDialog(
-          context: context,
-          popAfter: true,
-          text: '是否保留本次编辑',
-          onCancel: () {
-            _clearDraft();
-            AppNavigate.pop();
-          },
-          onConfirm: () {
-            _saveToDraft();
-            AppNavigate.pop();
-          },
-          cancelText: '不保留',
-          confirmText: '保留');
+        (vote != null && vote.canCreate());
+  }
+
+  Future<bool> _onWillPop() async {
+    if (tootEdited) {
+      _showSaveDraftDialog();
       return false;
     }
     return true;
+  }
+
+  _showSaveDraftDialog() {
+    DialogUtils.showSimpleAlertDialog(
+        context: context,
+        popAfter: true,
+        text: '是否保留本次编辑',
+        onCancel: () {
+          _clearDraft();
+          AppNavigate.pop();
+        },
+        onConfirm: () {
+          _saveToDraft();
+          AppNavigate.pop();
+        },
+        cancelText: '不保留',
+        confirmText: '保留');
+  }
+
+  _onPressBack() {
+    if (tootEdited) {
+      _showSaveDraftDialog();
+    } else {
+      AppNavigate.pop();
+    }
   }
 
   showToast(String str) {
@@ -468,8 +486,12 @@ class _NewStatusState extends State<NewStatus> {
 
   // 转发时需要填的mention list
   getMentionString() {
+    OwnerAccount myAccount = LoginedUser().account;
     var mentionStr = '@' + widget.replyTo.account.acct + ' ';
     for (Map mention in widget.replyTo.mentions) {
+      if (myAccount.acct == mention['acct']) {
+        continue;
+      }
       mentionStr += '@' + mention['acct'] + ' ';
     }
     return mentionStr;
@@ -505,7 +527,7 @@ class _NewStatusState extends State<NewStatus> {
             leading: Container(
               padding: EdgeInsets.fromLTRB(20, 15, 0, 0),
               child: GestureDetector(
-                onTap: () => AppNavigate.pop(),
+                onTap: () => _onPressBack(),
                 child: Text(
                   '取消',
                   style: TextStyle(fontSize: 15),
@@ -572,6 +594,7 @@ class _NewStatusState extends State<NewStatus> {
                           focusNode: focusNode,
                           onChanged: (value) {
                             setState(() {
+                              textEdited = true;
                               counter = value.length > 500
                                   ? 500
                                   : value.length; //当500时可能值会变成501

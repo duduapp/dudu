@@ -18,7 +18,7 @@ class BottomSheetItem extends StatelessWidget {
   BottomSheetItem(
       {this.text,
       this.subText,
-      this.icon = Icons.insert_emoticon,
+      this.icon,
       this.onTap,
       this.height,
       this.safeArea = false,
@@ -36,14 +36,16 @@ class BottomSheetItem extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(16),
         child: Row(
+          mainAxisAlignment: icon != null ? MainAxisAlignment.start : MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
               width: 10,
             ),
-            Icon(icon,color: color ?? Theme.of(context).accentColor,size: 22,),
+            if (icon != null) ...[
+            Icon(icon,color: color ?? Theme.of(context).textTheme.bodyText1.color,size: 25,),
             SizedBox(
               width: 20,
-            ),
+            ),],
             if (subText != null) ...[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

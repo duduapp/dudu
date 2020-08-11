@@ -3,6 +3,7 @@ import 'package:fastodon/api/accounts_api.dart';
 import 'package:fastodon/models/json_serializable/filter_item.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
+import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/view/list_view_util.dart';
 
 class FilterUtil {
@@ -10,9 +11,11 @@ class FilterUtil {
     List res = List.from(data);
     for (var dataRow in data) {
       for (var filterRow in SettingsProvider().filters[context]) {
-        if (dataRow.containsKey('content') && dataRow['content'].contains(filterRow.phrase)) {
-          res.remove(dataRow);
-          break;
+        if (dataRow.containsKey('content') && StringUtil.removeAllHtmlTags(dataRow['content']).contains(filterRow.phrase)) {
+          if (filterRow.expiresAt == null || DateTime.now().isBefore(filterRow.expiresAt)) {
+            res.remove(dataRow);
+            break;
+          }
         }
       }
     }

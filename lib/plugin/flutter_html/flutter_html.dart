@@ -18,7 +18,7 @@ class Html extends StatelessWidget {
     this.onImageError,
     this.linkStyle = const TextStyle(
         decoration: TextDecoration.none,
-        color: Colors.blueAccent,
+        color: Color.fromRGBO(80, 125, 175, 1),
         decorationColor: Colors.blueAccent),
     this.emojis = const []
   }) : super(key: key);

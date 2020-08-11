@@ -1,4 +1,5 @@
 import 'package:fastodon/api/status_api.dart';
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/logined_user.dart';
@@ -68,7 +69,7 @@ class StatusActionUtil {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               BottomSheetItem(
-                icon: Icons.bookmark_border,
+                icon: IconFont.bookmark,
                 text: data.bookmarked ? '删除书签' : '添加书签',
                 onTap: () => onPressBookmark(data),
               ),
@@ -76,7 +77,7 @@ class StatusActionUtil {
               if (mentioned)
                 ...[
                   BottomSheetItem(
-                    icon: OMIcons.volumeOff,
+                    icon: IconFont.volumeOff,
                     text: data.muted ? '取消隐藏该对话' : '隐藏该对话',
                     subText: '隐藏后将不会从该对话中接收到通知',
                     onTap: () {
@@ -87,7 +88,7 @@ class StatusActionUtil {
                   Divider(indent: 60, height: 0),
                 ],
               BottomSheetItem(
-                icon: Icons.link,
+                icon: IconFont.link,
                 text: '复制链接',
                 onTap: () {
                   AppNavigate.pop();
@@ -96,7 +97,7 @@ class StatusActionUtil {
               ),
               Divider(indent: 60, height: 0),
               BottomSheetItem(
-                icon: Icons.content_copy,
+                icon: IconFont.copy,
                 text: '复制嘟文',
                 onTap: () {
                   AppNavigate.pop();
@@ -107,7 +108,7 @@ class StatusActionUtil {
               Divider(indent: 60, height: 0),
               if (myAccount.id != data.account.id) ...[
                 BottomSheetItem(
-                  icon: OMIcons.volumeOff,
+                  icon: IconFont.volumeOff,
                   text: '隐藏 @'+data.account.username,
                   subText: '隐藏后该用户的嘟文将不会显示在你的时间轴中',
                   onTap: () {
@@ -121,7 +122,7 @@ class StatusActionUtil {
                     AppNavigate.pop();
                     _onPressBlock(modalContext, data, subStatus);
                   },
-                  icon: Icons.block,
+                  icon: IconFont.block,
                   text: '屏蔽 @'+data.account.username,
                   subText: '屏蔽后该用户将无法看到你发的嘟文',
                 ),
@@ -130,7 +131,7 @@ class StatusActionUtil {
                   height: 0,
                 ),
                 BottomSheetItem(
-                  icon: OMIcons.reportProblem,
+                  icon: IconFont.report,
                   text: '举报 ',
                   onTap: () {
                     AppNavigate.pop();

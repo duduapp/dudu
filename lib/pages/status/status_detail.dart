@@ -30,6 +30,7 @@ class _StatusDetailState extends State<StatusDetail> {
   ResultListProvider provider;
   OverlayEntry overlayEntry;
   bool overlayRemoved = true;
+  AppBar appBar;
 
   @override
   void initState() {
@@ -119,6 +120,9 @@ class _StatusDetailState extends State<StatusDetail> {
     }
 
     if (ancestorsHeight + itemHeight + descendantsHeight < ScreenUtil.heightWithoutAppBar(context)) {
+      if (ancestorsHeight > 0) {
+        _insertOverlay(itemHeight, ancestorsHeight + ScreenUtil.appBarAndStatusBarHeight(context));
+      }
       return;
     } else if (itemHeight + descendantsHeight < ScreenUtil.heightWithoutAppBar(context)){
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
@@ -154,11 +158,12 @@ class _StatusDetailState extends State<StatusDetail> {
   @override
   Widget build(BuildContext context) {
     var scale = SettingsProvider.getWithCurrentContext('text_scale');
+    appBar = AppBar(
+      title: Text('嘟文'),
+      centerTitle: false,
+    );
     return Scaffold(
-      appBar: AppBar(
-        title: Text('嘟文'),
-        centerTitle: false,
-      ),
+      appBar: appBar,
       body: MediaQuery(
         data: MediaQuery.of(context)
             .copyWith(textScaleFactor: 1.0 + 0.18 * double.parse(scale)),

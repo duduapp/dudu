@@ -16,7 +16,8 @@ import 'package:image_picker/image_picker.dart';
 
 class EditUserProfile extends StatefulWidget {
   final OwnerAccount account;
-  EditUserProfile(this.account);
+  final bool showBottomChooseImage;
+  EditUserProfile(this.account,{this.showBottomChooseImage = false});
 
   @override
   _EditUserProfileState createState() => _EditUserProfileState();
@@ -52,7 +53,12 @@ class _EditUserProfileState extends State<EditUserProfile> {
     if (extraInfoControllers.length == 0) {
       extraInfoControllers.add([TextEditingController(),TextEditingController()]);
     }
-    
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.showBottomChooseImage) {
+        showSheet(context);
+      }
+    });
   }
   
 

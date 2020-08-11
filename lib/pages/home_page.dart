@@ -1,4 +1,5 @@
 import 'package:fastodon/api/accounts_api.dart';
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/local_account.dart';
 import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
@@ -59,11 +60,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
 
 
   List<IconData> _tabIcons = [
-    OMIcons.home,
-    Icons.people_outline,
-    Icons.language,
-    OMIcons.notifications,
-    Icons.person_outline
+    IconFont.home,
+    IconFont.local,
+    IconFont.earth,
+    IconFont.notification,
+    IconFont.mine
   ];
 
   List<String> _tabTitles = ['首页', '本站', '跨站', '消息', '我'];
@@ -73,7 +74,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
       return Icon(_tabIcons[index],
           color: activeColor); //_tabSelectedImages[index];
     } else {
-      return Icon(_tabIcons[index]); //_tabImages[index];
+      return Icon(_tabIcons[index],color: Theme.of(context).textTheme.bodyText1.color,); //_tabImages[index];
     }
   }
 
@@ -84,7 +85,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
         style: TextStyle(color: activeColor, fontWeight: FontWeight.bold),
       );
     } else {
-      return Text(_tabTitles[index]);
+      return Text(_tabTitles[index],style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),);
     }
   }
 

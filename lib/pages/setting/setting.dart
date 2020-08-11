@@ -1,4 +1,5 @@
 import 'package:fastodon/api/accounts_api.dart';
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/local_account.dart';
 import 'package:fastodon/models/logined_user.dart';
@@ -70,7 +71,7 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
         GestureDetector(
           onTap: () {
            // AppNavigate.push(context, UserMessage(account: _account,));
-            AppNavigate.push( EditUserProfile(_account));
+            AppNavigate.push( EditUserProfile(_account,showBottomChooseImage: true,));
           },
           child: SettingHead(
             account: _account,
@@ -79,39 +80,39 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
         SizedBox(height: 10),
         SettingCell(
           title: '私信',
-          leftIcon: Icon(Icons.mail_outline),
+          leftIcon: Icon(IconFont.message),
           onPress: () => AppNavigate.push(ConversationTimeline()),
         ),
         SettingCell(
           title: '赞',
-          leftIcon: Icon(OMIcons.thumbUp),
+          leftIcon: Icon(IconFont.thumbUp),
           onPress: () => AppNavigate.push(FavouritesList()),
         ),
         SettingCell(
           title: '书签',
-          leftIcon: Icon(Icons.bookmark_border),
+          leftIcon: Icon(IconFont.bookmark),
           onPress: () => AppNavigate.push(BookmarksList()),
         ),
         SettingCell(
           title: '列表',
-          leftIcon: Icon(Icons.list),
+          leftIcon: Icon(IconFont.list),
           onPress: () => AppNavigate.push(ListsPage()),
         ),
         SettingCell(
           title: '定时嘟文',
-          leftIcon: Icon(Icons.access_time),
+          leftIcon: Icon(IconFont.time,size: 22,),
           onPress: () => AppNavigate.push(ScheduledStatusesList()),
         ),
 
         SizedBox(height: 10,),
         SettingCell(
           title: '账号设置',
-          leftIcon: Icon(OMIcons.accountBox),
+          leftIcon: Icon(IconFont.accountSetting),
           onPress: () => AppNavigate.push(AccountSetting()),
         ),
         SettingCell(
           title: '通用',
-          leftIcon: Icon(OMIcons.settings),
+          leftIcon: Icon(IconFont.settings),
           onPress: () => AppNavigate.push(GeneralSetting()),
         ),
 

@@ -28,7 +28,7 @@ class StatusReplyInfo extends StatelessWidget {
       child: ListTile(
         leading: image,
         title: Text('@'+item.account.acct,maxLines: 1,overflow: TextOverflow.ellipsis,),
-        subtitle: Text(item.content,maxLines: 2,overflow: TextOverflow.ellipsis,),
+        subtitle: Text(StringUtil.removeAllHtmlTags(item.content),maxLines: 2,overflow: TextOverflow.ellipsis,),
       ),
     );
   }

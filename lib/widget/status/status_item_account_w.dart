@@ -115,7 +115,7 @@ class StatusItemAccountW extends StatelessWidget {
             recognizer: TapGestureRecognizer()
               ..onTap = () => AppNavigate.push(InnerBrowser(appWebsite)),
             style:
-                TextStyle(fontSize: 12, color: Theme.of(context).buttonColor)));
+                TextStyle(fontSize: 12, color: Color.fromRGBO(80, 125, 175, 1))));
       }
       return spans;
     } else {

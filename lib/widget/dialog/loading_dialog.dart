@@ -1,6 +1,8 @@
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:outline_material_icons/outline_material_icons.dart';
 
 class LoadingDialog extends StatelessWidget {
   final String text;
@@ -12,9 +14,11 @@ class LoadingDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget loadingIcon;
     if (finished) {
-      loadingIcon = Icon(Icons.check_circle_outline,size: 40,color: Theme.of(context).accentColor,);
+      loadingIcon = Icon(IconFont.checkCircle,size: 40,color: Colors.white,);
     } else {
       loadingIcon =             CircularProgressIndicator(
+        strokeWidth: 1,
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
       );
     }
     return ClipRRect(
@@ -22,7 +26,6 @@ class LoadingDialog extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(20),
         width: 140,
-        height: 110,
         color: Color.fromRGBO(54, 54, 54, 1),
         child: Column(
           mainAxisSize: MainAxisSize.min,

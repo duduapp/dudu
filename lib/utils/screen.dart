@@ -16,6 +16,11 @@ class ScreenUtil {
     return height - padding.top - kToolbarHeight;
   }
 
+  static appBarAndStatusBarHeight(BuildContext context) {
+    var padding = MediaQuery.of(context).padding;
+    return kToolbarHeight + padding.top;
+  }
+
   static navigationBarHeight(BuildContext context) {
     return MediaQuery.of(context).padding.top + 44;
   }

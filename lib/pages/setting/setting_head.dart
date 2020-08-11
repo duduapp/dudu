@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
+import 'package:fastodon/pages/setting/edit_user_profile.dart';
 import 'package:fastodon/pages/user_profile/user_follewers.dart';
 import 'package:fastodon/pages/user_profile/user_follewing.dart';
 import 'package:fastodon/pages/user_profile/user_profile.dart';
 import 'package:fastodon/pages/user_profile/user_status.dart';
 import 'package:fastodon/public.dart';
+import 'package:fastodon/widget/common/no_splash_ink_well.dart';
 import 'package:fastodon/widget/other/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
@@ -19,14 +21,13 @@ class SettingHead extends StatelessWidget {
     }
     return Container(
       color: Theme.of(context).primaryColor,
-      padding: const EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           InkWell(
             child: headerSection(account.statusesCount, '嘟文'),
-            onTap: () => AppNavigate.push(UserStatus(account.id)),
+            onTap: () => AppNavigate.push(UserProfile(accountId: account.id,)),
           ),
           InkWell(
             child: headerSection(account.followingCount, '关注'),
@@ -42,12 +43,15 @@ class SettingHead extends StatelessWidget {
   }
 
   Widget headerSection(int number, String title) {
-    return Column(
-      children: <Widget>[
-        Text('$number',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-        Text(title, style: TextStyle(fontSize: 13,color: Theme.of(navGK.currentContext).accentColor))
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        children: <Widget>[
+          Text('$number',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+          Text(title, style: TextStyle(fontSize: 13,color: Theme.of(navGK.currentContext).accentColor))
+        ],
+      ),
     );
   }
 
@@ -70,10 +74,14 @@ class SettingHead extends StatelessWidget {
             children: [
               SizedBox(height: 90,),
               ListTile(
-                leading: Avatar(
-                  account: account,
-                  width: 60,
-                  height: 60,
+                leading: NoSplashInkWell(
+                  onTap: () => AppNavigate.push(EditUserProfile(account)),
+                  child: Avatar(
+                    account: account,
+                    width: 60,
+                    height: 60,
+                    navigateToDetail: false,
+                  ),
                 ),
                 title: Text(
                   StringUtil.displayName(account),

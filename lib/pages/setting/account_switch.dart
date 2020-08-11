@@ -56,85 +56,99 @@ class _AccountSwitchState extends State<AccountSwitch> {
 
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.all(12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            SafeArea(
-              child: Row(
-                children: <Widget>[
-                  FlatButton(
-                      onPressed: _onBackPressed,
-                      child: Text(
-                        manageMode ? '取消' : '关闭',
-                        style: TextStyle(
-                            fontSize: 16, color:Theme.of(context).textTheme.bodyText1.color,fontWeight: FontWeight.normal),
-                      )),
-                  Spacer(),
-                  if (!manageMode)
-                    FlatButton(
-                        onPressed: _onManagePressed,
-                        child: Text(
-                          '管理',
-                          style: TextStyle(
-                              fontSize: 16, color:Theme.of(context).textTheme.bodyText1.color,fontWeight: FontWeight.normal),
-                        ))
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: Text(
-                manageMode ? '清除账号信息' : '点击来切换账号',
-                style: TextStyle(fontSize: 25),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: Divider(
-                thickness: 1,
-                indent: 50,
-                endIndent: 50,
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            for (var account in accounts) accountRow(account),
-            //SizedBox(height: 10,),
-            if (!manageMode)
-              InkWell(
-                onTap: () => AppNavigate.push(Login(showBackButton: true,),routeType:RouterType.material),
-                child: Container(
-                  padding: EdgeInsets.all(25),
-                  color: primaryColor,
+          padding: EdgeInsets.all(12),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SafeArea(
                   child: Row(
                     children: <Widget>[
-                      Icon(
-                        Icons.add,
-                        size: 25,
-                        color: Theme.of(context).splashColor,
-                      ),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      Text(
-                        '添加账号',
-                        style: TextStyle(
-                            fontSize: 20, color: Theme.of(context).splashColor),
-                      )
+                      FlatButton(
+                          onPressed: _onBackPressed,
+                          child: Text(
+                            manageMode ? '取消' : '关闭',
+                            style: TextStyle(
+                                fontSize: 16,
+                                color:
+                                    Theme.of(context).textTheme.bodyText1.color,
+                                fontWeight: FontWeight.normal),
+                          )),
+                      Spacer(),
+                      if (!manageMode)
+                        FlatButton(
+                            onPressed: _onManagePressed,
+                            child: Text(
+                              '管理',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .color,
+                                  fontWeight: FontWeight.normal),
+                            ))
                     ],
                   ),
                 ),
-              )
-          ],
-        ),
-      ),
+                SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Text(
+                    manageMode ? '清除账号信息' : '点击来切换账号',
+                    style: TextStyle(fontSize: 25),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Divider(
+                    thickness: 1,
+                    indent: 50,
+                    endIndent: 50,
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                for (var account in accounts) accountRow(account),
+                //SizedBox(height: 10,),
+                if (!manageMode)
+                  InkWell(
+                    onTap: () => AppNavigate.push(
+                        Login(
+                          showBackButton: true,
+                        ),
+                        routeType: RouterType.material),
+                    child: Container(
+                      padding: EdgeInsets.all(25),
+                      color: primaryColor,
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.add,
+                            size: 25,
+                            color: Theme.of(context).splashColor,
+                          ),
+                          SizedBox(
+                            width: 6,
+                          ),
+                          Text(
+                            '添加账号',
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Theme.of(context).splashColor),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+              ],
+            ),
+          )),
     );
   }
 
@@ -148,7 +162,8 @@ class _AccountSwitchState extends State<AccountSwitch> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   BottomSheetItem(
-                    text: '删除账号${StringUtil.accountFullAddress(account.account)}',
+                    text:
+                        '删除账号${StringUtil.accountFullAddress(account.account)}',
                     onTap: () => _confirmDelete(account),
                   ),
                   Container(
@@ -183,7 +198,8 @@ class _AccountSwitchState extends State<AccountSwitch> {
           await LocalStorageAccount.setActiveAccount(accountInfo);
           LoginedUser().loadFromLocalAccount(accountInfo);
           await SettingsProvider().load();
-          AppNavigate.pushAndRemoveUntil(context,HomePage(),routeType: RouterType.scale);
+          AppNavigate.pushAndRemoveUntil(context, HomePage(),
+              routeType: RouterType.scale);
         }
       },
       child: Container(

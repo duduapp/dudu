@@ -38,6 +38,7 @@ class _StatusTextEditorState extends State<StatusTextEditor> {
       },
       child: TypeAheadField(
         suggestionsBoxVerticalOffset: 5,
+        keepSuggestionsOnLoading: false,
         suggestionsCallback: (pattern) async{
           String firstChar;
           String query;
@@ -111,7 +112,7 @@ class _StatusTextEditorState extends State<StatusTextEditor> {
 
         hideOnLoading: true,
 
-        hideSuggestionsOnKeyboardHide: false,
+        hideSuggestionsOnKeyboardHide: true,
 
         suggestionsBoxDecoration: SuggestionsBoxDecoration(
           color: Theme.of(context).backgroundColor,
@@ -121,7 +122,12 @@ class _StatusTextEditorState extends State<StatusTextEditor> {
         textFieldConfiguration: TextFieldConfiguration(
           focusNode: widget.focusNode,
           controller: widget.controller,
-          onChanged: widget.onChanged,
+          onChanged: (v) {
+            if (widget.controller.text.isEmpty) {
+              _boxController.close();
+            }
+            widget.onChanged(v);
+            },
           style: TextStyle(fontSize: 19),
 
           autofocus: true,

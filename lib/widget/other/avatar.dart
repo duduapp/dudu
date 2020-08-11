@@ -10,12 +10,14 @@ class Avatar extends StatelessWidget {
     @required this.account,
     this.width = 50,
     this.height = 50,
+    this.navigateToDetail = true
    }) : super(key: key);
 
 
   final double width;
   final double height;
   final OwnerAccount account;
+  final bool navigateToDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class Avatar extends StatelessWidget {
       );
     }
     return GestureDetector(
-      onTap: () => AppNavigate.push(UserProfile(accountId: account.id,)),
+      onTap: navigateToDetail ? () => AppNavigate.push(UserProfile(accountId: account.id,)) : null,
       child: ClipRRect(
         child: CachedNetworkImage(
             imageUrl: account.avatar,

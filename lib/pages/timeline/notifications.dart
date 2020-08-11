@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:fastodon/api/notification_api.dart';
 import 'package:fastodon/models/json_serializable/notificate_item.dart';
+import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/timeline/notification_display_type_dialog.dart';
@@ -13,6 +14,7 @@ import 'package:fastodon/widget/status/status_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../../widget/other/follow_cell.dart';
@@ -73,18 +75,19 @@ class _NotificationsState extends State<Notifications>
     } else if (item.type == 'favourite') {
       return StatusItem(
           item: item.status,
-          refIcon: Icons.star,
-          refString: '${StringUtil.displayName(item.account)} 收藏了你的嘟文',
+          refIcon: Icons.thumb_up,
+          refString: '${StringUtil.displayName(item.account)} 赞了你的嘟文',
           refAccount: item.account,);
     } else if (item.type == 'mention') {
       return StatusItem(
         item: item.status,
       );
     } else if (item.type == 'poll') {
+      bool self = item.status.account == LoginedUser().account;
       return StatusItem(
         item: item.status,
         refIcon: Icons.poll,
-        refString: '你创建的投票已结束',
+        refString: '你${self ? '创建' : '参与'}的投票已结束',
       );
     } else if (item.type == 'reblog') {
       return StatusItem(

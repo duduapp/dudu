@@ -1,3 +1,4 @@
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/search/search_page_delegate.dart';
@@ -70,14 +71,16 @@ class _TimelineState extends State<Timeline> {
           centerTitle: true,
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.search),
+              splashColor: Colors.transparent,
+              icon: Icon(IconFont.search,size: 25,),
               onPressed: () {
                 customSearch.showSearch(
                     context: context, delegate: SearchPageDelegate());
               },
             ),
             IconButton(
-              icon: Icon(Icons.add),
+              splashColor: Colors.transparent,
+              icon: Icon(Icons.add_circle,color: Theme.of(context).buttonColor,),
               onPressed: () {
                 AppNavigate.push(NewStatus(), routeType: RouterType.material);
               },
