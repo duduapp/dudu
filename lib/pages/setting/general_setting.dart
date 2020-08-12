@@ -1,3 +1,4 @@
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/local_account.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
 import 'package:fastodon/pages/login/login.dart';
@@ -82,7 +83,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
       body: ListView(
         children: <Widget>[
           SettingCell(
-            leftIcon: Icon(Icons.color_lens),
+            leftIcon: Icon(IconFont.theme),
             title: '应用主题',
             onPress: () => showDialog(
                 context: context,
@@ -90,7 +91,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
           ),
           ProviderSettingCell(
             providerKey: 'text_scale',
-            leftIcon: Icon(Icons.font_download),
+            leftIcon: Icon(IconFont.fontSize),
             title: '字体大小',
             options: ['0','1','2'],
             displayOptions: ['小','中','大'],

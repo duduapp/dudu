@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extend;
 import 'package:fastodon/api/accounts_api.dart';
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/json_serializable/media_attachment.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/logined_user.dart';
@@ -269,7 +270,7 @@ class _UserProfileState extends State<UserProfile>
               if (_account != null) ...[
                 BottomSheetItem(
                     text: '提及',
-                    icon: OMIcons.alternateEmail,
+                    icon: IconFont.at,
                     onTap: () {
                       AppNavigate.pop();
                       AppNavigate.push(
@@ -286,6 +287,7 @@ class _UserProfileState extends State<UserProfile>
               if (_account != null && mine.account.id != _account.id) ...[
                 if (!relationShip.blocking && !relationShip.requested) ...[
                   BottomSheetItem(
+                    icon: IconFont.follow,
                     text: relationShip.following ? '取消关注' : '关注',
                     onTap: _onPressButton,
                   ),
@@ -295,7 +297,7 @@ class _UserProfileState extends State<UserProfile>
                   )
                 ],
                 BottomSheetItem(
-                  icon: OMIcons.volumeOff,
+                  icon: IconFont.volumeOff,
                   text: relationShip.muting ? '取消隐藏' : '隐藏',
                   subText: '隐藏后该用户的嘟文将不会显示在你的时间轴中',
                   onTap: _onPressHideButton,
@@ -305,7 +307,7 @@ class _UserProfileState extends State<UserProfile>
                   height: 0,
                 ),
                 BottomSheetItem(
-                  icon: Icons.block,
+                  icon: IconFont.block,
                   text: relationShip.blocking ? '取消屏蔽' : '屏蔽',
                   subText: '屏蔽后该用户将无法看到你发的嘟文',
                   onTap: _onPressBlockButton,
@@ -315,7 +317,7 @@ class _UserProfileState extends State<UserProfile>
                   height: 0,
                 ),
                 BottomSheetItem(
-                  icon: Icons.link_off,
+                  icon: IconFont.www,
                   text: '隐藏该用户所在域名',
                   onTap: () => DialogUtils.showSimpleAlertDialog(
                       context: context,
@@ -329,7 +331,7 @@ class _UserProfileState extends State<UserProfile>
                   height: 0,
                 ),
                 BottomSheetItem(
-                  icon: OMIcons.reportProblem,
+                  icon: IconFont.report,
                   text: '举报',
                 )
               ],

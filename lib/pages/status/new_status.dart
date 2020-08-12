@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/logined_user.dart';
@@ -47,7 +48,7 @@ class _NewStatusState extends State<NewStatus> {
   final TextEditingController _warningController = new TextEditingController();
   OwnerAccount _myAcc;
   bool _hasWarning = false;
-  Icon _articleRange = Icon(Icons.public, size: 30);
+  Icon _articleRange;
   String _visibility = 'public';
   List<String> images = [];
   Map<String, String> imageTitles = {};
@@ -102,7 +103,7 @@ class _NewStatusState extends State<NewStatus> {
       SettingsProvider provider =
           Provider.of<SettingsProvider>(context, listen: false);
       _visibility = provider.get('default_post_privacy');
-      _articleRange = Icon(AppConfig.visibilityIcons[_visibility]);
+      _articleRange = Icon(AppConfig.visibilityIcons[_visibility],size: 26,);
       sensitive = provider.get('make_media_sensitive');
     });
   }
@@ -157,7 +158,7 @@ class _NewStatusState extends State<NewStatus> {
       _visibility = prefs.getString(_spKey('visibility'));
       _articleRange = Icon(
         AppConfig.visibilityIcons[_visibility],
-        size: 30,
+        size: 26,
       );
       images = prefs.getStringList(_spKey('images'));
       imageTitles = Map<String, String>.from(
@@ -190,7 +191,7 @@ class _NewStatusState extends State<NewStatus> {
     _visibility = params['visibility'];
     _articleRange = Icon(
       AppConfig.visibilityIcons[_visibility],
-      size: 30,
+      size: 26,
     );
     for (var media in info['media_attachments']) {
       if (media['type'] == 'image') {
@@ -415,7 +416,7 @@ class _NewStatusState extends State<NewStatus> {
                 NewStatusPublishLevel(
                   title: '公开',
                   description: '所有人可见，并且会出现在公共时间轴上',
-                  leftIcon: Icon(Icons.language, size: 26),
+                  leftIcon: Icon(IconFont.earth,size: 26,),
                   onSelect: (Icon icons) {
                     setState(() {
                       _articleRange = icons;
@@ -427,7 +428,7 @@ class _NewStatusState extends State<NewStatus> {
                 NewStatusPublishLevel(
                   title: '不公开',
                   description: '所有人可见，但不会出现在公共时间轴上',
-                  leftIcon: Icon(Icons.lock_open, size: 26),
+                  leftIcon: Icon(IconFont.unlock,size: 26,),
                   onSelect: (Icon icons) {
                     setState(() {
                       _articleRange = icons;
@@ -439,7 +440,7 @@ class _NewStatusState extends State<NewStatus> {
                 NewStatusPublishLevel(
                   title: '仅关注者',
                   description: '只有关注你的用户可以看到',
-                  leftIcon: Icon(Icons.lock_outline, size: 26),
+                  leftIcon: Icon(IconFont.lock,size: 26,),
                   onSelect: (Icon icons) {
                     setState(() {
                       _articleRange = icons;
@@ -451,7 +452,7 @@ class _NewStatusState extends State<NewStatus> {
                 NewStatusPublishLevel(
                   title: '私信',
                   description: '只有被提及的用户可以看到',
-                  leftIcon: Icon(Icons.mail_outline, size: 26),
+                  leftIcon: Icon(IconFont.message,size: 26,),
                   onSelect: (Icon icons) {
                     setState(() {
                       _articleRange = icons;
@@ -637,7 +638,7 @@ class _NewStatusState extends State<NewStatus> {
                     children: <Widget>[
                       SizedIconButton(
                         width: 35,
-                        icon: Icon(OMIcons.insertPhoto),
+                        icon: Icon(IconFont.picture),
                         onPressed: vote != null
                             ? null
                             : () {
@@ -654,10 +655,10 @@ class _NewStatusState extends State<NewStatus> {
                         SizedIconButton(
                           icon: sensitive
                               ? Icon(
-                                  OMIcons.visibilityOff,
+                                  IconFont.eyeClose,
                                   color: Colors.blue,
                                 )
-                              : Icon(OMIcons.visibility),
+                              : Icon(IconFont.eye),
                           onPressed: () {
                             setState(() {
                               sensitive = !sensitive;
@@ -666,7 +667,7 @@ class _NewStatusState extends State<NewStatus> {
                         ),
                       SizedIconButton(
                         icon: Icon(
-                          OMIcons.insertChart,
+                          IconFont.vote,
                           size: 26,
                         ),
                         onPressed: images.length > 0
@@ -681,7 +682,7 @@ class _NewStatusState extends State<NewStatus> {
                             _hasWarning = !_hasWarning;
                           });
                         },
-                        icon: Icon(OMIcons.feedback,color: _hasWarning ? Theme.of(context).buttonColor: null,),
+                        icon: Icon(IconFont.cw,color: _hasWarning ? Theme.of(context).buttonColor: null,),
 //                            child: Text('cw',
 //                                style: TextStyle(
 //                                    fontWeight: FontWeight.bold, fontSize: 20)),
@@ -715,14 +716,14 @@ class _NewStatusState extends State<NewStatus> {
                               locale: LocaleType.zh);
                         },
                         icon: Icon(
-                          Icons.access_time,
+                          IconFont.time,
                           color: scheduledAt != null
                               ? Colors.blue
                               : Colors.black,
                         ),
                       ),
                       SizedIconButton(
-                        icon: Icon(Icons.insert_emoticon),
+                        icon: Icon(IconFont.emoji),
                         onPressed: _toggleEmoji,
                       )
                     ],

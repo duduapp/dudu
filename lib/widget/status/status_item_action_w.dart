@@ -1,5 +1,6 @@
 import 'package:fastodon/api/status_api.dart';
 import 'package:fastodon/constant/api.dart';
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/status/new_status.dart';
@@ -50,9 +51,9 @@ class StatusItemActionW extends StatelessWidget {
               onTap: () => AppNavigate.push(NewStatus(replyTo: status)),
               child: Row(
                 children: <Widget>[
-                  Icon(OMIcons.launch, size: 18, color: color),
+                  Icon(IconFont.forward, size: 18, color: color),
                   SizedBox(
-                    width: 5,
+                    width: 2,
                   ),
                   Text(
                     subStatus ? '':'转评',
@@ -72,13 +73,13 @@ class StatusItemActionW extends StatelessWidget {
             SizedBox(width: 10,),
             if (status.visibility == 'private')
               Icon(
-                Icons.lock_outline,
+                IconFont.lock,
                 color: Theme.of(context).splashColor,
                 size: 20,
               ),
             if (status.visibility == 'direct')
               Icon(
-                Icons.mail_outline,
+                IconFont.message,
                 color: Theme.of(context).splashColor,
                 size: 20,
               ),
@@ -101,7 +102,7 @@ class StatusItemActionW extends StatelessWidget {
                   return Row(
                     children: <Widget>[
                       SizedBox(
-                        width: 5,
+                        width: 6,
                       ),
                       Text(
                         subStatus ? '' :'转嘟',
@@ -121,14 +122,14 @@ class StatusItemActionW extends StatelessWidget {
                 likeBuilder: (bool isLiked) {
                   return isLiked
                       ? Icon(
-                          Icons.repeat_one,
+                          IconFont.reblog,
                           color: Colors.blue[800],
-                          size: 18,
+                          size: 20,
                         )
                       : Icon(
-                          Icons.repeat,
+                          IconFont.reblog,
                           color: Theme.of(context).splashColor,
-                          size: 18,
+                          size: 20,
                         );
                 },
                 isLiked: status.reblogged,
@@ -156,7 +157,7 @@ class StatusItemActionW extends StatelessWidget {
                 return Row(
                   children: <Widget>[
                     SizedBox(
-                      width: 5,
+                      width: 4,
                     ),
                     Text(
                       subStatus ? '':'赞',
@@ -176,14 +177,14 @@ class StatusItemActionW extends StatelessWidget {
               likeBuilder: (bool isLiked) {
                 return isLiked
                     ? Icon(
-                        OMIcons.thumbUp,
+                        IconFont.thumbUp,
                         color: Colors.yellow[800],
-                        size: 16,
+                        size: 20,
                       )
                     : Icon(
-                        OMIcons.thumbUp,
+                        IconFont.thumbUp,
                         color: Theme.of(context).splashColor,
-                        size: 16,
+                        size: 20,
                       );
               },
               isLiked: status.favourited,

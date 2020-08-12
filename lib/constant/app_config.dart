@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:flutter/material.dart';
 
 class AppConfig {
@@ -9,9 +10,9 @@ class AppConfig {
   static const Color buttonColor = Colors.blue;
 
   static const Map<String, IconData> visibilityIcons = {
-    'public': Icons.language,
-    'unlisted': Icons.lock_open,
-    'private': Icons.lock_outline,
-    'direct': Icons.mail_outline
+    'public': IconFont.earth,
+    'unlisted': IconFont.unlock,
+    'private': IconFont.lock,
+    'direct': IconFont.message
   };
 }
