@@ -13,7 +13,6 @@ import 'package:fastodon/utils/view/status_action_util.dart';
 import 'package:fastodon/widget/common/no_splash_ink_well.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
-import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
 
 class StatusItemActionW extends StatelessWidget {
@@ -74,13 +73,13 @@ class StatusItemActionW extends StatelessWidget {
             if (status.visibility == 'private')
               Icon(
                 IconFont.lock,
-                color: Theme.of(context).splashColor,
+                color: Theme.of(context).accentColor,
                 size: 20,
               ),
             if (status.visibility == 'direct')
               Icon(
                 IconFont.message,
-                color: Theme.of(context).splashColor,
+                color: Theme.of(context).accentColor,
                 size: 20,
               ),
             if (status.visibility != 'private' && status.visibility != 'direct')
@@ -128,7 +127,7 @@ class StatusItemActionW extends StatelessWidget {
                         )
                       : Icon(
                           IconFont.reblog,
-                          color: Theme.of(context).splashColor,
+                          color: Theme.of(context).accentColor,
                           size: 20,
                         );
                 },
@@ -183,7 +182,7 @@ class StatusItemActionW extends StatelessWidget {
                       )
                     : Icon(
                         IconFont.thumbUp,
-                        color: Theme.of(context).splashColor,
+                        color: Theme.of(context).accentColor,
                         size: 20,
                       );
               },

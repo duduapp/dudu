@@ -14,7 +14,6 @@ import 'package:fastodon/widget/status/status_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../../widget/other/follow_cell.dart';
@@ -38,7 +37,7 @@ class _NotificationsState extends State<Notifications>
   Function loginSuccess;
   @override
   void initState() {
-    displayType = SettingsProvider.getWithCurrentContext('notification_display_type');
+    displayType = SettingsProvider().settings['notification_display_type'];
     // parameters will be added in build method
     provider = ResultListProvider(
         requestUrl: Request.buildGetUrl(Api.Notifications, getRequestParams(displayType)),

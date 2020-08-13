@@ -19,21 +19,21 @@ class SettingHead extends StatelessWidget {
     if (account == null) {
       return Container();
     }
-    return Container(
+    return Ink(
       color: Theme.of(context).primaryColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          InkWell(
+          NoSplashInkWell(
             child: headerSection(account.statusesCount, '嘟文'),
             onTap: () => AppNavigate.push(UserProfile(accountId: account.id,)),
           ),
-          InkWell(
+          NoSplashInkWell(
             child: headerSection(account.followingCount, '关注'),
             onTap: () => AppNavigate.push(UserFollowing(account.id)),
           ),
-          InkWell(
+          NoSplashInkWell(
             child: headerSection(account.followersCount, '粉丝'),
             onTap: () => AppNavigate.push(UserFollowers(account.id)),
           ),

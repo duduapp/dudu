@@ -12,7 +12,7 @@ import 'package:fastodon/widget/other/app_retain_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
-import 'package:outline_material_icons/outline_material_icons.dart';
+
 
 import 'login/login.dart';
 import 'setting/setting.dart';

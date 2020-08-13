@@ -1,4 +1,5 @@
 import 'package:fastodon/api/accounts_api.dart';
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/public.dart';
@@ -22,7 +23,7 @@ class CommonBlockList extends StatelessWidget {
             child: StatusItemAccount(
       account,
       action: IconButton(
-        icon: Icon(Icons.volume_up),
+        icon: Icon(IconFont.volumeUp),
         onPressed: () async{
           var res = await AccountsApi.unMute(account.id);
           if (res != null) {
@@ -40,7 +41,7 @@ class CommonBlockList extends StatelessWidget {
             child: StatusItemAccount(
               account,
               action: IconButton(
-                icon: Icon(Icons.clear),
+                icon: Icon(IconFont.clear),
                 onPressed: () async{
                   var res = await AccountsApi.unBlock(account.id);
                   if (res != null) {

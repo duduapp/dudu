@@ -13,7 +13,6 @@ import 'package:fastodon/widget/common/bottom_sheet_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nav_router/nav_router.dart';
-import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
 
 import 'list_view_util.dart';
@@ -93,6 +92,7 @@ class StatusActionUtil {
                 onTap: () {
                   AppNavigate.pop();
                   Clipboard.setData(new ClipboardData(text: data.url));
+                  DialogUtils.toastFinishedInfo('链接已复制');
                 },
               ),
               Divider(indent: 60, height: 0),
@@ -103,6 +103,7 @@ class StatusActionUtil {
                   AppNavigate.pop();
                   Clipboard.setData(new ClipboardData(
                       text: StringUtil.removeAllHtmlTags(data.content)));
+                  DialogUtils.toastFinishedInfo('嘟文已复制');
                 },
               ),
               Divider(indent: 60, height: 0),
@@ -113,14 +114,21 @@ class StatusActionUtil {
                   subText: '隐藏后该用户的嘟文将不会显示在你的时间轴中',
                   onTap: () {
                     AppNavigate.pop();
-                    _onPressMute(modalContext, data, subStatus);
+                    DialogUtils.showSimpleAlertDialog(context: context,
+                    text: '你确定要隐藏用户 @'+data.account.username + '吗?',
+                      onConfirm: () =>  _onPressMute(modalContext, data, subStatus)
+                    );
+
                   },
                 ),
                 Divider(indent: 60, height: 0),
                 BottomSheetItem(
                   onTap: () {
                     AppNavigate.pop();
-                    _onPressBlock(modalContext, data, subStatus);
+                    DialogUtils.showSimpleAlertDialog(context: context,
+                    text: '你确定要屏蔽用户 @'+data.account.username + '吗?',
+                      onConfirm: () => _onPressBlock(modalContext, data, subStatus)
+                    );
                   },
                   icon: IconFont.block,
                   text: '屏蔽 @'+data.account.username,
@@ -143,7 +151,7 @@ class StatusActionUtil {
                 ),
               ] else ...[
                 BottomSheetItem(
-                  icon: OMIcons.delete,
+                  icon: IconFont.delete,
                   text: '删除',
                   color: Colors.red,
                   onTap: () {
@@ -226,14 +234,14 @@ class StatusActionUtil {
                 element['account']['id'] == data.account.id,
             orElse: () => null);
         if (sameAccount == null)
-          ListViewUtil.muteUser(context: context, status: data);
+          ListViewUtil.blockUser(context: context, status: data);
         else
           AppNavigate.pop(param: {'operation': 'block', 'status': data});
       } else {
         AppNavigate.pop(param: {'operation': 'block', 'status': data});
       }
     } else {
-      ListViewUtil.muteUser(context: context, status: data);
+      ListViewUtil.blockUser(context: context, status: data);
     }
   }
 

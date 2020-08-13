@@ -131,7 +131,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                           Icon(
                             Icons.add,
                             size: 25,
-                            color: Theme.of(context).splashColor,
+                            color: Theme.of(context).accentColor,
                           ),
                           SizedBox(
                             width: 6,
@@ -140,7 +140,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                             '添加账号',
                             style: TextStyle(
                                 fontSize: 20,
-                                color: Theme.of(context).splashColor),
+                                color: Theme.of(context).accentColor),
                           )
                         ],
                       ),

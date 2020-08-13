@@ -131,7 +131,7 @@ class SubStatusItemHeader extends StatelessWidget {
                   TextSpan(
                       text: '@' + data.account.username,
                       style: TextStyle(
-                          fontSize: 15, color: Theme.of(context).splashColor))
+                          fontSize: 15, color: Theme.of(context).accentColor))
                 ]),
             overflow: TextOverflow.ellipsis,
           )),

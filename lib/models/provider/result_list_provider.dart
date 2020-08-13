@@ -104,19 +104,22 @@ class ResultListProvider extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
     }
-    await _startRequest(requestUrl, refresh: true);
-    if (showLoading) {
-      isLoading = false;
-      notifyListeners();
-    }
-    if (!enableRefresh) {
-      finishRefresh = true;
-     // finishLoad = true;
-      notifyListeners();
-    }
-    if (!enableLoad) {
-      finishLoad = true;
-      notifyListeners();
+    bool success = await _startRequest(requestUrl, refresh: true);
+
+    if (success) {
+      if (showLoading) {
+        isLoading = false;
+        notifyListeners();
+      }
+      if (!enableRefresh) {
+        finishRefresh = true;
+        // finishLoad = true;
+        notifyListeners();
+      }
+      if (!enableLoad) {
+        finishLoad = true;
+        notifyListeners();
+      }
     }
   }
 
@@ -140,7 +143,7 @@ class ResultListProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _startRequest(String url, {bool refresh}) async {
+  Future<bool> _startRequest(String url, {bool refresh}) async {
     if (cacheTimeInSeconds != null) {
       int cacheTime = await Storage.getIntWithAccount('cache_time' + url);
       if (cacheTime != null) {
@@ -151,81 +154,91 @@ class ResultListProvider extends ChangeNotifier {
           list = json
               .decode(await Storage.getStringWithAccount('cache_data' + url));
           notifyListeners();
-          return;
+          return true;
         }
       }
     }
 
-    await Request.get2(url: url, returnAll: true,cancelToken: token).then((response) {
-      //只有列表为空时，才显示错误，为了更好的用户体验
-      if (response == null && list.isEmpty) {
-        error = RuntimeConfig.error;
-        notifyListeners();
-        return;
-      } else if (response is DioError) {
-        return;
-      } else {
-        error = null;
-      }
-      var data = response.data;
+    var response;
+    try {
+      response = await Request.get2(
+          url: url, returnAll: true, cancelToken: token);
+    } catch (e) {
+      return false;
+    }
 
-      if (cacheTimeInSeconds != null) {
-        Storage.saveIntWithAccount(
-            'cache_time' + url, DateTime.now().millisecondsSinceEpoch);
-        Storage.saveStringWithAccount('cache_data' + url, json.encode(data));
-      }
-
-      if (mapKey != null) {
-        data = data[mapKey];
-      }
-
-      if (dataHandler != null) {
-        data = dataHandler(data);
-      }
-
-      if (data.length > 0 && data[data.length - 1].isNotEmpty) {
-        lastCellId = data[data.length - 1]['id'];
-      }
-
-      // 下拉刷新的时候，只需要将新的数组赋值到数据list中
-      // 上拉加载的时候，需要将新的数组添加到现有数据list中
-      if (refresh == true) {
-        list = _filterData(data);
-        if (data.length == 0) {
-          noResults = true;
-        } else {
-          noResults = false;
-        }
-      } else {
-        list.addAll(_filterData(data));
-      }
-
-      if (data.length == 0) {
-        finishLoad = true;
-      } else {
-        finishLoad = false;
-      }
-      if (reverseData && enableRefresh) {
-        list = _filterData(list.reversed);
-      }
-
-      if (headerLinkPagination != null && headerLinkPagination == true) {
-        if (response.headers.map.containsKey('link')) {
-          var link = response.headers['link'][0].split(',');
-          if (link.length < 2) {
-            finishLoad = true;
-          } else {
-            nextUrl = link[0].substring(1, link[0].indexOf('>'));
-          }
-        } else {
-          finishLoad = true;
+    //只有列表为空时，才显示错误，为了更好的用户体验
+    if (response == null && list.isEmpty) {
+      error = RuntimeConfig.error;
+      if (error is DioError) {
+        if (error.type == DioErrorType.CANCEL) {
+          return false;
         }
       }
       notifyListeners();
-    }).catchError((e) {
-      print(e);
-      print('error');
-    });
+      return false;
+    } else if (response is DioError) {
+      return false;
+    } else {
+      error = null;
+    }
+    var data = response.data;
+
+    if (cacheTimeInSeconds != null) {
+      Storage.saveIntWithAccount(
+          'cache_time' + url, DateTime.now().millisecondsSinceEpoch);
+      Storage.saveStringWithAccount('cache_data' + url, json.encode(data));
+    }
+
+    if (mapKey != null) {
+      data = data[mapKey];
+    }
+
+    if (dataHandler != null) {
+      data = dataHandler(data);
+    }
+
+    if (data.length > 0 && data[data.length - 1].isNotEmpty) {
+      lastCellId = data[data.length - 1]['id'];
+    }
+
+    // 下拉刷新的时候，只需要将新的数组赋值到数据list中
+    // 上拉加载的时候，需要将新的数组添加到现有数据list中
+    if (refresh == true) {
+      list = _filterData(data);
+      if (data.length == 0) {
+        noResults = true;
+      } else {
+        noResults = false;
+      }
+    } else {
+      list.addAll(_filterData(data));
+    }
+
+    if (data.length == 0) {
+      finishLoad = true;
+    } else {
+      finishLoad = false;
+    }
+    if (reverseData && enableRefresh) {
+      list = _filterData(list.reversed);
+    }
+
+    if (headerLinkPagination != null && headerLinkPagination == true) {
+      if (response.headers.map.containsKey('link')) {
+        var link = response.headers['link'][0].split(',');
+        if (link.length < 2) {
+          finishLoad = true;
+        } else {
+          nextUrl = link[0].substring(1, link[0].indexOf('>'));
+        }
+      } else {
+        finishLoad = true;
+      }
+    }
+    notifyListeners();
+
+    return true;
   }
 
   removeByIdWithAnimation(String id) {

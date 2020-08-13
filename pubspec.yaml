@@ -49,7 +49,6 @@ dependencies:
   flutter_local_notifications: ^1.4.4+2
   intl: ^0.16.1
   flutter_image_compress: ^0.7.0
-  outline_material_icons: ^0.1.1
   package_info: ^0.4.1
   crypto: ^2.1.4
   open_file: ^3.0.1

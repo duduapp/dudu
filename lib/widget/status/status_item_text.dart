@@ -48,7 +48,7 @@ class _StatusItemTextState extends State<StatusItemText> {
         ),
         if (widget.data.spoilerText.isNotEmpty)
           OutlineButton(
-            child: Text(showMore ? '折叠内容' : '显示更多'),
+            child: Text(showMore ? '折叠内容' : '显示更多',style: TextStyle(fontWeight: FontWeight.normal),),
             onPressed: _onShowMorePressed,
           ),
         if (showMore)

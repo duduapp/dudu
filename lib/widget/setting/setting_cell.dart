@@ -1,4 +1,5 @@
 import 'package:fastodon/models/provider/settings_provider.dart';
+import 'package:fastodon/widget/common/no_splash_ink_well.dart';
 import 'package:fastodon/widget/dialog/single_choice_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,7 @@ class SettingCell extends StatelessWidget {
       this.tail = const Icon(
         Icons.keyboard_arrow_right,
         size: 30,
+        color: Colors.grey,
       ),
       this.subTitle})
       : super(key: key);
@@ -44,12 +46,13 @@ class SettingCell extends StatelessWidget {
     }
 
     return Container(
-      color: Theme.of(context).primaryColor,
-      child: InkWell(
+
+      child: NoSplashInkWell(
         onTap: () => onPress(),
         child: Column(
           children: <Widget>[
             Ink(
+              color: Theme.of(context).primaryColor,
               height: subTitle == null ? 55 : 60,
               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Row(
@@ -64,8 +67,8 @@ class SettingCell extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 50),
-              child: Divider(height: 1.0),
+              padding: const EdgeInsets.only(left: 40),
+              child: Divider(height:0.5),
             )
           ],
         ),
@@ -198,9 +201,9 @@ class SettingCellText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return NoSplashInkWell(
       onTap: onPressed,
-      child: Container(
+      child: Ink(
         width: double.infinity,
         padding: EdgeInsets.all(16),
         color: Theme.of(context).primaryColor,

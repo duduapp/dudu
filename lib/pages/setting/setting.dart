@@ -13,7 +13,6 @@ import 'package:fastodon/pages/timeline/conversations_timeline.dart';
 import 'package:fastodon/public.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:outline_material_icons/outline_material_icons.dart';
 
 import '../../widget/setting/setting_cell.dart';
 import 'favourites_list.dart';

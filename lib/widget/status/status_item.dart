@@ -21,7 +21,7 @@ import 'package:nav_router/nav_router.dart';
 import '../other/avatar.dart';
 import 'status_item_action.dart';
 
-class StatusItem extends StatefulWidget {
+class StatusItem extends StatelessWidget {
   StatusItem(
       {Key key,
       @required this.item,
@@ -39,18 +39,13 @@ class StatusItem extends StatefulWidget {
   final bool primary; // 点击status详情页后该status
 
   @override
-  _StatusItemState createState() => _StatusItemState();
-}
-
-class _StatusItemState extends State<StatusItem> {
-  @override
   Widget build(BuildContext context) {
-    if (widget.subStatus != null && widget.subStatus) {
+    if (subStatus != null && subStatus) {
       return Column(children: [
         NoSplashInkWell(
-          onTap: _onStatusClicked,
-          onLongPress: () => StatusActionUtil.showBottomSheetAction(
-              context, widget.item, widget.subStatus),
+          onTap: () => _onStatusClicked(context),
+          onLongPress: () =>
+              StatusActionUtil.showBottomSheetAction(context, item, subStatus),
           child: Ink(
             color: Theme.of(context).primaryColor,
             padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
@@ -63,18 +58,18 @@ class _StatusItemState extends State<StatusItem> {
                   child: Avatar(
                     width: 40,
                     height: 40,
-                    account: widget.item.account,
+                    account: item.account,
                   ),
                 ),
                 Expanded(
                   child: Column(
                     children: <Widget>[
-                      SubStatusAccountW(status:widget.item),
-                      StatusItemContent(widget.item),
-                      StatusItemCard(widget.item),
+                      SubStatusAccountW(status: item),
+                      StatusItemContent(item),
+                      StatusItemCard(item),
                       StatusItemActionW(
-                        status: widget.item,
-                        subStatus: widget.subStatus,
+                        status: item,
+                        subStatus: subStatus,
                       )
                     ],
                   ),
@@ -88,12 +83,12 @@ class _StatusItemState extends State<StatusItem> {
         )
       ]);
     } else {
-      StatusItemData data = widget.item.reblog ?? widget.item;
+      StatusItemData data = item.reblog ?? item;
       return Column(children: [
         NoSplashInkWell(
-          onTap: widget.primary ? null :_onStatusClicked,
-          onLongPress: () => StatusActionUtil.showBottomSheetAction(
-              context, data, widget.subStatus),
+          onTap: primary ? null : () => _onStatusClicked(context),
+          onLongPress: () =>
+              StatusActionUtil.showBottomSheetAction(context, data, subStatus),
           child: Ink(
             color: Theme.of(context).primaryColor,
             padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
@@ -101,27 +96,27 @@ class _StatusItemState extends State<StatusItem> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                refHeader(),
+                refHeader(context),
                 StatusItemAccountW(
                   status: data,
-                  subStatus: widget.subStatus,
-                  primary: widget.primary,
+                  subStatus: subStatus,
+                  primary: primary,
                 ),
 //                StatusItemAccount(data.account,
-//                    createdAt: widget.primary ? null : data.createdAt),
+//                    createdAt: primary ? null : data.createdAt),
                 StatusItemContent(
                   data,
-                  primary: widget.primary,
+                  primary: primary,
                 ),
                 StatusItemCard(data),
-                // if (widget.primary) StatusItemPrimaryBottom(data),
+                // if (primary) StatusItemPrimaryBottom(data),
                 StatusItemActionW(
                   status: data,
-                  subStatus: widget.subStatus,
+                  subStatus: subStatus,
                 )
 //                StatusItemAction(
 //                  item: data,
-//                  subStatus: widget.subStatus,
+//                  subStatus: subStatus,
 //                ),
               ],
             ),
@@ -134,8 +129,8 @@ class _StatusItemState extends State<StatusItem> {
     }
   }
 
-  _onStatusClicked() async {
-    var res = await AppNavigate.push(StatusDetail(widget.item));
+  _onStatusClicked(BuildContext context) async {
+    var res = await AppNavigate.push(StatusDetail(item));
     if (res is Map && res.containsKey('operation')) {
       switch (res['operation']) {
         case 'mute':
@@ -154,19 +149,19 @@ class _StatusItemState extends State<StatusItem> {
     }
   }
 
-  Widget refHeader() {
-    IconData icon = widget.refIcon;
-    String str = widget.refString;
+  Widget refHeader(BuildContext context) {
+    IconData icon = refIcon;
+    String str = refString;
 
-    if (widget.item.reblog != null) {
+    if (item.reblog != null) {
       icon = Icons.repeat;
-      str = '${StringUtil.displayName(widget.item.account)} 转嘟了';
+      str = '${StringUtil.displayName(item.account)} 转嘟了';
     }
 
     return (icon != null && str != null)
         ? InkWell(
             onTap: () => AppNavigate.push(UserProfile(
-              accountId: widget.refAccount?.id ?? widget.item.account.id,
+              accountId: refAccount?.id ?? item.account.id,
             )),
             child: Container(
               padding: EdgeInsets.only(top: 3, bottom: 8),
@@ -181,9 +176,9 @@ class _StatusItemState extends State<StatusItem> {
                   ),
                   TextWithEmoji(
                     text: str,
-                    emojis: widget.refAccount == null
-                        ? widget.item.account.emojis
-                        : widget.refAccount?.emojis ?? [],
+                    emojis: refAccount == null
+                        ? item.account.emojis
+                        : refAccount?.emojis ?? [],
                   )
                 ],
               ),

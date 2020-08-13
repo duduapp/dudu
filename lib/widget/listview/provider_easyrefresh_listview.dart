@@ -53,7 +53,7 @@ enum ListStatus {
 
 class _ProviderEasyRefreshListViewState
     extends State<ProviderEasyRefreshListView>
-    with AutomaticKeepAliveClientMixin {
+     {
   ScrollController _scrollController = ScrollController();
 
   EasyRefreshController _controller;
@@ -98,7 +98,7 @@ class _ProviderEasyRefreshListViewState
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+   // super.build(context);
 
     return Selector<SettingsProvider, String>(
       selector: (_, m) => m.get('text_scale'),

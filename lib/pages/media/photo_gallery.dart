@@ -88,7 +88,8 @@ class _PhotoGalleryState extends State<PhotoGallery> {
                       height: 30.0,
                       child: CircularProgressIndicator(
                         backgroundColor: Colors.transparent,
-                        valueColor: new AlwaysStoppedAnimation<Color>(Colors.white.withOpacity(0.5)),
+                        valueColor: new AlwaysStoppedAnimation<Color>(
+                            Colors.white.withOpacity(0.5)),
                         strokeWidth: 30,
                         value: event == null
                             ? 0
@@ -125,7 +126,9 @@ class _PhotoGalleryState extends State<PhotoGallery> {
     var item = widget.galleryItems[index];
     return PhotoViewGalleryPageOptions(
       imageProvider: CachedNetworkImageProvider(item.url),
-      heroAttributes: PhotoViewHeroAttributes(tag: item.id),
+      heroAttributes: PhotoViewHeroAttributes(
+          tag: item.id,),
+
 //      child: Container(
 //        width: double.infinity,
 //        child: CachedNetworkImage(

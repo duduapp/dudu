@@ -12,9 +12,9 @@ class StatusItemPrimaryBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color splashColor = Theme.of(context).splashColor;
+    Color accentColor = Theme.of(context).accentColor;
     return DefaultTextStyle.merge(
-      style: TextStyle(color: splashColor),
+      style: TextStyle(color: accentColor),
       child: Padding(
         padding: const EdgeInsets.only(top: 15),
         child: Row(
@@ -35,7 +35,7 @@ class StatusItemPrimaryBottom extends StatelessWidget {
             InkWell(
                 child: Text(
                   data.application.name,
-                  style: TextStyle(color: data.application.website != null ? Theme.of(context).buttonColor: splashColor),
+                  style: TextStyle(color: data.application.website != null ? Theme.of(context).buttonColor: accentColor),
                 ),
                 onTap: data.application.website != null
                     ? () => AppNavigate.push(

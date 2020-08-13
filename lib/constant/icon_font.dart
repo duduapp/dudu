@@ -70,4 +70,12 @@ class IconFont {
   static const IconData at = IconData(0xe65c,fontFamily: 'IconFont');
 
   static const IconData follow = IconData(0xe67c,fontFamily: 'IconFont');
+
+  static const IconData delete = IconData(0xe65f,fontFamily: 'IconFont');
+
+  static const IconData volumeUp = IconData(0xe85c,fontFamily: 'IconFont');
+
+  static const IconData clear = IconData(0xe7c8,fontFamily: 'IconFont');
+
+  static const IconData expandMore = IconData(0xe633,fontFamily: 'IconFont');
 }

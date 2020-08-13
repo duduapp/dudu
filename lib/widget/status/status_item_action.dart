@@ -150,7 +150,7 @@ class _StatusItemActionState extends State<StatusItemAction> {
   @override
   Widget build(BuildContext context) {
     OwnerAccount myAccount = LoginedUser().account;
-    var splashColor = Theme.of(context).splashColor;
+    var splashColor = Theme.of(context).accentColor;
     return Container(
       height: 38,
       child: Row(

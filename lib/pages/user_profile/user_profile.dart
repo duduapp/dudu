@@ -28,7 +28,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
-import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../setting/model/relation_ship.dart';
@@ -150,12 +149,12 @@ class _UserProfileState extends State<UserProfile>
   Widget headerImage(BuildContext context) {
     if (_account == null) {
       return Container(
-        color: Theme.of(context).splashColor,
+        color: Theme.of(context).accentColor,
         height: 200,
       );
     }
     return Container(
-      color: Theme.of(context).splashColor,
+      color: Theme.of(context).accentColor,
       child: CachedNetworkImage(
         height: 200,
         width: ScreenUtil.width(context),

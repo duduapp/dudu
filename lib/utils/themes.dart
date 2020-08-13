@@ -15,7 +15,7 @@ class ThemeUtil {
       backgroundColor: Color.fromRGBO(238, 238, 238, 1),
       buttonColor: Colors.blue,
       bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
-      splashColor: Colors.grey[600],
+      splashColor: Colors.transparent,
       accentColor: Colors.grey[600],
       bottomAppBarColor: Color.fromRGBO(246, 246, 246, 1),
       scaffoldBackgroundColor: Color.fromRGBO(238, 238, 238, 1),
@@ -35,7 +35,7 @@ class ThemeUtil {
         backgroundColor: Color.fromRGBO(21, 21, 21, 1),
         appBarTheme:
         AppBarTheme(color: Color.fromRGBO(30, 30, 30, 1), elevation: 1.0),
-        splashColor: Colors.grey[800],
+        splashColor: Colors.transparent,
         scaffoldBackgroundColor: Color.fromRGBO(21, 21, 21, 1),
         buttonColor: Colors.blue //Colors.grey[800],
 

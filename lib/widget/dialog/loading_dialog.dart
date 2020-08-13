@@ -2,7 +2,6 @@ import 'package:fastodon/constant/icon_font.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:outline_material_icons/outline_material_icons.dart';
 
 class LoadingDialog extends StatelessWidget {
   final String text;

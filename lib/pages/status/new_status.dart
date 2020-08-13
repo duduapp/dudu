@@ -23,7 +23,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +47,7 @@ class _NewStatusState extends State<NewStatus> {
   final TextEditingController _warningController = new TextEditingController();
   OwnerAccount _myAcc;
   bool _hasWarning = false;
-  Icon _articleRange;
+  Icon _articleRange = Icon(IconFont.earth,size: 26,);
   String _visibility = 'public';
   List<String> images = [];
   Map<String, String> imageTitles = {};

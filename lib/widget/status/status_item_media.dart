@@ -371,7 +371,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
     }
 //    Navigator.of(context).push(
 //      PageRouteBuilder(
-//        transitionDuration: Duration(milliseconds: 2000),
+//        transitionDuration: Duration(milliseconds: 800),
 //        pageBuilder: (
 //            BuildContext context,
 //            Animation<double> animation,

@@ -1,3 +1,4 @@
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/pages/webview/inner_browser.dart';
@@ -82,9 +83,9 @@ class StatusItemAccountW extends StatelessWidget {
             splashColor: Colors.transparent,
             padding: EdgeInsets.all(0),
             icon: Icon(
-              Icons.expand_more,
+              IconFont.expandMore,
               color: Theme.of(context).accentColor,
-              size: 30,
+              size: 20,
             ),
           ),
         )
