@@ -112,6 +112,7 @@ class CommonBlockList extends StatelessWidget {
           ),
         builder: (context, snapshot) {
           return ProviderEasyRefreshListView(
+            useAnimatedList: true,
        //     triggerRefreshEvent: [refreshEvent],
           );
         }

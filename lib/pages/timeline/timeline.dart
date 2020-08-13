@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../widget/other/search.dart' as customSearch;
 
@@ -30,7 +31,7 @@ class Timeline extends StatefulWidget {
 
 class _TimelineState extends State<Timeline> with AutomaticKeepAliveClientMixin{
   ScrollController _scrollController = ScrollController();
-  EasyRefreshController refreshController = EasyRefreshController();
+  RefreshController refreshController = RefreshController(initialRefresh: false);
 
   @override
   void initState() {
@@ -114,7 +115,7 @@ class _TimelineState extends State<Timeline> with AutomaticKeepAliveClientMixin{
         return ProviderEasyRefreshListView(
           type: widget.type,
           scrollController: _scrollController,
-          controller: refreshController,
+          refreshController: refreshController,
         );
       }),
     );

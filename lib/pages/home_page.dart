@@ -130,16 +130,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
               if (index == _tabIndex) {
                 switch (index) {
                   case 0:
-                    SettingsProvider().homeProvider.refreshController.callRefresh();
+                    SettingsProvider().homeProvider.refreshController.requestRefresh(duration: const Duration(milliseconds: 100));
                     break;
                   case 1:
-                    SettingsProvider().localProvider.refreshController.callRefresh();
+                    SettingsProvider().localProvider.refreshController.requestRefresh(duration: const Duration(milliseconds: 100));
                     break;
                   case 2:
-                    SettingsProvider().federatedProvider.refreshController.callRefresh();
+                    SettingsProvider().federatedProvider.refreshController.requestRefresh(duration: const Duration(milliseconds: 100));
                     break;
                   case 3:
-                    SettingsProvider().notificationProvider.refreshController.callRefresh();
+                    SettingsProvider().notificationProvider.refreshController.requestRefresh(duration: const Duration(milliseconds: 100));
                     break;
                 }
               } else {

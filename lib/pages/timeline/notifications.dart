@@ -15,6 +15,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../widget/other/follow_cell.dart';
 
@@ -26,7 +27,7 @@ class Notifications extends StatefulWidget {
 class _NotificationsState extends State<Notifications>
     with AutomaticKeepAliveClientMixin {
     ResultListProvider provider;
-    EasyRefreshController refreshController = EasyRefreshController();
+    RefreshController refreshController = RefreshController(initialRefresh: false);
 
 
   List displayType;
@@ -138,7 +139,7 @@ class _NotificationsState extends State<Notifications>
               child: ChangeNotifierProvider<ResultListProvider>.value(
                 value: provider,
                 child: ProviderEasyRefreshListView(
-                  controller: refreshController,
+                  refreshController: refreshController,
                 ),
               ),
             )

@@ -9,7 +9,7 @@ class StatusItemContent extends StatelessWidget {
   final StatusItemData data;
   final bool primary;
 
-  StatusItemContent(this.data,{this.primary = false});
+  const StatusItemContent(this.data,{this.primary = false});
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[

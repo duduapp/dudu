@@ -52,6 +52,7 @@ dependencies:
   package_info: ^0.4.1
   crypto: ^2.1.4
   open_file: ^3.0.1
+  pull_to_refresh: ^1.6.1
 
 
 

@@ -22,7 +22,7 @@ import '../other/avatar.dart';
 import 'status_item_action.dart';
 
 class StatusItem extends StatelessWidget {
-  StatusItem(
+  const StatusItem(
       {Key key,
       @required this.item,
       this.refIcon,

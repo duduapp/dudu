@@ -9,6 +9,7 @@ import 'package:fastodon/utils/request.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 typedef ResultListDataHandler = Function(dynamic data);
 typedef RowBuilder = Function(int idx, List data, ResultListProvider provider);
@@ -39,7 +40,7 @@ class ResultListProvider extends ChangeNotifier {
   CancelToken token = CancelToken();
   final String tag;
 
-  EasyRefreshController refreshController;
+  RefreshController refreshController;
 
   /// map key 的优先级高于 data handler
   ResultListProvider(
@@ -122,6 +123,7 @@ class ResultListProvider extends ChangeNotifier {
       }
     }
   }
+
 
   Future<void> load() async {
     if (headerLinkPagination != null && headerLinkPagination == true) {
@@ -246,15 +248,21 @@ class ResultListProvider extends ChangeNotifier {
     if (idx == -1) {
       return;
     }
-    listKey?.currentState?.removeItem(idx, (context, animation) {
-      var copyList = List.from(list);
+
+    if (listKey != null) {
+      listKey?.currentState?.removeItem(idx, (context, animation) {
+        var copyList = List.from(list);
+        list.removeWhere((element) => element is Map && element['id'] == id);
+        return SizeTransition(
+          axis: Axis.vertical,
+          sizeFactor: animation,
+          child: buildRow(idx, copyList, this),
+        );
+      });
+    } else {
       list.removeWhere((element) => element is Map && element['id'] == id);
-      return SizeTransition(
-        axis: Axis.vertical,
-        sizeFactor: animation,
-        child: buildRow(idx, copyList, this),
-      );
-    });
+      notifyListeners();
+    }
   }
 
   removeWhere(Function where) {
@@ -264,15 +272,20 @@ class ResultListProvider extends ChangeNotifier {
 
   removeByValueWithAnimation(dynamic value) {
     var idx = list.indexOf(value);
-    listKey?.currentState?.removeItem(idx, (context, animation) {
-      var copyList = List.from(list);
+    if (listKey != null) {
+      listKey?.currentState?.removeItem(idx, (context, animation) {
+        var copyList = List.from(list);
+        list.remove(value);
+        return SizeTransition(
+          axis: Axis.vertical,
+          sizeFactor: animation,
+          child: buildRow(idx, copyList, this),
+        );
+      });
+    } else {
       list.remove(value);
-      return SizeTransition(
-        axis: Axis.vertical,
-        sizeFactor: animation,
-        child: buildRow(idx, copyList, this),
-      );
-    });
+      notifyListeners();
+    }
   }
 
   update(dynamic data) {
@@ -295,7 +308,10 @@ class ResultListProvider extends ChangeNotifier {
       notifyListeners();
     }
     list.insert(0, data);
+    if (listKey != null)
     listKey?.currentState?.insertItem(0);
+    else
+      notifyListeners();
   }
 
   _indexOfId(String id) {
