@@ -137,7 +137,7 @@ class StatusItemActionW extends StatelessWidget {
                     dotSecondaryColor: Colors.blue[300]),
                 circleColor:
                     CircleColor(start: Colors.blue[300], end: Colors.blue[700]),
-                onTap: (isLiked) => StatusActionUtil.reblog(isLiked, status),
+                onTap: (isLiked) => StatusActionUtil.reblog(isLiked, status,context),
               ),
             SizedBox(width: 10,),
             LikeButton(
@@ -187,7 +187,7 @@ class StatusItemActionW extends StatelessWidget {
                       );
               },
               isLiked: status.favourited,
-              onTap: (isLiked) => StatusActionUtil.favourite(isLiked, status),
+              onTap: (isLiked) => StatusActionUtil.favourite(isLiked, status ,context),
             ),
           ],
         ),

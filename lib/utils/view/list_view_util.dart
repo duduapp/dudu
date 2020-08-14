@@ -68,7 +68,11 @@ class ListViewUtil {
 
   static deleteStatus({BuildContext context, StatusItemData status}) async{
     var provider = Provider.of<ResultListProvider>(context, listen: false);
-    provider.removeByIdWithAnimation(status.id);
+    if (provider.tag == 'conversation') {
+      provider.removeWhere((e) => e['last_status']['id'] == status.id);
+    } else {
+      provider.removeByIdWithAnimation(status.id);
+    }
     var res = await StatusApi.remove(status.id);
     if (res != null) {
       Future.delayed(Duration(seconds: 1), () {

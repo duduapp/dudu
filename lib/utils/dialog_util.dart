@@ -10,7 +10,7 @@ class DialogUtils {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIos: 1,
-        backgroundColor: Colors.black,
+        backgroundColor: Theme.of(navGK.currentContext).accentColor.withOpacity(0.8),
         textColor: Colors.white,
         fontSize: 14.0);
   }

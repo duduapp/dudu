@@ -70,6 +70,10 @@ class _PhotoGalleryState extends State<PhotoGallery> {
               scrollPhysics: const BouncingScrollPhysics(),
               builder: _buildItem,
               itemCount: widget.galleryItems.length,
+              loadFailedChild: Container(
+                color: Colors.black,
+                child: Center(child: Text('图片加载出现错误',style: TextStyle(fontSize:16,color: Colors.white),),),
+              ),
               loadingBuilder: (context, event) => Stack(
                 children: [
                   Container(
@@ -116,8 +120,13 @@ class _PhotoGalleryState extends State<PhotoGallery> {
   downloadMedia() async {
     var item = widget.galleryItems[currentIndex];
     DialogUtils.toastDownloadInfo('正在下载中...');
-    var response = await Dio()
-        .get(item.url, options: Options(responseType: ResponseType.bytes));
+    Response response;
+    try {
+      response = await Dio()
+          .get(item.url, options: Options(responseType: ResponseType.bytes));
+    } catch (e) {
+      return;
+    }
     final result =
         await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
   }

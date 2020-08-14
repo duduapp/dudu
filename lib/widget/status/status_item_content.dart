@@ -9,12 +9,13 @@ class StatusItemContent extends StatelessWidget {
   final StatusItemData data;
   final bool primary;
 
-  const StatusItemContent(this.data,{this.primary = false});
+  StatusItemContent(this.data,{this.primary = false});
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
       StatusItemText(data,navigateToDetail: !primary,),
       StatusItemMedia(data),
+      if (data.poll != null)
       StatusItemPoll(data.poll)
     ],);
   }

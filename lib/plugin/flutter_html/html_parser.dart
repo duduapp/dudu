@@ -40,12 +40,12 @@ class LinkTextSpan extends TextSpan {
       this.url,
       String text,
       OnLinkTap onLinkTap,
-      List<TextSpan> children,
+      List<InlineSpan> children,
       dom.Node node})
       : super(
             style: style,
             text: text,
-            children: children ?? <TextSpan>[],
+            children: children ?? <InlineSpan>[],
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 onLinkTap(url, node);
@@ -385,7 +385,7 @@ class HtmlRichTextParser extends StatelessWidget {
       // create a span by default
       TextSpan span = TextSpan(
           text: finalText,
-          children: <TextSpan>[],
+          children: <InlineSpan>[],
           style: parseContext.childStyle);
 
       // in this class, a ParentElement must be a BlockText, LinkTextSpan, Row, Column, TextSpan
@@ -618,7 +618,7 @@ class HtmlRichTextParser extends StatelessWidget {
                   style: _linkStyle,
                   url: url,
                   onLinkTap: onLinkTap,
-                  children: <TextSpan>[],
+                  children: <InlineSpan>[],
                   node: node);
               if (parseContext.parentElement is TextSpan) {
                 nextContext.parentElement.children.add(span);
@@ -677,7 +677,7 @@ class HtmlRichTextParser extends StatelessWidget {
                     ? FontWeight.bold
                     : FontWeight.normal));
             RichText text =
-                RichText(text: TextSpan(text: '', children: <TextSpan>[]));
+                RichText(text: TextSpan(text: '', children: <InlineSpan>[]));
             Expanded cell = Expanded(
               flex: colspan,
               child: Container(padding: EdgeInsets.all(1.0), child: text),
@@ -707,7 +707,7 @@ class HtmlRichTextParser extends StatelessWidget {
             RichText text = RichText(
                 textAlign: TextAlign.center,
                 textScaleFactor: 1.2,
-                text: TextSpan(text: '', children: <TextSpan>[]));
+                text: TextSpan(text: '', children: <InlineSpan>[]));
             Expanded cell = Expanded(
               child: Container(padding: EdgeInsets.all(2.0), child: text),
             );
@@ -766,7 +766,7 @@ class HtmlRichTextParser extends StatelessWidget {
                   child: RichText(
                       text: TextSpan(
                     text: node.attributes['alt'],
-                    children: <TextSpan>[],
+                    children: <InlineSpan>[],
                   ))));
             }
             break;
@@ -785,7 +785,7 @@ class HtmlRichTextParser extends StatelessWidget {
                 text: TextSpan(
                   text: '',
                   style: nextContext.childStyle,
-                  children: <TextSpan>[],
+                  children: <InlineSpan>[],
                 ),
               ),
               leadingChar: '$leadingChar  ',

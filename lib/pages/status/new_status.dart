@@ -66,8 +66,8 @@ class _NewStatusState extends State<NewStatus> {
   @override
   void initState() {
     _controller = RichTextController({
-      RegExp(r"\B#[a-zA-Z0-9]+\b"): TextStyle(color: AppConfig.buttonColor),
-      RegExp(r"\B@[@\.a-zA-Z0-9]+\b"): TextStyle(color: AppConfig.buttonColor)
+      RegExp(r"\B#[a-zA-Z0-9-_]+\b"): TextStyle(color: AppConfig.buttonColor),
+      RegExp(r"\B@[@\.a-zA-Z0-9-_]+\b"): TextStyle(color: AppConfig.buttonColor)
     }, onMatch: (List<String> matches) {});
     super.initState();
     // 隐藏登录弹出页
@@ -75,8 +75,6 @@ class _NewStatusState extends State<NewStatus> {
 
     if (widget.replyTo != null) {
       replyToId = widget.replyTo.id;
-    }
-    if (widget.replyTo != null) {
       _controller.text = getMentionString();
       counter = _controller.text.length;
     }
@@ -84,7 +82,8 @@ class _NewStatusState extends State<NewStatus> {
     if (widget.scheduleInfo != null) {
       _loadFromScheduleInfo(widget.scheduleInfo);
     } else {
-      _loadFromDraft();
+      if (widget.replyTo == null)
+        _loadFromDraft();
     }
 
     if (widget.prepareText != null) {
@@ -718,7 +717,7 @@ class _NewStatusState extends State<NewStatus> {
                           IconFont.time,
                           color: scheduledAt != null
                               ? Colors.blue
-                              : Colors.black,
+                              : null,
                         ),
                       ),
                       SizedIconButton(
@@ -733,8 +732,13 @@ class _NewStatusState extends State<NewStatus> {
                   child: SizedBox(
                     height: keyboardHeight,
                     child: EmojiKeyboard(
-                        onChoose: (e) => _controller.text =
-                            _controller.text + ' :' + e + ':'),
+                        onChoose: (e) {
+                          setState(() {
+                            _controller.text =
+                                _controller.text + ' :' + e + ':';
+                            counter = _controller.text.length;
+                          });
+                        }),
                   ),
                 )
               ]),

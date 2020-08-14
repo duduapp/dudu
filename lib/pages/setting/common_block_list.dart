@@ -58,7 +58,7 @@ class CommonBlockList extends StatelessWidget {
         children: <Widget>[
           Text(dynamic[idx]),
           Spacer(),
-          IconButton(icon: Icon(Icons.volume_up),
+          IconButton(icon: Icon(IconFont.volumeUp),
             onPressed: () async{
               var res = await AccountsApi.unBlockDomain(dynamic[idx]);
               if (res != null) {

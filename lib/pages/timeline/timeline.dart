@@ -29,7 +29,7 @@ class Timeline extends StatefulWidget {
   _TimelineState createState() => _TimelineState();
 }
 
-class _TimelineState extends State<Timeline> with AutomaticKeepAliveClientMixin{
+class _TimelineState extends State<Timeline> {
   ScrollController _scrollController = ScrollController();
   RefreshController refreshController = RefreshController(initialRefresh: false);
 
@@ -45,7 +45,6 @@ class _TimelineState extends State<Timeline> with AutomaticKeepAliveClientMixin{
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     var title;
     var url;
     switch (widget.type) {
@@ -121,6 +120,5 @@ class _TimelineState extends State<Timeline> with AutomaticKeepAliveClientMixin{
     );
   }
 
-  @override
-  bool get wantKeepAlive => true;
+
 }

@@ -32,6 +32,15 @@ class Avatar extends StatelessWidget {
       onTap: navigateToDetail ? () => AppNavigate.push(UserProfile(accountId: account.id,)) : null,
       child: ClipRRect(
         child: CachedNetworkImage(
+            placeholder: (context,string) {
+              return Image(
+                width: width,
+                height: height,
+                image: AssetImage(
+                    'image/missing.png'
+                ),
+              );
+            },
             imageUrl: account.avatar,
             width: width,
             height: height,

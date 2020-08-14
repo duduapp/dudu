@@ -150,7 +150,7 @@ class _StatusDetailState extends State<StatusDetail> {
 
     Overlay.of(context).insert(overlayEntry);
     overlayRemoved = false;
-    Future.delayed(Duration(milliseconds: 2000),() {
+    Future.delayed(Duration(milliseconds: 1000),() {
       _removeOverlay();
     });
   }

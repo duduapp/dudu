@@ -30,6 +30,7 @@ class ProviderEasyRefreshListView extends StatefulWidget {
       this.enableLoad = true,
       this.addToSliverCount = 0,
       this.afterBuild,
+        this.firstRefresh = false,
       this.useAnimatedList = false})
       : super(key: key);
   final TimelineType type;
@@ -44,6 +45,7 @@ class ProviderEasyRefreshListView extends StatefulWidget {
   final int addToSliverCount;
   final Function afterBuild;
   final bool useAnimatedList;
+  final bool firstRefresh;
   final RefreshController refreshController;
   @override
   _ProviderEasyRefreshListViewState createState() =>
@@ -60,7 +62,7 @@ enum ListStatus {
 }
 
 class _ProviderEasyRefreshListViewState
-    extends State<ProviderEasyRefreshListView> {
+    extends State<ProviderEasyRefreshListView> with AutomaticKeepAliveClientMixin{
   ScrollController _scrollController = ScrollController();
 
   EasyRefreshController _controller;
@@ -68,6 +70,7 @@ class _ProviderEasyRefreshListViewState
   bool noResults = false;
   bool finishLoad = false;
   bool finishRefresh = false;
+  bool firstRefreshed = false;
   String nextUrl; // 用header link 时分页有用
   int textScale = 1;
   Function onTextScaleChanged;
@@ -108,7 +111,7 @@ class _ProviderEasyRefreshListViewState
 
   @override
   Widget build(BuildContext context) {
-    // super.build(context);
+     super.build(context);
 
     return Selector<SettingsProvider, String>(
       selector: (_, m) => m.get('text_scale'),
@@ -141,9 +144,15 @@ class _ProviderEasyRefreshListViewState
               _refreshController.loadNoData();
             }
 
-            if (provider.noResults) {
-              return EmptyView();
+
+            if (!firstRefreshed && widget.firstRefresh) {
+              firstRefreshed = true;
+              WidgetsBinding.instance.addPostFrameCallback((_){
+                provider.refresh(showLoading: true);
+              });
+
             }
+
             // 初次可能从Provider 里面请求
             return provider.isLoading
                 ? LoadingView()
@@ -151,7 +160,7 @@ class _ProviderEasyRefreshListViewState
                     onNotification: (ScrollNotification notification) {
                       double progress = notification.metrics.maxScrollExtent -
                           notification.metrics.pixels;
-                      if (progress < 1000 &&
+                      if (progress < 1500 &&
                           provider.list.length != requestLoadSize &&
                           provider.enableLoad) {
                         requestLoadSize = provider.list.length;
@@ -162,7 +171,7 @@ class _ProviderEasyRefreshListViewState
                     },
                     child: Scrollbar(
                       child: SmartRefresher(
-                        primary: false,
+                        primary: widget.scrollController == null ? true : false,
                         controller: _refreshController,
                         header: ClassicHeader(
                           releaseText: '释放刷新',
@@ -176,12 +185,13 @@ class _ProviderEasyRefreshListViewState
                         footer: ClassicFooter(
                           loadingText: '加载中...',
                           loadingIcon: CupertinoActivityIndicator(),
-                          idleText: '上拉加载更多',
+                          idleText: '加载中...',
+                          idleIcon: CupertinoActivityIndicator(), // 自动加载，所以显示这个
                           canLoadingText: '释放加载更多',
                           noDataText: '',
                         ),
-                        enablePullDown: true,
-                        enablePullUp: true,
+                        enablePullDown: provider.finishRefresh ? false : true,
+                        enablePullUp: provider.finishLoad ? false : true,
                         scrollController: widget.scrollController,
                         cacheExtent: widget.cacheExtent ?? null,
                         onRefresh: () async {
@@ -192,7 +202,7 @@ class _ProviderEasyRefreshListViewState
                           await provider.load();
                           _refreshController.loadComplete();
                         },
-                        child: widget.useAnimatedList
+                        child: provider.noResults ? EmptyView():widget.useAnimatedList
                             ? CustomScrollView(
                                 slivers: [
                                   !widget.usingGrid
@@ -301,6 +311,5 @@ class _ProviderEasyRefreshListViewState
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }

@@ -1,5 +1,6 @@
 import 'package:fastodon/api/lists_api.dart';
 import 'package:fastodon/constant/api.dart';
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/pages/setting/lists/lists_add.dart';
 import 'package:fastodon/pages/setting/lists/lists_eidt.dart';
@@ -59,9 +60,10 @@ class _ListsPageState extends State<ListsPage> {
         onTap: () => AppNavigate.push(ListTimeline(list['id'])),
         child: Row(children: [
           Icon(
-            Icons.list,
+            IconFont.list,
             size: 25,
           ),
+          SizedBox(width: 5,),
           Text(
             list['title'],
             style: TextStyle(fontSize: 18),

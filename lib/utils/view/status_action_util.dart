@@ -18,9 +18,17 @@ import 'package:provider/provider.dart';
 import 'list_view_util.dart';
 
 class StatusActionUtil {
-  static Future<bool> reblog(bool isLiked, StatusItemData status) async {
+  static Future<bool> reblog(bool isLiked, StatusItemData status,BuildContext context) async {
     status.reblogged = !isLiked;
     status.reblogsCount = status.reblogsCount + (!isLiked ? 1 : -1);
+
+    ResultListProvider provider = Provider.of<ResultListProvider>(context,listen: false);
+    provider.list.forEach((element) {
+      if (element['id'] == status.id) {
+        element['reblogged'] = !isLiked;
+        element['reblogs_count'] = element['reblogs_count'] + (!isLiked ? 1 : -1);
+      }
+    });
     if (isLiked) {
       StatusApi.unReblog(status.id);
       ListViewUtil.unreblogStatusInAllProvider(status);
@@ -32,10 +40,16 @@ class StatusActionUtil {
     return !isLiked;
   }
 
-  static Future<bool> favourite(bool isLiked, StatusItemData status) async {
+  static Future<bool> favourite(bool isLiked, StatusItemData status, BuildContext context) async {
     status.favourited = !isLiked;
     status.favouritesCount = status.favouritesCount + (!isLiked ? 1 : -1);
-
+    ResultListProvider provider = Provider.of<ResultListProvider>(context,listen: false);
+    provider.list.forEach((element) {
+      if (element['id'] == status.id) {
+        element['favourited'] = !isLiked;
+        element['favourites_count'] = element['favourites_count'] + (!isLiked ? 1 : -1);
+      }
+    });
     if (isLiked) {
       StatusApi.unfavourite(status.id);
       ListViewUtil.unfavouriteStatusInAllProvider(status);

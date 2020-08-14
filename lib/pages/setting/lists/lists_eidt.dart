@@ -94,7 +94,7 @@ class _ListsEditState extends State<ListsEdit> {
   }
 
   _removeAccount(OwnerAccount account) async{
-    await ListsApi.removeAccount(widget.id, account.id);
+    ListsApi.removeAccount(widget.id, account.id);
     setState(() {
       members.remove(account);
     });
@@ -102,7 +102,7 @@ class _ListsEditState extends State<ListsEdit> {
 
   _addAccount(OwnerAccount account) async{
 
-    await ListsApi.addAccount(widget.id, account.id);
+    ListsApi.addAccount(widget.id, account.id);
 
     setState(() {
       members.add(account);

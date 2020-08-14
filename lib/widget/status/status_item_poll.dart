@@ -25,13 +25,14 @@ class _StatusItemPollState extends State<StatusItemPoll> {
   Widget build(BuildContext context) {
     if (poll == null) {
       return Container();
+    } else {
+      return Container(
+        padding: EdgeInsets.only(bottom: 4),
+        child: poll.voted || poll.expired ? resultPoll() : votablePoll(),
+      );
     }
 
-    if (poll.voted || poll.expired) {
-      return resultPoll();
-    } else {
-      return votablePoll();
-    }
+
 
   }
 
@@ -91,27 +92,25 @@ class _StatusItemPollState extends State<StatusItemPoll> {
       });
 
 
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-        Column(children: rows,),
-        Container(
-          width: 150,
-          child: OutlineButton(
-            child: Text('投票'),
-            onPressed: vote,
-          ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+      Column(children: rows,),
+      Container(
+        width: 150,
+        child: OutlineButton(
+          child: Text('投票',style: TextStyle(color: Theme.of(context).buttonColor),),
+          onPressed: vote,
         ),
-          pollInfo()
-      ],),
-    );
+      ),
+        pollInfo()
+    ],);
   }
 
   vote() async{
     Map<String, dynamic> paramsMap = Map();
     paramsMap['choices'] = choices;
-    var response = await Request.post(url:'${Api.poll}/${poll.id}/votes',params: paramsMap,showDialog: false);
+    var response = await Request.post(url:'${Api.poll}/${poll.id}/votes',params: paramsMap,showDialog: true);
     Poll votedPoll = Poll.fromJson(response);
     if (votedPoll.id.isNotEmpty) {
       setState(() {

@@ -38,6 +38,13 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
       hideImage = true;
     else
       hideImage = false;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (SettingsProvider().get('always_show_sensitive')) {
+        setState(() {
+          hideImage = false;
+        });
+      }
+    });
     super.initState();
   }
 
@@ -45,6 +52,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   Widget build(BuildContext context) {
     bool showThumbnails =
         context.select<SettingsProvider, bool>((m) => m.get('show_thumbnails'));
+
     if (showThumbnails) {
       var mediaLength = widget.data.mediaAttachments.length;
       if (mediaLength == 1) {

@@ -53,7 +53,7 @@ class _CommonFilterListState extends State<CommonFilterList> {
                 )
               ],
             ),
-            body: ProviderEasyRefreshListView(),
+            body: ProviderEasyRefreshListView(useAnimatedList: true,),
           );
         });
   }

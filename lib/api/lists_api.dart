@@ -20,7 +20,7 @@ class ListsApi {
     var params = {
       'account_ids':[accountId]
     };
-    await Request.post(url: requestUrl,params: params);
+    await Request.post(url: requestUrl,params: params,showDialog: false);
   }
 
   static removeAccount(String listId,String accountId) async {
@@ -28,7 +28,7 @@ class ListsApi {
     var params = {
       'account_ids':[accountId]
     };
-    await Request.delete(url: requestUrl,params: params);
+    await Request.delete(url: requestUrl,params: params,showDialog: false);
   }
 
   static updateTitle(String listId,String newTitle) async{

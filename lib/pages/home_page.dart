@@ -45,6 +45,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     super.initState();
     UpdateTask.check();
     FilterUtil.getFiltersAndApply();
+
+    NotificationTask.enable();
+
     WidgetsBinding.instance.addObserver(this);
   }
 

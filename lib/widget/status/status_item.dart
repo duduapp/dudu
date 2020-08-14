@@ -22,7 +22,7 @@ import '../other/avatar.dart';
 import 'status_item_action.dart';
 
 class StatusItem extends StatelessWidget {
-  const StatusItem(
+  StatusItem(
       {Key key,
       @required this.item,
       this.refIcon,
@@ -130,7 +130,7 @@ class StatusItem extends StatelessWidget {
   }
 
   _onStatusClicked(BuildContext context) async {
-    var res = await AppNavigate.push(StatusDetail(item));
+    var res = await AppNavigate.push(StatusDetail(item.reblog ?? item));
     if (res is Map && res.containsKey('operation')) {
       switch (res['operation']) {
         case 'mute':

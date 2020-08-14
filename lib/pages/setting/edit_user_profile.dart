@@ -214,12 +214,13 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         TextField(
                           controller: nameController,
                           decoration: InputDecoration(hintText: '昵称',labelText: '昵称',helperText: '',counterText: '',enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Theme.of(context).textTheme.bodyText2.color)
                           ),focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).buttonColor))),
                           maxLength: 30,
                         ),
                         TextField(
                           controller: noteController,
-                          decoration: InputDecoration(hintText: '简介',labelText: '简介',enabledBorder: OutlineInputBorder(),focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).buttonColor))),
+                          decoration: InputDecoration(hintText: '简介',labelText: '简介',enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).textTheme.bodyText2.color)),focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).buttonColor))),
                           maxLength: 500,
                           maxLines: null,
                         ),

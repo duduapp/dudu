@@ -53,7 +53,7 @@ class IconFont {
 
   static const IconData eye = IconData(0xe630,fontFamily: 'IconFont');
 
-  static const IconData unlock = IconData(0xe6cf,fontFamily: 'IconFont');
+  static const IconData unlock = IconData(0xe657,fontFamily: 'IconFont');
 
   static const IconData lock = IconData(0xe6ba,fontFamily: 'IconFont');
 

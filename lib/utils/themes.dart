@@ -6,10 +6,10 @@ class ThemeUtil {
     return ThemeData(
       primaryColor: Colors.white,
       toggleableActiveColor: Colors.blue,
-      appBarTheme: AppBarTheme(
-          elevation: 1.0, color: Color.fromRGBO(252, 252, 252, 1)),
+      appBarTheme:
+          AppBarTheme(elevation: 1.0, color: Color.fromRGBO(252, 252, 252, 1)),
       dialogTheme: DialogTheme(),
-      popupMenuTheme: PopupMenuThemeData(color: Colors.white),
+      popupMenuTheme: PopupMenuThemeData(color: Color.fromRGBO(238, 238, 238, 1)),
       inputDecorationTheme:
           InputDecorationTheme(fillColor: Color.fromRGBO(240, 240, 240, 1)),
       backgroundColor: Color.fromRGBO(238, 238, 238, 1),
@@ -22,7 +22,6 @@ class ThemeUtil {
       buttonTheme: ButtonThemeData(
         buttonColor: Colors.blue,
         textTheme: ButtonTextTheme.primary,
-
       ),
     );
   }
@@ -30,16 +29,18 @@ class ThemeUtil {
   static ThemeData darkTheme(BuildContext context) {
     return ThemeData.dark().copyWith(
         primaryColor: Color.fromRGBO(30, 30, 30, 1),
-        accentColor: Colors.white,
-        toggleableActiveColor: Colors.white,
+        accentColor: Colors.grey[600],
+        textTheme: TextTheme(
+
+            bodyText2: TextStyle(color: Color.fromRGBO(211, 211, 211, 1)),),
+        toggleableActiveColor: Colors.blue,
         backgroundColor: Color.fromRGBO(21, 21, 21, 1),
         appBarTheme:
-        AppBarTheme(color: Color.fromRGBO(30, 30, 30, 1), elevation: 1.0),
+            AppBarTheme(color: Color.fromRGBO(30, 30, 30, 1), elevation: 1.0),
         splashColor: Colors.transparent,
         scaffoldBackgroundColor: Color.fromRGBO(21, 21, 21, 1),
         buttonColor: Colors.blue //Colors.grey[800],
 
-    );
+        );
   }
 }
-

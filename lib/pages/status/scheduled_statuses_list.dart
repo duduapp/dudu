@@ -36,6 +36,7 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
           builder: (context, snapshot) {
             providerContext = context;
             return ProviderEasyRefreshListView(
+              useAnimatedList: true,
               header: MaterialHeader(),
               //    triggerRefreshEvent: [EventBusKey.scheduledStatusDeleted,EventBusKey.scheduledStatusPublished],
             );

@@ -86,24 +86,24 @@ class _UserProfileState extends State<UserProfile>
           requestUrl: Api.UersArticle(widget.accountId, 'exclude_replies=true'),
           buildRow: ListViewUtil.statusRowFunction(),
           dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('status_'),
-          enableRefresh: false),
+          enableRefresh: false,),
       ResultListProvider(
           requestUrl: AccountsApi.accountStatusUrl(widget.accountId),
           buildRow: ListViewUtil.statusRowFunction(),
           dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('replies_'),
-          enableRefresh: false),
+          enableRefresh: false,firstRefresh: false),
       ResultListProvider(
         requestUrl: AccountsApi.accountStatusUrl(widget.accountId,
             param: 'pinned=true'),
         buildRow: ListViewUtil.statusRowFunction(),
         dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('pinned_'),
-        enableRefresh: false,
+        enableRefresh: false,firstRefresh: false,
       ),
       ResultListProvider(
           requestUrl: AccountsApi.accountStatusUrl(widget.accountId,
               param: 'only_media=true'),
           buildRow: _buildGridItem,
-          enableRefresh: false,
+          enableRefresh: false,firstRefresh: false,
           dataHandler: (data) {
             var handledData = [];
             for (var row in data) {
@@ -512,6 +512,7 @@ class _UserProfileState extends State<UserProfile>
                         child: Hero(
                           tag: 'user_avatar',
                           child: Avatar(
+                            navigateToDetail: false,
                             account: _account,
                           ),
                         ),
@@ -651,20 +652,25 @@ class _UserProfileState extends State<UserProfile>
             Key('tab1'),
             ChangeNotifierProvider<ResultListProvider>.value(
               value: providers[1],
-              child: ProviderEasyRefreshListView(),
+              child: ProviderEasyRefreshListView(firstRefresh: true,),
             )),
         extend.NestedScrollViewInnerScrollPositionKeyWidget(
             Key('tab2'),
             ChangeNotifierProvider<ResultListProvider>.value(
               value: providers[2],
-              child: ProviderEasyRefreshListView(),
+              child: ProviderEasyRefreshListView(firstRefresh: true,),
             )),
         extend.NestedScrollViewInnerScrollPositionKeyWidget(
             Key('tab3'),
             ChangeNotifierProvider<ResultListProvider>.value(
               value: providers[3],
-              child: ProviderEasyRefreshListView(
-                usingGrid: true,
+              child: Container(
+                key: PageStorageKey('tab3'),
+                child: ProviderEasyRefreshListView(
+                  useAnimatedList: true,
+                  usingGrid: true,
+                  firstRefresh: true,
+                ),
               ),
             )),
       ],

@@ -39,6 +39,7 @@ class ResultListProvider extends ChangeNotifier {
   final int cacheTimeInSeconds;
   CancelToken token = CancelToken();
   final String tag;
+  String lastRequestUrl = '';
 
   RefreshController refreshController;
 
@@ -55,6 +56,7 @@ class ResultListProvider extends ChangeNotifier {
       this.listenBlockEvent = false,
       this.onlyMedia = false,
       this.dataHandler,
+        bool firstRefresh = true,
       bool showLoading = true, // 给list 第一次赋值，刷新后用结果值
       this.cacheTimeInSeconds,
       this.tag}) {
@@ -73,6 +75,7 @@ class ResultListProvider extends ChangeNotifier {
       });
     }
 
+    if (firstRefresh)
     refresh(showLoading: showLoading);
   }
 
@@ -84,8 +87,12 @@ class ResultListProvider extends ChangeNotifier {
   }
 
   _filterData(List data) {
-    if (['home','notifications','thread'].contains(tag)) {
+    if (['home','thread'].contains(tag)) {
       return FilterUtil.filterData(data, tag);
+    }
+
+    if (tag == 'notifications') {
+      return FilterUtil.filterData(data, tag, mapKey: 'status');
     }
 
     if (['local','federated'].contains(tag)) {
@@ -129,7 +136,7 @@ class ResultListProvider extends ChangeNotifier {
     if (headerLinkPagination != null && headerLinkPagination == true) {
       if (nextUrl != null) {
        await _startRequest(nextUrl);
-        nextUrl = null;
+
       }
     } else {
       String appendOffset = "";
@@ -145,7 +152,14 @@ class ResultListProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> _startRequest(String url, {bool refresh}) async {
+  Future<bool> _startRequest(String url, {bool refresh = false}) async {
+    // 防止重复请求
+    if (url == lastRequestUrl && !refresh) {
+      return false;
+    } else {
+      lastRequestUrl = url;
+    }
+
     if (cacheTimeInSeconds != null) {
       int cacheTime = await Storage.getIntWithAccount('cache_time' + url);
       if (cacheTime != null) {
@@ -200,7 +214,7 @@ class ResultListProvider extends ChangeNotifier {
       data = dataHandler(data);
     }
 
-    if (data.length > 0 && data[data.length - 1].isNotEmpty) {
+    if (data.length > 0 && data[data.length - 1].isNotEmpty && !headerLinkPagination) {
       lastCellId = data[data.length - 1]['id'];
     }
 
@@ -231,6 +245,7 @@ class ResultListProvider extends ChangeNotifier {
         var link = response.headers['link'][0].split(',');
         if (link.length < 2) {
           finishLoad = true;
+          nextUrl = null;
         } else {
           nextUrl = link[0].substring(1, link[0].indexOf('>'));
         }
@@ -242,6 +257,8 @@ class ResultListProvider extends ChangeNotifier {
 
     return true;
   }
+
+
 
   removeByIdWithAnimation(String id) {
     var idx = _indexOfId(id);

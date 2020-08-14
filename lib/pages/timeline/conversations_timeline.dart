@@ -17,6 +17,7 @@ class ConversationTimeline extends StatelessWidget {
       ),
       body: ChangeNotifierProvider<ResultListProvider>(
         create: (context) => ResultListProvider(
+          tag: 'conversation',
           requestUrl: TimelineApi.conversations,
           buildRow: _buildRow,
 
