@@ -53,7 +53,7 @@ class _StatusItemPollState extends State<StatusItemPoll> {
       poll.options.asMap().forEach((key, value) {
         if (poll.multiple) {
           rows.add(CheckboxListTile(
-            title: Text(value['title']),
+            title: Text(value['title'],style: TextStyle(fontSize: 14),),
             value: choices.contains(key),
             onChanged: (value) {
               if (value) {
@@ -74,7 +74,7 @@ class _StatusItemPollState extends State<StatusItemPoll> {
 
           rows.add(RadioListTile(
             value: key.toString(),
-            title: Text(value['title']),
+            title: Text(value['title'],style: TextStyle(fontSize: 14),),
             groupValue: radioGroup,
             onChanged: (value) {
               setState(() {

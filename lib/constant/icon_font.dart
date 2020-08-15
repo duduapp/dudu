@@ -78,4 +78,6 @@ class IconFont {
   static const IconData clear = IconData(0xe7c8,fontFamily: 'IconFont');
 
   static const IconData expandMore = IconData(0xe633,fontFamily: 'IconFont');
+
+  static const IconData personAdd = IconData(0xe60d,fontFamily: 'IconFont');
 }

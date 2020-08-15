@@ -63,7 +63,7 @@ class StatusItemAccount extends StatelessWidget {
                         maxLines: 1,
                         style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.normal,
                             color:
                             Theme.of(context).textTheme.bodyText1.color),
                       ),

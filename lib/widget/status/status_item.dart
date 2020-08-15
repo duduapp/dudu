@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/json_serializable/owner_account.dart';
 import 'package:fastodon/pages/status/status_detail.dart';
@@ -154,7 +155,7 @@ class StatusItem extends StatelessWidget {
     String str = refString;
 
     if (item.reblog != null) {
-      icon = Icons.repeat;
+      icon = IconFont.reblog;
       str = '${StringUtil.displayName(item.account)} 转嘟了';
     }
 
@@ -170,11 +171,13 @@ class StatusItem extends StatelessWidget {
                   Icon(
                     icon,
                     color: Theme.of(context).buttonColor,
+                    size: 18,
                   ),
                   SizedBox(
                     width: 5,
                   ),
                   TextWithEmoji(
+                    style: TextStyle(fontSize: 12.5,color: Theme.of(context).textTheme.bodyText1.color),
                     text: str,
                     emojis: refAccount == null
                         ? item.account.emojis

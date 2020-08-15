@@ -1,3 +1,4 @@
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/json_serializable/notificate_item.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/widget/other/avatar.dart';
@@ -27,7 +28,7 @@ class FollowCell extends StatelessWidget {
               children: <Widget>[
                 Container(
                   child: Center(
-                    child: Icon(Icons.person_add,color: Theme.of(context).buttonColor,),
+                    child: Icon(IconFont.personAdd,color: Theme.of(context).buttonColor,),
                   ),
                 ),
                 SizedBox(width: 5,),

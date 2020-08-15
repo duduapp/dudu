@@ -14,6 +14,7 @@ import 'package:fastodon/pages/setting/edit_user_profile.dart';
 import 'package:fastodon/pages/status/new_status.dart';
 import 'package:fastodon/pages/user_profile/user_follewers.dart';
 import 'package:fastodon/pages/user_profile/user_follewing.dart';
+import 'package:fastodon/pages/user_profile/user_report.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/dialog_util.dart';
 import 'package:fastodon/utils/view/list_view_util.dart';
@@ -83,27 +84,31 @@ class _UserProfileState extends State<UserProfile>
       });
     providers.addAll([
       ResultListProvider(
-          requestUrl: Api.UersArticle(widget.accountId, 'exclude_replies=true'),
-          buildRow: ListViewUtil.statusRowFunction(),
-          dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('status_'),
-          enableRefresh: false,),
+        requestUrl: Api.UersArticle(widget.accountId, 'exclude_replies=true'),
+        buildRow: ListViewUtil.statusRowFunction(),
+        dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('status_'),
+        enableRefresh: false,
+      ),
       ResultListProvider(
           requestUrl: AccountsApi.accountStatusUrl(widget.accountId),
           buildRow: ListViewUtil.statusRowFunction(),
           dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('replies_'),
-          enableRefresh: false,firstRefresh: false),
+          enableRefresh: false,
+          firstRefresh: false),
       ResultListProvider(
         requestUrl: AccountsApi.accountStatusUrl(widget.accountId,
             param: 'pinned=true'),
         buildRow: ListViewUtil.statusRowFunction(),
         dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('pinned_'),
-        enableRefresh: false,firstRefresh: false,
+        enableRefresh: false,
+        firstRefresh: false,
       ),
       ResultListProvider(
           requestUrl: AccountsApi.accountStatusUrl(widget.accountId,
               param: 'only_media=true'),
           buildRow: _buildGridItem,
-          enableRefresh: false,firstRefresh: false,
+          enableRefresh: false,
+          firstRefresh: false,
           dataHandler: (data) {
             var handledData = [];
             for (var row in data) {
@@ -259,8 +264,7 @@ class _UserProfileState extends State<UserProfile>
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         builder: (BuildContext context) {
           return new Column(
             mainAxisSize: MainAxisSize.min,
@@ -332,6 +336,9 @@ class _UserProfileState extends State<UserProfile>
                 BottomSheetItem(
                   icon: IconFont.report,
                   text: '举报',
+                  onTap: () => AppNavigate.push(UserReport(
+                    account: _account,
+                  )),
                 )
               ],
               Container(
@@ -380,7 +387,7 @@ class _UserProfileState extends State<UserProfile>
                               Spacer(),
                               if (relationShip != null && relationShip.muting)
                                 IconButton(
-                                  icon: Icon(Icons.volume_up),
+                                  icon: Icon(IconFont.volumeUp),
                                   onPressed: _onPressUnmute,
                                 ),
                               Visibility(
@@ -439,7 +446,7 @@ class _UserProfileState extends State<UserProfile>
                                     visible:
                                         _account != null && _account.locked,
                                     child: Icon(
-                                      Icons.lock,
+                                      IconFont.lock,
                                       size: 16,
                                     ),
                                   )
@@ -652,13 +659,17 @@ class _UserProfileState extends State<UserProfile>
             Key('tab1'),
             ChangeNotifierProvider<ResultListProvider>.value(
               value: providers[1],
-              child: ProviderEasyRefreshListView(firstRefresh: true,),
+              child: ProviderEasyRefreshListView(
+                firstRefresh: true,
+              ),
             )),
         extend.NestedScrollViewInnerScrollPositionKeyWidget(
             Key('tab2'),
             ChangeNotifierProvider<ResultListProvider>.value(
               value: providers[2],
-              child: ProviderEasyRefreshListView(firstRefresh: true,),
+              child: ProviderEasyRefreshListView(
+                firstRefresh: true,
+              ),
             )),
         extend.NestedScrollViewInnerScrollPositionKeyWidget(
             Key('tab3'),
@@ -721,15 +732,17 @@ class _UserProfileState extends State<UserProfile>
 
   Future<void> _onRefreshPage({bool firstRefresh = false}) async {
     if (!firstRefresh) providers[_tabController.index]?.refresh();
-    var newAccount = await AccountsApi.getAccount(widget.accountId,cancelToken: cancelToken);
-    var newRelationShip = await AccountsApi.getRelationShip(widget.accountId,cancelToken: cancelToken);
+    var newAccount = await AccountsApi.getAccount(widget.accountId,
+        cancelToken: cancelToken);
+    var newRelationShip = await AccountsApi.getRelationShip(widget.accountId,
+        cancelToken: cancelToken);
     if (newAccount != null && newRelationShip != null)
-    setState(() {
-      _account = newAccount ?? _account;
-      relationShip = newRelationShip ?? relationShip;
+      setState(() {
+        _account = newAccount ?? _account;
+        relationShip = newRelationShip ?? relationShip;
 
-      _resetExpandHeight();
-    });
+        _resetExpandHeight();
+      });
   }
 
   @override

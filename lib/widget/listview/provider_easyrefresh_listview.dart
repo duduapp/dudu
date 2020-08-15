@@ -31,7 +31,8 @@ class ProviderEasyRefreshListView extends StatefulWidget {
       this.addToSliverCount = 0,
       this.afterBuild,
         this.firstRefresh = false,
-      this.useAnimatedList = false})
+      this.useAnimatedList = false,
+      this.showLoading = true})
       : super(key: key);
   final TimelineType type;
 
@@ -46,6 +47,7 @@ class ProviderEasyRefreshListView extends StatefulWidget {
   final Function afterBuild;
   final bool useAnimatedList;
   final bool firstRefresh;
+  final bool showLoading;
   final RefreshController refreshController;
   @override
   _ProviderEasyRefreshListViewState createState() =>
@@ -154,7 +156,7 @@ class _ProviderEasyRefreshListViewState
             }
 
             // 初次可能从Provider 里面请求
-            return provider.isLoading
+            return (provider.isLoading && widget.showLoading)
                 ? LoadingView()
                 : NotificationListener<ScrollNotification>(
                     onNotification: (ScrollNotification notification) {
@@ -190,7 +192,7 @@ class _ProviderEasyRefreshListViewState
                           canLoadingText: '释放加载更多',
                           noDataText: '',
                         ),
-                        enablePullDown: provider.finishRefresh ? false : true,
+                        enablePullDown: provider.finishRefresh ? false : (provider.isLoading && !widget.showLoading) ? false : true,
                         enablePullUp: provider.finishLoad ? false : true,
                         scrollController: widget.scrollController,
                         cacheExtent: widget.cacheExtent ?? null,

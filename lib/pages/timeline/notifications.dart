@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:fastodon/api/notification_api.dart';
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/json_serializable/notificate_item.dart';
 import 'package:fastodon/models/logined_user.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
@@ -75,7 +76,7 @@ class _NotificationsState extends State<Notifications>
     } else if (item.type == 'favourite') {
       return StatusItem(
           item: item.status,
-          refIcon: Icons.thumb_up,
+          refIcon: IconFont.thumbUp,
           refString: '${StringUtil.displayName(item.account)} 赞了你的嘟文',
           refAccount: item.account,);
     } else if (item.type == 'mention') {
@@ -86,13 +87,13 @@ class _NotificationsState extends State<Notifications>
       bool self = item.status.account == LoginedUser().account;
       return StatusItem(
         item: item.status,
-        refIcon: Icons.poll,
+        refIcon: IconFont.vote,
         refString: '你${self ? '创建' : '参与'}的投票已结束',
       );
     } else if (item.type == 'reblog') {
       return StatusItem(
         item: item.status,
-        refIcon: Icons.repeat,
+        refIcon: IconFont.reblog,
         refString: '${StringUtil.displayName(item.account)} 转嘟了你的嘟文',
         refAccount: item.account,
       );

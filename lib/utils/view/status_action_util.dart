@@ -18,15 +18,27 @@ import 'package:provider/provider.dart';
 import 'list_view_util.dart';
 
 class StatusActionUtil {
-  static Future<bool> reblog(bool isLiked, StatusItemData status,BuildContext context) async {
+  static Future<bool> reblog(
+      bool isLiked, StatusItemData status, BuildContext context) async {
     status.reblogged = !isLiked;
     status.reblogsCount = status.reblogsCount + (!isLiked ? 1 : -1);
 
-    ResultListProvider provider = Provider.of<ResultListProvider>(context,listen: false);
+    ResultListProvider provider =
+        Provider.of<ResultListProvider>(context, listen: false);
     provider.list.forEach((element) {
       if (element['id'] == status.id) {
         element['reblogged'] = !isLiked;
-        element['reblogs_count'] = element['reblogs_count'] + (!isLiked ? 1 : -1);
+        element['reblogs_count'] =
+            element['reblogs_count'] + (!isLiked ? 1 : -1);
+      }
+
+      // handle reblog status
+      if ((element.containsKey('reblog') &&
+          element['reblog'] != null &&
+          element['reblog']['id'] == status.id)) {
+        element['reblog']['reblogged'] = !isLiked;
+        element['reblog']['reblogs_count'] =
+            element['reblogs_count'] + (!isLiked ? 1 : -1);
       }
     });
     if (isLiked) {
@@ -40,14 +52,24 @@ class StatusActionUtil {
     return !isLiked;
   }
 
-  static Future<bool> favourite(bool isLiked, StatusItemData status, BuildContext context) async {
+  static Future<bool> favourite(
+      bool isLiked, StatusItemData status, BuildContext context) async {
     status.favourited = !isLiked;
     status.favouritesCount = status.favouritesCount + (!isLiked ? 1 : -1);
-    ResultListProvider provider = Provider.of<ResultListProvider>(context,listen: false);
+    ResultListProvider provider =
+        Provider.of<ResultListProvider>(context, listen: false);
     provider.list.forEach((element) {
       if (element['id'] == status.id) {
         element['favourited'] = !isLiked;
-        element['favourites_count'] = element['favourites_count'] + (!isLiked ? 1 : -1);
+        element['favourites_count'] =
+            element['favourites_count'] + (!isLiked ? 1 : -1);
+      }
+      if ((element.containsKey('reblog') &&
+          element['reblog'] != null &&
+          element['reblog']['id'] == status.id)) {
+        element['reblog']['favourited'] = !isLiked;
+        element['reblog']['favourites_count'] =
+            element['reblogs_count'] + (!isLiked ? 1 : -1);
       }
     });
     if (isLiked) {
@@ -64,7 +86,8 @@ class StatusActionUtil {
       BuildContext context, StatusItemData data, bool subStatus) {
     OwnerAccount myAccount = LoginedUser().account;
     BuildContext modalContext = context;
-    ResultListProvider provider = Provider.of<ResultListProvider>(context,listen: false);
+    ResultListProvider provider =
+        Provider.of<ResultListProvider>(context, listen: false);
     bool mentioned = false;
     for (var row in data.mentions) {
       if (row['acct'] == myAccount.acct) {
@@ -87,19 +110,18 @@ class StatusActionUtil {
                 onTap: () => onPressBookmark(data),
               ),
               Divider(indent: 60, height: 0),
-              if (mentioned)
-                ...[
-                  BottomSheetItem(
-                    icon: IconFont.volumeOff,
-                    text: data.muted ? '取消隐藏该对话' : '隐藏该对话',
-                    subText: '隐藏后将不会从该对话中接收到通知',
-                    onTap: () {
-                      AppNavigate.pop();
-                      _onPressMuteConversation(data);
-                    },
-                  ),
-                  Divider(indent: 60, height: 0),
-                ],
+              if (mentioned) ...[
+                BottomSheetItem(
+                  icon: IconFont.volumeOff,
+                  text: data.muted ? '取消隐藏该对话' : '隐藏该对话',
+                  subText: '隐藏后将不会从该对话中接收到通知',
+                  onTap: () {
+                    AppNavigate.pop();
+                    _onPressMuteConversation(data);
+                  },
+                ),
+                Divider(indent: 60, height: 0),
+              ],
               BottomSheetItem(
                 icon: IconFont.link,
                 text: '复制链接',
@@ -124,28 +146,29 @@ class StatusActionUtil {
               if (myAccount.id != data.account.id) ...[
                 BottomSheetItem(
                   icon: IconFont.volumeOff,
-                  text: '隐藏 @'+data.account.username,
+                  text: '隐藏 @' + data.account.username,
                   subText: '隐藏后该用户的嘟文将不会显示在你的时间轴中',
                   onTap: () {
                     AppNavigate.pop();
-                    DialogUtils.showSimpleAlertDialog(context: context,
-                    text: '你确定要隐藏用户 @'+data.account.username + '吗?',
-                      onConfirm: () =>  _onPressMute(modalContext, data, subStatus)
-                    );
-
+                    DialogUtils.showSimpleAlertDialog(
+                        context: context,
+                        text: '你确定要隐藏用户 @' + data.account.username + '吗?',
+                        onConfirm: () =>
+                            _onPressMute(modalContext, data, subStatus));
                   },
                 ),
                 Divider(indent: 60, height: 0),
                 BottomSheetItem(
                   onTap: () {
                     AppNavigate.pop();
-                    DialogUtils.showSimpleAlertDialog(context: context,
-                    text: '你确定要屏蔽用户 @'+data.account.username + '吗?',
-                      onConfirm: () => _onPressBlock(modalContext, data, subStatus)
-                    );
+                    DialogUtils.showSimpleAlertDialog(
+                        context: context,
+                        text: '你确定要屏蔽用户 @' + data.account.username + '吗?',
+                        onConfirm: () =>
+                            _onPressBlock(modalContext, data, subStatus));
                   },
                   icon: IconFont.block,
-                  text: '屏蔽 @'+data.account.username,
+                  text: '屏蔽 @' + data.account.username,
                   subText: '屏蔽后该用户将无法看到你发的嘟文',
                 ),
                 Divider(
@@ -230,8 +253,8 @@ class StatusActionUtil {
       DialogUtils.toastFinishedInfo('已隐藏对话');
     }
     data.muted = !data.muted;
-    ListViewUtil.handleAllStatuses((e) => e['muted'] = data.muted,
-        ListViewUtil.sameStatusCondition(data));
+    ListViewUtil.handleAllStatuses(
+        (e) => e['muted'] = data.muted, ListViewUtil.sameStatusCondition(data));
   }
 
   static _onPressBlock(

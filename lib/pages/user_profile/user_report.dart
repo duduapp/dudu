@@ -25,6 +25,7 @@ class _UserReportState extends State<UserReport> {
 
   @override
   void initState() {
+    if (widget.fromStatusId != null)
     chooseStatues.add(widget.fromStatusId);
     super.initState();
   }

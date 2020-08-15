@@ -1,5 +1,6 @@
 
 
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/json_serializable/vote.dart';
 import 'package:fastodon/public.dart';
 import 'package:fastodon/utils/screen.dart';
@@ -43,7 +44,7 @@ class _HandleVoteDialogState extends State<HandleVoteDialog> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Icon(Icons.poll,color: Theme.of(context).buttonColor,size: 30,),
+                Icon(IconFont.vote,color: Theme.of(context).buttonColor,size: 30,),
                 SizedBox(width: 5,),
                 Text('投票',style: TextStyle(fontSize: 20),)
               ],

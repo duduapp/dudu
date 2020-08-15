@@ -1,3 +1,4 @@
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/json_serializable/vote.dart';
 import 'package:fastodon/utils/screen.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class VoteDisplay extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Icon(Icons.list),
+              Icon(IconFont.vote),
               Text(
                 '投票',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

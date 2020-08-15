@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/json_serializable/article_item.dart';
 import 'package:fastodon/models/json_serializable/media_attachment.dart';
 import 'package:fastodon/models/provider/settings_provider.dart';
@@ -88,12 +89,12 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
               child: Row(
                 children: <Widget>[
                   Icon(media.type == 'image'
-                      ? Icons.image
+                      ? IconFont.picture
                       : media.type == 'video'
                           ? Icons.videocam
                           : media.type == 'audio'
                               ? Icons.audiotrack
-                              : Icons.image),
+                              : IconFont.picture),
                   Expanded(
                       child: Text(
                     media.description ?? '没有描述信息',
@@ -226,7 +227,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
             child: hideImage == false
                 ? IconButton(
                     icon: Icon(
-                      Icons.remove_red_eye,
+                      IconFont.eyeClose,
                       color: primaryColor,
                     ),
                     onPressed: () {

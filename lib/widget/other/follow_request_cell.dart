@@ -1,4 +1,5 @@
 import 'package:fastodon/api/accounts_api.dart';
+import 'package:fastodon/constant/icon_font.dart';
 import 'package:fastodon/models/json_serializable/notificate_item.dart';
 import 'package:fastodon/models/provider/result_list_provider.dart';
 import 'package:fastodon/utils/string_until.dart';
@@ -27,7 +28,7 @@ class FollowRequestCell extends StatelessWidget {
                 Container(
                   child: Center(
                     child: Icon(
-                      Icons.person_add,
+                      IconFont.personAdd,
                       color: Theme.of(context).buttonColor,
                     ),
                   ),

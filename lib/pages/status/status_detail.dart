@@ -174,7 +174,6 @@ class _StatusDetailState extends State<StatusDetail> {
                 tag: 'thread',
                 buildRow: _buildRow,
                 //    holderList: [widget.data.toJson()],
-                showLoading: false,
                 enableLoad: false,
                 dataHandler: (data) {
                   List res = [];
@@ -208,6 +207,7 @@ class _StatusDetailState extends State<StatusDetail> {
               scrollController: _scrollController,
               cacheExtent: 10000,
               enableLoad: false,
+              showLoading: false,
               afterBuild: _afterLayout,
             );
           },
