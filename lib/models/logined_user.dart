@@ -1,7 +1,7 @@
-import 'package:fastodon/api/accounts_api.dart';
-import 'package:fastodon/models/json_serializable/owner_account.dart';
-import 'package:fastodon/models/local_account.dart';
-import 'package:fastodon/models/provider/settings_provider.dart';
+import 'package:dudu/api/accounts_api.dart';
+import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/models/local_account.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
 
 class LoginedUser {
   String host;

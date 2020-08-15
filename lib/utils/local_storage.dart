@@ -1,5 +1,5 @@
-import 'package:fastodon/models/logined_user.dart';
-import 'package:fastodon/public.dart';
+import 'package:dudu/models/logined_user.dart';
+import 'package:dudu/public.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Storage {

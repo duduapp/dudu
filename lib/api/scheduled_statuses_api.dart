@@ -1,5 +1,5 @@
 
-import 'package:fastodon/utils/request.dart';
+import 'package:dudu/utils/request.dart';
 
 class ScheduledStatusesApi {
     static const String url = '/api/v1/scheduled_statuses';

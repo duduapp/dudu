@@ -1,4 +1,4 @@
-import 'package:fastodon/utils/app_navigate.dart';
+import 'package:dudu/utils/app_navigate.dart';
 import 'package:flutter/material.dart';
 
 class SingleChoiceDialog extends StatelessWidget {

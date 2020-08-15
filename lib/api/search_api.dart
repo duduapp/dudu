@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:fastodon/constant/api.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/request.dart';
+import 'package:dudu/constant/api.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/request.dart';
 
 enum SearchType { accounts, hashtags, statuses }
 

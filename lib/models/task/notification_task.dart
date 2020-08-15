@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:fastodon/models/logined_user.dart';
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/plugin/event_source.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/notification_util.dart';
+import 'package:dudu/models/logined_user.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/plugin/event_source.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/notification_util.dart';
 
 import '../json_serializable/notificate_item.dart';
 

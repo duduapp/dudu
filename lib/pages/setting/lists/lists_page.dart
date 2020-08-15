@@ -1,15 +1,15 @@
-import 'package:fastodon/api/lists_api.dart';
-import 'package:fastodon/constant/api.dart';
-import 'package:fastodon/constant/icon_font.dart';
-import 'package:fastodon/models/provider/result_list_provider.dart';
-import 'package:fastodon/pages/setting/lists/lists_add.dart';
-import 'package:fastodon/pages/setting/lists/lists_eidt.dart';
-import 'package:fastodon/pages/timeline/lists_timeline.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/dialog_util.dart';
-import 'package:fastodon/widget/common/list_row.dart';
-import 'package:fastodon/widget/common/normal_flat_button.dart';
-import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
+import 'package:dudu/api/lists_api.dart';
+import 'package:dudu/constant/api.dart';
+import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/models/provider/result_list_provider.dart';
+import 'package:dudu/pages/setting/lists/lists_add.dart';
+import 'package:dudu/pages/setting/lists/lists_eidt.dart';
+import 'package:dudu/pages/timeline/lists_timeline.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/widget/common/list_row.dart';
+import 'package:dudu/widget/common/normal_flat_button.dart';
+import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,5 +1,5 @@
-import 'package:fastodon/models/json_serializable/owner_account.dart';
-import 'package:fastodon/utils/request.dart';
+import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/utils/request.dart';
 
 
 class ListsApi {

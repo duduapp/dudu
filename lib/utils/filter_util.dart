@@ -1,9 +1,9 @@
-import 'package:fastodon/api/accounts_api.dart';
-import 'package:fastodon/models/json_serializable/filter_item.dart';
-import 'package:fastodon/models/provider/result_list_provider.dart';
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/view/list_view_util.dart';
+import 'package:dudu/api/accounts_api.dart';
+import 'package:dudu/models/json_serializable/filter_item.dart';
+import 'package:dudu/models/provider/result_list_provider.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/view/list_view_util.dart';
 
 class FilterUtil {
   static List<dynamic> filterData(List data, String context, {String mapKey}) {

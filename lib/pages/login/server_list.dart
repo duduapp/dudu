@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fastodon/public.dart';
+import 'package:dudu/public.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -136,7 +136,7 @@ class _ServerListState extends State<ServerList>  {
       );
     }
     return RefreshIndicator(
-        onRefresh: () => _getServerList(),
+        onRefresh: () async => await _getServerList(),
         child: Column(
           children: <Widget>[
             Container(

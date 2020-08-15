@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fastodon/models/local_account.dart';
-import 'package:fastodon/models/logined_user.dart';
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/pages/login/login.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/widget/common/bottom_sheet_item.dart';
+import 'package:dudu/models/local_account.dart';
+import 'package:dudu/models/logined_user.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/pages/login/login.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
 

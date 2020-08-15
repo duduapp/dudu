@@ -1,7 +1,7 @@
-import 'package:fastodon/models/json_serializable/article_item.dart';
-import 'package:fastodon/widget/status/status_item_media.dart';
-import 'package:fastodon/widget/status/status_item_poll.dart';
-import 'package:fastodon/widget/status/status_item_text.dart';
+import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/widget/status/status_item_media.dart';
+import 'package:dudu/widget/status/status_item_poll.dart';
+import 'package:dudu/widget/status/status_item_text.dart';
 import 'package:flutter/material.dart';
 
 
@@ -16,7 +16,7 @@ class StatusItemContent extends StatelessWidget {
       StatusItemText(data,navigateToDetail: !primary,),
       StatusItemMedia(data),
       if (data.poll != null)
-      StatusItemPoll(data.poll)
+      StatusItemPoll(data)
     ],);
   }
 }

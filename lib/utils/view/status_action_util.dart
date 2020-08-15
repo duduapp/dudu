@@ -1,15 +1,15 @@
-import 'package:fastodon/api/status_api.dart';
-import 'package:fastodon/constant/icon_font.dart';
-import 'package:fastodon/models/json_serializable/article_item.dart';
-import 'package:fastodon/models/json_serializable/owner_account.dart';
-import 'package:fastodon/models/logined_user.dart';
-import 'package:fastodon/models/provider/result_list_provider.dart';
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/models/runtime_config.dart';
-import 'package:fastodon/pages/user_profile/user_report.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/dialog_util.dart';
-import 'package:fastodon/widget/common/bottom_sheet_item.dart';
+import 'package:dudu/api/status_api.dart';
+import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/models/logined_user.dart';
+import 'package:dudu/models/provider/result_list_provider.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/models/runtime_config.dart';
+import 'package:dudu/pages/user_profile/user_report.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nav_router/nav_router.dart';
@@ -81,6 +81,28 @@ class StatusActionUtil {
     }
     return !isLiked;
   }
+
+  static updateStatusVote(StatusItemData status,dynamic pollJson,BuildContext context) {
+    status.poll = Poll.fromJson(pollJson);
+    ResultListProvider provider =
+    Provider.of<ResultListProvider>(context, listen: false);
+    provider.list.forEach((element) {
+      if (element['id'] == status.id) {
+        element['poll'] = pollJson;
+      }
+      if ((element.containsKey('reblog') &&
+          element['reblog'] != null &&
+          element['reblog']['id'] == status.id)) {
+        element['reblog']['poll'] = pollJson;
+      }
+    });
+    provider.notify();
+    ListViewUtil.handleAllStatuses((e) {
+      e['poll'] = pollJson;
+
+    }, ListViewUtil.sameStatusCondition(status));
+  }
+
 
   static showBottomSheetAction(
       BuildContext context, StatusItemData data, bool subStatus) {

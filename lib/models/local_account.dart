@@ -1,8 +1,8 @@
 
 import 'dart:convert';
 
-import 'package:fastodon/models/json_serializable/owner_account.dart';
-import 'package:fastodon/utils/local_storage.dart';
+import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/utils/local_storage.dart';
 // account info saved in local
 class LocalAccount {
   OwnerAccount account;

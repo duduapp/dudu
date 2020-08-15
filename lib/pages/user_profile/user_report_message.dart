@@ -1,7 +1,7 @@
-import 'package:fastodon/api/accounts_api.dart';
-import 'package:fastodon/models/json_serializable/owner_account.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/app_navigate.dart';
+import 'package:dudu/api/accounts_api.dart';
+import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/app_navigate.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 

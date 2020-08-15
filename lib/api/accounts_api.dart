@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:fastodon/models/json_serializable/filter_item.dart';
-import 'package:fastodon/models/json_serializable/owner_account.dart';
-import 'package:fastodon/pages/setting/model/relation_ship.dart';
-import 'package:fastodon/utils/request.dart';
+import 'package:dudu/models/json_serializable/filter_item.dart';
+import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/pages/setting/model/relation_ship.dart';
+import 'package:dudu/utils/request.dart';
 
 class AccountsApi {
   static const String url = '/api/v1/accounts';

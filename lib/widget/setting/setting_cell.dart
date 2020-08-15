@@ -1,6 +1,6 @@
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/widget/common/no_splash_ink_well.dart';
-import 'package:fastodon/widget/dialog/single_choice_dialog.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/widget/common/no_splash_ink_well.dart';
+import 'package:dudu/widget/dialog/single_choice_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/utils/screen.dart';
-import 'package:fastodon/widget/status/text_with_emoji.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/utils/screen.dart';
+import 'package:dudu/widget/status/text_with_emoji.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;

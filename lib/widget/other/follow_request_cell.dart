@@ -1,9 +1,9 @@
-import 'package:fastodon/api/accounts_api.dart';
-import 'package:fastodon/constant/icon_font.dart';
-import 'package:fastodon/models/json_serializable/notificate_item.dart';
-import 'package:fastodon/models/provider/result_list_provider.dart';
-import 'package:fastodon/utils/string_until.dart';
-import 'package:fastodon/widget/status/status_item_account.dart';
+import 'package:dudu/api/accounts_api.dart';
+import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/models/json_serializable/notificate_item.dart';
+import 'package:dudu/models/provider/result_list_provider.dart';
+import 'package:dudu/utils/string_until.dart';
+import 'package:dudu/widget/status/status_item_account.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

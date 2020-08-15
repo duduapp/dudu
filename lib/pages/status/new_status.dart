@@ -3,22 +3,22 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:fastodon/constant/icon_font.dart';
-import 'package:fastodon/models/json_serializable/article_item.dart';
-import 'package:fastodon/models/json_serializable/owner_account.dart';
-import 'package:fastodon/models/logined_user.dart';
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/models/json_serializable/vote.dart';
-import 'package:fastodon/models/task/update_task.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/dialog_util.dart';
-import 'package:fastodon/utils/media_util.dart';
-import 'package:fastodon/widget/common/sized_icon_button.dart';
-import 'package:fastodon/widget/new_status/emoji_widget.dart';
-import 'package:fastodon/widget/new_status/handle_vote_dialog.dart';
-import 'package:fastodon/widget/new_status/status_text_editor.dart';
-import 'package:fastodon/widget/publish/status_reply_info.dart';
-import 'package:fastodon/widget/publish/vote_display.dart';
+import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/models/logined_user.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/models/json_serializable/vote.dart';
+import 'package:dudu/models/task/update_task.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/utils/media_util.dart';
+import 'package:dudu/widget/common/sized_icon_button.dart';
+import 'package:dudu/widget/new_status/emoji_widget.dart';
+import 'package:dudu/widget/new_status/handle_vote_dialog.dart';
+import 'package:dudu/widget/new_status/status_text_editor.dart';
+import 'package:dudu/widget/publish/status_reply_info.dart';
+import 'package:dudu/widget/publish/vote_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -75,6 +75,8 @@ class _NewStatusState extends State<NewStatus> {
 
     if (widget.replyTo != null) {
       replyToId = widget.replyTo.id;
+      _visibility = widget.replyTo.visibility;
+      _articleRange = Icon(AppConfig.visibilityIcons[_visibility],size: 26,);
       _controller.text = getMentionString();
       counter = _controller.text.length;
     }
@@ -97,12 +99,15 @@ class _NewStatusState extends State<NewStatus> {
         });
       }
     });
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      SettingsProvider provider =
-          Provider.of<SettingsProvider>(context, listen: false);
-      _visibility = provider.get('default_post_privacy');
-      _articleRange = Icon(AppConfig.visibilityIcons[_visibility],size: 26,);
-      sensitive = provider.get('make_media_sensitive');
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async{
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (widget.replyTo == null && prefs.getBool(_spKey('have_draft')) == null) {
+        SettingsProvider provider =
+        Provider.of<SettingsProvider>(context, listen: false);
+        _visibility = provider.get('default_post_privacy');
+        _articleRange = Icon(AppConfig.visibilityIcons[_visibility], size: 26,);
+        sensitive = provider.get('make_media_sensitive');
+      }
     });
   }
 
@@ -486,7 +491,11 @@ class _NewStatusState extends State<NewStatus> {
   // 转发时需要填的mention list
   getMentionString() {
     OwnerAccount myAccount = LoginedUser().account;
-    var mentionStr = '@' + widget.replyTo.account.acct + ' ';
+    var mentionStr;
+    if (widget.replyTo.account.acct == myAccount.acct)
+      mentionStr = '';
+    else
+     mentionStr = '@' + widget.replyTo.account.acct + ' ';
     for (Map mention in widget.replyTo.mentions) {
       if (myAccount.acct == mention['acct']) {
         continue;

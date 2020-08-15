@@ -1,12 +1,14 @@
-import 'package:fastodon/constant/api.dart';
-import 'package:fastodon/models/json_serializable/article_item.dart';
-import 'package:fastodon/utils/request.dart';
+import 'package:dudu/constant/api.dart';
+import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/utils/request.dart';
+import 'package:dudu/utils/view/status_action_util.dart';
+
 import 'package:flutter/material.dart';
 
 class StatusItemPoll extends StatefulWidget {
-  final Poll poll;
+  final StatusItemData status;
 
-  StatusItemPoll(this.poll);
+  StatusItemPoll(this.status);
   @override
   _StatusItemPollState createState() => _StatusItemPollState();
 }
@@ -14,21 +16,22 @@ class StatusItemPoll extends StatefulWidget {
 class _StatusItemPollState extends State<StatusItemPoll> {
   var choices = <int>[];
   var radioGroup = "";
-  Poll poll;
+
 
   @override
   void initState() {
-    poll = widget.poll;
     super.initState();
   }
+  
+
   @override
   Widget build(BuildContext context) {
-    if (poll == null) {
+    if (widget.status.poll == null) {
       return Container();
     } else {
       return Container(
         padding: EdgeInsets.only(bottom: 4),
-        child: poll.voted || poll.expired ? resultPoll() : votablePoll(),
+        child: widget.status.poll.voted || widget.status.poll.expired ? resultPoll() : votablePoll(),
       );
     }
 
@@ -38,9 +41,9 @@ class _StatusItemPollState extends State<StatusItemPoll> {
 
   Widget resultPoll() {
     var rows = <Widget>[];
-    for (dynamic option in poll.options) {
+    for (dynamic option in widget.status.poll.options) {
       rows.add(optionRow(
-          poll.votesCount == 0 ? 0 : option['votes_count'] / poll.votesCount,
+          widget.status.poll.votesCount == 0 ? 0 : option['votes_count'] / widget.status.poll.votesCount,
           option['title']));
     }
     return Column(
@@ -50,8 +53,8 @@ class _StatusItemPollState extends State<StatusItemPoll> {
 
   Widget votablePoll() {
     var rows = <Widget>[];
-      poll.options.asMap().forEach((key, value) {
-        if (poll.multiple) {
+      widget.status.poll.options.asMap().forEach((key, value) {
+        if (widget.status.poll.multiple) {
           rows.add(CheckboxListTile(
             title: Text(value['title'],style: TextStyle(fontSize: 14),),
             value: choices.contains(key),
@@ -110,25 +113,23 @@ class _StatusItemPollState extends State<StatusItemPoll> {
   vote() async{
     Map<String, dynamic> paramsMap = Map();
     paramsMap['choices'] = choices;
-    var response = await Request.post(url:'${Api.poll}/${poll.id}/votes',params: paramsMap,showDialog: true);
-    Poll votedPoll = Poll.fromJson(response);
-    if (votedPoll.id.isNotEmpty) {
-      setState(() {
-        poll = votedPoll;
-      });
-    }
+    var response = await Request.post(url:'${Api.poll}/${widget.status.poll.id}/votes',params: paramsMap,showDialog: true);
+    if (response != null)
+    StatusActionUtil.updateStatusVote(widget.status, response, context);
+
+
   }
 
   Widget pollInfo() {
     return Container(
       margin: EdgeInsets.only(top: 5),
-        child: Text(poll.expired
-            ? '${poll.votesCount}次投票・已结束'
-            : '${poll.votesCount}次投票・${getRemainingTime()}'));
+        child: Text(widget.status.poll.expired
+            ? '${widget.status.poll.votesCount}次投票・已结束'
+            : '${widget.status.poll.votesCount}次投票・${getRemainingTime()}'));
   }
 
   getRemainingTime() {
-    var expireAt = DateTime.parse(poll.expiresAt);
+    var expireAt = DateTime.parse(widget.status.poll.expiresAt);
     var diff = expireAt.difference(DateTime.now());
     return diff.inDays > 0 ? '剩余${diff.inDays}天': diff.inHours > 0 ? '剩余${diff.inHours}小时' :'剩余${diff.inMinutes}分钟';
   }

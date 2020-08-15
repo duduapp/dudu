@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:fastodon/models/logined_user.dart';
-import 'package:fastodon/models/runtime_config.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/dialog_util.dart';
-import 'package:fastodon/widget/dialog/loading_dialog.dart';
-import 'package:fastodon/widget/flutter_framework/progress_dialog.dart';
+import 'package:dudu/models/logined_user.dart';
+import 'package:dudu/models/runtime_config.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/widget/dialog/loading_dialog.dart';
+import 'package:dudu/widget/flutter_framework/progress_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';

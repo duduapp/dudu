@@ -1,4 +1,4 @@
-package com.example.fastodon;
+package com.idudu.dudu;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

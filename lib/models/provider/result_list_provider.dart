@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/models/runtime_config.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/filter_util.dart';
-import 'package:fastodon/utils/request.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/models/runtime_config.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/filter_util.dart';
+import 'package:dudu/utils/request.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -195,7 +195,9 @@ class ResultListProvider extends ChangeNotifier {
       return false;
     } else if (response is DioError) {
       return false;
-    } else {
+    } else if (response == null){
+      return false;
+    }else{
       error = null;
     }
     var data = response.data;
@@ -342,6 +344,10 @@ class ResultListProvider extends ChangeNotifier {
   clearData() {
     list.clear();
     noResults = true;
+    notifyListeners();
+  }
+
+  notify() {
     notifyListeners();
   }
 

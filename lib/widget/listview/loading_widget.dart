@@ -1,4 +1,4 @@
-import 'package:fastodon/widget/common/loading_view.dart';
+import 'package:dudu/widget/common/loading_view.dart';
 import 'package:flutter/material.dart';
 
 class LoadingWidget extends StatelessWidget {

@@ -1,5 +1,5 @@
 // 下拉刷新和上拉加载
-import 'package:fastodon/public.dart';
+import 'package:dudu/public.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 

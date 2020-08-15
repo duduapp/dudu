@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:fastodon/constant/icon_font.dart';
+import 'package:dudu/constant/icon_font.dart';
 import 'package:flutter/material.dart';
 
 class AppConfig {

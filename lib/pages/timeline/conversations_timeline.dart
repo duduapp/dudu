@@ -1,9 +1,9 @@
-import 'package:fastodon/api/timeline_api.dart';
-import 'package:fastodon/models/json_serializable/article_item.dart';
-import 'package:fastodon/models/provider/result_list_provider.dart';
-import 'package:fastodon/utils/view/list_view_util.dart';
-import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
-import 'package:fastodon/widget/status/status_item.dart';
+import 'package:dudu/api/timeline_api.dart';
+import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/models/provider/result_list_provider.dart';
+import 'package:dudu/utils/view/list_view_util.dart';
+import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
+import 'package:dudu/widget/status/status_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

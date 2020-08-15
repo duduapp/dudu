@@ -1,14 +1,14 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fastodon/constant/icon_font.dart';
-import 'package:fastodon/models/json_serializable/article_item.dart';
-import 'package:fastodon/models/json_serializable/media_attachment.dart';
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/pages/media/photo_gallery.dart';
-import 'package:fastodon/pages/media/video_play.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/widget/common/no_splash_ink_well.dart';
+import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/models/json_serializable/media_attachment.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/pages/media/photo_gallery.dart';
+import 'package:dudu/pages/media/video_play.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/widget/common/no_splash_ink_well.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:nav_router/nav_router.dart';

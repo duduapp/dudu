@@ -1,7 +1,7 @@
-import 'package:fastodon/api/lists_api.dart';
-import 'package:fastodon/api/search_api.dart';
-import 'package:fastodon/models/json_serializable/owner_account.dart';
-import 'package:fastodon/widget/status/status_item_account.dart';
+import 'package:dudu/api/lists_api.dart';
+import 'package:dudu/api/search_api.dart';
+import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/widget/status/status_item_account.dart';
 import 'package:flutter/material.dart';
 
 class ListsEdit extends StatefulWidget {

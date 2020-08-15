@@ -2,10 +2,10 @@ import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:fastodon/models/json_serializable/media_attachment.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/dialog_util.dart';
-import 'package:fastodon/widget/common/media_detail.dart';
+import 'package:dudu/models/json_serializable/media_attachment.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/widget/common/media_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:photo_view/photo_view.dart';

@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fastodon/models/json_serializable/owner_account.dart';
-import 'package:fastodon/pages/setting/edit_user_profile.dart';
-import 'package:fastodon/pages/user_profile/user_follewers.dart';
-import 'package:fastodon/pages/user_profile/user_follewing.dart';
-import 'package:fastodon/pages/user_profile/user_profile.dart';
-import 'package:fastodon/pages/user_profile/user_status.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/widget/common/no_splash_ink_well.dart';
-import 'package:fastodon/widget/other/avatar.dart';
+import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/pages/setting/edit_user_profile.dart';
+import 'package:dudu/pages/user_profile/user_follewers.dart';
+import 'package:dudu/pages/user_profile/user_follewing.dart';
+import 'package:dudu/pages/user_profile/user_profile.dart';
+import 'package:dudu/pages/user_profile/user_status.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/widget/common/no_splash_ink_well.dart';
+import 'package:dudu/widget/other/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
 

@@ -1,8 +1,8 @@
-import 'package:fastodon/api/scheduled_statuses_api.dart';
-import 'package:fastodon/models/provider/result_list_provider.dart';
-import 'package:fastodon/pages/status/new_status.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
+import 'package:dudu/api/scheduled_statuses_api.dart';
+import 'package:dudu/models/provider/result_list_provider.dart';
+import 'package:dudu/pages/status/new_status.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:nav_router/nav_router.dart';

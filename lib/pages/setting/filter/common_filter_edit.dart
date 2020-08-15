@@ -1,8 +1,8 @@
-import 'package:fastodon/api/accounts_api.dart';
-import 'package:fastodon/models/provider/result_list_provider.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/filter_util.dart';
-import 'package:fastodon/widget/common/normal_flat_button.dart';
+import 'package:dudu/api/accounts_api.dart';
+import 'package:dudu/models/provider/result_list_provider.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/filter_util.dart';
+import 'package:dudu/widget/common/normal_flat_button.dart';
 import 'package:flutter/material.dart';
 
 class CommonFilterEdit extends StatefulWidget {

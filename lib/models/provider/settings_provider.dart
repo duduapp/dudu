@@ -1,8 +1,8 @@
-import 'package:fastodon/models/json_serializable/filter_item.dart';
-import 'package:fastodon/models/logined_user.dart';
-import 'package:fastodon/models/provider/result_list_provider.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/local_storage.dart';
+import 'package:dudu/models/json_serializable/filter_item.dart';
+import 'package:dudu/models/logined_user.dart';
+import 'package:dudu/models/provider/result_list_provider.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/local_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';

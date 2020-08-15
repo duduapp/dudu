@@ -1,12 +1,12 @@
-import 'package:fastodon/api/accounts_api.dart';
-import 'package:fastodon/constant/icon_font.dart';
-import 'package:fastodon/models/logined_user.dart';
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/pages/setting/common_block_list.dart';
-import 'package:fastodon/pages/setting/filter/common_filter_list.dart';
-import 'package:fastodon/pages/setting/setting_notification.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/widget/setting/setting_cell.dart';
+import 'package:dudu/api/accounts_api.dart';
+import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/models/logined_user.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/pages/setting/common_block_list.dart';
+import 'package:dudu/pages/setting/filter/common_filter_list.dart';
+import 'package:dudu/pages/setting/setting_notification.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/widget/setting/setting_cell.dart';
 import 'package:flutter/material.dart';
 
 class AccountSetting extends StatefulWidget {

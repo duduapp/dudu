@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/utils/screen.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/utils/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
 

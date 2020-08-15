@@ -1,10 +1,10 @@
 
 
-import 'package:fastodon/constant/icon_font.dart';
-import 'package:fastodon/models/json_serializable/vote.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/screen.dart';
-import 'package:fastodon/widget/common/normal_flat_button.dart';
+import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/models/json_serializable/vote.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/screen.dart';
+import 'package:dudu/widget/common/normal_flat_button.dart';
 import 'package:flutter/material.dart';
 
 class HandleVoteDialog extends StatefulWidget {

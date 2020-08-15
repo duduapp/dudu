@@ -1,9 +1,9 @@
 
-import 'package:fastodon/models/json_serializable/article_item.dart';
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/pages/status/status_detail.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/widget/common/html_content.dart';
+import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/pages/status/status_detail.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/widget/common/html_content.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

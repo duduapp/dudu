@@ -1,5 +1,5 @@
-import 'package:fastodon/api/search_api.dart';
-import 'package:fastodon/pages/search/search_result.dart';
+import 'package:dudu/api/search_api.dart';
+import 'package:dudu/pages/search/search_result.dart';
 import 'package:flutter/material.dart';
 import 'package:theme_provider/theme_provider.dart';
 

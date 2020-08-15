@@ -1,13 +1,13 @@
-import 'package:fastodon/api/search_api.dart';
-import 'package:fastodon/models/json_serializable/article_item.dart';
-import 'package:fastodon/models/json_serializable/owner_account.dart';
-import 'package:fastodon/models/provider/result_list_provider.dart';
-import 'package:fastodon/pages/timeline/hashtag_timeline.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/widget/common/list_row.dart';
-import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
-import 'package:fastodon/widget/status/status_item.dart';
-import 'package:fastodon/widget/status/status_item_account.dart';
+import 'package:dudu/api/search_api.dart';
+import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/models/provider/result_list_provider.dart';
+import 'package:dudu/pages/timeline/hashtag_timeline.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/widget/common/list_row.dart';
+import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
+import 'package:dudu/widget/status/status_item.dart';
+import 'package:dudu/widget/status/status_item_account.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

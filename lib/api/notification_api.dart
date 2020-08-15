@@ -1,6 +1,6 @@
 
 
-import 'package:fastodon/public.dart';
+import 'package:dudu/public.dart';
 
 class NotificationApi {
     static String url = '/api/v1/notifications';

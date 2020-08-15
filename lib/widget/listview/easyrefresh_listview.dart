@@ -1,9 +1,9 @@
 // 下拉刷新和上拉加载
-import 'package:fastodon/pages/timeline/timeline.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/view/list_view_util.dart';
-import 'package:fastodon/widget/common/empty_view.dart';
-import 'package:fastodon/widget/common/loading_view.dart';
+import 'package:dudu/pages/timeline/timeline.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/view/list_view_util.dart';
+import 'package:dudu/widget/common/empty_view.dart';
+import 'package:dudu/widget/common/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 

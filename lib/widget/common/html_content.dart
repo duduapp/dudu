@@ -1,10 +1,10 @@
-import 'package:fastodon/models/json_serializable/article_item.dart';
-import 'package:fastodon/pages/timeline/hashtag_timeline.dart';
-import 'package:fastodon/pages/user_profile/user_profile.dart';
-import 'package:fastodon/plugin/flutter_html/flutter_html.dart';
+import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/pages/timeline/hashtag_timeline.dart';
+import 'package:dudu/pages/user_profile/user_profile.dart';
+import 'package:dudu/plugin/flutter_html/flutter_html.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:fastodon/pages/webview/inner_browser.dart';
-import 'package:fastodon/public.dart';
+import 'package:dudu/pages/webview/inner_browser.dart';
+import 'package:dudu/public.dart';
 import 'package:flutter/material.dart';
 
 class HtmlContent extends StatefulWidget {

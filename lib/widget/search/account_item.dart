@@ -1,9 +1,9 @@
-import 'package:fastodon/models/json_serializable/owner_account.dart';
-import 'package:fastodon/pages/user_profile/user_profile.dart';
-import 'package:fastodon/utils/app_navigate.dart';
-import 'package:fastodon/utils/date_until.dart';
-import 'package:fastodon/utils/string_until.dart';
-import 'package:fastodon/widget/other/avatar.dart';
+import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/pages/user_profile/user_profile.dart';
+import 'package:dudu/utils/app_navigate.dart';
+import 'package:dudu/utils/date_until.dart';
+import 'package:dudu/utils/string_until.dart';
+import 'package:dudu/widget/other/avatar.dart';
 import 'package:flutter/material.dart';
 
 class AccountItem extends StatelessWidget {

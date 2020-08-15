@@ -1,4 +1,4 @@
-import 'package:fastodon/public.dart';
+import 'package:dudu/public.dart';
 import 'package:flutter/material.dart';
 
 class ExpandStateBean{

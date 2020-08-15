@@ -1,7 +1,7 @@
-import 'package:fastodon/api/lists_api.dart';
-import 'package:fastodon/models/provider/result_list_provider.dart';
-import 'package:fastodon/utils/app_navigate.dart';
-import 'package:fastodon/widget/common/normal_flat_button.dart';
+import 'package:dudu/api/lists_api.dart';
+import 'package:dudu/models/provider/result_list_provider.dart';
+import 'package:dudu/utils/app_navigate.dart';
+import 'package:dudu/widget/common/normal_flat_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

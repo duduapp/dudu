@@ -1,5 +1,5 @@
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/utils/themes.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nav_router/nav_router.dart';
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           child: Builder(
             builder: (themeContext) => MaterialApp(
               theme: ThemeProvider.themeOf(themeContext).data,
-              title: 'fastondon',
+              title: '嘟嘟',
               debugShowCheckedModeBanner: false,
               navigatorKey: navGK,
               home: ThemeConsumer(

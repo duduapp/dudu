@@ -1,6 +1,6 @@
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/models/task/notification_task.dart';
-import 'package:fastodon/widget/setting/setting_cell.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/models/task/notification_task.dart';
+import 'package:dudu/widget/setting/setting_cell.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

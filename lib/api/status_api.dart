@@ -1,4 +1,4 @@
-import 'package:fastodon/public.dart';
+import 'package:dudu/public.dart';
 
 class StatusApi {
   static String url = '/api/v1/statuses';

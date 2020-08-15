@@ -1,5 +1,5 @@
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/public.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/public.dart';
 import 'package:flutter/material.dart';
 
 class NotificationDisplayTypeDialog extends StatefulWidget {

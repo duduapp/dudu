@@ -1,7 +1,7 @@
 
 
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/themes.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/themes.dart';
 import 'package:flutter/material.dart';
 
 class NormalFlatButton extends StatelessWidget {

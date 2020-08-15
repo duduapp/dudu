@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fastodon/constant/api.dart';
-import 'package:fastodon/models/provider/result_list_provider.dart';
+import 'package:dudu/constant/api.dart';
+import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

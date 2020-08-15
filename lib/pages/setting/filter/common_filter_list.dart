@@ -1,9 +1,9 @@
-import 'package:fastodon/api/accounts_api.dart';
-import 'package:fastodon/models/provider/result_list_provider.dart';
-import 'package:fastodon/pages/setting/filter/common_filter_edit.dart';
-import 'package:fastodon/utils/dialog_util.dart';
-import 'package:fastodon/widget/common/list_row.dart';
-import 'package:fastodon/widget/listview/provider_easyrefresh_listview.dart';
+import 'package:dudu/api/accounts_api.dart';
+import 'package:dudu/models/provider/result_list_provider.dart';
+import 'package:dudu/pages/setting/filter/common_filter_edit.dart';
+import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/widget/common/list_row.dart';
+import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

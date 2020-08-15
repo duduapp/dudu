@@ -1,12 +1,12 @@
 // 下拉刷新和上拉加载
-import 'package:fastodon/models/provider/result_list_provider.dart';
-import 'package:fastodon/models/provider/settings_provider.dart';
-import 'package:fastodon/pages/timeline/timeline.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/view/list_view_util.dart';
-import 'package:fastodon/widget/common/empty_view.dart';
-import 'package:fastodon/widget/common/error_view.dart';
-import 'package:fastodon/widget/common/loading_view.dart';
+import 'package:dudu/models/provider/result_list_provider.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/pages/timeline/timeline.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/view/list_view_util.dart';
+import 'package:dudu/widget/common/empty_view.dart';
+import 'package:dudu/widget/common/error_view.dart';
+import 'package:dudu/widget/common/loading_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -162,7 +162,7 @@ class _ProviderEasyRefreshListViewState
                     onNotification: (ScrollNotification notification) {
                       double progress = notification.metrics.maxScrollExtent -
                           notification.metrics.pixels;
-                      if (progress < 1500 &&
+                      if (progress < 2000 &&
                           provider.list.length != requestLoadSize &&
                           provider.enableLoad) {
                         requestLoadSize = provider.list.length;
@@ -238,7 +238,6 @@ class _ProviderEasyRefreshListViewState
                                 ],
                               )
                             : ListView.builder(
-                                physics: const AlwaysScrollableScrollPhysics(),
                                 //      key: listKey,
                                 itemCount: provider.list.length +
                                     widget.addToSliverCount,

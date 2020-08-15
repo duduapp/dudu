@@ -1,8 +1,8 @@
-import 'package:fastodon/constant/app_config.dart';
-import 'package:fastodon/models/json_serializable/article_item.dart';
-import 'package:fastodon/pages/webview/inner_browser.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/date_until.dart';
+import 'package:dudu/constant/app_config.dart';
+import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/pages/webview/inner_browser.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/date_until.dart';
 import 'package:flutter/material.dart';
 
 class StatusItemPrimaryBottom extends StatelessWidget {

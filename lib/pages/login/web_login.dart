@@ -1,5 +1,5 @@
-import 'package:fastodon/utils/app_navigate.dart';
-import 'package:fastodon/widget/common/loading_view.dart';
+import 'package:dudu/utils/app_navigate.dart';
+import 'package:dudu/widget/common/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 

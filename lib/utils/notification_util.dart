@@ -2,9 +2,9 @@
 
 import 'dart:convert';
 
-import 'package:fastodon/models/json_serializable/notificate_item.dart';
-import 'package:fastodon/pages/status/status_detail.dart';
-import 'package:fastodon/public.dart';
+import 'package:dudu/models/json_serializable/notificate_item.dart';
+import 'package:dudu/pages/status/status_detail.dart';
+import 'package:dudu/public.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationUtil {

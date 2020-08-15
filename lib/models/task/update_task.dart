@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-import 'package:fastodon/pages/timeline/timeline.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/utils/dialog_util.dart';
-import 'package:fastodon/widget/common/normal_flat_button.dart';
-import 'package:fastodon/widget/flutter_framework/progress_dialog.dart';
+import 'package:dudu/pages/timeline/timeline.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/widget/common/normal_flat_button.dart';
+import 'package:dudu/widget/flutter_framework/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -26,7 +26,7 @@ class UpdateTask {
     var rnd = StringUtil.getRandomString(20);
     try {
       Response response =
-          await Dio().get("http://a.vikey.cc:5000/check_update?auth=" + rnd);
+          await Dio().get("https://api.idudu.fans/app/android/update_check?auth=" + rnd);
 
       var data = response.data;
       if (data == null) {
@@ -42,7 +42,7 @@ class UpdateTask {
           // a new version is released
           DialogUtils.showSimpleAlertDialog(
               context: navGK.currentState.overlay.context,
-              text: "请点击更新新版本。谢谢。",
+              text: data['text'],
               confirmText: '更新',
               cancelText: '关闭程序',
               onConfirm: () async {

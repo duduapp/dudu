@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:fastodon/public.dart';
-import 'package:fastodon/widget/common/no_splash_ink_well.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/widget/common/no_splash_ink_well.dart';
 import 'package:flutter/material.dart';
 
 class BottomSheetItem extends StatelessWidget {

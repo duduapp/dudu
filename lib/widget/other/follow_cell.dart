@@ -1,9 +1,9 @@
-import 'package:fastodon/constant/icon_font.dart';
-import 'package:fastodon/models/json_serializable/notificate_item.dart';
-import 'package:fastodon/public.dart';
-import 'package:fastodon/widget/other/avatar.dart';
-import 'package:fastodon/widget/status/status_item_account.dart';
-import 'package:fastodon/widget/status/text_with_emoji.dart';
+import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/models/json_serializable/notificate_item.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/widget/other/avatar.dart';
+import 'package:dudu/widget/status/status_item_account.dart';
+import 'package:dudu/widget/status/text_with_emoji.dart';
 import 'package:flutter/material.dart';
 
 

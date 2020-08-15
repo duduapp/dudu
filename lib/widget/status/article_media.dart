@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fastodon/models/json_serializable/media_attachment.dart';
-import 'package:fastodon/public.dart';
+import 'package:dudu/models/json_serializable/media_attachment.dart';
+import 'package:dudu/public.dart';
 import 'package:flutter/material.dart';
 
 class ArticleMedia extends StatelessWidget {
