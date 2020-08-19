@@ -306,23 +306,37 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
               final Hero hero = flightDirection == HeroFlightDirection.push ? fromHeroContext.widget : toHeroContext.widget;
               return hero.child;
             },
-            child: Image(
+            child: CachedNetworkImage(
+              filterQuality: FilterQuality.none,
+              imageUrl: imageUrl,
               width: width,
               height: height,
               fit: BoxFit.cover,
-              loadingBuilder:  (context, widget,chunk) {
-                if (chunk == null) {
-                  return widget;
-                }
+              progressIndicatorBuilder :  (context, widget,chunk) {
                 return Container(
                   color: Theme.of(context).backgroundColor,
                   width: width,
                   height: height,
-                  
                 );
               },
-              image: CachedNetworkImageProvider(imageUrl),
             ),
+//            child: Image(
+//              width: width,
+//              height: height,
+//              fit: BoxFit.cover,
+//              loadingBuilder:  (context, widget,chunk) {
+//                if (chunk == null) {
+//                  return widget;
+//                }
+//                return Container(
+//                  color: Theme.of(context).backgroundColor,
+//                  width: width,
+//                  height: height,
+//
+//                );
+//              },
+//              image: CachedNetworkImageProvider(imageUrl),
+//            ),
 //            child: CachedNetworkImage(
 //               fit: BoxFit.cover,
 //                width: width,

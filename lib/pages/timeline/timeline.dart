@@ -31,7 +31,7 @@ class Timeline extends StatefulWidget {
 
 class _TimelineState extends State<Timeline> {
   ScrollController _scrollController = ScrollController();
-  RefreshController refreshController = RefreshController(initialRefresh: false);
+  EasyRefreshController refreshController = EasyRefreshController();
 
   @override
   void initState() {
@@ -41,6 +41,8 @@ class _TimelineState extends State<Timeline> {
   @override
   void dispose() {
     super.dispose();
+    _scrollController.dispose();
+    refreshController.dispose();
   }
 
   @override
@@ -94,7 +96,7 @@ class _TimelineState extends State<Timeline> {
             requestUrl: url,
             tag: widget.type.toString().split('.').last,
             buildRow: ListViewUtil.statusRowFunction(),
-            listenBlockEvent: true,
+            listenBlockEvent: false,
             dataHandler: ListViewUtil.dataHandlerPrefixIdFunction(
                 widget.type.toString().split('.')[1]));
         switch(widget.type) {
@@ -114,7 +116,7 @@ class _TimelineState extends State<Timeline> {
         return ProviderEasyRefreshListView(
           type: widget.type,
           scrollController: _scrollController,
-          refreshController: refreshController,
+          easyRefreshController: refreshController,
         );
       }),
     );

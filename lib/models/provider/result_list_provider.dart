@@ -41,7 +41,7 @@ class ResultListProvider extends ChangeNotifier {
   final String tag;
   String lastRequestUrl = '';
 
-  RefreshController refreshController;
+  EasyRefreshController refreshController;
 
   /// map key 的优先级高于 data handler
   ResultListProvider(

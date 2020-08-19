@@ -28,7 +28,7 @@ class Notifications extends StatefulWidget {
 class _NotificationsState extends State<Notifications>
     with AutomaticKeepAliveClientMixin {
     ResultListProvider provider;
-    RefreshController refreshController = RefreshController(initialRefresh: false);
+    EasyRefreshController refreshController = EasyRefreshController();
 
 
   List displayType;
@@ -140,7 +140,7 @@ class _NotificationsState extends State<Notifications>
               child: ChangeNotifierProvider<ResultListProvider>.value(
                 value: provider,
                 child: ProviderEasyRefreshListView(
-                  refreshController: refreshController,
+                  easyRefreshController: refreshController,
                 ),
               ),
             )
