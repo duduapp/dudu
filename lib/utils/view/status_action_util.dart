@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 import 'list_view_util.dart';
 
@@ -146,22 +147,24 @@ class StatusActionUtil {
               ],
               BottomSheetItem(
                 icon: IconFont.link,
-                text: '复制链接',
+                text: '分享链接',
                 onTap: () {
                   AppNavigate.pop();
-                  Clipboard.setData(new ClipboardData(text: data.url));
-                  DialogUtils.toastFinishedInfo('链接已复制');
+                  Share.share(data.url);
+//                  Clipboard.setData(new ClipboardData(text: data.url));
+//                  DialogUtils.toastFinishedInfo('链接已复制');
                 },
               ),
               Divider(indent: 60, height: 0),
               BottomSheetItem(
                 icon: IconFont.copy,
-                text: '复制嘟文',
+                text: '分享嘟文',
                 onTap: () {
                   AppNavigate.pop();
-                  Clipboard.setData(new ClipboardData(
-                      text: StringUtil.removeAllHtmlTags(data.content)));
-                  DialogUtils.toastFinishedInfo('嘟文已复制');
+                  Share.share(StringUtil.removeAllHtmlTags(data.content));
+//                  Clipboard.setData(new ClipboardData(
+//                      text: StringUtil.removeAllHtmlTags(data.content)));
+//                  DialogUtils.toastFinishedInfo('嘟文已复制');
                 },
               ),
               Divider(indent: 60, height: 0),

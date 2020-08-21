@@ -17,6 +17,16 @@ class MyApp extends StatelessWidget {
 
   const MyApp({Key key, this.logined}) : super(key: key);
 
+  Widget buildError(BuildContext context, FlutterErrorDetails error) {
+    return Container(
+      child: Center(
+        child: Text(
+          "出现错误",
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -37,6 +47,13 @@ class MyApp extends StatelessWidget {
           loadThemeOnInit: true,
           child: Builder(
             builder: (themeContext) => MaterialApp(
+                builder: (BuildContext context, Widget widget) {
+                  ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+                    return buildError(context, errorDetails);
+                  };
+
+                  return widget;
+                },
               theme: ThemeProvider.themeOf(themeContext).data,
               title: '嘟嘟',
               debugShowCheckedModeBanner: false,

@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class StatusDetail extends StatefulWidget {
   final StatusItemData data;
@@ -54,6 +55,7 @@ class _StatusDetailState extends State<StatusDetail> {
   @override
   void dispose() {
     _removeOverlay();
+    _scrollController.dispose();
     super.dispose();
   }
 

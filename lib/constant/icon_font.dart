@@ -80,4 +80,10 @@ class IconFont {
   static const IconData expandMore = IconData(0xe633,fontFamily: 'IconFont');
 
   static const IconData personAdd = IconData(0xe60d,fontFamily: 'IconFont');
+
+  static const IconData more = IconData(0xe628,fontFamily: 'IconFont');
+
+  static const IconData download = IconData(0xe610,fontFamily: 'IconFont');
+
+  static const IconData share = IconData(0xe622,fontFamily: 'IconFont');
 }

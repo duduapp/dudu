@@ -6,6 +6,7 @@ import 'package:dudu/pages/user_profile/user_follewing.dart';
 import 'package:dudu/pages/user_profile/user_profile.dart';
 import 'package:dudu/pages/user_profile/user_status.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/cache_manager.dart';
 import 'package:dudu/widget/common/no_splash_ink_well.dart';
 import 'package:dudu/widget/other/avatar.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +70,7 @@ class SettingHead extends StatelessWidget {
                       Colors.black.withOpacity(0.5), BlendMode.dstATop),
                   image: CachedNetworkImageProvider(
                     account.header,
+                    cacheManager: CustomCacheManager()
                   ))),
           child: Column(
             children: [

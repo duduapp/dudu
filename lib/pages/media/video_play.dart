@@ -3,6 +3,7 @@ import 'package:chewie/chewie.dart';
 import 'package:dio/dio.dart';
 import 'package:dudu/models/json_serializable/media_attachment.dart';
 import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/utils/media_util.dart';
 import 'package:dudu/widget/common/media_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -56,7 +57,10 @@ class _VideoPlayState extends State<VideoPlay> {
         ),
       ),
       title: "1/1",
-      onDownloadClick: downloadMedia,
+      onDownloadClick: () async => await MediaUtil.downloadMedia(widget.media),
+      onShareClick: () async {
+        await MediaUtil.shareMedia(widget.media);
+      },
     );
   }
 

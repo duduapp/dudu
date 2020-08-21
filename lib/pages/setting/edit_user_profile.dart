@@ -88,7 +88,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
       setState(() {
         header = image.path;
       });
-      print(image);
+      debugPrint(image.toString());
   }
 
   chooseAvatar() async {
@@ -100,7 +100,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
     setState(() {
       avatar = image.path;
     });
-    print(image);
+    debugPrint(image.toString());
   }
 
   _save() async{

@@ -355,7 +355,7 @@ class _NewStatusState extends State<NewStatus> {
           url: Api.attachMedia + '/' + fileId,
           params: paramsMap,
           showDialog: false);
-      print(response);
+      debugPrint(response);
     }
   }
 

@@ -78,14 +78,12 @@ class _ProviderEasyRefreshListViewState
   Function onTextScaleChanged;
   int requestLoadSize = 0;
 
-  RefreshController _refreshController;
 
 
   @override
   void initState() {
     super.initState();
 
-    _refreshController = widget.refreshController ?? RefreshController(initialRefresh: false);
 
     // _startRequest(widget.requestUrl,refresh: true);
     _controller = widget.easyRefreshController ?? EasyRefreshController();
@@ -142,10 +140,6 @@ class _ProviderEasyRefreshListViewState
                   });
             }
 
-            if (provider.finishLoad) {
-              _refreshController.loadNoData();
-            }
-
 
             if (!firstRefreshed && widget.firstRefresh) {
               firstRefreshed = true;
@@ -172,7 +166,9 @@ class _ProviderEasyRefreshListViewState
                           //
                         }
                       },
-                      child: provider.noResults ? EmptyView(): EasyRefresh.custom(
+                      child:  EasyRefresh.custom(
+                        behavior: ScrollBehavior(),
+                        topBouncing: false,
                         slivers: [
                          widget.useAnimatedList? SliverAnimatedList(
 
@@ -207,14 +203,14 @@ class _ProviderEasyRefreshListViewState
                         firstRefresh: false, //在NestedScrollView 不用启用这个选项，而且不能设置scroll controller
                         firstRefreshWidget: LoadingView(),
                         header:
-                        widget.header ?? ListViewUtil.getDefaultHeader(context),
+                        (widget.firstRefresh || provider.enableRefresh) ? ListViewUtil.getDefaultHeader(context) : null,
                         footer: widget.enableLoad ?(provider.finishLoad ? null : ListViewUtil.getDefaultFooter(context) ):null,
 
                         controller: _controller,
 
                         scrollController:widget.scrollController,
 //                        widget.type == null ? null : _scrollController,
-                        onRefresh: (provider.finishRefresh || widget.firstRefresh) ?  null  : provider.refresh,
+                        onRefresh: (provider.finishRefresh || provider.isLoading || widget.firstRefresh) ?  null  : provider.refresh,
                         onLoad: widget.enableLoad ?(provider.finishLoad ? null : provider.load ):null,
                         emptyWidget: provider.noResults && widget.addToSliverCount == 0
                             ? widget.emptyWidget ?? EmptyView()
@@ -246,6 +242,8 @@ class _ProviderEasyRefreshListViewState
 
     eventBus.off(EventBusKey.textScaleChanged, onTextScaleChanged);
     super.dispose();
+    _controller.dispose();
+    _scrollController.dispose();
   }
 
   @override

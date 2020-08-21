@@ -30,10 +30,11 @@ class LoadingDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             loadingIcon,
+            if (text != null) ...[
             SizedBox(
               height: 10,
             ),
-            Text(text,style: TextStyle(color: Colors.white),)
+            Text(text,style: TextStyle(color: Colors.white),)]
           ],
         ),
       ),

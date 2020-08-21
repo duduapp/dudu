@@ -6,6 +6,7 @@ import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/widget/dialog/loading_dialog.dart';
 import 'package:dudu/widget/flutter_framework/progress_dialog.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nav_router/nav_router.dart';
@@ -13,63 +14,7 @@ import 'package:nav_router/nav_router.dart';
 enum RequestType { get, post, put, delete, patch }
 
 class Request {
-  static Future get({String url, Map params, Map header}) async {
-    Response res = await get1(url: url, params: params, header: header);
-    return res?.data;
-  }
-
-  // response all instead of response data only
-  static Future get1(
-      {String url, Map params, Map header, CancelToken cancelToken}) async {
-    if (params != null && params.isNotEmpty) {
-      StringBuffer sb = new StringBuffer("?");
-      params.forEach((key, value) {
-        sb.write("$key" + "=" + "$value" + "&");
-      });
-      String paramStr = sb.toString();
-      paramStr = paramStr.substring(0, paramStr.length - 1);
-      url += paramStr;
-    }
-
-    var dio = Request.createDio();
-    if (header != null && header.isNotEmpty) {
-      dio.options.headers = header;
-    }
-    try {
-      Response response = await dio.get(url, cancelToken: cancelToken);
-      if (response.statusCode != 200) {
-        var errorMsg = "网络请求错误,状态码:" + response.statusCode.toString();
-        showTotast(errorMsg);
-      } else if (response.statusCode == 200 && response != null) {
-        return response;
-      }
-    } catch (exception) {
-      if (CancelToken.isCancel(exception)) {
-        return;
-      }
-      if (exception is DioError) {
-        // The access token is invalid
-        if (exception.response != null &&
-            exception.response.statusCode == 401) {
-          if (!RuntimeConfig.dialogOpened) {
-            DialogUtils.showSimpleAlertDialog(
-                    context: navGK.currentState.overlay.context,
-                    text: '你的登录信息已失效，你可以退出重新登录',
-                    onlyInfo: true)
-                .then((val) {
-              RuntimeConfig.dialogOpened = false;
-            });
-            RuntimeConfig.dialogOpened = true;
-          }
-        }
-        RuntimeConfig.error = exception;
-        return null;
-      }
-      //showTotast(exception.toString());
-    }
-  }
-
-  static Future get2({String url,Map params,bool showDialog = false,bool returnAll = false,Map header,CancelToken cancelToken}) async{
+  static Future get({String url,Map params,bool showDialog = false,bool returnAll = false,Map header,CancelToken cancelToken}) async{
     return await _request(requestType: RequestType.get,url: url,params: params,showDialog: showDialog,returnAll: returnAll,header: header,cancelToken: cancelToken);
   }
 
@@ -152,11 +97,7 @@ class Request {
     ProgressDialog dialog;
     Response response;
     if (showDialog != null && showDialog == true) {
-      dialog = ProgressDialog(navGK.currentState.overlay.context,
-          isDismissible: false,
-          customBody: LoadingDialog(text: dialogMessage ?? '处理中...'));
-      dialog.style(borderRadius: 20);
-      await dialog.show();
+      dialog = await DialogUtils.showProgressDialog(dialogMessage ?? '处理中...');
     }
     var dio = Request.createDio();
     if (header != null && header.isNotEmpty) {
@@ -244,18 +185,20 @@ class Request {
       dio.options.baseUrl = urlHost;
     }
     // dio拦截器
-    dio.interceptors
-        .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
-      print(options.uri);
-      return options; //continue
-    }, onResponse: (Response response) {
-      print('收到了json信息');
-      // print(response);
-      return response; // continue
-    }, onError: (DioError e) {
-      // 当请求失败时做一些预处理
-      return e; //continue
-    }));
+    if (!kReleaseMode) {
+      dio.interceptors
+          .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
+        debugPrint(options.uri.toString());
+        return options; //continue
+      }, onResponse: (Response response) {
+        debugPrint('收到了json信息');
+        // print(response);
+        return response; // continue
+      }, onError: (DioError e) {
+        // 当请求失败时做一些预处理
+        return e; //continue
+      }));
+    }
 
     return dio;
   }

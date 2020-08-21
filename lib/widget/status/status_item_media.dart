@@ -8,6 +8,7 @@ import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/media/photo_gallery.dart';
 import 'package:dudu/pages/media/video_play.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/cache_manager.dart';
 import 'package:dudu/widget/common/no_splash_ink_well.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -306,37 +307,45 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
               final Hero hero = flightDirection == HeroFlightDirection.push ? fromHeroContext.widget : toHeroContext.widget;
               return hero.child;
             },
-            child: CachedNetworkImage(
-              filterQuality: FilterQuality.none,
-              imageUrl: imageUrl,
-              width: width,
-              height: height,
-              fit: BoxFit.cover,
-              progressIndicatorBuilder :  (context, widget,chunk) {
-                return Container(
-                  color: Theme.of(context).backgroundColor,
-                  width: width,
-                  height: height,
-                );
-              },
-            ),
-//            child: Image(
+//            child: CachedNetworkImage(
+//              filterQuality: FilterQuality.none,
+//              imageUrl: imageUrl,
 //              width: width,
 //              height: height,
 //              fit: BoxFit.cover,
-//              loadingBuilder:  (context, widget,chunk) {
-//                if (chunk == null) {
-//                  return widget;
-//                }
+//              progressIndicatorBuilder :  (context, widget,chunk) {
 //                return Container(
 //                  color: Theme.of(context).backgroundColor,
 //                  width: width,
 //                  height: height,
-//
 //                );
 //              },
-//              image: CachedNetworkImageProvider(imageUrl),
 //            ),
+            child: Image(
+              width: width,
+              height: height,
+              fit: BoxFit.cover,
+              loadingBuilder:  (context, widget,chunk) {
+                if (chunk == null) {
+                  return widget;
+                }
+                return Container(
+                  color: Theme.of(context).backgroundColor,
+                  width: width,
+                  height: height,
+
+                );
+              },
+              errorBuilder: (context,object,trace) {
+                return Container(
+                  color: Theme.of(context).backgroundColor,
+                  width: width,
+                  height: height,
+                  child: Center(child: Text(!sensitive || !hideImage ? '出现错误..': '',style: TextStyle(color: Theme.of(context).accentColor),),),
+                );
+              },
+              image: CachedNetworkImageProvider(imageUrl,cacheManager: CustomCacheManager()),
+            ),
 //            child: CachedNetworkImage(
 //               fit: BoxFit.cover,
 //                width: width,
@@ -361,9 +370,9 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
         if (hideImage)
           Positioned.fill(
             child: ClipRRect(
-                child: BlurHash(
+                child: image.blurhash != null ?BlurHash(
                   hash: image.blurhash,
-                ),
+                ):Container(),
                 borderRadius: BorderRadius.circular(8.0)),
           ),
         if ((image.type == 'video' || image.type == 'gifv') &&

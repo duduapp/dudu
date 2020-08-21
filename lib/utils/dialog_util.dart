@@ -1,4 +1,6 @@
 import 'package:dudu/public.dart';
+import 'package:dudu/widget/dialog/loading_dialog.dart';
+import 'package:dudu/widget/flutter_framework/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nav_router/nav_router.dart';
@@ -18,7 +20,7 @@ class DialogUtils {
   static toastFinishedInfo(String msg) {
     Fluttertoast.showToast(
         msg: msg,
-        toastLength: Toast.LENGTH_LONG,
+        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIos: 1,
         backgroundColor: Theme.of(navGK.currentContext).accentColor.withOpacity(0.8),
@@ -112,7 +114,14 @@ class DialogUtils {
 
 
 
-  static showProgressDialog() {}
+  static Future<ProgressDialog> showProgressDialog(String msg) async{
+    var dialog = ProgressDialog(navGK.currentState.overlay.context,
+        isDismissible: false,
+        customBody: LoadingDialog(text: msg));
+    dialog.style(borderRadius: 20);
+    await dialog.show();
+    return dialog;
+  }
 
   static showRoundedDialog(
       {Widget content, BuildContext context, double radius = 8}) async {

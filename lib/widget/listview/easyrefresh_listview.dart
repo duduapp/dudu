@@ -144,7 +144,7 @@ class _EasyRefreshListViewState extends State<EasyRefreshListView> {
   }
 
   Future<void> _startRequest(String url, {bool refresh}) async {
-    await Request.get2(url: url,returnAll: true).then((response) {
+    await Request.get(url: url,returnAll: true).then((response) {
       var data = response.data;
       data = widget.mapKey == null ? data : data[widget.mapKey];
       List combineList = [];

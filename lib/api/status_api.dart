@@ -45,7 +45,7 @@ class StatusApi {
 
   static getContext(String statusId) async{
     var api = '$url/$statusId/context';
-    return await Request.get2(url: api);
+    return await Request.get(url: api);
   }
 
   static remove(String statusId) async{

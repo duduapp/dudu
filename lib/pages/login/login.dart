@@ -106,7 +106,7 @@ class _LoginState extends State<Login> {
         // eventBus.emit(EventBusKey.HidePresentWidegt);
       });
     } catch (e) {
-      print(e);
+      debugPrint(e);
     }
   }
 

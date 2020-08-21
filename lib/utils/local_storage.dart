@@ -1,5 +1,6 @@
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/public.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Storage {
@@ -9,7 +10,7 @@ class Storage {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString(key, value);
     } catch (e) {
-      print('存储失败');
+      debugPrint('存储失败');
     }
   }
 
@@ -19,8 +20,7 @@ class Storage {
       String response = prefs.getString(key);
       return response;
     } catch (e) {
-      print('报错了');
-      print(e.toString());
+      debugPrint(e.toString());
       return null;
     }
   }
@@ -31,8 +31,7 @@ class Storage {
       int response = prefs.getInt(key);
       return response;
     } catch (e) {
-      print('报错了');
-      print(e.toString());
+      debugPrint(e.toString());
       return null;
     }
   }
@@ -42,8 +41,7 @@ class Storage {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.remove(key);
     } catch (e) {
-      print('报错了');
-      print(e.toString());
+      debugPrint(e.toString());
       return null;
     }
   }
@@ -53,8 +51,7 @@ class Storage {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       return prefs.getStringList(key);
     } catch (e) {
-      print('报错了');
-      print(e.toString());
+      debugPrint(e.toString());
       return null;
     }
   }
@@ -64,8 +61,7 @@ class Storage {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       return prefs.getBool(key);
     } catch (e) {
-      print('报错了');
-      print(e.toString());
+      debugPrint(e.toString());
       return null;
     }
   }
@@ -75,8 +71,7 @@ class Storage {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       return prefs.setBool(key,value);
     } catch (e) {
-      print('报错了');
-      print(e.toString());
+      debugPrint(e.toString());
       return null;
     }
   }
@@ -86,8 +81,7 @@ class Storage {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       return prefs.setInt(key,value);
     } catch (e) {
-      print('报错了');
-      print(e.toString());
+      debugPrint(e.toString());
       return null;
     }
   }
@@ -97,8 +91,7 @@ class Storage {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       return prefs.setStringList(key,value);
     } catch (e) {
-      print('报错了');
-      print(e.toString());
+      debugPrint(e.toString());
       return null;
     }
   }

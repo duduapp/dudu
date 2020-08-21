@@ -177,7 +177,7 @@ class ResultListProvider extends ChangeNotifier {
 
     var response;
     try {
-      response = await Request.get2(
+      response = await Request.get(
           url: url, returnAll: true, cancelToken: token);
     } catch (e) {
       return false;

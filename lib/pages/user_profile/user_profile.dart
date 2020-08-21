@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:dudu/utils/cache_manager.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extend;
 import 'package:dudu/api/accounts_api.dart';
@@ -716,6 +717,7 @@ class _UserProfileState extends State<UserProfile>
           fit: BoxFit.cover,
           image: CachedNetworkImageProvider(
             media.previewUrl,
+            cacheManager: CustomCacheManager()
           ),
         ),
       ),
