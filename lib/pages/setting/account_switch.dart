@@ -123,7 +123,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                           showBackButton: true,
                         ),
                         routeType: RouterType.material),
-                    child: Container(
+                    child: Ink(
                       padding: EdgeInsets.all(25),
                       color: primaryColor,
                       child: Row(
@@ -172,7 +172,6 @@ class _AccountSwitchState extends State<AccountSwitch> {
                   ),
                   BottomSheetItem(
                     text: '取消',
-                    onTap: () => AppNavigate.pop(),
                     safeArea: true,
                   )
                 ],
@@ -186,65 +185,69 @@ class _AccountSwitchState extends State<AccountSwitch> {
     setState(() {
       manageMode = false;
     });
-    AppNavigate.pop();
   }
 
   Widget accountRow(LocalAccount accountInfo) {
-    return InkWell(
-      onTap: () async {
-        if (accountInfo.active) {
-          AppNavigate.pop();
-        } else {
-          await LocalStorageAccount.setActiveAccount(accountInfo);
-          LoginedUser().loadFromLocalAccount(accountInfo);
-          await SettingsProvider().load();
-          AppNavigate.pushAndRemoveUntil(context, HomePage(),
-              routeType: RouterType.scale);
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.only(bottom: 10),
-        color: Theme.of(context).primaryColor,
-        child: ListTile(
-          leading: CachedNetworkImage(
-            imageUrl: accountInfo.account?.avatarStatic,
-          ),
-          title: Row(
-            children: <Widget>[
-              Text(StringUtil.displayName(accountInfo.account)),
-              Spacer(),
-              if (accountInfo.active)
-                Text(
-                  '当前使用',
-                  style: TextStyle(color: Theme.of(context).buttonColor),
-                )
-            ],
-          ),
-          subtitle: Text(StringUtil.accountFullAddress(accountInfo.account)),
-          trailing: (manageMode && !accountInfo.active)
-              ? ButtonTheme(
-                  minWidth: 60,
-                  height: 35,
-                  child: RaisedButton(
-                    child: Text(
-                      '删除',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    color: Colors.red,
-                    onPressed: () {
-                      _onDeletePressed(accountInfo);
-                    },
-                    textColor: Colors.white,
-                    padding: EdgeInsets.all(0),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4)),
+    return Column(
+      children: <Widget>[
+        InkWell(
+          onTap: () async {
+            if (accountInfo.active) {
+              AppNavigate.pop();
+            } else {
+              await LocalStorageAccount.setActiveAccount(accountInfo);
+              LoginedUser().loadFromLocalAccount(accountInfo);
+              await SettingsProvider().load();
+              AppNavigate.pushAndRemoveUntil(context, HomePage(),
+                  routeType: RouterType.scale);
+            }
+          },
+          child: Ink(
+            padding: EdgeInsets.all(10),
+            // margin: EdgeInsets.only(bottom: 10),
+            color: Theme.of(context).primaryColor,
+            child: ListTile(
+              leading: CachedNetworkImage(
+                imageUrl: accountInfo.account?.avatarStatic,
+              ),
+              title: Row(
+                children: <Widget>[
+                  Text(StringUtil.displayName(accountInfo.account)),
+                  Spacer(),
+                  if (accountInfo.active)
+                    Text(
+                      '当前使用',
+                      style: TextStyle(color: Theme.of(context).buttonColor),
+                    )
+                ],
+              ),
+              subtitle: Text(StringUtil.accountFullAddress(accountInfo.account)),
+              trailing: (manageMode && !accountInfo.active)
+                  ? ButtonTheme(
+                minWidth: 60,
+                height: 35,
+                child: RaisedButton(
+                  child: Text(
+                    '删除',
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                )
-              : null,
-          contentPadding: EdgeInsets.all(0),
+                  color: Colors.red,
+                  onPressed: () {
+                    _onDeletePressed(accountInfo);
+                  },
+                  textColor: Colors.white,
+                  padding: EdgeInsets.all(0),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4)),
+                ),
+              )
+                  : null,
+              contentPadding: EdgeInsets.all(0),
+            ),
+          ),
         ),
-      ),
+        SizedBox(height: 10,)
+      ],
     );
   }
 }

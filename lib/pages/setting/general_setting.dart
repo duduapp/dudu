@@ -59,11 +59,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
                 height: 8,
                 color: Theme.of(context).backgroundColor,
               ),
-              BottomSheetItem(
-                text: '取消',
-                onTap: () => AppNavigate.pop(),
-                safeArea: true,
-              )
+              BottomSheetCancelItem()
             ],
           ),
         ));

@@ -86,7 +86,7 @@ class StatusItem extends StatelessWidget {
     } else {
       StatusItemData data = item.reblog ?? item;
       return Column(children: [
-        NoSplashInkWell(
+        InkWell(
           onTap: primary ? null : () => _onStatusClicked(context),
           onLongPress: () =>
               StatusActionUtil.showBottomSheetAction(context, data, subStatus),

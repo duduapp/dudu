@@ -1,4 +1,5 @@
 import 'package:dudu/public.dart';
+import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:dudu/widget/dialog/loading_dialog.dart';
 import 'package:dudu/widget/flutter_framework/progress_dialog.dart';
 import 'package:flutter/material.dart';
@@ -135,5 +136,23 @@ class DialogUtils {
           );
         });
     return res;
+  }
+
+  static showBottomSheet({BuildContext context,List<Widget> widgets}) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        builder: (context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ...widgets,
+              BottomSheetCancelItem()
+            ],
+          );
+        });
   }
 }

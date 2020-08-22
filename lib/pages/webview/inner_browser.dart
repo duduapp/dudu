@@ -1,8 +1,11 @@
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class InnerBrowser extends StatefulWidget {
@@ -51,8 +54,30 @@ class _InnerBrowserState extends State<InnerBrowser> {
         title: Text(title),
         actions: <Widget>[
           IconButton(
-            icon: Icon(IconFont.share),
-            onPressed: () => Share.share(widget.url),
+            icon: Icon(Icons.more_horiz),
+            onPressed: () {
+              DialogUtils.showBottomSheet(context: context,widgets: [
+                BottomSheetItem(
+                  text: '分享',
+                  onTap: () => Share.share(widget.url),
+                ),
+                Divider(indent: 60, height: 0),
+                BottomSheetItem(
+                  text: '在浏览器中打开',
+                  onTap: () async{
+                    if (await canLaunch(widget.url)) {
+                    await launch(widget.url);
+                    } else {
+                      // do nothing
+                    }
+                  },
+                ),
+                Container(
+                  height: 8,
+                  color: Theme.of(context).backgroundColor,
+                ),
+              ]);
+            },
           )
         ],
         bottom: progress == 100

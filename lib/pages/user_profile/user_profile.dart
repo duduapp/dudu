@@ -200,7 +200,6 @@ class _UserProfileState extends State<UserProfile>
   }
 
   _onPressBlockButton() async {
-    AppNavigate.pop();
     if (relationShip.blocking) {
       _unBlockUser();
     } else {
@@ -212,7 +211,6 @@ class _UserProfileState extends State<UserProfile>
   }
 
   _onPressHideButton() async {
-    AppNavigate.pop();
     if (relationShip.muting) {
       _onPressUnmute();
     } else {
@@ -276,7 +274,6 @@ class _UserProfileState extends State<UserProfile>
                     text: '提及',
                     icon: IconFont.at,
                     onTap: () {
-                      AppNavigate.pop();
                       AppNavigate.push(
                           NewStatus(
                             prepareText: '@' + _account.acct + ' ',
@@ -328,7 +325,7 @@ class _UserProfileState extends State<UserProfile>
                       text:
                           '你确定要屏蔽@${StringUtil.accountDomain(_account)}域名吗？你将不会在任何公共时间轴或通知中看到该域名的内容，而且该域名的关注者也会被删除',
                       onConfirm: _onPressBlockDomain,
-                      popFirst: true),
+                      popFirst: false),
                 ),
                 Divider(
                   indent: 60,

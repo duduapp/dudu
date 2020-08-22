@@ -30,34 +30,51 @@ class BottomSheetItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: Colors.transparent,
-      onTap: onTap,
+      onTap: () async {
+        AppNavigate.pop();
+        if (onTap != null)
+        await onTap();
+      },
       child: Container(
-   //     height: height,
+        //     height: height,
         width: double.infinity,
         padding: EdgeInsets.all(16),
         child: Row(
-          mainAxisAlignment: icon != null ? MainAxisAlignment.start : MainAxisAlignment.center,
+          mainAxisAlignment:
+              icon != null ? MainAxisAlignment.start : MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
               width: 10,
             ),
             if (icon != null) ...[
-            Icon(icon,color: color ?? Theme.of(context).textTheme.bodyText1.color,size: 25,),
-            SizedBox(
-              width: 20,
-            ),],
+              Icon(
+                icon,
+                color: color ?? Theme.of(context).textTheme.bodyText1.color,
+                size: 25,
+              ),
+              SizedBox(
+                width: 20,
+              ),
+            ],
             if (subText != null) ...[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(text,style: TextStyle(fontSize: 16),),
-                  Text(subText,style: TextStyle(fontSize: 12,color: Theme.of(context).accentColor),)
+                  Text(
+                    text,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    subText,
+                    style: TextStyle(
+                        fontSize: 12, color: Theme.of(context).accentColor),
+                  )
                 ],
               ),
             ] else ...[
               Text(
                 text,
-                style: TextStyle(fontSize: 16,color: color),
+                style: TextStyle(fontSize: 16, color: color),
               )
             ],
           ],

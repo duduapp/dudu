@@ -26,14 +26,15 @@ dependencies:
   flutter_spinkit: ^4.1.2+1
   fluttertoast: ^3.0.1
   flutter_webview_plugin: ^0.3.11
-  url_launcher: ^5.0.2
+  url_launcher: ^5.5.0
   video_player: ^0.10.0+4
   image_picker: ^0.6.6+1
   nav_router:
     path: ../nav_router/
   popup_menu: ^1.0.5
   progress_indicators: ^0.1.5
-  photo_view: 0.10.1
+  photo_view:
+    path: ../photo_view/
   image_gallery_saver: ^1.2.2
   chewie: ^0.9.10
   path_provider: ^1.6.9

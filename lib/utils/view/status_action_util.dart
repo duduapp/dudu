@@ -83,10 +83,11 @@ class StatusActionUtil {
     return !isLiked;
   }
 
-  static updateStatusVote(StatusItemData status,dynamic pollJson,BuildContext context) {
+  static updateStatusVote(
+      StatusItemData status, dynamic pollJson, BuildContext context) {
     status.poll = Poll.fromJson(pollJson);
     ResultListProvider provider =
-    Provider.of<ResultListProvider>(context, listen: false);
+        Provider.of<ResultListProvider>(context, listen: false);
     provider.list.forEach((element) {
       if (element['id'] == status.id) {
         element['poll'] = pollJson;
@@ -100,10 +101,8 @@ class StatusActionUtil {
     provider.notify();
     ListViewUtil.handleAllStatuses((e) {
       e['poll'] = pollJson;
-
     }, ListViewUtil.sameStatusCondition(status));
   }
-
 
   static showBottomSheetAction(
       BuildContext context, StatusItemData data, bool subStatus) {
@@ -117,124 +116,104 @@ class StatusActionUtil {
         mentioned = true;
       }
     }
-    showModalBottomSheet(
-        context: modalContext,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+
+    DialogUtils.showBottomSheet(context: modalContext, widgets: [
+      BottomSheetItem(
+        icon: IconFont.bookmark,
+        text: data.bookmarked ? '删除书签' : '添加书签',
+        onTap: () => onPressBookmark(data),
+      ),
+      Divider(indent: 60, height: 0),
+      if (mentioned) ...[
+        BottomSheetItem(
+          icon: IconFont.volumeOff,
+          text: data.muted ? '取消隐藏该对话' : '隐藏该对话',
+          subText: '隐藏后将不会从该对话中接收到通知',
+          onTap: () {
+            _onPressMuteConversation(data);
+          },
         ),
-        builder: (context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              BottomSheetItem(
-                icon: IconFont.bookmark,
-                text: data.bookmarked ? '删除书签' : '添加书签',
-                onTap: () => onPressBookmark(data),
-              ),
-              Divider(indent: 60, height: 0),
-              if (mentioned) ...[
-                BottomSheetItem(
-                  icon: IconFont.volumeOff,
-                  text: data.muted ? '取消隐藏该对话' : '隐藏该对话',
-                  subText: '隐藏后将不会从该对话中接收到通知',
-                  onTap: () {
-                    AppNavigate.pop();
-                    _onPressMuteConversation(data);
-                  },
-                ),
-                Divider(indent: 60, height: 0),
-              ],
-              BottomSheetItem(
-                icon: IconFont.link,
-                text: '分享链接',
-                onTap: () {
-                  AppNavigate.pop();
-                  Share.share(data.url);
+        Divider(indent: 60, height: 0),
+      ],
+      BottomSheetItem(
+        icon: IconFont.link,
+        text: '分享链接',
+        onTap: () {
+          Share.share(data.url);
 //                  Clipboard.setData(new ClipboardData(text: data.url));
 //                  DialogUtils.toastFinishedInfo('链接已复制');
-                },
-              ),
-              Divider(indent: 60, height: 0),
-              BottomSheetItem(
-                icon: IconFont.copy,
-                text: '分享嘟文',
-                onTap: () {
-                  AppNavigate.pop();
-                  Share.share(StringUtil.removeAllHtmlTags(data.content));
+        },
+      ),
+      Divider(indent: 60, height: 0),
+      BottomSheetItem(
+        icon: IconFont.copy,
+        text: '分享嘟文',
+        onTap: () {
+          Share.share(StringUtil.removeAllHtmlTags(data.content));
 //                  Clipboard.setData(new ClipboardData(
 //                      text: StringUtil.removeAllHtmlTags(data.content)));
 //                  DialogUtils.toastFinishedInfo('嘟文已复制');
-                },
-              ),
-              Divider(indent: 60, height: 0),
-              if (myAccount.id != data.account.id) ...[
-                BottomSheetItem(
-                  icon: IconFont.volumeOff,
-                  text: '隐藏 @' + data.account.username,
-                  subText: '隐藏后该用户的嘟文将不会显示在你的时间轴中',
-                  onTap: () {
-                    AppNavigate.pop();
-                    DialogUtils.showSimpleAlertDialog(
-                        context: context,
-                        text: '你确定要隐藏用户 @' + data.account.username + '吗?',
-                        onConfirm: () =>
-                            _onPressMute(modalContext, data, subStatus));
-                  },
-                ),
-                Divider(indent: 60, height: 0),
-                BottomSheetItem(
-                  onTap: () {
-                    AppNavigate.pop();
-                    DialogUtils.showSimpleAlertDialog(
-                        context: context,
-                        text: '你确定要屏蔽用户 @' + data.account.username + '吗?',
-                        onConfirm: () =>
-                            _onPressBlock(modalContext, data, subStatus));
-                  },
-                  icon: IconFont.block,
-                  text: '屏蔽 @' + data.account.username,
-                  subText: '屏蔽后该用户将无法看到你发的嘟文',
-                ),
-                Divider(
-                  indent: 60,
-                  height: 0,
-                ),
-                BottomSheetItem(
-                  icon: IconFont.report,
-                  text: '举报 ',
-                  onTap: () {
-                    AppNavigate.pop();
-                    AppNavigate.push(UserReport(
-                      account: data.account,
-                      fromStatusId: data.id,
-                    ));
-                  },
-                ),
-              ] else ...[
-                BottomSheetItem(
-                  icon: IconFont.delete,
-                  text: '删除',
-                  color: Colors.red,
-                  onTap: () {
-                    AppNavigate.pop();
-                    DialogUtils.showSimpleAlertDialog(
-                        context: context,
-                        text: '确定要删除这条嘟嘟吗?',
-                        onConfirm: () {
-                          _onPressRemove(modalContext, data, subStatus);
-                        });
-                  },
-                )
-              ],
-              Container(
-                height: 8,
-                color: Theme.of(context).backgroundColor,
-              ),
-              BottomSheetCancelItem()
-            ],
-          );
-        });
+        },
+      ),
+      Divider(indent: 60, height: 0),
+      if (myAccount.id != data.account.id) ...[
+        BottomSheetItem(
+          icon: IconFont.volumeOff,
+          text: '隐藏 @' + data.account.username,
+          subText: '隐藏后该用户的嘟文将不会显示在你的时间轴中',
+          onTap: () {
+            DialogUtils.showSimpleAlertDialog(
+                context: context,
+                text: '你确定要隐藏用户 @' + data.account.username + '吗?',
+                onConfirm: () => _onPressMute(modalContext, data, subStatus));
+          },
+        ),
+        Divider(indent: 60, height: 0),
+        BottomSheetItem(
+          onTap: () {
+            DialogUtils.showSimpleAlertDialog(
+                context: context,
+                text: '你确定要屏蔽用户 @' + data.account.username + '吗?',
+                onConfirm: () => _onPressBlock(modalContext, data, subStatus));
+          },
+          icon: IconFont.block,
+          text: '屏蔽 @' + data.account.username,
+          subText: '屏蔽后该用户将无法看到你发的嘟文',
+        ),
+        Divider(
+          indent: 60,
+          height: 0,
+        ),
+        BottomSheetItem(
+          icon: IconFont.report,
+          text: '举报 ',
+          onTap: () {
+            AppNavigate.push(UserReport(
+              account: data.account,
+              fromStatusId: data.id,
+            ));
+          },
+        ),
+      ] else ...[
+        BottomSheetItem(
+          icon: IconFont.delete,
+          text: '删除',
+          color: Colors.red,
+          onTap: () {
+            DialogUtils.showSimpleAlertDialog(
+                context: context,
+                text: '确定要删除这条嘟嘟吗?',
+                onConfirm: () {
+                  _onPressRemove(modalContext, data, subStatus);
+                });
+          },
+        )
+      ],
+      Container(
+        height: 8,
+        color: Theme.of(context).backgroundColor,
+      ),
+    ]);
   }
 
   static _onPressRemove(
@@ -256,7 +235,6 @@ class StatusActionUtil {
   }
 
   static onPressBookmark(StatusItemData data) async {
-    AppNavigate.pop();
     if (!data.bookmarked) {
       StatusApi.bookmark(data.id);
       DialogUtils.toastFinishedInfo('已添加书签');

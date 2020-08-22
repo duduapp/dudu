@@ -16,18 +16,12 @@ class StatusItemCard extends StatelessWidget {
     if (statusData.card != null && statusData.card.image != null) {
       return Padding(
         padding: const EdgeInsets.only(top: 8,bottom: 8),
-        child: InkWell(
-          onTap: () => AppNavigate.push(InnerBrowser(statusData.card.url)),
-          child: Card(
-            elevation: 3,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-            child: Container(
-              decoration: BoxDecoration(
-
-             //   color: Colors.grey[50],
-//              border: Border.all(color: Theme.of(context).accentColor),
-
-              ),
+        child: Card(
+          elevation: 3,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+          child: InkWell(
+            onTap: () => AppNavigate.push(InnerBrowser(statusData.card.url)),
+            child: Ink(
 
               height: 130,
 

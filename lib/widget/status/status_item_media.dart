@@ -307,45 +307,44 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
               final Hero hero = flightDirection == HeroFlightDirection.push ? fromHeroContext.widget : toHeroContext.widget;
               return hero.child;
             },
-//            child: CachedNetworkImage(
-//              filterQuality: FilterQuality.none,
-//              imageUrl: imageUrl,
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              width: width,
+              height: height,
+              fit: BoxFit.cover,
+              progressIndicatorBuilder :  (context, widget,chunk) {
+                return Container(
+                  color: Theme.of(context).backgroundColor,
+                  width: width,
+                  height: height,
+                );
+              },
+            ),
+//            child: Image(
 //              width: width,
 //              height: height,
 //              fit: BoxFit.cover,
-//              progressIndicatorBuilder :  (context, widget,chunk) {
+//              loadingBuilder:  (context, widget,chunk) {
+//                if (chunk == null) {
+//                  return widget;
+//                }
 //                return Container(
 //                  color: Theme.of(context).backgroundColor,
 //                  width: width,
 //                  height: height,
+//
 //                );
 //              },
+//              errorBuilder: (context,object,trace) {
+//                return Container(
+//                  color: Theme.of(context).backgroundColor,
+//                  width: width,
+//                  height: height,
+//                  child: Center(child: Text(!sensitive || !hideImage ? '出现错误..': '',style: TextStyle(color: Theme.of(context).accentColor),),),
+//                );
+//              },
+//              image: CachedNetworkImageProvider(imageUrl,cacheManager: CustomCacheManager()),
 //            ),
-            child: Image(
-              width: width,
-              height: height,
-              fit: BoxFit.cover,
-              loadingBuilder:  (context, widget,chunk) {
-                if (chunk == null) {
-                  return widget;
-                }
-                return Container(
-                  color: Theme.of(context).backgroundColor,
-                  width: width,
-                  height: height,
-
-                );
-              },
-              errorBuilder: (context,object,trace) {
-                return Container(
-                  color: Theme.of(context).backgroundColor,
-                  width: width,
-                  height: height,
-                  child: Center(child: Text(!sensitive || !hideImage ? '出现错误..': '',style: TextStyle(color: Theme.of(context).accentColor),),),
-                );
-              },
-              image: CachedNetworkImageProvider(imageUrl,cacheManager: CustomCacheManager()),
-            ),
 //            child: CachedNetworkImage(
 //               fit: BoxFit.cover,
 //                width: width,
