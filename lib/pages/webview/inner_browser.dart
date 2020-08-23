@@ -19,6 +19,7 @@ class InnerBrowser extends StatefulWidget {
 
 class _InnerBrowserState extends State<InnerBrowser> {
   int progress = 0;
+  double opacity = 0;
   String title = '网页';
 
   WebViewController _controller;
@@ -30,28 +31,29 @@ class _InnerBrowserState extends State<InnerBrowser> {
 
   @override
   Widget build(BuildContext context) {
-    final _flutterWebviewPlugin = new FlutterWebviewPlugin();
-
-    _flutterWebviewPlugin.onProgressChanged.listen((event) {
-      setState(() {
-       // progress = event;
-      });
-    });
-
-    _flutterWebviewPlugin.onUrlChanged.listen((event) {
-      debugPrint(event);
-    });
-
-    _flutterWebviewPlugin.onStateChanged.listen((WebViewStateChanged st) async {
-      String currentWebviewTitle =
-          await _flutterWebviewPlugin.evalJavascript("window.document.title");
-      setState(() => {title = currentWebviewTitle});
-    });
+//    final _flutterWebviewPlugin = new FlutterWebviewPlugin();
+//
+//    _flutterWebviewPlugin.onProgressChanged.listen((event) {
+//      setState(() {
+//       // progress = event;
+//      });
+//    });
+//
+//    _flutterWebviewPlugin.onUrlChanged.listen((event) {
+//      debugPrint(event);
+//    });
+//
+//    _flutterWebviewPlugin.onStateChanged.listen((WebViewStateChanged st) async {
+//      String currentWebviewTitle =
+//          await _flutterWebviewPlugin.evalJavascript("window.document.title");
+//      setState(() => {title = currentWebviewTitle});
+//    });
 
     //ToDo update official flutter_webview when on progress is merged
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        elevation: 0,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.more_horiz),
@@ -93,20 +95,30 @@ class _InnerBrowserState extends State<InnerBrowser> {
                 preferredSize: Size(double.infinity, 3.0),
               ),
       ),
-      body: WebView(
-          initialUrl: widget.url,
-          javascriptMode: JavascriptMode.unrestricted,
-          onProgress: (p) {setState(() {
-            progress = p;
-          });},
-          onWebViewCreated: (controller) {
-            _controller = controller;
-          },
-          onPageFinished: (str) {
-            setState(() async{
-              title = await _controller.getTitle();
-            });
-          },
+      body: Opacity(
+        opacity: opacity,
+        child: WebView(
+            initialUrl: widget.url,
+            javascriptMode: JavascriptMode.unrestricted,
+            onProgress: (p) {setState(() {
+              progress = p;
+              //ToDo solve first open webview black,not perfectly
+              if (progress > 30 && opacity != 1) {
+                setState(() {
+                  opacity = 1;
+                });
+              }
+            });},
+            onWebViewCreated: (controller) {
+              _controller = controller;
+            },
+            onPageFinished: (str) {
+              setState(() async{
+                title = await _controller.getTitle();
+                opacity = 1;
+              });
+            },
+        ),
       ),
     );
 

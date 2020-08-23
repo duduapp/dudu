@@ -39,6 +39,7 @@ class ListViewUtil {
       completeDuration: Duration(milliseconds: 0),
       showInfo: false,
       enableInfiniteLoad: true,
+      enableHapticFeedback: false,
       triggerDistance:500,
       loadText: '拉动加载',
       loadReadyText: '释放加载',

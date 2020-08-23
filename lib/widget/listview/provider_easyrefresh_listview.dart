@@ -78,12 +78,14 @@ class _ProviderEasyRefreshListViewState
   Function onTextScaleChanged;
   int requestLoadSize = 0;
 
+  RefreshController _refreshController;
 
 
   @override
   void initState() {
     super.initState();
 
+    _refreshController = widget.refreshController ?? RefreshController(initialRefresh: false);
 
     // _startRequest(widget.requestUrl,refresh: true);
     _controller = widget.easyRefreshController ?? EasyRefreshController();
@@ -140,6 +142,10 @@ class _ProviderEasyRefreshListViewState
                   });
             }
 
+            if (provider.finishLoad) {
+              _refreshController.loadNoData();
+            }
+
 
             if (!firstRefreshed && widget.firstRefresh) {
               firstRefreshed = true;
@@ -152,86 +158,148 @@ class _ProviderEasyRefreshListViewState
             // 初次可能从Provider 里面请求
             return (provider.isLoading && widget.showLoading)
                 ? LoadingView()
-                : Scrollbar(
-                  child: NotificationListener<ScrollNotification>(
-                      onNotification: (ScrollNotification notification) {
-                        double progress = notification.metrics.maxScrollExtent -
-                            notification.metrics.pixels;
-                        if (progress < 2000 &&
-                            provider.list.length != requestLoadSize &&
-                            provider.enableLoad) {
-                          requestLoadSize = provider.list.length;
-                          provider.load();
+                : NotificationListener<ScrollNotification>(
+                    onNotification: (ScrollNotification notification) {
+                      double progress = notification.metrics.maxScrollExtent -
+                          notification.metrics.pixels;
+                      if (progress < 2000 &&
+                          provider.list.length != requestLoadSize &&
+                          provider.enableLoad) {
+                        requestLoadSize = provider.list.length;
+                        provider.load();
 
-                          //
-                        }
-                      },
-                      child:  EasyRefresh.custom(
-                        behavior: ScrollBehavior(),
-                        topBouncing: false,
-                        slivers: [
-                         widget.useAnimatedList? SliverAnimatedList(
-
-                            key: listKey,
-                            initialItemCount: provider.list.length+widget.addToSliverCount,
-                            itemBuilder: (context, index, animation) {
-                              return SizeTransition(
-                                axis: Axis.vertical,
-                                sizeFactor: animation,
-                                child: provider.buildRow(
-                                    index, provider.list, provider),
-                              );
-                            },
-                          ) : !widget.usingGrid ?
-                             SliverList(
-                               delegate: SliverChildBuilderDelegate((context, idx) {
-                                 return provider.buildRow(
-                                     idx, provider.list, provider);
-                               },childCount: provider.list.length),
-                             )
-                              : SliverGrid(
-                            delegate:
-                            SliverChildBuilderDelegate((context, idx) {
-                              return provider.buildRow(
-                                  idx, provider.list, provider);
-                            }, childCount: provider.list.length+widget.addToSliverCount),
-                            gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3),
-                          )
-                        ],
-                        firstRefresh: false, //在NestedScrollView 不用启用这个选项，而且不能设置scroll controller
-                        firstRefreshWidget: LoadingView(),
-                        header:
-                        (widget.firstRefresh || provider.enableRefresh) ? ListViewUtil.getDefaultHeader(context) : null,
-                        footer: widget.enableLoad ?(provider.finishLoad ? null : ListViewUtil.getDefaultFooter(context) ):null,
-
-                        controller: _controller,
-
-                        scrollController:widget.scrollController,
-//                        widget.type == null ? null : _scrollController,
-                        onRefresh: (provider.finishRefresh || provider.isLoading || widget.firstRefresh) ?  null  : provider.refresh,
-                        onLoad: widget.enableLoad ?(provider.finishLoad ? null : provider.load ):null,
-                        emptyWidget: provider.noResults && widget.addToSliverCount == 0
-                            ? widget.emptyWidget ?? EmptyView()
-                            : null,
+                        //
+                      }
+                    },
+                    child: Scrollbar(
+                      child: SmartRefresher(
+                        primary: widget.scrollController == null ? true : false,
+                        controller: _refreshController,
+                        header: ClassicHeader(
+                          releaseText: '释放刷新',
+                          refreshingText: '加载中',
+                          completeText: '完成刷新',
+                          idleText: '下拉刷新',
+                          releaseIcon: Icon(Icons.arrow_upward,color: Colors.grey,),
+                          refreshingIcon: CupertinoActivityIndicator(),
+                          textStyle: TextStyle(fontSize: 12,color: Theme.of(context).accentColor),
+                        ),
+                        footer: ClassicFooter(
+                          loadingText: '加载中...',
+                          loadingIcon: null,
+                          idleText: '加载中...',
+                          idleIcon: null, // 自动加载，所以显示这个
+                          canLoadingText: '释放加载更多',
+                          noDataText: '',
+                        ),
+                        enablePullDown: provider.finishRefresh ? false : (provider.isLoading && !widget.showLoading) ? false : true,
+                        enablePullUp: provider.finishLoad ? false : true,
+                        scrollController: widget.scrollController,
                         cacheExtent: widget.cacheExtent ?? null,
-                      )
+                        onRefresh: () async {
+                          await provider.refresh();
+                          _refreshController.refreshCompleted();
+                        },
+                        onLoading: () async {
+                          await provider.load();
+                          _refreshController.loadComplete();
+                        },
+                        child: provider.noResults ? EmptyView():widget.useAnimatedList
+                            ? CustomScrollView(
+                                slivers: [
+                                  !widget.usingGrid
+                                      ? SliverAnimatedList(
+                                          key: listKey,
+                                          initialItemCount:
+                                              provider.list.length +
+                                                  widget.addToSliverCount,
+                                          itemBuilder:
+                                              (context, index, animation) {
+                                            return SizeTransition(
+                                              axis: Axis.vertical,
+                                              sizeFactor: animation,
+                                              child: provider.buildRow(index,
+                                                  provider.list, provider),
+                                            );
+                                          },
+                                        )
+                                      : SliverGrid(
+                                          delegate: SliverChildBuilderDelegate(
+                                              (context, idx) {
+                                            return provider.buildRow(
+                                                idx, provider.list, provider);
+                                          },
+                                              childCount: provider.list.length +
+                                                  widget.addToSliverCount),
+                                          gridDelegate:
+                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 3),
+                                        )
+                                ],
+                              )
+                            : ListView.builder(
+
+                                //      key: listKey,
+                                itemCount: provider.list.length +
+                                    widget.addToSliverCount,
+                                itemBuilder: (context, index) {
+                                  return provider.buildRow(
+                                      index, provider.list, provider);
+                                },
+                              ),
                       ),
-                );
+                    )
+
+//                  child: EasyRefresh.custom(
+//
+//                      topBouncing: false,
+//                      slivers: [
+//                        !widget.usingGrid
+//                            ? SliverAnimatedList(
+//
+//                                key: listKey,
+//                                initialItemCount: provider.list.length+widget.addToSliverCount,
+//                                itemBuilder: (context, index, animation) {
+//                                  return SizeTransition(
+//                                    axis: Axis.vertical,
+//                                    sizeFactor: animation,
+//                                    child: provider.buildRow(
+//                                        index, provider.list, provider),
+//                                  );
+//                                },
+//                              )
+//                            : SliverGrid(
+//                                delegate:
+//                                    SliverChildBuilderDelegate((context, idx) {
+//                                  return provider.buildRow(
+//                                      idx, provider.list, provider);
+//                                }, childCount: provider.list.length+widget.addToSliverCount),
+//                                gridDelegate:
+//                                    SliverGridDelegateWithFixedCrossAxisCount(
+//                                        crossAxisCount: 3),
+//                              )
+//                      ],
+//                      firstRefresh: false, //在NestedScrollView 不用启用这个选项，而且不能设置scroll controller
+//                      firstRefreshWidget: LoadingView(),
+//                      header:
+//                          widget.header ?? ListViewUtil.getDefaultHeader(context),
+//                      footer: ListViewUtil.getDefaultFooter(context),
+//                      controller: _controller,
+//
+//                      scrollController:widget.scrollController,
+////                        widget.type == null ? null : _scrollController,
+//                      onRefresh: provider.finishRefresh ? null : provider.refresh,
+//                      onLoad: widget.enableLoad ?(provider.finishLoad ? null : provider.load ):null,
+//                      emptyWidget: provider.noResults && widget.addToSliverCount == 0
+//                          ? widget.emptyWidget ?? EmptyView()
+//                          : null,
+//                      cacheExtent: widget.cacheExtent ?? 30,
+//                    ),
+                    );
           }),
         );
       },
     );
-  }
-
-  _buildItems(ResultListProvider provider) {
-    List<Widget> items = [];
-    for (int i = 0; i < provider.list.length; i++) {
-      items.add( provider.buildRow(
-          i, provider.list, provider));
-    }
-    return items;
   }
 
   @override
@@ -242,8 +310,6 @@ class _ProviderEasyRefreshListViewState
 
     eventBus.off(EventBusKey.textScaleChanged, onTextScaleChanged);
     super.dispose();
-    _controller.dispose();
-    _scrollController.dispose();
   }
 
   @override
