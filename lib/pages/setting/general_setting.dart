@@ -66,7 +66,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
   }
   _onConfirmExit() async{
     await LocalStorageAccount.logout();
-    AppNavigate.pushAndRemoveUntil(context, Login(),routeType: RouterType.fade);
+    AppNavigate.pushAndRemoveUntil(Login(),routeType: RouterType.fade);
   }
 
   @override

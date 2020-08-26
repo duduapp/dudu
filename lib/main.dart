@@ -15,6 +15,7 @@ void main() async{
     LoginedUser().loadFromLocalAccount(account);
   }
   await SettingsProvider().init();
+  await LocalStorageAccount.load();
   if (kReleaseMode) {
     debugPrint = (String message, {int wrapWidth}) {};
   }

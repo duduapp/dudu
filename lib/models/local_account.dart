@@ -10,6 +10,7 @@ class LocalAccount {
   final String token;
   bool active;
 
+
   LocalAccount({this.account,this.hostUrl,this.token,this.active});
 
   setAccount(OwnerAccount account) {
@@ -38,13 +39,22 @@ class LocalAccount {
 }
 
 class LocalStorageAccount {
-  static Future<List<LocalAccount>> getAccounts() async{
+  static List<LocalAccount> accounts = [];
+
+  static Future<List<LocalAccount>> load() async{
     List<String> accs = await Storage.getStringList('mastodon_accounts');
     if (accs == null) return [];
-    List<LocalAccount> accounts = [];
+    List<LocalAccount> storageAccounts = [];
     for (String s in accs) {
-      accounts.add(LocalAccount.fromStr(s));
+      storageAccounts.add(LocalAccount.fromStr(s));
     }
+    return storageAccounts;
+  }
+
+  static Future<List<LocalAccount>> getAccounts() async{
+    if (accounts.isNotEmpty) return accounts;
+
+    accounts = await load();
     return accounts;
   }
 
@@ -71,15 +81,15 @@ class LocalStorageAccount {
   }
 
   static removeAccount(LocalAccount account) async {
-    List<LocalAccount> newAcc = [];
     var accounts = await getAccounts();
-    for (var acc in accounts) {
-      if (acc.hostUrl == account.hostUrl && acc.token == account.token) {
-      } else {
-        newAcc.add(acc);
-      }
-    }
-    await saveAccounts(newAcc);
+//    for (var acc in accounts) {
+//      if (acc.hostUrl == account.hostUrl && acc.token == account.token) {
+//      } else {
+//        newAcc.add(acc);
+//      }
+//    }
+    accounts.removeWhere((acc) => acc.hostUrl == account.hostUrl && acc.token == account.token);
+    await saveAccounts(accounts);
   }
 
   static logout() async{

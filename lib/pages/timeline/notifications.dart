@@ -12,6 +12,7 @@ import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:dudu/widget/other/follow_request_cell.dart';
 import 'package:dudu/widget/status/status_item.dart';
+import 'package:dudu/widget/timeline/account_switch_timeline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -106,46 +107,35 @@ class _NotificationsState extends State<Notifications>
 
   @override
   Widget build(BuildContext context) {
-
-
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('通知'),
-          centerTitle: true,
-          actions: <Widget>[
-            PopupMenuButton(
-              offset: Offset(0, 45),
-              icon: Icon(Icons.more_vert),
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                PopupMenuItem<String>(value: 'clear', child: new Text('清空')),
-                PopupMenuItem<String>(
-                    value: 'choose_type', child: new Text('分类'))
-              ],
-              onSelected: (String value) {
-                switch (value) {
-                  case 'clear':
-                    DialogUtils.showSimpleAlertDialog(context: context,text: '你确定要永远删除通知列表吗',onConfirm: _clearNotification);
-                    break;
-                  case 'choose_type':
-                    showChooseTypeDialog();
-                    break;
-                }
-              },
-            )
+    return AccountSwitchTimeline(
+      provider: provider,
+      title: '通知',
+      listView: ProviderEasyRefreshListView(
+        easyRefreshController: refreshController,
+      ),
+      actions: [
+        PopupMenuButton(
+          offset: Offset(0, 45),
+          icon: Icon(Icons.more_vert),
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+            PopupMenuItem<String>(value: 'clear', child: new Text('清空')),
+            PopupMenuItem<String>(
+                value: 'choose_type', child: new Text('分类'))
           ],
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: ChangeNotifierProvider<ResultListProvider>.value(
-                value: provider,
-                child: ProviderEasyRefreshListView(
-                  easyRefreshController: refreshController,
-                ),
-              ),
-            )
-          ],
-        ));
+          onSelected: (String value) {
+            switch (value) {
+              case 'clear':
+                DialogUtils.showSimpleAlertDialog(context: context,text: '你确定要永远删除通知列表吗',onConfirm: _clearNotification);
+                break;
+              case 'choose_type':
+                showChooseTypeDialog();
+                break;
+            }
+          },
+        )
+      ],
+    );
+
   }
 
   _clearNotification() async{

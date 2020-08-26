@@ -4,6 +4,7 @@ import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/login/login.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
@@ -195,11 +196,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
             if (accountInfo.active) {
               AppNavigate.pop();
             } else {
-              await LocalStorageAccount.setActiveAccount(accountInfo);
-              LoginedUser().loadFromLocalAccount(accountInfo);
-              await SettingsProvider().load();
-              AppNavigate.pushAndRemoveUntil(context, HomePage(),
-                  routeType: RouterType.scale);
+              await AccountUtil.switchToAccount(accountInfo);
             }
           },
           child: Ink(

@@ -12,7 +12,7 @@ class AppNavigate {
     router.pop(param);
   }
 
-  static pushAndRemoveUntil(BuildContext context, Widget scene,
+  static pushAndRemoveUntil(Widget scene,
       {Function callBack, router.RouterType routeType}) {
     router.pushAndRemoveUntil(ThemeConsumer(child: scene),routeType ?? router.RouterType.cupertino).then((data) {
       if (callBack != null) callBack(data);

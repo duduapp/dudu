@@ -35,7 +35,7 @@ dependencies:
   progress_indicators: ^0.1.5
   photo_view:
     path: ../photo_view/
-  image_gallery_saver: ^1.2.2
+  image_gallery_saver: ^1.5.0
   chewie: ^0.9.10
   path_provider: ^1.6.9
   like_button: ^1.0.1
@@ -58,6 +58,9 @@ dependencies:
   share_extend: ^1.1.9
   webview_flutter:
     path: ../plugins/packages/webview_flutter/
+  gzx_dropdown_menu :
+    path: ../gzx_dropdown_menu/
+
 
 
 

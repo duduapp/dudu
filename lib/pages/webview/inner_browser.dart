@@ -21,8 +21,16 @@ class _InnerBrowserState extends State<InnerBrowser> {
   int progress = 0;
   double opacity = 0;
   String title = '网页';
+  String url;
 
   WebViewController _controller;
+
+
+  @override
+  void initState() {
+    url = widget.url;
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -52,13 +60,18 @@ class _InnerBrowserState extends State<InnerBrowser> {
     //ToDo update official flutter_webview when on progress is merged
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Column(
+          children: [
+            Text(title,style: TextStyle(fontSize: 16),),
+            Text(url ?? '',style: TextStyle(fontSize: 12,color: Theme.of(context).accentColor),)
+          ],
+        ),
         elevation: 0,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.more_horiz),
             onPressed: () {
-              DialogUtils.showBottomSheet(context: context,widgets: [
+              DialogUtils.showBottomSheet(context: context, widgets: [
                 BottomSheetItem(
                   text: '分享',
                   onTap: () => Share.share(widget.url),
@@ -66,9 +79,9 @@ class _InnerBrowserState extends State<InnerBrowser> {
                 Divider(indent: 60, height: 0),
                 BottomSheetItem(
                   text: '在浏览器中打开',
-                  onTap: () async{
+                  onTap: () async {
                     if (await canLaunch(widget.url)) {
-                    await launch(widget.url);
+                      await launch(widget.url);
                     } else {
                       // do nothing
                     }
@@ -88,8 +101,9 @@ class _InnerBrowserState extends State<InnerBrowser> {
                 child: SizedBox(
                   height: 3,
                   child: LinearProgressIndicator(
-                    value: progress/100,
-                    valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).buttonColor),
+                    value: progress / 100,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).buttonColor),
                   ),
                 ),
                 preferredSize: Size(double.infinity, 3.0),
@@ -98,9 +112,18 @@ class _InnerBrowserState extends State<InnerBrowser> {
       body: Opacity(
         opacity: opacity,
         child: WebView(
-            initialUrl: widget.url,
-            javascriptMode: JavascriptMode.unrestricted,
-            onProgress: (p) {setState(() {
+          initialUrl: widget.url,
+          javascriptMode: JavascriptMode.unrestricted,
+          navigationDelegate: (action) {
+            setState(() {
+              url = action.url;
+            });
+            return NavigationDecision.navigate;
+          },
+          gestureNavigationEnabled: true,
+          debuggingEnabled: true,
+          onProgress: (p) async{
+            setState(() {
               progress = p;
               //ToDo solve first open webview black,not perfectly
               if (progress > 30 && opacity != 1) {
@@ -108,16 +131,24 @@ class _InnerBrowserState extends State<InnerBrowser> {
                   opacity = 1;
                 });
               }
-            });},
-            onWebViewCreated: (controller) {
-              _controller = controller;
-            },
-            onPageFinished: (str) {
-              setState(() async{
-                title = await _controller.getTitle();
-                opacity = 1;
+            });
+            if (progress == 100) {
+            }
+          },
+
+          onWebViewCreated: (controller) {
+            _controller = controller;
+          },
+          onPageFinished: (str) async{
+            _controller.getTitle().then((t){
+              setState(() {
+                title = t;
               });
-            },
+            });
+            setState(()  {
+              opacity = 1;
+            });
+          },
         ),
       ),
     );
