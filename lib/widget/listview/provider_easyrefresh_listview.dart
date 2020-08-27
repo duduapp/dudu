@@ -32,7 +32,8 @@ class ProviderEasyRefreshListView extends StatefulWidget {
       this.afterBuild,
         this.firstRefresh = false,
       this.useAnimatedList = false,
-      this.showLoading = true})
+      this.showLoading = true,
+      this.emptyView})
       : super(key: key);
   final TimelineType type;
 
@@ -49,6 +50,7 @@ class ProviderEasyRefreshListView extends StatefulWidget {
   final bool firstRefresh;
   final bool showLoading;
   final RefreshController refreshController;
+  final Widget emptyView;
   @override
   _ProviderEasyRefreshListViewState createState() =>
       _ProviderEasyRefreshListViewState();
@@ -173,6 +175,7 @@ class _ProviderEasyRefreshListViewState
                     },
                     child: Scrollbar(
                       child: SmartRefresher(
+                        physics: ClampingScrollPhysics(),
                         primary: widget.scrollController == null ? true : false,
                         controller: _refreshController,
                         header: ClassicHeader(
@@ -192,8 +195,8 @@ class _ProviderEasyRefreshListViewState
                           canLoadingText: '释放加载更多',
                           noDataText: '',
                         ),
-                        enablePullDown: provider.finishRefresh ? false : (provider.isLoading && !widget.showLoading) ? false : true,
-                        enablePullUp: provider.finishLoad ? false : true,
+                        enablePullDown: provider.enableRefresh ? (provider.finishRefresh ? false : (provider.isLoading && !widget.showLoading) ? false : true) : false,
+                        enablePullUp: provider.enableLoad ? (provider.finishLoad ? false : true) :false,
                         scrollController: widget.scrollController,
                         cacheExtent: widget.cacheExtent ?? null,
                         onRefresh: () async {
@@ -204,7 +207,7 @@ class _ProviderEasyRefreshListViewState
                           await provider.load();
                           _refreshController.loadComplete();
                         },
-                        child: provider.noResults ? EmptyView():widget.useAnimatedList
+                        child: provider.noResults ? (widget.emptyView ?? EmptyView()):widget.useAnimatedList
                             ? CustomScrollView(
                                 slivers: [
                                   !widget.usingGrid

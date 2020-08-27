@@ -8,11 +8,12 @@ class ListRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Ink(
       width: double.infinity,
       padding: EdgeInsets.all(padding),
       child: child,
       decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
           border:
           Border(bottom: BorderSide(color: Theme.of(context).dividerColor,))),
     );

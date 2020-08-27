@@ -25,7 +25,7 @@ class ResultListProvider extends ChangeNotifier {
   final bool reverseData;
   bool finishRefresh = false;
   bool finishLoad = false;
-  bool noResults = false;
+  bool noResults = true;
   bool isLoading = false;
   DioError error;
   String nextUrl;
@@ -348,6 +348,13 @@ class ResultListProvider extends ChangeNotifier {
   }
 
   notify() {
+    notifyListeners();
+  }
+
+  setData(List listData,{bool updateNoResults = true}) {
+    if (updateNoResults)
+      noResults = false;
+    list = _filterData(listData);
     notifyListeners();
   }
 

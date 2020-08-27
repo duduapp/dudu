@@ -18,8 +18,9 @@ import 'package:provider/provider.dart';
 class StatusItemActionW extends StatelessWidget {
   final StatusItemData status;
   final bool subStatus;
+  final bool showNum;
 
-  const StatusItemActionW({Key key, this.status, this.subStatus})
+  const StatusItemActionW({Key key, this.status, this.subStatus, this.showNum = true})
       : super(key: key);
 
   @override
@@ -32,7 +33,7 @@ class StatusItemActionW extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(top: subStatus ? 0 :0),
         decoration: BoxDecoration(
-            border: subStatus ? null : Border(
+            border: (subStatus || !showNum) ? null : Border(
                 top: BorderSide(
                     width: 0.5, color: Theme.of(context).dividerColor))) ,
         padding:  EdgeInsets.fromLTRB(0,subStatus ? 0 :8,0,8),
@@ -62,9 +63,8 @@ class StatusItemActionW extends StatelessWidget {
                     width: 2,
                   ),
                   Text(
-                      status.repliesCount > 0
-                          ? status.repliesCount.toString()
-                          : '',
+                      (status.repliesCount <= 0 || !showNum)
+                          ? '' : status.repliesCount.toString(),
                       style: TextStyle(fontSize: fontSize - 1, color: color))
                 ],
               ),
@@ -88,7 +88,7 @@ class StatusItemActionW extends StatelessWidget {
                 likeCountPadding: EdgeInsets.only(top: 0),
                 likeCount: status.reblogsCount,
                 countBuilder: (int count, bool isLiked, String text) {
-                  return count <= 0
+                  return (count <= 0 || !showNum)
                       ? Container()
                       : Text(count.toString(),
                           style: TextStyle(
@@ -145,7 +145,7 @@ class StatusItemActionW extends StatelessWidget {
               likeCountPadding: EdgeInsets.only(top: 0),
               likeCount: status.favouritesCount,
               countBuilder: (int count, bool isLiked, String text) {
-                return count <= 0
+                return (count <= 0 || !showNum)
                     ? Container()
                     : Text(count.toString(),
                         style: TextStyle(

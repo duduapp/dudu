@@ -24,8 +24,14 @@ class StatusActionUtil {
     status.reblogged = !isLiked;
     status.reblogsCount = status.reblogsCount + (!isLiked ? 1 : -1);
 
-    ResultListProvider provider =
-        Provider.of<ResultListProvider>(context, listen: false);
+    ResultListProvider provider;
+    try {
+      provider =
+          Provider.of<ResultListProvider>(context, listen: false);
+    } catch (e) {
+
+    }
+    if (provider != null)
     provider.list.forEach((element) {
       if (element['id'] == status.id) {
         element['reblogged'] = !isLiked;
@@ -57,22 +63,30 @@ class StatusActionUtil {
       bool isLiked, StatusItemData status, BuildContext context) async {
     status.favourited = !isLiked;
     status.favouritesCount = status.favouritesCount + (!isLiked ? 1 : -1);
-    ResultListProvider provider =
-        Provider.of<ResultListProvider>(context, listen: false);
-    provider.list.forEach((element) {
-      if (element['id'] == status.id) {
-        element['favourited'] = !isLiked;
-        element['favourites_count'] =
-            element['favourites_count'] + (!isLiked ? 1 : -1);
-      }
-      if ((element.containsKey('reblog') &&
-          element['reblog'] != null &&
-          element['reblog']['id'] == status.id)) {
-        element['reblog']['favourited'] = !isLiked;
-        element['reblog']['favourites_count'] =
-            element['reblogs_count'] + (!isLiked ? 1 : -1);
-      }
-    });
+
+    ResultListProvider provider;
+    try {
+      provider =
+          Provider.of<ResultListProvider>(context, listen: false);
+    } catch (e) {
+
+    }
+    if (provider != null) {
+      provider.list.forEach((element) {
+        if (element['id'] == status.id) {
+          element['favourited'] = !isLiked;
+          element['favourites_count'] =
+              element['favourites_count'] + (!isLiked ? 1 : -1);
+        }
+        if ((element.containsKey('reblog') &&
+            element['reblog'] != null &&
+            element['reblog']['id'] == status.id)) {
+          element['reblog']['favourited'] = !isLiked;
+          element['reblog']['favourites_count'] =
+              element['reblogs_count'] + (!isLiked ? 1 : -1);
+        }
+      });
+    }
     if (isLiked) {
       StatusApi.unfavourite(status.id);
       ListViewUtil.unfavouriteStatusInAllProvider(status);
@@ -108,8 +122,7 @@ class StatusActionUtil {
       BuildContext context, StatusItemData data, bool subStatus) {
     OwnerAccount myAccount = LoginedUser().account;
     BuildContext modalContext = context;
-    ResultListProvider provider =
-        Provider.of<ResultListProvider>(context, listen: false);
+
     bool mentioned = false;
     for (var row in data.mentions) {
       if (row['acct'] == myAccount.acct) {
@@ -262,7 +275,13 @@ class StatusActionUtil {
 
   static _onPressBlock(
       BuildContext context, StatusItemData data, bool subStatus) async {
-    var provider = Provider.of<ResultListProvider>(context, listen: false);
+    var provider;
+    try {
+      provider = Provider.of<ResultListProvider>(context, listen: false);
+    } catch (e) {
+      // status detail page
+      provider = SettingsProvider().statusDetailProviders.last;
+    }
     if (SettingsProvider().statusDetailProviders.contains(provider)) {
       // user is in status detail page
       if (subStatus) {
@@ -287,8 +306,16 @@ class StatusActionUtil {
 
   static _onPressMute(
       BuildContext context, StatusItemData data, bool subStatus) async {
-    var provider = Provider.of<ResultListProvider>(context, listen: false);
-    if (SettingsProvider().statusDetailProviders.contains(provider)) {
+    var provider;
+    try {
+      provider = Provider.of<ResultListProvider>(context, listen: false);
+    } catch (e) {
+      // status detail page
+      provider = SettingsProvider().statusDetailProviders.last;
+    }
+
+
+     if (SettingsProvider().statusDetailProviders.contains(provider)) {
       // user is in status detail page
       if (subStatus) {
         // 当前页的的字嘟文是否和主嘟文是同一个作者

@@ -37,7 +37,7 @@ class StatusItem extends StatelessWidget {
   final String refString;
   final OwnerAccount refAccount;
   final bool subStatus;
-  final bool primary; // 点击status详情页后该status
+  final bool primary;// 点击status详情页后该status
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +111,7 @@ class StatusItem extends StatelessWidget {
                 ),
                 StatusItemCard(data),
                 // if (primary) StatusItemPrimaryBottom(data),
+                if (!primary)
                 StatusItemActionW(
                   status: data,
                   subStatus: subStatus,

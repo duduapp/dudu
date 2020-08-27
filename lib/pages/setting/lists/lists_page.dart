@@ -56,44 +56,48 @@ class _ListsPageState extends State<ListsPage> {
   Widget _row(int idx, List data, ResultListProvider provider) {
     var list = data[idx];
     return ListRow(
+      padding: 0,
       child: InkWell(
         onTap: () => AppNavigate.push(ListTimeline(list['id'])),
-        child: Row(children: [
-          Icon(
-            IconFont.list,
-            size: 25,
-          ),
-          SizedBox(width: 5,),
-          Text(
-            list['title'],
-            style: TextStyle(fontSize: 18),
-          ),
-          Spacer(),
-          PopupMenuButton(
-            offset: Offset(0, 35),
-            icon: Icon(Icons.more_horiz),
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              new PopupMenuItem<String>(value: 'edit', child: new Text('编辑列表')),
-              new PopupMenuItem<String>(
-                  value: 'rename', child: new Text('重命名列表')),
-              new PopupMenuItem<String>(
-                  value: 'delete', child: new Text('删除列表')),
-            ],
-            onSelected: (String value) {
-              switch (value) {
-                case 'edit':
-                  _showEditDialog(list['id']);
-                  break;
-                case 'rename':
-                  _showRenameDialog(list['id'], list['title'], provider);
-                  break;
-                case 'delete':
-                  _remove(list['id'], provider);
-                  break;
-              }
-            },
-          )
-        ]),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(children: [
+            Icon(
+              IconFont.list,
+              size: 25,
+            ),
+            SizedBox(width: 5,),
+            Text(
+              list['title'],
+              style: TextStyle(fontSize: 18),
+            ),
+            Spacer(),
+            PopupMenuButton(
+              offset: Offset(0, 35),
+              icon: Icon(Icons.more_horiz),
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                new PopupMenuItem<String>(value: 'edit', child: new Text('编辑列表')),
+                new PopupMenuItem<String>(
+                    value: 'rename', child: new Text('重命名列表')),
+                new PopupMenuItem<String>(
+                    value: 'delete', child: new Text('删除列表')),
+              ],
+              onSelected: (String value) {
+                switch (value) {
+                  case 'edit':
+                    _showEditDialog(list['id']);
+                    break;
+                  case 'rename':
+                    _showRenameDialog(list['id'], list['title'], provider);
+                    break;
+                  case 'delete':
+                    _remove(list['id'], provider);
+                    break;
+                }
+              },
+            )
+          ]),
+        ),
       ),
     );
   }

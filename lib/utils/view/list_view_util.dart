@@ -95,7 +95,11 @@ class ListViewUtil {
       provider = SettingsProvider().statusDetailProviders.last;
       if (provider == null) return;
     } else {
-      provider = Provider.of<ResultListProvider>(context, listen: false);
+      try {
+        provider = Provider.of<ResultListProvider>(context, listen: false);
+      } catch (e) {
+        provider = SettingsProvider().statusDetailProviders.last;
+      }
     }
     var accountId = status.account.id;
     AccountsApi.block(accountId);
@@ -115,7 +119,11 @@ class ListViewUtil {
       provider = SettingsProvider().statusDetailProviders.last;
       if (provider == null) return;
     } else {
-      provider = Provider.of<ResultListProvider>(context, listen: false);
+      try {
+        provider = Provider.of<ResultListProvider>(context, listen: false);
+      } catch (e) {
+        provider = SettingsProvider().statusDetailProviders.last;
+      }
     }
     var accountId = status.account.id;
     AccountsApi.mute(accountId);
