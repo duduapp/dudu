@@ -60,7 +60,7 @@ class _StatusDetailState extends State<StatusDetail>
           .add(_buildStatusItem(widget.data, primary: true, subStatus: false));
 
       parentWidgets.add(Container(
-        height: 42,
+        height: 38,
         color: Theme.of(context).scaffoldBackgroundColor,
       ));
 
@@ -179,6 +179,7 @@ class _StatusDetailState extends State<StatusDetail>
 
   Widget _statusContent() {
     return Container(
+      color: null,
       child: MeasureSize(
         onChange: (size) {
           if (!_getSliverExpandHeight) {
@@ -264,6 +265,7 @@ class _StatusDetailState extends State<StatusDetail>
                 headerSliverBuilder: (context, bool) {
                   return [
                     SliverAppBar(
+                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                       toolbarHeight: 0,
                       flexibleSpace: !_getSliverExpandHeight
                           ? _statusContent()
@@ -277,7 +279,7 @@ class _StatusDetailState extends State<StatusDetail>
                       snap: false,
                       bottom: ColoredTabBar(
                         color: Theme.of(context).primaryColor,
-                        height: 40,
+                        height: 38,
                         tabBar: Align(
                           alignment: Alignment.centerRight,
                           child: Container(
@@ -302,21 +304,21 @@ class _StatusDetailState extends State<StatusDetail>
                                               ScreenUtil.width(context) / 9)),
                                   tabs: [
                                     Padding(
-                                      padding: const EdgeInsets.all(6.0),
+                                      padding: const EdgeInsets.all(8.0),
                                       child: Text(
                                         '转评 ' +
                                             widget.data.repliesCount.toString(),
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(6.0),
+                                      padding: const EdgeInsets.all(8.0),
                                       child: Text(
                                         '转嘟 ' +
                                             widget.data.reblogsCount.toString(),
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(6.0),
+                                      padding: const EdgeInsets.all(8.0),
                                       child: Text(
                                         '赞 ' +
                                             widget.data.favouritesCount

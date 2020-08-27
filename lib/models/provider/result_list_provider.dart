@@ -27,6 +27,7 @@ class ResultListProvider extends ChangeNotifier {
   bool finishLoad = false;
   bool noResults = true;
   bool isLoading = false;
+  bool enableCache;
   DioError error;
   String nextUrl;
   final bool listenBlockEvent;
@@ -36,7 +37,6 @@ class ResultListProvider extends ChangeNotifier {
   final bool onlyMedia;
   final ResultListDataHandler dataHandler;
   String lastCellId = '0';
-  final int cacheTimeInSeconds;
   CancelToken token = CancelToken();
   final String tag;
   String lastRequestUrl = '';
@@ -58,7 +58,7 @@ class ResultListProvider extends ChangeNotifier {
       this.dataHandler,
         bool firstRefresh = true,
       bool showLoading = true, // 给list 第一次赋值，刷新后用结果值
-      this.cacheTimeInSeconds,
+        this.enableCache = false,
       this.tag}) {
 
     if (listenBlockEvent) {
@@ -160,25 +160,12 @@ class ResultListProvider extends ChangeNotifier {
       lastRequestUrl = url;
     }
 
-    if (cacheTimeInSeconds != null) {
-      int cacheTime = await Storage.getIntWithAccount('cache_time' + url);
-      if (cacheTime != null) {
-        if (DateTime.now()
-                .difference(DateTime.fromMillisecondsSinceEpoch(cacheTime))
-                .inSeconds <
-            cacheTimeInSeconds) {
-          list = json
-              .decode(await Storage.getStringWithAccount('cache_data' + url));
-          notifyListeners();
-          return true;
-        }
-      }
-    }
+
 
     var response;
     try {
       response = await Request.get(
-          url: url, returnAll: true, cancelToken: token);
+          url: url, returnAll: true, cancelToken: token,enableCache: enableCache);
     } catch (e) {
       return false;
     }
@@ -201,12 +188,6 @@ class ResultListProvider extends ChangeNotifier {
       error = null;
     }
     var data = response.data;
-
-    if (cacheTimeInSeconds != null) {
-      Storage.saveIntWithAccount(
-          'cache_time' + url, DateTime.now().millisecondsSinceEpoch);
-      Storage.saveStringWithAccount('cache_data' + url, json.encode(data));
-    }
 
     if (mapKey != null) {
       data = data[mapKey];

@@ -115,7 +115,7 @@ class _TimelineState extends State<Timeline> {
                           customSearch.showSearch(
                     context: context, delegate: SearchPageDelegate());
         },),
-        IconButton(icon: Icon(IconFont.addCircle),)
+        IconButton(icon: Icon(IconFont.addCircle),onPressed: () => AppNavigate.push(NewStatus(), routeType: RouterType.material),)
       ],
     );
 

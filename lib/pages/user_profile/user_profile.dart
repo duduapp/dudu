@@ -676,8 +676,9 @@ class _UserProfileState extends State<UserProfile>
               child: Container(
                 key: PageStorageKey('tab3'),
                 child: ProviderEasyRefreshListView(
-                  useAnimatedList: true,
                   usingGrid: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3),
                   firstRefresh: true,
                 ),
               ),
@@ -710,13 +711,14 @@ class _UserProfileState extends State<UserProfile>
               : toHeroContext.widget;
           return hero.child;
         },
-        child: Image(
-          fit: BoxFit.cover,
-          image: CachedNetworkImageProvider(
-            media.previewUrl,
-            cacheManager: CustomCacheManager()
-          ),
-        ),
+        child: CachedNetworkImage(
+            progressIndicatorBuilder :  (context, widget,chunk) {
+              return Container(
+                color: Theme.of(context).accentColor,
+              );
+            },
+            fit: BoxFit.cover,
+            imageUrl: media.previewUrl, cacheManager: CustomCacheManager()),
       ),
     );
   }

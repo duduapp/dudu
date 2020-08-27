@@ -13,6 +13,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 /// animatedlist 无法保存位置
 /// customscrollview + sliveranimatedlist 性能有问题
 /// 所以性能相关的地方用listview,其它地方可以用animatedlist
@@ -22,15 +23,16 @@ class ProviderEasyRefreshListView extends StatefulWidget {
       this.type,
       this.emptyWidget,
       this.easyRefreshController,
-        this.refreshController,
+      this.refreshController,
       this.header,
       this.usingGrid = false,
+        this.gridDelegate,
       this.scrollController,
       this.cacheExtent,
       this.enableLoad = true,
       this.addToSliverCount = 0,
       this.afterBuild,
-        this.firstRefresh = false,
+      this.firstRefresh = false,
       this.useAnimatedList = false,
       this.showLoading = true,
       this.emptyView})
@@ -51,6 +53,7 @@ class ProviderEasyRefreshListView extends StatefulWidget {
   final bool showLoading;
   final RefreshController refreshController;
   final Widget emptyView;
+  final SliverGridDelegate gridDelegate;
   @override
   _ProviderEasyRefreshListViewState createState() =>
       _ProviderEasyRefreshListViewState();
@@ -66,7 +69,8 @@ enum ListStatus {
 }
 
 class _ProviderEasyRefreshListViewState
-    extends State<ProviderEasyRefreshListView> with AutomaticKeepAliveClientMixin{
+    extends State<ProviderEasyRefreshListView>
+    with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = ScrollController();
 
   EasyRefreshController _controller;
@@ -82,12 +86,12 @@ class _ProviderEasyRefreshListViewState
 
   RefreshController _refreshController;
 
-
   @override
   void initState() {
     super.initState();
 
-    _refreshController = widget.refreshController ?? RefreshController(initialRefresh: false);
+    _refreshController =
+        widget.refreshController ?? RefreshController(initialRefresh: false);
 
     // _startRequest(widget.requestUrl,refresh: true);
     _controller = widget.easyRefreshController ?? EasyRefreshController();
@@ -115,7 +119,7 @@ class _ProviderEasyRefreshListViewState
 
   @override
   Widget build(BuildContext context) {
-     super.build(context);
+    super.build(context);
 
     return Selector<SettingsProvider, String>(
       selector: (_, m) => m.get('text_scale'),
@@ -132,8 +136,7 @@ class _ProviderEasyRefreshListViewState
 
             GlobalKey<SliverAnimatedListState> listKey;
             if (widget.useAnimatedList) {
-              listKey =
-                  GlobalKey<SliverAnimatedListState>();
+              listKey = GlobalKey<SliverAnimatedListState>();
               provider.setAnimatedListKey(listKey);
             }
             if (provider.error != null) {
@@ -148,13 +151,11 @@ class _ProviderEasyRefreshListViewState
               _refreshController.loadNoData();
             }
 
-
             if (!firstRefreshed && widget.firstRefresh) {
               firstRefreshed = true;
-              WidgetsBinding.instance.addPostFrameCallback((_){
+              WidgetsBinding.instance.addPostFrameCallback((_) {
                 provider.refresh(showLoading: true);
               });
-
             }
 
             // 初次可能从Provider 里面请求
@@ -183,9 +184,14 @@ class _ProviderEasyRefreshListViewState
                           refreshingText: '加载中',
                           completeText: '完成刷新',
                           idleText: '下拉刷新',
-                          releaseIcon: Icon(Icons.arrow_upward,color: Colors.grey,),
+                          releaseIcon: Icon(
+                            Icons.arrow_upward,
+                            color: Colors.grey,
+                          ),
                           refreshingIcon: CupertinoActivityIndicator(),
-                          textStyle: TextStyle(fontSize: 12,color: Theme.of(context).accentColor),
+                          textStyle: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).accentColor),
                         ),
                         footer: ClassicFooter(
                           loadingText: '加载中...',
@@ -195,8 +201,16 @@ class _ProviderEasyRefreshListViewState
                           canLoadingText: '释放加载更多',
                           noDataText: '',
                         ),
-                        enablePullDown: provider.enableRefresh ? (provider.finishRefresh ? false : (provider.isLoading && !widget.showLoading) ? false : true) : false,
-                        enablePullUp: provider.enableLoad ? (provider.finishLoad ? false : true) :false,
+                        enablePullDown: provider.enableRefresh
+                            ? (provider.finishRefresh
+                                ? false
+                                : (provider.isLoading && !widget.showLoading)
+                                    ? false
+                                    : true)
+                            : false,
+                        enablePullUp: provider.enableLoad
+                            ? (provider.finishLoad ? false : true)
+                            : false,
                         scrollController: widget.scrollController,
                         cacheExtent: widget.cacheExtent ?? null,
                         onRefresh: () async {
@@ -207,49 +221,47 @@ class _ProviderEasyRefreshListViewState
                           await provider.load();
                           _refreshController.loadComplete();
                         },
-                        child: provider.noResults ? (widget.emptyView ?? EmptyView()):widget.useAnimatedList
-                            ? CustomScrollView(
-                                slivers: [
-                                  !widget.usingGrid
-                                      ? SliverAnimatedList(
-                                          key: listKey,
-                                          initialItemCount:
-                                              provider.list.length +
-                                                  widget.addToSliverCount,
-                                          itemBuilder:
-                                              (context, index, animation) {
-                                            return SizeTransition(
-                                              axis: Axis.vertical,
-                                              sizeFactor: animation,
-                                              child: provider.buildRow(index,
-                                                  provider.list, provider),
-                                            );
-                                          },
-                                        )
-                                      : SliverGrid(
-                                          delegate: SliverChildBuilderDelegate(
-                                              (context, idx) {
-                                            return provider.buildRow(
-                                                idx, provider.list, provider);
-                                          },
-                                              childCount: provider.list.length +
-                                                  widget.addToSliverCount),
-                                          gridDelegate:
-                                              SliverGridDelegateWithFixedCrossAxisCount(
-                                                  crossAxisCount: 3),
-                                        )
-                                ],
-                              )
-                            : ListView.builder(
+                        child: provider.noResults
+                            ? (widget.emptyView ?? EmptyView())
+                            : widget.useAnimatedList
+                                ? CustomScrollView(
+                                    slivers: [
+                                      SliverAnimatedList(
+                                        key: listKey,
+                                        initialItemCount: provider.list.length +
+                                            widget.addToSliverCount,
+                                        itemBuilder:
+                                            (context, index, animation) {
+                                          return SizeTransition(
+                                            axis: Axis.vertical,
+                                            sizeFactor: animation,
+                                            child: provider.buildRow(
+                                                index, provider.list, provider),
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  )
+                                : widget.usingGrid
+                                    ? GridView.builder(
+                                        itemBuilder: (context, idx) {
+                                          return provider.buildRow(
+                                              idx, provider.list, provider);
+                                        },
+                                        itemCount: provider.list.length +
+                                            widget.addToSliverCount,
+                                        gridDelegate: widget.gridDelegate
 
-                                //      key: listKey,
-                                itemCount: provider.list.length +
-                                    widget.addToSliverCount,
-                                itemBuilder: (context, index) {
-                                  return provider.buildRow(
-                                      index, provider.list, provider);
-                                },
-                              ),
+                                      )
+                                    : ListView.builder(
+                                        //      key: listKey,
+                                        itemCount: provider.list.length +
+                                            widget.addToSliverCount,
+                                        itemBuilder: (context, index) {
+                                          return provider.buildRow(
+                                              index, provider.list, provider);
+                                        },
+                                      ),
                       ),
                     )
 

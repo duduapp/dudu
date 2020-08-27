@@ -5,6 +5,7 @@ import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/home_page.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/widget/common/loading_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -100,6 +101,8 @@ class _LoginState extends State<Login> {
         await LocalStorageAccount.addOwnerAccount(account);
 
         await SettingsProvider().load(); // load new settings
+
+        AccountUtil.cacheEmoji();
 
         pushAndRemoveUntil(HomePage());
 
