@@ -88,6 +88,7 @@ class _LoginState extends State<Login> {
         Token getToken = Token.fromJson(data);
         String token = '${getToken.tokenType} ${getToken.accessToken}';
         
+        Request.closeDioClient();
 
         LocalAccount localAccount = LocalAccount(hostUrl: hostUrl,token: token,active: true);
         await LocalStorageAccount.addLocalAccount(localAccount);
