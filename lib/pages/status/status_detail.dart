@@ -41,6 +41,7 @@ class _StatusDetailState extends State<StatusDetail>
 
   double _sliverExpandHeight = 10000;
   bool _getSliverExpandHeight = false;
+  bool _originExpandOption = false;
 
   _fetchData() async {
     var data = await StatusApi.getContext(widget.data.id);
@@ -92,6 +93,8 @@ class _StatusDetailState extends State<StatusDetail>
     }
     data['media_attachments'] = copyAttachments;
     data['media_attachments'].forEach((e) => e['id'] = "c_" + e['id']);
+    _originExpandOption = SettingsProvider().settings['always_expand_tools'];
+    SettingsProvider().settings['always_expand_tools'] = true;
 
     _tabController = TabController(length: 3, vsync: this);
 
@@ -124,6 +127,7 @@ class _StatusDetailState extends State<StatusDetail>
     _scrollController.dispose();
     _tabController.dispose();
     SettingsProvider().statusDetailProviders.remove(providers[0]);
+    SettingsProvider().settings['always_expand_tools'] = _originExpandOption;
     super.dispose();
   }
 

@@ -1,4 +1,5 @@
 import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/timeline/hashtag_timeline.dart';
 import 'package:dudu/pages/user_profile/user_profile.dart';
 import 'package:dudu/plugin/flutter_html/flutter_html.dart';
@@ -25,7 +26,7 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
 
   @override
   void initState() {
-    if (widget.foldConetent && StringUtil.removeAllHtmlTags(widget.content).length > 500) {
+    if (widget.foldConetent && StringUtil.removeAllHtmlTags(widget.content).length > 500 && !SettingsProvider().get('always_expand_tools')) {
       expanded = false;
       needExpand = true;
     }
