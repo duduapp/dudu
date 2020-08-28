@@ -102,7 +102,7 @@ class _AccountSwitchTimelineState extends State<AccountSwitchTimeline> {
                       items: [
                         GZXDropDownHeaderItem(widget.title,
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 17,
                                 color: Theme.of(context).textTheme.bodyText1.color))
                       ],
                       stackKey: _stackKey,
