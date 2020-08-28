@@ -7,6 +7,7 @@ import 'package:dudu/pages/setting/lists/lists_eidt.dart';
 import 'package:dudu/pages/timeline/lists_timeline.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/common/list_row.dart';
 import 'package:dudu/widget/common/normal_flat_button.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
@@ -29,12 +30,11 @@ class _ListsPageState extends State<ListsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: CustomAppBar(
         title: Text('列表'),
-        centerTitle: false,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.add),
+            icon: Icon(IconFont.follow,size: 28,),
             onPressed: () => _showAddDialog(),
           )
         ],
@@ -74,7 +74,7 @@ class _ListsPageState extends State<ListsPage> {
             Spacer(),
             PopupMenuButton(
               offset: Offset(0, 35),
-              icon: Icon(Icons.more_horiz),
+              icon: Icon(IconFont.moreHoriz,size: 28,),
               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                 new PopupMenuItem<String>(value: 'edit', child: new Text('编辑列表')),
                 new PopupMenuItem<String>(

@@ -2,6 +2,7 @@ import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/pages/login/login.dart';
 import 'package:dudu/utils/app_navigate.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:dudu/widget/setting/account_row_top.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class _AccountSwitchTimelineState extends State<AccountSwitchTimeline> {
 
     return Scaffold(
       appBar: PreferredSize(
-          child: AppBar(
+          child: CustomAppBar(
             elevation: 0,
           ),
           preferredSize: Size.fromHeight(0)),
@@ -94,7 +95,7 @@ class _AccountSwitchTimelineState extends State<AccountSwitchTimeline> {
             height: 40,
             color: Theme.of(context).appBarTheme.color,
             child: Row(children: [
-              SizedBox(width: (widget.actions.length * 35 + 17).toDouble()),
+              SizedBox(width: (widget.actions.length * 35 + 22).toDouble()),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8),
@@ -102,7 +103,7 @@ class _AccountSwitchTimelineState extends State<AccountSwitchTimeline> {
                       items: [
                         GZXDropDownHeaderItem(widget.title,
                             style: TextStyle(
-                                fontSize: 17,
+                                fontSize: 18,
                                 color: Theme.of(context).textTheme.bodyText1.color))
                       ],
                       stackKey: _stackKey,
@@ -111,7 +112,7 @@ class _AccountSwitchTimelineState extends State<AccountSwitchTimeline> {
                       borderWidth: 0,
                       color: Theme.of(context).appBarTheme.color,
                       dropDownStyle: TextStyle(
-                          fontSize: 17,
+                          fontSize: 18,
                           color: Theme.of(context).textTheme.bodyText1.color),
                       iconDropDownColor: Theme.of(context).textTheme.bodyText1.color),
                 ),
@@ -123,7 +124,7 @@ class _AccountSwitchTimelineState extends State<AccountSwitchTimeline> {
               ),SizedBox(width: 5,),
               ],
 
-              SizedBox(width: 7,
+              SizedBox(width: 12,
               )
             ]),
           ),

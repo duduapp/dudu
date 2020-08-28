@@ -2,6 +2,7 @@
 
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/utils/app_navigate.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class MediaDetail extends StatelessWidget {
@@ -23,7 +24,7 @@ class MediaDetail extends StatelessWidget {
       onWillPop: _onWillPop,
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: AppBar(
+        appBar: CustomAppBar(
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,

@@ -39,7 +39,7 @@ class _StatusItemTextState extends State<StatusItemText> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
+      padding: EdgeInsets.only(top:4,bottom: 5),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         HtmlContent(
            widget.data.spoilerText.isEmpty
@@ -47,9 +47,14 @@ class _StatusItemTextState extends State<StatusItemText> {
               : widget.data.spoilerText.trim(),statusData: widget.data,emojis: widget.data.emojis,
         ),
         if (widget.data.spoilerText.isNotEmpty)
-          OutlineButton(
-            child: Text(showMore ? '折叠内容' : '显示更多',style: TextStyle(fontWeight: FontWeight.normal),),
-            onPressed: _onShowMorePressed,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 2),
+            child: OutlineButton(
+              padding: EdgeInsets.all(0),
+              highlightedBorderColor: Theme.of(context).buttonColor,
+              child: Text(showMore ? '折叠内容' : '显示更多',style: TextStyle(fontSize:12,fontWeight: FontWeight.normal),),
+              onPressed: _onShowMorePressed,
+            ),
           ),
         if (showMore)
           HtmlContent(

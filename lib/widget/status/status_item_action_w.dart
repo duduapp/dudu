@@ -3,6 +3,7 @@ import 'package:dudu/constant/api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/status/new_status.dart';
 import 'package:dudu/plugin/event_source.dart';
 import 'package:dudu/public.dart';
@@ -25,9 +26,12 @@ class StatusItemActionW extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textScale =
+    SettingsProvider.getWithCurrentContext('text_scale', listen: true);
     Color color = Theme.of(context).accentColor;
-    double fontSize = 12;
-    return NoSplashInkWell(
+    double fontSize = 12 ;
+    double iconSize = 16 * ScreenUtil.scaleFromSetting(textScale) ;
+    return InkWell(
       highlightColor: Colors.transparent,
       onTap: () {},
       child: Container(
@@ -36,9 +40,10 @@ class StatusItemActionW extends StatelessWidget {
             border: (subStatus || !showNum) ? null : Border(
                 top: BorderSide(
                     width: 0.5, color: Theme.of(context).dividerColor))) ,
-        padding:  EdgeInsets.fromLTRB(0,subStatus ? 0 :8,0,8),
+        padding:  EdgeInsets.fromLTRB(30,subStatus ? 0 :6,30,7),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             if (subStatus)
               ...[
@@ -50,10 +55,11 @@ class StatusItemActionW extends StatelessWidget {
             GestureDetector(
               onTap: () => AppNavigate.push(NewStatus(replyTo: status)),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Icon(IconFont.forward, size: 18, color: color),
+                  Icon(IconFont.forward, size: iconSize, color: color),
                   SizedBox(
-                    width: 2,
+                    width: 3,
                   ),
                   Text(
                     subStatus ? '':'转评',
@@ -65,7 +71,8 @@ class StatusItemActionW extends StatelessWidget {
                   Text(
                       (status.repliesCount <= 0 || !showNum)
                           ? '' : status.repliesCount.toString(),
-                      style: TextStyle(fontSize: fontSize - 1, color: color))
+                      style: TextStyle(fontSize: fontSize - 1, color: color),
+                  textAlign: TextAlign.center,)
                 ],
               ),
             ),
@@ -84,8 +91,9 @@ class StatusItemActionW extends StatelessWidget {
               ),
             if (status.visibility != 'private' && status.visibility != 'direct')
               LikeButton(
-                size: 16,
-                likeCountPadding: EdgeInsets.only(top: 0),
+                size: 20 * ScreenUtil.scaleFromSetting(textScale),
+
+                likeCountPadding: EdgeInsets.zero,
                 likeCount: status.reblogsCount,
                 countBuilder: (int count, bool isLiked, String text) {
                   return (count <= 0 || !showNum)
@@ -100,13 +108,13 @@ class StatusItemActionW extends StatelessWidget {
                 countDecoration: (Widget count, int likeCount) {
                   return Row(
                     children: <Widget>[
-                      SizedBox(
-                        width: 6,
-                      ),
+                      SizedBox(width: 3,),
                       Text(
                         subStatus ? '' :'转嘟',
                         style: TextStyle(
-                            fontSize: fontSize,
+                            fontSize: fontSize ,
+
+
                             color: status.reblogged
                                 ? Colors.blue[800]
                                 : Theme.of(context).accentColor),
@@ -123,12 +131,12 @@ class StatusItemActionW extends StatelessWidget {
                       ? Icon(
                           IconFont.reblog,
                           color: Colors.blue[800],
-                          size: 20,
+                          size: iconSize,
                         )
                       : Icon(
                           IconFont.reblog,
                           color: Theme.of(context).accentColor,
-                          size: 20,
+                          size: iconSize,
                         );
                 },
                 isLiked: status.reblogged,
@@ -141,8 +149,8 @@ class StatusItemActionW extends StatelessWidget {
               ),
             SizedBox(width: 10,),
             LikeButton(
-              size: 16,
-              likeCountPadding: EdgeInsets.only(top: 0),
+              size: 20 * ScreenUtil.scaleFromSetting(textScale),
+              likeCountPadding: EdgeInsets.zero,
               likeCount: status.favouritesCount,
               countBuilder: (int count, bool isLiked, String text) {
                 return (count <= 0 || !showNum)
@@ -155,9 +163,7 @@ class StatusItemActionW extends StatelessWidget {
               countDecoration: (Widget count, int likeCount) {
                 return Row(
                   children: <Widget>[
-                    SizedBox(
-                      width: 4,
-                    ),
+                    SizedBox(width: 3,),
                     Text(
                       subStatus ? '':'赞',
                       style: TextStyle(
@@ -178,12 +184,12 @@ class StatusItemActionW extends StatelessWidget {
                     ? Icon(
                         IconFont.thumbUp,
                         color: Colors.yellow[800],
-                        size: 20,
+                        size: iconSize,
                       )
                     : Icon(
                         IconFont.thumbUp,
                         color: Theme.of(context).accentColor,
-                        size: 20,
+                        size: iconSize,
                       );
               },
               isLiked: status.favourited,

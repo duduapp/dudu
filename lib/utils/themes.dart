@@ -7,7 +7,9 @@ class ThemeUtil {
       primaryColor: Colors.white,
       toggleableActiveColor: Colors.blue,
       appBarTheme:
-          AppBarTheme(elevation: 1.0, color: Color.fromRGBO(252, 252, 252, 1),),
+          AppBarTheme(elevation: 1.0, color: Color.fromRGBO(252, 252, 252, 1),textTheme: TextTheme(
+            headline6: TextStyle(fontSize: 18,color: Colors.black)
+          )),
       dialogTheme: DialogTheme(),
       popupMenuTheme: PopupMenuThemeData(color: Color.fromRGBO(238, 238, 238, 1)),
       inputDecorationTheme:

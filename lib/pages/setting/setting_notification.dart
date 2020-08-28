@@ -1,5 +1,6 @@
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/models/task/notification_task.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/setting/setting_cell.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,7 @@ class _SettingNotificationState extends State<SettingNotification> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: CustomAppBar(
         title: Text('新消息通知'),
         centerTitle: false,
       ),

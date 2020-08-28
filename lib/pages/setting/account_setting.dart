@@ -6,6 +6,7 @@ import 'package:dudu/pages/setting/common_block_list.dart';
 import 'package:dudu/pages/setting/filter/common_filter_list.dart';
 import 'package:dudu/pages/setting/setting_notification.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/setting/setting_cell.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,7 @@ class _AccountSettingState extends State<AccountSetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: CustomAppBar(
         title: Text('账号设置'),
         centerTitle: false,
       ),

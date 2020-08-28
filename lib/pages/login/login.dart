@@ -7,6 +7,7 @@ import 'package:dudu/pages/home_page.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/common/loading_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -180,7 +181,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return  isLoading ? loadView():
     Scaffold(
-      appBar: AppBar(
+      appBar: CustomAppBar(
         automaticallyImplyLeading: widget.showBackButton,
           backgroundColor: Colors.transparent,
         elevation: 0,

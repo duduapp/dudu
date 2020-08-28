@@ -2,6 +2,7 @@ import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/app_navigate.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +33,7 @@ class _UserReportMessageState extends State<UserReportMessage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: CustomAppBar(
         title: Text('举报@${widget.account.acct}的滥用行为',overflow: TextOverflow.fade,),
       ),
       body: Padding(

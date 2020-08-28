@@ -30,7 +30,7 @@ class _StatusItemPollState extends State<StatusItemPoll> {
       return Container();
     } else {
       return Container(
-        padding: EdgeInsets.only(bottom: 4),
+        padding: EdgeInsets.only(bottom: 6),
         child: widget.status.poll.voted || widget.status.poll.expired ? resultPoll() : votablePoll(),
       );
     }

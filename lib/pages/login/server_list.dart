@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -168,7 +169,7 @@ class _ServerListState extends State<ServerList>  {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      appBar: AppBar(
+      appBar: CustomAppBar(
         title: Text('选择节点',),
         centerTitle: false,
         toolbarOpacity: 1,

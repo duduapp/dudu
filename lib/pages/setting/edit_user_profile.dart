@@ -10,6 +10,7 @@ import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/media_util.dart';
 import 'package:dudu/utils/request.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -173,7 +174,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
   Widget build(BuildContext context) {
     var color = Theme.of(context).toggleableActiveColor;
     return Scaffold(
-      appBar: AppBar(
+      appBar: CustomAppBar(
         title: Text('编辑个人资料'),
         actions: <Widget>[
           isUpdating?  Padding(

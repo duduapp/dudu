@@ -1,4 +1,5 @@
 import 'package:dudu/utils/app_navigate.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/common/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
@@ -30,7 +31,7 @@ class WebLogin extends StatelessWidget {
     String url = '$hostUrl/oauth/authorize?scope=read%20write%20follow%20push&response_type=code&redirect_uri=${serverItem.redirectUri}&client_id=${serverItem.clientId}';
     return WebviewScaffold(
         url: url,
-        appBar: new AppBar(
+        appBar: new CustomAppBar(
           title: new Text('登录'),
           backgroundColor: Color.fromRGBO(40, 44, 55, 1),
         ),

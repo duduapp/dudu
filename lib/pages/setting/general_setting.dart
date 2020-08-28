@@ -5,6 +5,7 @@ import 'package:dudu/pages/login/login.dart';
 import 'package:dudu/pages/setting/account_switch.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/setting/setting_cell.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
@@ -72,7 +73,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: CustomAppBar(
         title: Text('通用设置'),
         centerTitle: false,
       ),

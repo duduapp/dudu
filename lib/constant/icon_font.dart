@@ -25,7 +25,7 @@ class IconFont {
 
   static const IconData notification = IconData(0xe694,fontFamily: 'IconFont');
 
-  static const IconData addCircle = IconData(0xe9c9,fontFamily: 'IconFont');
+  static const IconData addCircle = IconData(0xe787,fontFamily: 'IconFont');
 
   static const IconData home = IconData(0xe9ce,fontFamily: 'IconFont');
 
@@ -86,4 +86,8 @@ class IconFont {
   static const IconData download = IconData(0xe610,fontFamily: 'IconFont');
 
   static const IconData share = IconData(0xe622,fontFamily: 'IconFont');
+
+  static const IconData back = IconData(0xe715,fontFamily: 'IconFont');
+
+  static const IconData moreHoriz = IconData(0xe62c,fontFamily: 'IconFont');
 }

@@ -7,6 +7,7 @@ import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
 import 'package:dudu/widget/common/colored_tab_bar.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/common/empty_view.dart';
 import 'package:dudu/widget/common/measure_size.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
@@ -245,9 +246,9 @@ class _StatusDetailState extends State<StatusDetail>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: CustomAppBar(
         title: Text('嘟文信息'),
-        toolbarHeight: 50,
+        toolbarHeight: 45,
       ),
       body: Column(
         //  alignment: AlignmentDirectional.bottomEnd,

@@ -1,6 +1,7 @@
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/webview/inner_browser.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/view/status_action_util.dart';
@@ -20,6 +21,8 @@ class StatusItemAccountW extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textScale =
+    SettingsProvider.getWithCurrentContext('text_scale', listen: true);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -40,7 +43,7 @@ class StatusItemAccountW extends StatelessWidget {
                         text: StringUtil.displayName(status.account),
                         emojis: status.account.emojis,
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 13.5,
                             color:
                                 Theme.of(context).textTheme.bodyText1.color)),
                     TextSpan(text: " "),
@@ -49,6 +52,7 @@ class StatusItemAccountW extends StatelessWidget {
                         style: TextStyle(
                             color: Theme.of(context).textTheme.bodyText1.color))
                   ]),
+                  textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -61,10 +65,11 @@ class StatusItemAccountW extends StatelessWidget {
                         text: primary? DateUntil.absoluteTime(status.createdAt):DateUntil.dateTime(status.createdAt),
                         style: TextStyle(
                             color: Theme.of(context).accentColor,
-                            fontSize: 12)),
+                            fontSize: 11)),
                     TextSpan(text: " "),
                     ...fromWidgetSpans(context)
                   ]),
+                  textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
                 )
               ],
             ),
@@ -102,21 +107,21 @@ class StatusItemAccountW extends StatelessWidget {
         TextSpan(
             text: '来自',
             style:
-                TextStyle(fontSize: 12, color: Theme.of(context).accentColor)),
+                TextStyle(fontSize: 11, color: Theme.of(context).accentColor)),
         TextSpan(text: " ")
       ]);
       if (appWebsite == null) {
         spans.add(TextSpan(
             text: status.application?.name,
             style:
-                TextStyle(fontSize: 12, color: Theme.of(context).accentColor)));
+                TextStyle(fontSize: 11, color: Theme.of(context).accentColor)));
       } else {
         spans.add(TextSpan(
             text: status.application?.name,
             recognizer: TapGestureRecognizer()
               ..onTap = () => AppNavigate.push(InnerBrowser(appWebsite)),
             style:
-                TextStyle(fontSize: 12, color: Color.fromRGBO(80, 125, 175, 1))));
+                TextStyle(fontSize: 11, color: Color.fromRGBO(80, 125, 175, 1))));
       }
       return spans;
     } else {

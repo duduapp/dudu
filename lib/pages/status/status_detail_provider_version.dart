@@ -5,6 +5,7 @@ import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:dudu/widget/status/status_item.dart';
 import 'package:flutter/gestures.dart';
@@ -106,7 +107,7 @@ class _StatusDetailState extends State<StatusDetail> {
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     var scale = SettingsProvider.getWithCurrentContext('text_scale');
     return Scaffold(
-      appBar: AppBar(
+      appBar: CustomAppBar(
         title: Text('嘟文'),
         centerTitle: false,
       ),

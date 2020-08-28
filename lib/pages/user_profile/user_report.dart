@@ -4,6 +4,7 @@ import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/pages/user_profile/user_report_message.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/common/list_row.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:dudu/widget/status/status_item_content.dart';
@@ -33,7 +34,7 @@ class _UserReportState extends State<UserReport> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: CustomAppBar(
         title: Text('举报@${widget.account.acct}的滥用行为',overflow: TextOverflow.fade,),
       ),
       body: Column(

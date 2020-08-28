@@ -38,7 +38,8 @@ dependencies:
   image_gallery_saver: ^1.5.0
   chewie: ^0.9.10
   path_provider: ^1.6.9
-  like_button: ^1.0.1
+  like_button:
+    path: ../like_button/
   flutter_easyrefresh: ^2.1.5
   flutter_datetime_picker: ^1.4.0
   theme_provider: ^0.3.3

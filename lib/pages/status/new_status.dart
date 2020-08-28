@@ -13,6 +13,7 @@ import 'package:dudu/models/task/update_task.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/media_util.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/common/sized_icon_button.dart';
 import 'package:dudu/widget/new_status/emoji_widget.dart';
 import 'package:dudu/widget/new_status/handle_vote_dialog.dart';
@@ -531,7 +532,7 @@ class _NewStatusState extends State<NewStatus> {
       child: Scaffold(
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(45.0),
-          child: AppBar(
+          child: CustomAppBar(
             leading: Container(
               padding: EdgeInsets.fromLTRB(20, 15, 0, 0),
               child: GestureDetector(

@@ -111,11 +111,11 @@ class _TimelineState extends State<Timeline> {
       ),
       title: title,
       actions: [
-        IconButton(icon: Icon(IconFont.search),onPressed: () {
+        IconButton(icon: Icon(IconFont.search,size: 26,),onPressed: () {
                           customSearch.showSearch(
                     context: context, delegate: SearchPageDelegate());
         },),
-        IconButton(icon: Icon(IconFont.addCircle),onPressed: () => AppNavigate.push(NewStatus(), routeType: RouterType.material),)
+        IconButton(icon: Icon(IconFont.addCircle,color: Theme.of(context).buttonColor,size: 26,),onPressed: () => AppNavigate.push(NewStatus(), routeType: RouterType.material),)
       ],
     );
 

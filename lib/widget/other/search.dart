@@ -4,6 +4,7 @@
 
 import 'dart:async';
 
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -500,7 +501,7 @@ class _SearchPageState<T> extends State<_SearchPage<T>> {
       namesRoute: true,
       label: routeName,
       child: Scaffold(
-        appBar: AppBar(
+        appBar: CustomAppBar(
           backgroundColor: theme.primaryColor,
           iconTheme: theme.primaryIconTheme,
           textTheme: theme.primaryTextTheme,

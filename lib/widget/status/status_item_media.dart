@@ -81,7 +81,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
 
   Widget mediaWithNoThumbnail() {
     return Padding(
-      padding: const EdgeInsets.only(top: 10,bottom: 10),
+      padding: const EdgeInsets.only(top: 10,bottom: 9),
       child: Column(
         children: <Widget>[
           for (MediaAttachment media in widget.images)
@@ -219,7 +219,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   Widget imageWrapper(Widget widget) {
     var primaryColor = Theme.of(context).primaryColor;
     return Padding(
-      padding: EdgeInsets.only(top: 7,bottom: 10),
+      padding: EdgeInsets.only(top: 0,bottom: 13),
       child: Stack(
         children: <Widget>[
           widget,

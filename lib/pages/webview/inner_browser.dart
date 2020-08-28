@@ -2,6 +2,7 @@ import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:share/share.dart';
@@ -59,7 +60,7 @@ class _InnerBrowserState extends State<InnerBrowser> {
 
     //ToDo update official flutter_webview when on progress is merged
     return Scaffold(
-      appBar: AppBar(
+      appBar: CustomAppBar(
         title: Column(
           children: [
             Text(title,style: TextStyle(fontSize: 16),),

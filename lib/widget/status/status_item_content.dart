@@ -1,4 +1,5 @@
 import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/widget/status/status_item_card.dart';
 import 'package:dudu/widget/status/status_item_media.dart';
 import 'package:dudu/widget/status/status_item_poll.dart';
 import 'package:dudu/widget/status/status_item_text.dart';
@@ -16,7 +17,8 @@ class StatusItemContent extends StatelessWidget {
       StatusItemText(data,navigateToDetail: !primary,),
       StatusItemMedia(data),
       if (data.poll != null)
-      StatusItemPoll(data)
+      StatusItemPoll(data),
+      StatusItemCard(data),
     ],);
   }
 }

@@ -103,13 +103,14 @@ class StatusItem extends StatelessWidget {
                   subStatus: subStatus,
                   primary: primary,
                 ),
+
 //                StatusItemAccount(data.account,
 //                    createdAt: primary ? null : data.createdAt),
                 StatusItemContent(
                   data,
                   primary: primary,
                 ),
-                StatusItemCard(data),
+
                 // if (primary) StatusItemPrimaryBottom(data),
                 if (!primary)
                 StatusItemActionW(

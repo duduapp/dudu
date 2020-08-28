@@ -3,6 +3,7 @@ import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/common/list_row.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:dudu/widget/status/status_item_account.dart';
@@ -99,7 +100,7 @@ class CommonBlockList extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: CustomAppBar(
         title: Text(title),
         centerTitle: false,
       ),

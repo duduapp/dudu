@@ -2,6 +2,7 @@ import 'package:dudu/api/scheduled_statuses_api.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/pages/status/new_status.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
@@ -24,7 +25,7 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: CustomAppBar(
         title: Text('定时嘟文'),
         centerTitle: false,
       ),

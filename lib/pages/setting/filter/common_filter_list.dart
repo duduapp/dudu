@@ -2,6 +2,7 @@ import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/pages/setting/filter/common_filter_edit.dart';
 import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/common/list_row.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ class _CommonFilterListState extends State<CommonFilterList> {
             enableRefresh: false,enableLoad: false),
         builder: (context, snapshot) {
           return Scaffold(
-            appBar: AppBar(
+            appBar: CustomAppBar(
               title: Text(title),
               centerTitle: false,
               actions: <Widget>[

@@ -15,7 +15,7 @@ class StatusItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     if (statusData.card != null && statusData.card.image != null) {
       return Padding(
-        padding: const EdgeInsets.only(top: 8,bottom: 8),
+        padding: const EdgeInsets.only(top: 0,bottom: 10),
         child: Card(
           elevation: 3,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
