@@ -102,7 +102,6 @@ class CommonBlockList extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: Text(title),
-        centerTitle: false,
       ),
       body: ChangeNotifierProvider<ResultListProvider>(
           create: (context) => ResultListProvider(

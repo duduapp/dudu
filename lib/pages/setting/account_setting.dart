@@ -27,7 +27,6 @@ class _AccountSettingState extends State<AccountSetting> {
     return Scaffold(
       appBar: CustomAppBar(
         title: Text('账号设置'),
-        centerTitle: false,
       ),
       body: ListView(
         children: <Widget>[

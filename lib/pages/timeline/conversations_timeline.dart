@@ -14,7 +14,6 @@ class ConversationTimeline extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: Text('私信'),
-        centerTitle: false,
       ),
       body: ChangeNotifierProvider<ResultListProvider>(
         create: (context) => ResultListProvider(

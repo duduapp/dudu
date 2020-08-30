@@ -760,6 +760,10 @@ class _UserProfileState extends State<UserProfile>
             return [
               SliverAppBar(
                 titleSpacing: 0,
+                leading: InkWell(
+                  onTap: () => AppNavigate.pop(),
+                  child: Icon(IconFont.back),
+                ),
                 title: _showAccountInfoInAppBar
                     ? _account == null
                         ? Container()
@@ -794,7 +798,7 @@ class _UserProfileState extends State<UserProfile>
                 //backgroundColor: Colors.transparent,
                 actions: <Widget>[
                   IconButton(
-                    icon: Icon(Icons.more_horiz),
+                    icon: Icon(IconFont.moreHoriz),
                     onPressed: _showMore,
                   )
                 ],

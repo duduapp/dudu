@@ -89,5 +89,5 @@ class IconFont {
 
   static const IconData back = IconData(0xe715,fontFamily: 'IconFont');
 
-  static const IconData moreHoriz = IconData(0xe62c,fontFamily: 'IconFont');
+  static const IconData moreHoriz = IconData(0xe721,fontFamily: 'IconFont');
 }

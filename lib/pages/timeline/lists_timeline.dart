@@ -18,7 +18,6 @@ class ListTimeline extends StatelessWidget {
     return Scaffold(
         appBar: CustomAppBar(
           title: Text('列表时间轴'),
-          centerTitle: false,
         ),
         body: ChangeNotifierProvider<ResultListProvider>(
           create: (context) => ResultListProvider(

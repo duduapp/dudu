@@ -16,7 +16,6 @@ class UserFollowers extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: Text('粉丝'),
-        centerTitle: false,
       ),
       body: ChangeNotifierProvider<ResultListProvider>(
         create: (context) => ResultListProvider(

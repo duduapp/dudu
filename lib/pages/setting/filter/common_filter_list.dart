@@ -46,7 +46,6 @@ class _CommonFilterListState extends State<CommonFilterList> {
           return Scaffold(
             appBar: CustomAppBar(
               title: Text(title),
-              centerTitle: false,
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.add),

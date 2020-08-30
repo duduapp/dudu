@@ -20,7 +20,7 @@ class CustomAppBar extends AppBar {
     IconThemeData actionsIconTheme,
     TextTheme textTheme,
     bool primary = true,
-    bool centerTitle,
+    bool centerTitle = true,
     bool excludeHeaderSemantics = false,
     double titleSpacing = NavigationToolbar.kMiddleSpacing,
     double toolbarOpacity = 1.0,
@@ -28,12 +28,9 @@ class CustomAppBar extends AppBar {
     double toolbarHeight = 45,
   }) : super(
           key: key,
-          leading :leading == null ? Padding(
-            padding: const EdgeInsets.only(bottom: 20,top: 0),
-            child: IconButton(
-              icon: Icon(IconFont.back,size: 28,),
-              onPressed: () => AppNavigate.pop(),
-            ),
+          leading :leading == null ? InkWell(
+            onTap: () => AppNavigate.pop(),
+            child: Icon(IconFont.back,size: 28,),
           ) : leading,
           automaticallyImplyLeading:automaticallyImplyLeading,
           title: title,

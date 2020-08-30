@@ -171,7 +171,6 @@ class _ServerListState extends State<ServerList>  {
       backgroundColor: Theme.of(context).primaryColor,
       appBar: CustomAppBar(
         title: Text('选择节点',),
-        centerTitle: false,
         toolbarOpacity: 1,
         actions: <Widget>[
 

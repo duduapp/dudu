@@ -75,7 +75,6 @@ class _GeneralSettingState extends State<GeneralSetting> {
     return Scaffold(
       appBar: CustomAppBar(
         title: Text('通用设置'),
-        centerTitle: false,
       ),
       body: ListView(
         children: <Widget>[

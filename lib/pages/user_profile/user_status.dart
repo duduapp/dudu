@@ -16,7 +16,6 @@ class UserStatus extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: Text('嘟文'),
-        centerTitle: false,
       ),
       body: ChangeNotifierProvider<ResultListProvider>(
         create: (context) => ResultListProvider(

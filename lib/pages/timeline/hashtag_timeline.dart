@@ -16,7 +16,6 @@ class HashtagTimeline extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: Text('#'+hashtag),
-        centerTitle: false,
       ),
       body: ChangeNotifierProvider<ResultListProvider>(
         create: (context) => ResultListProvider(

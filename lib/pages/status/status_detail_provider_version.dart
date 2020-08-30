@@ -109,7 +109,6 @@ class _StatusDetailState extends State<StatusDetail> {
     return Scaffold(
       appBar: CustomAppBar(
         title: Text('嘟文'),
-        centerTitle: false,
       ),
       body: MediaQuery(
         data: MediaQuery.of(context)

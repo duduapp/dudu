@@ -27,7 +27,6 @@ class _FavouritesListState extends State<FavouritesList> {
     return Scaffold(
       appBar: CustomAppBar(
         title: Text('我的赞'),
-        centerTitle: false,
       ),
       body: ChangeNotifierProvider<ResultListProvider>(
           create: (context) => ResultListProvider(

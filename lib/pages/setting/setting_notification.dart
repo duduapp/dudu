@@ -26,7 +26,6 @@ class _SettingNotificationState extends State<SettingNotification> {
     return Scaffold(
       appBar: CustomAppBar(
         title: Text('新消息通知'),
-        centerTitle: false,
       ),
       body: Column(
         children: <Widget>[

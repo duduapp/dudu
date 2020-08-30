@@ -27,7 +27,6 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
     return Scaffold(
       appBar: CustomAppBar(
         title: Text('定时嘟文'),
-        centerTitle: false,
       ),
       body: ChangeNotifierProvider<ResultListProvider>(
           create: (context) => ResultListProvider(

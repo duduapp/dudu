@@ -34,7 +34,7 @@ class _ListsPageState extends State<ListsPage> {
         title: Text('列表'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(IconFont.follow,size: 28,),
+            icon: Icon(IconFont.follow,size: 26,),
             onPressed: () => _showAddDialog(),
           )
         ],

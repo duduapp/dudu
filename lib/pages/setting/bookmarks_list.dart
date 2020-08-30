@@ -12,7 +12,6 @@ class BookmarksList extends StatelessWidget {
     return Scaffold(
         appBar: CustomAppBar(
           title: Text('书签'),
-          centerTitle: false,
         ),
         body: ChangeNotifierProvider<ResultListProvider>(
             create: (context) => ResultListProvider(
