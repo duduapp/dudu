@@ -35,7 +35,8 @@ class ProviderEasyRefreshListView extends StatefulWidget {
       this.firstRefresh = false,
       this.useAnimatedList = false,
       this.showLoading = true,
-      this.emptyView})
+      this.emptyView,
+      this.loadingView})
       : super(key: key);
   final TimelineType type;
 
@@ -53,6 +54,7 @@ class ProviderEasyRefreshListView extends StatefulWidget {
   final bool showLoading;
   final RefreshController refreshController;
   final Widget emptyView;
+  final Widget loadingView;
   final SliverGridDelegate gridDelegate;
   @override
   _ProviderEasyRefreshListViewState createState() =>
@@ -160,7 +162,7 @@ class _ProviderEasyRefreshListViewState
 
             // 初次可能从Provider 里面请求
             return (provider.isLoading && widget.showLoading)
-                ? LoadingView()
+                ? widget.loadingView ?? LoadingView()
                 : NotificationListener<ScrollNotification>(
                     onNotification: (ScrollNotification notification) {
                       double progress = notification.metrics.maxScrollExtent -

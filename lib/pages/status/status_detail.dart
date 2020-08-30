@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:dudu/api/status_api.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/media_attachment.dart';
@@ -10,6 +11,7 @@ import 'package:dudu/utils/view/list_view_util.dart';
 import 'package:dudu/widget/common/colored_tab_bar.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/common/empty_view.dart';
+import 'package:dudu/widget/common/loading_view.dart';
 import 'package:dudu/widget/common/measure_size.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:dudu/widget/status/status_item.dart';
@@ -45,9 +47,10 @@ class _StatusDetailState extends State<StatusDetail>
   double _sliverExpandHeight = 10000;
   bool _getSliverExpandHeight = false;
   bool _originExpandOption = false;
+  CancelToken _cancelToken;
 
   _fetchData() async {
-    var data = await StatusApi.getContext(widget.data.id);
+    var data = await StatusApi.getContext(widget.data.id,cancelToken: _cancelToken);
     if (data != null) {
       parentWidgets.clear();
       for (var d in data['ancestors']) {
@@ -88,6 +91,8 @@ class _StatusDetailState extends State<StatusDetail>
 
   @override
   void initState() {
+    _cancelToken = CancelToken();
+
     //deep copy media attachments, fix hero
     var data = widget.data.toJson();
     status = StatusItemData.fromJson(Map.from(data));
@@ -131,6 +136,8 @@ class _StatusDetailState extends State<StatusDetail>
 
   @override
   void dispose() {
+    _cancelToken.cancel();
+
     _scrollController.dispose();
     _tabController.dispose();
     SettingsProvider().statusDetailProviders.remove(providers[0]);
@@ -222,6 +229,7 @@ class _StatusDetailState extends State<StatusDetail>
               firstRefresh: false,
               enableLoad: false,
               emptyView: EmptyViewWithHeight(text: '还没有转评',),
+              loadingView: LoadingView(height: 200,),
             ),
           ),
         ),
@@ -232,6 +240,7 @@ class _StatusDetailState extends State<StatusDetail>
             child: ProviderEasyRefreshListView(
               firstRefresh: true,
               emptyView: EmptyViewWithHeight(text: '还没有转嘟',),
+              loadingView: LoadingView(height: 200,),
             ),
           ),
         ),
@@ -242,6 +251,7 @@ class _StatusDetailState extends State<StatusDetail>
             child: ProviderEasyRefreshListView(
               firstRefresh: true,
               emptyView: EmptyViewWithHeight(text: '还没有点赞',),
+              loadingView: LoadingView(height: 200,),
             ),
           ),
         )

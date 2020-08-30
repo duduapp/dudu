@@ -174,7 +174,9 @@ class _LoginState extends State<Login> {
 
   Widget loadView() {
 
-      return LoadingView(text: '正在加载中',);
+      return Scaffold(
+        body: LoadingView(text: '正在加载中',),
+      );
   }
 
   @override
@@ -185,6 +187,7 @@ class _LoginState extends State<Login> {
         automaticallyImplyLeading: widget.showBackButton,
           backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: null,
       ),
         extendBodyBehindAppBar:true,
             resizeToAvoidBottomPadding: false,

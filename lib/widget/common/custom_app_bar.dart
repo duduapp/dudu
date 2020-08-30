@@ -28,7 +28,7 @@ class CustomAppBar extends AppBar {
     double toolbarHeight = 45,
   }) : super(
           key: key,
-          leading :leading == null ? InkWell(
+          leading :automaticallyImplyLeading ? InkWell(
             onTap: () => AppNavigate.pop(),
             child: Icon(IconFont.back,size: 28,),
           ) : leading,

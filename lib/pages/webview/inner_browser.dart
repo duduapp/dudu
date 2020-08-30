@@ -38,6 +38,15 @@ class _InnerBrowserState extends State<InnerBrowser> {
     super.dispose();
   }
 
+  Future<bool> _onWillPop() async {
+    if (await _controller.canGoBack()) {
+      _controller.goBack();
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 //    final _flutterWebviewPlugin = new FlutterWebviewPlugin();
@@ -59,97 +68,100 @@ class _InnerBrowserState extends State<InnerBrowser> {
 //    });
 
     //ToDo update official flutter_webview when on progress is merged
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: Column(
-          children: [
-            Text(title,style: TextStyle(fontSize: 16),),
-            Text(url ?? '',style: TextStyle(fontSize: 12,color: Theme.of(context).accentColor),)
-          ],
-        ),
-        elevation: 0,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(IconFont.moreHoriz),
-            onPressed: () {
-              DialogUtils.showBottomSheet(context: context, widgets: [
-                BottomSheetItem(
-                  text: '分享',
-                  onTap: () => Share.share(widget.url),
-                ),
-                Divider(indent: 60, height: 0),
-                BottomSheetItem(
-                  text: '在浏览器中打开',
-                  onTap: () async {
-                    if (await canLaunch(widget.url)) {
-                      await launch(widget.url);
-                    } else {
-                      // do nothing
-                    }
-                  },
-                ),
-                Container(
-                  height: 8,
-                  color: Theme.of(context).backgroundColor,
-                ),
-              ]);
-            },
-          )
-        ],
-        bottom: progress == 100
-            ? null
-            : PreferredSize(
-                child: SizedBox(
-                  height: 3,
-                  child: LinearProgressIndicator(
-                    value: progress / 100,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).buttonColor),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: CustomAppBar(
+          title: Column(
+            children: [
+              Text(title,style: TextStyle(fontSize: 16),),
+              Text(url ?? '',style: TextStyle(fontSize: 12,color: Theme.of(context).accentColor),)
+            ],
+          ),
+          elevation: 0,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(IconFont.moreHoriz),
+              onPressed: () {
+                DialogUtils.showBottomSheet(context: context, widgets: [
+                  BottomSheetItem(
+                    text: '分享',
+                    onTap: () => Share.share(widget.url),
                   ),
+                  Divider(indent: 60, height: 0),
+                  BottomSheetItem(
+                    text: '在浏览器中打开',
+                    onTap: () async {
+                      if (await canLaunch(widget.url)) {
+                        await launch(widget.url);
+                      } else {
+                        // do nothing
+                      }
+                    },
+                  ),
+                  Container(
+                    height: 8,
+                    color: Theme.of(context).backgroundColor,
+                  ),
+                ]);
+              },
+            )
+          ],
+          bottom: progress == 100
+              ? null
+              : PreferredSize(
+                  child: SizedBox(
+                    height: 3,
+                    child: LinearProgressIndicator(
+                      value: progress / 100,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).buttonColor),
+                    ),
+                  ),
+                  preferredSize: Size(double.infinity, 3.0),
                 ),
-                preferredSize: Size(double.infinity, 3.0),
-              ),
-      ),
-      body: Opacity(
-        opacity: opacity,
-        child: WebView(
-          initialUrl: widget.url,
-          javascriptMode: JavascriptMode.unrestricted,
-          navigationDelegate: (action) {
-            setState(() {
-              url = action.url;
-            });
-            return NavigationDecision.navigate;
-          },
-          gestureNavigationEnabled: true,
-          debuggingEnabled: true,
-          onProgress: (p) async{
-            setState(() {
-              progress = p;
-              //ToDo solve first open webview black,not perfectly
-              if (progress > 30 && opacity != 1) {
-                setState(() {
-                  opacity = 1;
-                });
-              }
-            });
-            if (progress == 100) {
-            }
-          },
-
-          onWebViewCreated: (controller) {
-            _controller = controller;
-          },
-          onPageFinished: (str) async{
-            _controller.getTitle().then((t){
+        ),
+        body: Opacity(
+          opacity: opacity,
+          child: WebView(
+            initialUrl: widget.url,
+            javascriptMode: JavascriptMode.unrestricted,
+            navigationDelegate: (action) {
               setState(() {
-                title = t;
+                url = action.url;
               });
-            });
-            setState(()  {
-              opacity = 1;
-            });
-          },
+              return NavigationDecision.navigate;
+            },
+            gestureNavigationEnabled: true,
+            debuggingEnabled: false,
+            onProgress: (p) async{
+              setState(() {
+                progress = p;
+                //ToDo solve first open webview black,not perfectly
+                if (progress > 30 && opacity != 1) {
+                  setState(() {
+                    opacity = 1;
+                  });
+                }
+              });
+              if (progress == 100) {
+              }
+            },
+
+            onWebViewCreated: (controller) {
+              _controller = controller;
+            },
+            onPageFinished: (str) async{
+              _controller.getTitle().then((t){
+                setState(() {
+                  title = t;
+                });
+              });
+              setState(()  {
+                opacity = 1;
+              });
+            },
+          ),
         ),
       ),
     );
@@ -176,4 +188,6 @@ class _InnerBrowserState extends State<InnerBrowser> {
 //      ),
 //    );
   }
+
+
 }

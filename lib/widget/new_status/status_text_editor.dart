@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dudu/api/search_api.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/public.dart';
 import 'package:dudu/widget/common/measure_size.dart';
 import 'package:dudu/widget/status/status_item_account.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,6 +28,7 @@ class _StatusTextEditorState extends State<StatusTextEditor> {
 
   @override
   Widget build(BuildContext context) {
+    var textScale = SettingsProvider().get('text_scale');
     return MeasureSize(
       onChange: (size) {
         if (currentWidgetHeight != size.height) {
@@ -128,7 +131,7 @@ class _StatusTextEditorState extends State<StatusTextEditor> {
             }
             widget.onChanged(v);
             },
-          style: TextStyle(fontSize: 19),
+          style: TextStyle(fontSize: 14 * ScreenUtil.scaleFromSetting(textScale)),
 
           autofocus: true,
           maxLength: 500,
@@ -141,7 +144,7 @@ class _StatusTextEditorState extends State<StatusTextEditor> {
               disabledBorder: InputBorder.none,
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
-              hintStyle: TextStyle(fontSize: 16),
+              hintStyle: TextStyle(fontSize: 14 * ScreenUtil.scaleFromSetting(textScale)),
               labelStyle: TextStyle(fontSize: 16)),
         ),
       ),

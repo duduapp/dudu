@@ -1,5 +1,7 @@
 import 'package:dudu/constant/api.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/public.dart';
 import 'package:dudu/utils/request.dart';
 import 'package:dudu/utils/view/status_action_util.dart';
 
@@ -76,7 +78,7 @@ class _StatusItemPollState extends State<StatusItemPoll> {
         } else {
 
           rows.add(SizedBox(
-            height: 32,
+            //height: 32,
             child: RadioListTile(
               dense: true,
               value: key.toString(),
@@ -107,9 +109,9 @@ class _StatusItemPollState extends State<StatusItemPoll> {
       SizedBox(height: 5,),
       ButtonTheme(
         minWidth: 100,
-        height: 30,
+     //   height: 28,
         child: OutlineButton(
-          child: Text('投票',style: TextStyle(color: Theme.of(context).buttonColor),),
+          child: Text('投票',style: TextStyle(fontSize:12,color: Theme.of(context).buttonColor),),
           onPressed: vote,
         ),
       ),
@@ -132,7 +134,7 @@ class _StatusItemPollState extends State<StatusItemPoll> {
       margin: EdgeInsets.only(top: 5),
         child: Text(widget.status.poll.expired
             ? '${widget.status.poll.votesCount}次投票・已结束'
-            : '${widget.status.poll.votesCount}次投票・${getRemainingTime()}'));
+            : '${widget.status.poll.votesCount}次投票・${getRemainingTime()}',style: TextStyle(fontSize: 10,color: Theme.of(context).accentColor),));
   }
 
   getRemainingTime() {
@@ -173,7 +175,7 @@ class _StatusItemPollState extends State<StatusItemPoll> {
                     SizedBox(
                       width: 5,
                     ),
-                    Flexible(child: Text(title,overflow: TextOverflow.ellipsis,maxLines: 3,))
+                    Flexible(child: Text(title,overflow: TextOverflow.ellipsis,maxLines: 1,style: TextStyle(fontSize: 12),))
                   ],
                 ),
               )

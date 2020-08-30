@@ -49,46 +49,6 @@ class _AccountSwitchTimelineState extends State<AccountSwitchTimeline> {
             elevation: 0,
           ),
           preferredSize: Size.fromHeight(0)),
-//      appBar: PreferredSize(
-//        preferredSize: Size.fromHeight(40.0),
-//        child: AppBar(
-//          title: Stack(
-//            key: _stackKey,
-//            children: [
-//              GZXDropDownHeader(
-//                items: [GZXDropDownHeaderItem(title)],
-//                stackKey: _stackKey,
-//                controller: _menuController,
-//              ),
-//
-//            ],
-//          ),
-//          centerTitle: true,
-//          actions: <Widget>[
-//            IconButton(
-//              splashColor: Colors.transparent,
-//              icon: Icon(
-//                IconFont.search,
-//                size: 25,
-//              ),
-//              onPressed: () {
-//                customSearch.showSearch(
-//                    context: context, delegate: SearchPageDelegate());
-//              },
-//            ),
-//            IconButton(
-//              splashColor: Colors.transparent,
-//              icon: Icon(
-//                Icons.add_circle,
-//                color: Theme.of(context).buttonColor,
-//              ),
-//              onPressed: () {
-//                AppNavigate.push(NewStatus(), routeType: RouterType.material);
-//              },
-//            )
-//          ],
-//        ),
-//      ),
       body: Stack(key: _stackKey, children: [
         Column(children: [
           Container(

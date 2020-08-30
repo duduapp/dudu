@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:dudu/public.dart';
 
 class StatusApi {
@@ -43,9 +44,9 @@ class StatusApi {
     return await Request.post(url: api,showDialog: false);
   }
 
-  static getContext(String statusId) async{
+  static getContext(String statusId,{CancelToken cancelToken}) async{
     var api = '$url/$statusId/context';
-    return await Request.get(url: api);
+    return await Request.get(url: api,cancelToken: cancelToken);
   }
 
   static remove(String statusId) async{
