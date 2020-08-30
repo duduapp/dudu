@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/setting/edit_user_profile.dart';
 import 'package:dudu/pages/user_profile/user_follewers.dart';
 import 'package:dudu/pages/user_profile/user_follewing.dart';
@@ -11,12 +12,12 @@ import 'package:dudu/widget/common/no_splash_ink_well.dart';
 import 'package:dudu/widget/other/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
+import 'package:provider/provider.dart';
 
 class SettingHead extends StatelessWidget {
-  SettingHead({Key key, this.account}) : super(key: key);
-  final OwnerAccount account;
+  SettingHead({Key key}) : super(key: key);
 
-  Widget userStatistics(BuildContext context) {
+  Widget userStatistics(BuildContext context,OwnerAccount account) {
     if (account == null) {
       return Container();
     }
@@ -58,6 +59,8 @@ class SettingHead extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    OwnerAccount account = Provider.of<SettingsProvider>(context).currentUser.account;
+
     return account == null? Container(height: 180,):Column(
       children: [
         Container(
@@ -95,7 +98,7 @@ class SettingHead extends StatelessWidget {
             ],
           ),
         ),
-        userStatistics(context)
+        userStatistics(context,account)
       ],
     );
   }

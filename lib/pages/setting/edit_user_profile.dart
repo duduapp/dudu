@@ -4,7 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/constant/api.dart';
+import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/models/logined_user.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/media_util.dart';
@@ -18,7 +21,7 @@ import 'package:image_picker/image_picker.dart';
 class EditUserProfile extends StatefulWidget {
   final OwnerAccount account;
   final bool showBottomChooseImage;
-  EditUserProfile(this.account,{this.showBottomChooseImage = false});
+  EditUserProfile(this.account, {this.showBottomChooseImage = false});
 
   @override
   _EditUserProfileState createState() => _EditUserProfileState();
@@ -36,8 +39,6 @@ class _EditUserProfileState extends State<EditUserProfile> {
 
   List<List<TextEditingController>> extraInfoControllers = [];
 
-
-
   initState() {
     super.initState();
     account = widget.account;
@@ -47,12 +48,16 @@ class _EditUserProfileState extends State<EditUserProfile> {
 
     nameController.text = account.displayName;
     noteController.text = StringUtil.removeAllHtmlTags(account.note);
-    
+
     for (Map filed in account.fields) {
-      extraInfoControllers.add([TextEditingController(text: filed['name']),TextEditingController(text: filed['value'])]);
+      extraInfoControllers.add([
+        TextEditingController(text: filed['name']),
+        TextEditingController(text: filed['value'])
+      ]);
     }
     if (extraInfoControllers.length == 0) {
-      extraInfoControllers.add([TextEditingController(),TextEditingController()]);
+      extraInfoControllers
+          .add([TextEditingController(), TextEditingController()]);
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -61,34 +66,51 @@ class _EditUserProfileState extends State<EditUserProfile> {
       }
     });
   }
-  
 
   Widget headerView() {
     if (Uri.parse(header).isAbsolute) {
-      return CachedNetworkImage(imageUrl: header,fit: BoxFit.cover,width: double.infinity,);
+      return CachedNetworkImage(
+        imageUrl: header,
+        fit: BoxFit.cover,
+        width: double.infinity,
+      );
     } else {
-      return Image.file(File(header),fit: BoxFit.cover,width: double.infinity,);
+      return Image.file(
+        File(header),
+        fit: BoxFit.cover,
+        width: double.infinity,
+      );
     }
   }
 
   Widget avatarView() {
     if (Uri.parse(avatar).isAbsolute) {
-      return CachedNetworkImage(imageUrl: account.avatar,width: 80,height: 80,fit: BoxFit.fitWidth,);
+      return CachedNetworkImage(
+        imageUrl: account.avatar,
+        width: 80,
+        height: 80,
+        fit: BoxFit.fitWidth,
+      );
     } else {
-      return Image.file(File(avatar),width: 80,height: 80,fit: BoxFit.cover,);
+      return Image.file(
+        File(avatar),
+        width: 80,
+        height: 80,
+        fit: BoxFit.cover,
+      );
     }
   }
 
-  chooseHeader() async{
-      var image = await MediaUtil.pickAndCompressImage();
-      if (image == null) {
-        return;
-      }
+  chooseHeader() async {
+    var image = await MediaUtil.pickAndCompressImage();
+    if (image == null) {
+      return;
+    }
 
-      setState(() {
-        header = image.path;
-      });
-      debugPrint(image.toString());
+    setState(() {
+      header = image.path;
+    });
+    debugPrint(image.toString());
   }
 
   chooseAvatar() async {
@@ -102,11 +124,11 @@ class _EditUserProfileState extends State<EditUserProfile> {
     debugPrint(image.toString());
   }
 
-  _save() async{
+  _save() async {
     setState(() {
       isUpdating = true;
     });
-    Map<String,dynamic> params = {};
+    Map<String, dynamic> params = {};
     if (!StringUtil.isUrl(header)) {
       params['header'] = MultipartFile.fromFileSync(header);
     }
@@ -114,14 +136,17 @@ class _EditUserProfileState extends State<EditUserProfile> {
       params['avatar'] = MultipartFile.fromFileSync(avatar);
     }
     if (nameController.text.isNotEmpty)
-    params['display_name'] = nameController.text;
-    if (noteController.text.isNotEmpty)
-    params['note'] = noteController.text;
+      params['display_name'] = nameController.text;
+    if (noteController.text.isNotEmpty) params['note'] = noteController.text;
 
     params['locked'] = locked;
     params['fields_attributes'] = _getFileds();
     try {
-      await AccountsApi.updateCredentials(params);
+      var res = await AccountsApi.updateCredentials(params);
+    if (res != null) {
+
+      SettingsProvider().updateCurrentAccount(OwnerAccount.fromJson(res));
+    }
     } catch (e) {
       setState(() {
         isUpdating = false;
@@ -129,45 +154,50 @@ class _EditUserProfileState extends State<EditUserProfile> {
       DialogUtils.showInfoDialog(context, e.response.toString());
       return;
     }
-    eventBus.emit(EventBusKey.accountUpdated);
+   // eventBus.emit(EventBusKey.accountUpdated);
     AppNavigate.pop();
   }
-
 
   List _getFileds() {
     List<Map> filedAttrs = [];
     for (int i = 0; i < extraInfoControllers.length; i++) {
-      filedAttrs.add(
-          {
-            'name':extraInfoControllers[i][0].text,
-            'value' :extraInfoControllers[i][1].text
-          }
-      );
+      filedAttrs.add({
+        'name': extraInfoControllers[i][0].text,
+        'value': extraInfoControllers[i][1].text
+      });
     }
     return filedAttrs;
   }
 
   showSheet(BuildContext context) {
-    showModalBottomSheet(context: context, builder: (_) => Container(
-      width: double.infinity,
-
-
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          BottomSheetItem(text: '修改图片背景',onTap: chooseHeader,),
-          Container(height: 1,color: Theme.of(context).backgroundColor,),
-          BottomSheetItem(text: '修改头像',onTap: chooseAvatar,),
-
-          Container(height: 8,color: Theme.of(context).backgroundColor,),
-
-          BottomSheetCancelItem()
-
-
-        ],
-      ),
-    ));
+    showModalBottomSheet(
+        context: context,
+        builder: (_) => Container(
+              width: double.infinity,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  BottomSheetItem(
+                    text: '修改图片背景',
+                    onTap: chooseHeader,
+                  ),
+                  Container(
+                    height: 1,
+                    color: Theme.of(context).backgroundColor,
+                  ),
+                  BottomSheetItem(
+                    text: '修改头像',
+                    onTap: chooseAvatar,
+                  ),
+                  Container(
+                    height: 8,
+                    color: Theme.of(context).backgroundColor,
+                  ),
+                  BottomSheetCancelItem()
+                ],
+              ),
+            ));
   }
 
   @override
@@ -175,89 +205,149 @@ class _EditUserProfileState extends State<EditUserProfile> {
     var color = Theme.of(context).toggleableActiveColor;
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('编辑个人资料'),
+        title: Text('编辑个人资料',style: TextStyle(fontSize: 16),),
         actions: <Widget>[
-          isUpdating?  Padding(
-            padding: const EdgeInsets.only(right: 15),
-            child: CupertinoActivityIndicator(),
-          ):IconButton(icon: Icon(Icons.check),onPressed: _save,)
+          isUpdating
+              ? Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: CupertinoActivityIndicator(),
+                )
+              : InkWell(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(right: 15, top: 12, left: 15),
+                    child: Text(
+                      '确定',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Theme.of(context).buttonColor),
+                    ),
+                  ),
+                  onTap: _save,
+                )
         ],
       ),
-      body:SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Theme(
-          data: Theme.of(context).copyWith(primaryColor: Theme.of(context).buttonColor),
+          data: Theme.of(context)
+              .copyWith(primaryColor: Theme.of(context).buttonColor),
           child: Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 InkWell(
-                  onTap: () =>showSheet(context),
+                  onTap: () => showSheet(context),
                   child: Container(
                     width: double.infinity,
                     color: Theme.of(context).accentColor,
                     height: 200,
                     child: Stack(
                       children: <Widget>[
-                        Builder(builder:(context) =>headerView()),
-                     //   Positioned.fill(child: Center(child: IconButton(icon: Icon(Icons.camera_alt,size: 35,color: Colors.white,),onPressed: showSheet(context),)))
+                        Builder(builder: (context) => headerView()),
+                        //   Positioned.fill(child: Center(child: IconButton(icon: Icon(Icons.camera_alt,size: 35,color: Colors.white,),onPressed: showSheet(context),)))
                       ],
                     ),
                   ),
                 ),
                 Container(
                   padding: EdgeInsets.all(12),
-                  child: Stack(overflow:Overflow.visible,children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        SizedBox(height: 50,),
-                        TextField(
-                          controller: nameController,
-                          decoration: InputDecoration(hintText: '昵称',labelText: '昵称',helperText: '',counterText: '',enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).textTheme.bodyText2.color)
-                          ),focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).buttonColor))),
-                          maxLength: 30,
-                        ),
-                        TextField(
-                          controller: noteController,
-                          decoration: InputDecoration(hintText: '简介',labelText: '简介',enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).textTheme.bodyText2.color)),focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).buttonColor))),
-                          maxLength: 500,
-                          maxLines: null,
-                        ),
-                      ],
-                    ),
-                    Positioned(
-                      top: -50,
-                      child: InkWell(
-                        onTap: () => showSheet(context),
-                        child: ClipRRect(child: avatarView(),borderRadius: BorderRadius.circular(5),),
+                  child: Stack(
+                    overflow: Overflow.visible,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 50,
+                          ),
+                          TextField(
+                            controller: nameController,
+                            decoration: InputDecoration(
+                                hintText: '昵称',
+                                labelText: '昵称',
+                                helperText: '',
+                                counterText: '',
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2
+                                            .color)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).buttonColor))),
+                            maxLength: 30,
+                          ),
+                          TextField(
+                            controller: noteController,
+                            decoration: InputDecoration(
+                                hintText: '简介',
+                                labelText: '简介',
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2
+                                            .color)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).buttonColor))),
+                            maxLength: 500,
+                            maxLines: null,
+                          ),
+                        ],
                       ),
-                    )
-                  ],),
+                      Positioned(
+                        top: -50,
+                        child: InkWell(
+                          onTap: () => showSheet(context),
+                          child: ClipRRect(
+                            child: avatarView(),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 Row(
                   children: <Widget>[
-                    Checkbox(value: locked,onChanged: _onLockChanged,),
+                    Checkbox(
+                      value: locked,
+                      onChanged: _onLockChanged,
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(top: 15),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                        Text('保护你的账户（锁嘟）',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
-                        Text('你需要手动审核所有关注请求')
-                      ],),
+                          Text(
+                            '保护你的账户（锁嘟）',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          Text('你需要手动审核所有关注请求')
+                        ],
+                      ),
                     )
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB( 12,20,12,0),
-                  child: Text('个人资料附加信息',style: TextStyle(color: Colors.grey),),
+                  padding: const EdgeInsets.fromLTRB(12, 20, 12, 0),
+                  child: Text(
+                    '个人资料附加信息',
+                    style: TextStyle(color: Colors.grey),
+                  ),
                 ),
-
                 extraWidgets(),
-
                 Padding(
-                  padding: const EdgeInsets.only(right: 12,bottom: 30),
-                  child: Align(child: RaisedButton(child: Text('添加信息'),onPressed: _addExtra,),alignment: Alignment.bottomRight,),
+                  padding: const EdgeInsets.only(right: 12, bottom: 30),
+                  child: Align(
+                    child: RaisedButton(
+                      child: Text('添加信息'),
+                      onPressed: _addExtra,
+                    ),
+                    alignment: Alignment.bottomRight,
+                  ),
                 )
               ],
             ),
@@ -276,7 +366,8 @@ class _EditUserProfileState extends State<EditUserProfile> {
   _addExtra() {
     if (extraInfoControllers.length < 4) {
       setState(() {
-        extraInfoControllers.add([TextEditingController(),TextEditingController()]);
+        extraInfoControllers
+            .add([TextEditingController(), TextEditingController()]);
       });
     }
   }
@@ -284,9 +375,21 @@ class _EditUserProfileState extends State<EditUserProfile> {
   Widget extraWidgets() {
     List<Widget> children = [];
     for (int i = 0; i < extraInfoControllers.length; i++) {
-      children.add(TextField(controller: extraInfoControllers[i][0],decoration: InputDecoration(hintText: '标签',counterText: ''),maxLength: 255,maxLines: null,));
-      children.add(TextField(controller: extraInfoControllers[i][1],decoration: InputDecoration(hintText: '内容',counterText: ''),maxLength: 255,maxLines: null,));
-      children.add(SizedBox(height: 10,));
+      children.add(TextField(
+        controller: extraInfoControllers[i][0],
+        decoration: InputDecoration(hintText: '标签', counterText: ''),
+        maxLength: 255,
+        maxLines: null,
+      ));
+      children.add(TextField(
+        controller: extraInfoControllers[i][1],
+        decoration: InputDecoration(hintText: '内容', counterText: ''),
+        maxLength: 255,
+        maxLines: null,
+      ));
+      children.add(SizedBox(
+        height: 10,
+      ));
     }
     return Padding(
       padding: const EdgeInsets.all(18),

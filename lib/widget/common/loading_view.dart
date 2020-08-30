@@ -16,7 +16,7 @@ class LoadingView extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(strokeWidth: 2,),
                   width: 50,
                   height: 50,
                 ),

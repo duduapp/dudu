@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dudu/api/status_api.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/models/json_serializable/media_attachment.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/public.dart';
@@ -34,6 +35,7 @@ class _StatusDetailState extends State<StatusDetail>
   final ScrollController _scrollController = ScrollController();
   final List<GlobalKey> keys = [];
   int itemPosition = 0;
+  StatusItemData status;
 
   List<ResultListProvider> providers = [];
   List<Widget> parentWidgets = [];
@@ -59,7 +61,7 @@ class _StatusDetailState extends State<StatusDetail>
       }
 
       parentWidgets
-          .add(_buildStatusItem(widget.data, primary: true, subStatus: false));
+          .add(_buildStatusItem(status, primary: true, subStatus: false));
 
       parentWidgets.add(Container(
         height: 38,
@@ -86,14 +88,18 @@ class _StatusDetailState extends State<StatusDetail>
 
   @override
   void initState() {
-    //deep copy media attachments
+    //deep copy media attachments, fix hero
     var data = widget.data.toJson();
+    status = StatusItemData.fromJson(Map.from(data));
     var copyAttachments = [];
     for (var m in data['media_attachments']) {
-      copyAttachments.add(Map<String, dynamic>.from(m));
+      copyAttachments.add(Map<String,dynamic>.from(m));
     }
-    data['media_attachments'] = copyAttachments;
-    data['media_attachments'].forEach((e) => e['id'] = "c_" + e['id']);
+    status.mediaAttachments = copyAttachments;
+    status.mediaAttachments.forEach((e) {
+      e['id'] = "c_" + e['id'];
+    });
+
     _originExpandOption = SettingsProvider().settings['always_expand_tools'];
     SettingsProvider().settings['always_expand_tools'] = true;
 

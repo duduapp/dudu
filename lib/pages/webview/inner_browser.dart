@@ -70,7 +70,7 @@ class _InnerBrowserState extends State<InnerBrowser> {
         elevation: 0,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.more_horiz),
+            icon: Icon(IconFont.moreHoriz),
             onPressed: () {
               DialogUtils.showBottomSheet(context: context, widgets: [
                 BottomSheetItem(

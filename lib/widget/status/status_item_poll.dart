@@ -56,7 +56,7 @@ class _StatusItemPollState extends State<StatusItemPoll> {
       widget.status.poll.options.asMap().forEach((key, value) {
         if (widget.status.poll.multiple) {
           rows.add(CheckboxListTile(
-            title: Text(value['title'],style: TextStyle(fontSize: 14),),
+            title: Text(value['title'],style: TextStyle(fontSize: 12),),
             value: choices.contains(key),
             onChanged: (value) {
               if (value) {
@@ -75,32 +75,39 @@ class _StatusItemPollState extends State<StatusItemPoll> {
           ));
         } else {
 
-          rows.add(RadioListTile(
-            value: key.toString(),
-            title: Text(value['title'],style: TextStyle(fontSize: 14),),
-            groupValue: radioGroup,
-            onChanged: (value) {
-              setState(() {
+          rows.add(SizedBox(
+            height: 32,
+            child: RadioListTile(
+              dense: true,
+              value: key.toString(),
+              title: Text(value['title'],style: TextStyle(fontSize: 12),),
+              groupValue: radioGroup,
+              onChanged: (value) {
                 setState(() {
-                  radioGroup = value;
+                  setState(() {
+                    radioGroup = value;
+                  });
+                  choices.clear();
+                  choices.add(key);
                 });
-                choices.clear();
-                choices.add(key);
-              });
 
-            },
-            selected: choices.contains(key),
+              },
+              selected: choices.contains(key),
+            ),
           ));
         }
       });
 
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
       Column(children: rows,),
-      Container(
-        width: 150,
+      SizedBox(height: 5,),
+      ButtonTheme(
+        minWidth: 100,
+        height: 30,
         child: OutlineButton(
           child: Text('投票',style: TextStyle(color: Theme.of(context).buttonColor),),
           onPressed: vote,

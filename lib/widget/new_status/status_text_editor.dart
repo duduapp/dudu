@@ -133,6 +133,7 @@ class _StatusTextEditorState extends State<StatusTextEditor> {
           autofocus: true,
           maxLength: 500,
           maxLines: null,
+          keyboardType: TextInputType.multiline,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.all(15),
               hintText: '有什么新鲜事',
@@ -140,6 +141,7 @@ class _StatusTextEditorState extends State<StatusTextEditor> {
               disabledBorder: InputBorder.none,
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
+              hintStyle: TextStyle(fontSize: 16),
               labelStyle: TextStyle(fontSize: 16)),
         ),
       ),

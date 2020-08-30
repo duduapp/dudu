@@ -27,6 +27,7 @@ class _StatusItemTextState extends State<StatusItemText> {
 
     SettingsProvider provider =
         Provider.of<SettingsProvider>(context, listen: false);
+    if (widget.data.spoilerText.isNotEmpty)
     showMore = provider.get('always_expand_tools');
   }
 

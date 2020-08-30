@@ -13,7 +13,7 @@ class NotificationTask {
   static StreamSubscription userNotificationEvents;
 
   static enable() async {
-    var settings = SettingsProvider.getCurrentContextProvider().settings;
+    var settings = SettingsProvider().settings;
     if (!settings['show_notifications']) return;
     userNotificationEvents?.cancel();
     

@@ -18,8 +18,8 @@ import 'package:dudu/widget/common/sized_icon_button.dart';
 import 'package:dudu/widget/new_status/emoji_widget.dart';
 import 'package:dudu/widget/new_status/handle_vote_dialog.dart';
 import 'package:dudu/widget/new_status/status_text_editor.dart';
-import 'package:dudu/widget/publish/status_reply_info.dart';
-import 'package:dudu/widget/publish/vote_display.dart';
+import 'package:dudu/widget/new_status/status_reply_info.dart';
+import 'package:dudu/widget/new_status/vote_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,7 +30,7 @@ import 'package:provider/provider.dart';
 import 'package:rich_text_controller/rich_text_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../widget/publish/new_status_publish_level.dart';
+import '../../widget/new_status/new_status_publish_level.dart';
 
 class NewStatus extends StatefulWidget {
   final StatusItemData replyTo;

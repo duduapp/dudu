@@ -345,7 +345,7 @@ class ResultListProvider extends ChangeNotifier {
     events.forEach((key, value) {
       eventBus.off(key, value);
     });
-    SettingsProvider.getCurrentContextProvider().statusDetailProviders.remove(this);
+    SettingsProvider().statusDetailProviders.remove(this);
     super.dispose();
   }
 }

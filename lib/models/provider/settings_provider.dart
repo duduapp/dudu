@@ -1,4 +1,6 @@
 import 'package:dudu/models/json_serializable/filter_item.dart';
+import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/public.dart';
@@ -37,6 +39,8 @@ class SettingsProvider extends ChangeNotifier {
   ResultListProvider localProvider;
   ResultListProvider notificationProvider;
   ResultListProvider federatedProvider;
+
+  LoginedUser currentUser;
 
   Map<String,List<FilterItem>> filters = {
     'home' : [],
@@ -101,6 +105,7 @@ class SettingsProvider extends ChangeNotifier {
         }
       }
     }
+    currentUser = LoginedUser();
     notifyListeners();
   }
 
@@ -130,6 +135,13 @@ class SettingsProvider extends ChangeNotifier {
     return settings[key];
   }
 
+  updateCurrentAccount(OwnerAccount account) {
+    if (account.id == currentUser.account.id) {
+      currentUser.account = account;
+      LocalStorageAccount.addOwnerAccount(account);
+      notifyListeners();
+    }
+  }
 
   static SettingsProvider getCurrentContextProvider({listen = false}) {
     return Provider.of<SettingsProvider>(navGK.currentContext,listen: listen);

@@ -24,7 +24,6 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
-  OwnerAccount _account;
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -35,46 +34,30 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-    _account = LoginedUser().account;
 
-    if (_account == null) {
-      _getMyAccount();
-    }
-    eventBus.on(EventBusKey.accountUpdated,(arg) {
-      _getMyAccount();
-    });
+
   }
 
   @override
   void dispose() {
-    eventBus.off(EventBusKey.LoadLoginMegSuccess,loginSuccess);
-    eventBus.off(EventBusKey.accountUpdated);
+
     super.dispose();
   }
 
-  Future<void> _getMyAccount() async {
-    OwnerAccount account = await AccountsApi.getMyAccount();
-    LocalStorageAccount.addOwnerAccount(account);
-    LoginedUser().account = account;
-    setState(() {
-      _account = account;
-    });
-  }
 
-
-  Widget settingWidget() {
+  @override
+  Widget build(BuildContext context) {
     return ListView(
       padding: EdgeInsets.only(top: 0),
       controller: _scrollController,
       children: <Widget>[
         GestureDetector(
-          onTap: () {
-           // AppNavigate.push(context, UserMessage(account: _account,));
-            AppNavigate.push( EditUserProfile(_account,showBottomChooseImage: true,));
-          },
-          child: SettingHead(
-            account: _account,
-          )
+            onTap: () {
+              // AppNavigate.push(context, UserMessage(account: _account,));
+              AppNavigate.push( EditUserProfile(LoginedUser().account,showBottomChooseImage: true,));
+            },
+            child:  SettingHead(
+            )
         ),
         SizedBox(height: 10),
         SettingCell(
@@ -119,10 +102,5 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
 
       ],
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return settingWidget();
   }
 }

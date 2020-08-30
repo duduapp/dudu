@@ -45,7 +45,7 @@ class TextWithEmoji extends StatelessWidget {
             if (emoji['shortcode'] == shortcode) {
               widgets.add(WidgetSpan(
                   alignment: PlaceholderAlignment.middle,
-                  baseline: TextBaseline.alphabetic,
+                 // baseline: TextBaseline.alphabetic,
                   child: CachedNetworkImage(width:15,height: 15,imageUrl: emoji['url'])));
               break;
             }
