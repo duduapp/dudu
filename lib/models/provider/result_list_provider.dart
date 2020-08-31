@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/models/runtime_config.dart';
@@ -8,7 +6,6 @@ import 'package:dudu/utils/filter_util.dart';
 import 'package:dudu/utils/request.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 typedef ResultListDataHandler = Function(dynamic data);
@@ -41,7 +38,7 @@ class ResultListProvider extends ChangeNotifier {
   final String tag;
   String lastRequestUrl = '';
 
-  EasyRefreshController refreshController;
+  RefreshController refreshController;
 
   /// map key 的优先级高于 data handler
   ResultListProvider(

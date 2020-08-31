@@ -25,7 +25,6 @@ dependencies:
   shared_preferences: ^0.5.1+1
   flutter_spinkit: ^4.1.2+1
   fluttertoast: ^3.0.1
-  flutter_webview_plugin: ^0.3.11
   url_launcher: ^5.5.0
   video_player: ^0.10.0+4
   image_picker: ^0.6.6+1
@@ -40,7 +39,6 @@ dependencies:
   path_provider: ^1.6.9
   like_button:
     path: ../like_button/
-  flutter_easyrefresh: ^2.1.5
   flutter_datetime_picker: ^1.4.0
   theme_provider: ^0.3.3
   provider: ^4.3.1
@@ -62,6 +60,7 @@ dependencies:
   gzx_dropdown_menu :
     path: ../gzx_dropdown_menu/
   dio_http_cache: ^0.2.8
+  flutter_webview_plugin: ^0.3.11 #登录账号用
 
 
 

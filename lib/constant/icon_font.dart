@@ -31,7 +31,9 @@ class IconFont {
 
   static const IconData thumbUp = IconData(0xe9cf,fontFamily: 'IconFont');
 
-  static const IconData earth = IconData(0xe61b,fontFamily: 'IconFont');
+  static const IconData earth = IconData(0xeef6,fontFamily: 'IconFont');
+
+  static const IconData earthSmall = IconData(0xe61b,fontFamily: 'IconFont'); // use in bottom navigation
 
   static const IconData theme = IconData(0xe6a7,fontFamily: 'IconFont');
 

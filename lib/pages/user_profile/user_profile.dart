@@ -1,8 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:dudu/utils/cache_manager.dart';
-import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
-    as extend;
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/media_attachment.dart';
@@ -17,6 +14,7 @@ import 'package:dudu/pages/user_profile/user_follewers.dart';
 import 'package:dudu/pages/user_profile/user_follewing.dart';
 import 'package:dudu/pages/user_profile/user_report.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/cache_manager.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
@@ -26,6 +24,8 @@ import 'package:dudu/widget/common/measure_size.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:dudu/widget/other/avatar.dart';
 import 'package:dudu/widget/status/text_with_emoji.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
+    as extend;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

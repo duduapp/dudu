@@ -1,5 +1,5 @@
-import 'package:path/path.dart' as p;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 class CustomCacheManager extends BaseCacheManager {

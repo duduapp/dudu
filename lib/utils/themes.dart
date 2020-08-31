@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nav_router/nav_router.dart';
 
 class ThemeUtil {
   static ThemeData lightTheme(BuildContext context) {
@@ -33,7 +32,7 @@ class ThemeUtil {
         primaryColor: Color.fromRGBO(30, 30, 30, 1),
         accentColor: Colors.grey[600],
         textTheme: TextTheme(
-
+            bodyText1: TextStyle(color: Color.fromRGBO(211, 211, 211, 1)),
             bodyText2: TextStyle(color: Color.fromRGBO(211, 211, 211, 1)),),
         toggleableActiveColor: Colors.blue,
         backgroundColor: Color.fromRGBO(21, 21, 21, 1),

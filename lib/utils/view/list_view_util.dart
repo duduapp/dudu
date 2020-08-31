@@ -1,57 +1,17 @@
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/api/status_api.dart';
-import 'package:dudu/constant/event_bus_key.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/widget/common/list_row.dart';
-import 'package:dudu/widget/listview/footer.dart';
-import 'package:dudu/widget/listview/header.dart';
 import 'package:dudu/widget/status/status_item.dart';
 import 'package:dudu/widget/status/status_item_account.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../event_bus.dart';
-
 class ListViewUtil {
-
-  static  getDefaultHeader(BuildContext context) {
-    return ClassicalHeader(
-        refreshText: '下拉刷新',
-        refreshReadyText: '释放刷新',
-        refreshingText: '加载中...',
-        refreshedText: '已完成',
-        refreshFailedText: '刷新失败',
-        noMoreText: '没有更多数据',
-        infoText: '更新于 %T',
-        showInfo: false,
-        textColor: Theme.of(context).accentColor,
-        enableHapticFeedback: false,
-
-        completeDuration: Duration(milliseconds: 200));
-  }
-
-  static getDefaultFooter(BuildContext context) {
-    return ClassicalFooter(
-      completeDuration: Duration(milliseconds: 0),
-      showInfo: false,
-      enableInfiniteLoad: true,
-      enableHapticFeedback: false,
-      triggerDistance:500,
-      loadText: '拉动加载',
-      loadReadyText: '释放加载',
-      loadingText: '加载中...',
-      loadedText: '加载中...',
-      loadFailedText: '加载失败',
-      noMoreText: 'no more',
-      infoText: 'a',
-    );
-  }
-
-
   static statusRowFunction() {
     return (int index, List data, ResultListProvider provider) {
       StatusItemData lineItem = StatusItemData.fromJson(data[index]);

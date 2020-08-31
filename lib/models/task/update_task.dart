@@ -7,17 +7,11 @@ import 'package:dudu/pages/timeline/timeline.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/widget/common/normal_flat_button.dart';
-import 'package:dudu/widget/flutter_framework/progress_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-
 import 'package:nav_router/nav_router.dart';
 import 'package:open_file/open_file.dart';
-
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class UpdateTask {
   static String key = "gityp34dkg" +

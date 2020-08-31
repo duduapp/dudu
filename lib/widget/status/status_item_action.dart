@@ -1,4 +1,3 @@
-import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/api/status_api.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';

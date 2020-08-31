@@ -1,6 +1,5 @@
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
-import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/webview/inner_browser.dart';
 import 'package:dudu/public.dart';

@@ -9,8 +9,9 @@ import 'package:flutter/material.dart';
 class StatusItemContent extends StatelessWidget {
   final StatusItemData data;
   final bool primary;
+  final bool subStatus;
 
-  StatusItemContent(this.data,{this.primary = false});
+  StatusItemContent(this.data,{this.primary = false,this.subStatus = false});
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[

@@ -31,9 +31,12 @@ class _StatusItemPollState extends State<StatusItemPoll> {
     if (widget.status.poll == null) {
       return Container();
     } else {
-      return Container(
-        padding: EdgeInsets.only(bottom: 6),
-        child: widget.status.poll.voted || widget.status.poll.expired ? resultPoll() : votablePoll(),
+      return MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: ScreenUtil.scaleFromSetting(SettingsProvider().get('text_scale'))),
+        child: Container(
+          padding: EdgeInsets.only(bottom: 6),
+          child: widget.status.poll.voted || widget.status.poll.expired ? resultPoll() : votablePoll(),
+        ),
       );
     }
 

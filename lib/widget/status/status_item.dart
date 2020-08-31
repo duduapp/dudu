@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
@@ -8,19 +7,15 @@ import 'package:dudu/public.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
 import 'package:dudu/utils/view/status_action_util.dart';
 import 'package:dudu/widget/common/no_splash_ink_well.dart';
-import 'package:dudu/widget/status/status_item_account.dart';
 import 'package:dudu/widget/status/status_item_account_w.dart';
 import 'package:dudu/widget/status/status_item_action_w.dart';
 import 'package:dudu/widget/status/status_item_card.dart';
 import 'package:dudu/widget/status/status_item_content.dart';
-import 'package:dudu/widget/status/status_item_primary_bottom.dart';
 import 'package:dudu/widget/status/text_with_emoji.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:nav_router/nav_router.dart';
 
 import '../other/avatar.dart';
-import 'status_item_action.dart';
 
 class StatusItem extends StatelessWidget {
   StatusItem(
@@ -66,7 +61,7 @@ class StatusItem extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       SubStatusAccountW(status: item),
-                      StatusItemContent(item),
+                      StatusItemContent(item,subStatus: true,),
                       StatusItemCard(item),
                       StatusItemActionW(
                         status: item,

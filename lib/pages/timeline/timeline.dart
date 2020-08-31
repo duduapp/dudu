@@ -1,20 +1,15 @@
 import 'package:dudu/constant/icon_font.dart';
-import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
-import 'package:dudu/pages/login/login.dart';
 import 'package:dudu/pages/search/search_page_delegate.dart';
 import 'package:dudu/pages/status/new_status.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
-import 'package:dudu/widget/setting/account_row_top.dart';
 import 'package:dudu/widget/timeline/account_switch_timeline.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:nav_router/nav_router.dart';
-import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../widget/other/search.dart' as customSearch;
@@ -36,7 +31,7 @@ class Timeline extends StatefulWidget {
 
 class _TimelineState extends State<Timeline> {
   ScrollController _scrollController = ScrollController();
-  EasyRefreshController refreshController = EasyRefreshController();
+  RefreshController refreshController = RefreshController();
   GlobalKey _stackKey = GlobalKey();
   GZXDropdownMenuController _menuController = GZXDropdownMenuController();
   ResultListProvider provider;
@@ -107,7 +102,7 @@ class _TimelineState extends State<Timeline> {
       listView: ProviderEasyRefreshListView(
         type: widget.type,
         scrollController: _scrollController,
-        easyRefreshController: refreshController,
+        refreshController: refreshController,
       ),
       title: title,
       actions: [

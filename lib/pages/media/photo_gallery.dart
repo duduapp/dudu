@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,13 +8,10 @@ import 'package:dudu/utils/cache_manager.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/media_util.dart';
 import 'package:dudu/widget/common/media_detail.dart';
-import 'package:dudu/widget/flutter_framework/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-import 'package:share/share.dart';
-import 'package:share_extend/share_extend.dart';
 
 class PhotoGallery extends StatefulWidget {
   PhotoGallery({

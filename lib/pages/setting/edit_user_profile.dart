@@ -3,20 +3,15 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dudu/api/accounts_api.dart';
-import 'package:dudu/constant/api.dart';
-import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
-import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/media_util.dart';
-import 'package:dudu/utils/request.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class EditUserProfile extends StatefulWidget {
   final OwnerAccount account;

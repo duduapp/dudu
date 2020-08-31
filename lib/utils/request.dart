@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/runtime_config.dart';
-import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/widget/dialog/loading_dialog.dart';
 import 'package:dudu/widget/flutter_framework/progress_dialog.dart';

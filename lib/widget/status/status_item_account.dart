@@ -44,13 +44,13 @@ class StatusItemAccount extends StatelessWidget {
       children: <Widget>[
         Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-            child: Avatar(account: account,)),
+            child: Avatar(account: account,width: 40,height: 40,)),
         Expanded(
           child: Container(
-            height: 50,
+            height: 40,
             //ns  margin: EdgeInsets.only(top: 8),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Row(
@@ -62,7 +62,7 @@ class StatusItemAccount extends StatelessWidget {
                         emojis: account.emojis,
                         maxLines: 1,
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 12,
                             fontWeight: FontWeight.normal,
                             color:
                             Theme.of(context).textTheme.bodyText1.color),
@@ -81,7 +81,7 @@ class StatusItemAccount extends StatelessWidget {
                 Flexible(
                   child: Text(
                     '@' + account.acct,
-                    style: TextStyle(fontSize: 13, color: Theme.of(context).accentColor),
+                    style: TextStyle(fontSize: 12, color: Theme.of(context).accentColor),
                     overflow: TextOverflow.ellipsis,
                   ),
                 )

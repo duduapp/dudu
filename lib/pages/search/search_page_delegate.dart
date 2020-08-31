@@ -1,4 +1,5 @@
 import 'package:dudu/api/search_api.dart';
+import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/pages/search/search_result.dart';
 import 'package:flutter/material.dart';
 import 'package:theme_provider/theme_provider.dart';
@@ -21,7 +22,7 @@ class SearchPageDelegate extends customSearch.SearchDelegate  {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: Icon(IconFont.clear),
         onPressed: () {
           query = '';
         },
@@ -32,7 +33,7 @@ class SearchPageDelegate extends customSearch.SearchDelegate  {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: Icon(IconFont.back),
       onPressed: () {
         close(context, null);
       },

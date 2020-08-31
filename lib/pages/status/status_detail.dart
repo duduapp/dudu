@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:dudu/api/status_api.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
-import 'package:dudu/models/json_serializable/media_attachment.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/public.dart';
@@ -16,14 +13,10 @@ import 'package:dudu/widget/common/measure_size.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:dudu/widget/status/status_item.dart';
 import 'package:dudu/widget/status/status_item_action_w.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:provider/provider.dart';
-import 'package:share/share.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extend;
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StatusDetail extends StatefulWidget {
   final StatusItemData data;
@@ -367,18 +360,27 @@ class _StatusDetailState extends State<StatusDetail>
               ),
             ),
           ),
-          Container(
-              decoration: BoxDecoration(
-                  border: Border(
-                      top: BorderSide(
-                          width: 0.5, color: Theme.of(context).dividerColor))),
-              padding: EdgeInsets.symmetric(horizontal: 40),
-              child: SafeArea(
+          MediaQuery(
+            data: MediaQuery.of(context)
+                .copyWith(textScaleFactor: ScreenUtil.scaleFromSetting(SettingsProvider().get('text_scale')) + 0.1),
+            child: Container(
+                decoration: BoxDecoration(
+                    color: Theme.of(context).appBarTheme.color,
+                    border: Border(
+                        top: BorderSide(
+                            width: 0.5, color: Theme.of(context).dividerColor))),
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  padding: EdgeInsets.all(8),
+               //   color: Colors.red,
+                  alignment: Alignment.topCenter,
                   child: StatusItemActionW(
-                status: widget.data,
-                subStatus: false,
-                showNum: false,
-              )))
+                  status: widget.data,
+                  subStatus: false,
+                  showNum: false,
+                ),
+                )),
+          )
         ],
       ),
     );

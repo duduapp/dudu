@@ -3,7 +3,6 @@ import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/utils/app_navigate.dart';
 import 'package:dudu/widget/common/normal_flat_button.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ListsAdd extends StatefulWidget {
   final ResultListProvider provider;

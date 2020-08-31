@@ -39,7 +39,7 @@ class FollowRequestCell extends StatelessWidget {
                 Expanded(
                   child: Text(
                     StringUtil.displayName(item.account) + '请求关注你',
-                    style: TextStyle(fontSize: 14),
+                    style: TextStyle(fontSize: 12),
                   ),
                 ),
               ],

@@ -4,6 +4,7 @@ import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/home_page.dart';
+import 'package:dudu/pages/webview/inner_browser.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/utils/dialog_util.dart';
@@ -18,7 +19,6 @@ import 'model/app_credential.dart';
 import 'model/server_item.dart';
 import 'model/token.dart';
 import 'server_list.dart';
-import 'web_login.dart';
 
 class Login extends StatefulWidget {
   final bool showBackButton;
@@ -64,7 +64,7 @@ class _LoginState extends State<Login> {
     setState(() {
       _clickButton = false;
     });
-    final result = await AppNavigate.push(WebLogin(serverItem: model, hostUrl: hostUrl),);
+    final result = await AppNavigate.push(InnerBrowser(hostUrl, appCredential: model,),);
 
     if (result == null) {
       return;

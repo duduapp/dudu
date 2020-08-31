@@ -3,14 +3,11 @@ import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/timeline/timeline.dart';
 import 'package:dudu/public.dart';
-import 'package:dudu/utils/view/list_view_util.dart';
 import 'package:dudu/widget/common/empty_view.dart';
 import 'package:dudu/widget/common/error_view.dart';
 import 'package:dudu/widget/common/loading_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -22,9 +19,7 @@ class ProviderEasyRefreshListView extends StatefulWidget {
       {Key key,
       this.type,
       this.emptyWidget,
-      this.easyRefreshController,
       this.refreshController,
-      this.header,
       this.usingGrid = false,
         this.gridDelegate,
       this.scrollController,
@@ -41,8 +36,6 @@ class ProviderEasyRefreshListView extends StatefulWidget {
   final TimelineType type;
 
   final Widget emptyWidget;
-  final EasyRefreshController easyRefreshController;
-  final Header header;
   final usingGrid;
   final ScrollController scrollController;
   final double cacheExtent;
@@ -75,7 +68,6 @@ class _ProviderEasyRefreshListViewState
     with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = ScrollController();
 
-  EasyRefreshController _controller;
   int offset;
   bool noResults = false;
   bool finishLoad = false;
@@ -94,9 +86,6 @@ class _ProviderEasyRefreshListViewState
 
     _refreshController =
         widget.refreshController ?? RefreshController(initialRefresh: false);
-
-    // _startRequest(widget.requestUrl,refresh: true);
-    _controller = widget.easyRefreshController ?? EasyRefreshController();
 
     Storage.getInt("mastodon.text_scale").then((value) {
       if (value != null && value != textScale) {
@@ -266,52 +255,6 @@ class _ProviderEasyRefreshListViewState
                                       ),
                       ),
                     )
-
-//                  child: EasyRefresh.custom(
-//
-//                      topBouncing: false,
-//                      slivers: [
-//                        !widget.usingGrid
-//                            ? SliverAnimatedList(
-//
-//                                key: listKey,
-//                                initialItemCount: provider.list.length+widget.addToSliverCount,
-//                                itemBuilder: (context, index, animation) {
-//                                  return SizeTransition(
-//                                    axis: Axis.vertical,
-//                                    sizeFactor: animation,
-//                                    child: provider.buildRow(
-//                                        index, provider.list, provider),
-//                                  );
-//                                },
-//                              )
-//                            : SliverGrid(
-//                                delegate:
-//                                    SliverChildBuilderDelegate((context, idx) {
-//                                  return provider.buildRow(
-//                                      idx, provider.list, provider);
-//                                }, childCount: provider.list.length+widget.addToSliverCount),
-//                                gridDelegate:
-//                                    SliverGridDelegateWithFixedCrossAxisCount(
-//                                        crossAxisCount: 3),
-//                              )
-//                      ],
-//                      firstRefresh: false, //在NestedScrollView 不用启用这个选项，而且不能设置scroll controller
-//                      firstRefreshWidget: LoadingView(),
-//                      header:
-//                          widget.header ?? ListViewUtil.getDefaultHeader(context),
-//                      footer: ListViewUtil.getDefaultFooter(context),
-//                      controller: _controller,
-//
-//                      scrollController:widget.scrollController,
-////                        widget.type == null ? null : _scrollController,
-//                      onRefresh: provider.finishRefresh ? null : provider.refresh,
-//                      onLoad: widget.enableLoad ?(provider.finishLoad ? null : provider.load ):null,
-//                      emptyWidget: provider.noResults && widget.addToSliverCount == 0
-//                          ? widget.emptyWidget ?? EmptyView()
-//                          : null,
-//                      cacheExtent: widget.cacheExtent ?? 30,
-//                    ),
                     );
           }),
         );

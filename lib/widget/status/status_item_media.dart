@@ -8,7 +8,6 @@ import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/media/photo_gallery.dart';
 import 'package:dudu/pages/media/video_play.dart';
 import 'package:dudu/public.dart';
-import 'package:dudu/utils/cache_manager.dart';
 import 'package:dudu/widget/common/no_splash_ink_well.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';

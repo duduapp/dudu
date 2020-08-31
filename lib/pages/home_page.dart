@@ -1,20 +1,15 @@
-import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/constant/icon_font.dart';
-import 'package:dudu/models/local_account.dart';
-import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/models/runtime_config.dart';
 import 'package:dudu/models/task/notification_task.dart';
 import 'package:dudu/models/task/update_task.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/filter_util.dart';
+import 'package:dudu/widget/common/bottom_navigation_item.dart';
 import 'package:dudu/widget/other/app_retain_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:nav_router/nav_router.dart';
 
-
-import 'login/login.dart';
 import 'setting/setting.dart';
 import 'status/new_status.dart';
 import 'timeline/notifications.dart';
@@ -30,7 +25,6 @@ class HomePage extends StatefulWidget{
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -38,11 +32,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     }
   }
 
-  int _tabIndex = 0;
+  int _tabIndex;
 
   @override
   void initState() {
     super.initState();
+    _tabIndex = RuntimeConfig.tabIndex ?? 0;
+
+
+
     UpdateTask.check();
     FilterUtil.getFiltersAndApply();
 
@@ -65,7 +63,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   List<IconData> _tabIcons = [
     IconFont.home,
     IconFont.local,
-    IconFont.earth,
+    IconFont.earthSmall,
     IconFont.notification,
     IconFont.mine
   ];
@@ -75,7 +73,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   Icon getTabIcon(int index, Color activeColor) {
     if (index == _tabIndex) {
       return Icon(_tabIcons[index],
-          color: activeColor); //_tabSelectedImages[index];
+          color: activeColor,); //_tabSelectedImages[index];
     } else {
       return Icon(_tabIcons[index],color: Theme.of(context).textTheme.bodyText1.color,); //_tabImages[index];
     }
@@ -85,7 +83,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     if (index == _tabIndex) {
       return Text(
         _tabTitles[index],
-        style: TextStyle(color: activeColor, fontWeight: FontWeight.bold),
+        style: TextStyle(color: activeColor, fontWeight: FontWeight.normal),
       );
     } else {
       return Text(_tabTitles[index],style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),);
@@ -109,48 +107,57 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
             children: <Widget>[Timeline(TimelineType.home), Timeline(TimelineType.local), Timeline(TimelineType.federated),Notifications(), Setting()],
             index: _tabIndex,
           ),
-          bottomNavigationBar: CupertinoTabBar(
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                  icon: getTabIcon(0, activeColor),
-                  title: getTabTitle(0, activeColor)),
-              BottomNavigationBarItem(
-                  icon: getTabIcon(1, activeColor),
-                  title: getTabTitle(1, activeColor)),
-              BottomNavigationBarItem(
-                  icon: getTabIcon(2, activeColor),
-                  title: getTabTitle(2, activeColor)),
-              BottomNavigationBarItem(
-                  icon: getTabIcon(3, activeColor),
-                  title: getTabTitle(3, activeColor)),
-              BottomNavigationBarItem(
-                  icon: getTabIcon(4, activeColor),
-                  title: getTabTitle(4, activeColor)),
+          bottomNavigationBar: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Divider(height: 0,),
+              CupertinoTabBar(
+                iconSize: 30,
+                items: [
+                  BottomNavigationBarItem(
+                      icon: getTabIcon(0, activeColor),
+                      title: getTabTitle(0, activeColor)),
+                  BottomNavigationBarItem(
+                      icon: getTabIcon(1, activeColor),
+                      title: getTabTitle(1, activeColor)),
+                  BottomNavigationBarItem(
+                      icon: getTabIcon(2, activeColor),
+                      title: getTabTitle(2, activeColor)),
+                  BottomNavigationBarItem(
+                      icon: getTabIcon(3, activeColor),
+                      title: getTabTitle(3, activeColor)),
+                  BottomNavigationBarItem(
+                      icon: getTabIcon(4, activeColor),
+                      title: getTabTitle(4, activeColor)),
+                ],
+                currentIndex: _tabIndex,
+                onTap: (index) {
+                  // 选中状态后继续点击，开启刷新
+                  if (index == _tabIndex) {
+                    switch (index) {
+                      case 0:
+                        SettingsProvider().homeProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 1));
+                        break;
+                      case 1:
+                        SettingsProvider().localProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 1));
+                        break;
+                      case 2:
+                        SettingsProvider().federatedProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 1));
+                        break;
+                      case 3:
+                        SettingsProvider().notificationProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 1));
+                        break;
+                    }
+                  } else {
+              //      _tabIndex = index;
+                    RuntimeConfig.tabIndex = index;
+                    setState(() {
+                      _tabIndex = index;
+                    });
+                  }
+                },
+              ),
             ],
-            currentIndex: _tabIndex,
-            onTap: (index) {
-              // 选中状态后继续点击，开启刷新
-              if (index == _tabIndex) {
-                switch (index) {
-                  case 0:
-                    SettingsProvider().homeProvider.refreshController.callRefresh(duration: Duration(milliseconds: 101));
-                    break;
-                  case 1:
-                    SettingsProvider().localProvider.refreshController.callRefresh(duration: Duration(milliseconds: 101));
-                    break;
-                  case 2:
-                    SettingsProvider().federatedProvider.refreshController.callRefresh(duration: Duration(milliseconds: 101));
-                    break;
-                  case 3:
-                    SettingsProvider().notificationProvider.refreshController.callRefresh(duration: Duration(milliseconds: 101));
-                    break;
-                }
-              } else {
-                setState(() {
-                  _tabIndex = index;
-                });
-              }
-            },
           ),
       ),
     );

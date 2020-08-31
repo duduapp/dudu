@@ -5,7 +5,6 @@ import 'package:dudu/public.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +36,6 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
             providerContext = context;
             return ProviderEasyRefreshListView(
               useAnimatedList: true,
-              header: MaterialHeader(),
               //    triggerRefreshEvent: [EventBusKey.scheduledStatusDeleted,EventBusKey.scheduledStatusPublished],
             );
           }),

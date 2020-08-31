@@ -1,7 +1,4 @@
-import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/constant/icon_font.dart';
-import 'package:dudu/models/json_serializable/owner_account.dart';
-import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/pages/setting/account_setting.dart';
 import 'package:dudu/pages/setting/bookmarks_list.dart';

@@ -2,11 +2,11 @@ import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/timeline/hashtag_timeline.dart';
 import 'package:dudu/pages/user_profile/user_profile.dart';
-import 'package:dudu/plugin/flutter_html/flutter_html.dart';
-import 'package:html/dom.dart' as dom;
 import 'package:dudu/pages/webview/inner_browser.dart';
+import 'package:dudu/plugin/flutter_html/flutter_html.dart';
 import 'package:dudu/public.dart';
 import 'package:flutter/material.dart';
+import 'package:html/dom.dart' as dom;
 
 class HtmlContent extends StatefulWidget {
   final String content;
@@ -44,7 +44,7 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
         crossAxisAlignment: CrossAxisAlignment.start,
           children: [
         Html(
-          data: expanded? widget.content : widget.content.substring(0,500)+'...',
+          data: expanded? widget.content : widget.content.length > 500 ? widget.content.substring(0,500)+'...' : widget.content,
           onLinkTap: _onLinkTap,
           padding: EdgeInsets.all(0),
           blockSpacing: 5,
@@ -52,8 +52,8 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
           renderNewlines: true,
           useRichText: true//widget.emojis.isEmpty,
         ),
-        if (needExpand)
-          OutlineButton(child: Text(expanded?'折叠内容':'显示更多'),onPressed: () {setState(() {
+        if (needExpand && widget.content.length > 500)
+          OutlineButton(child: Text(expanded?'折叠内容':'显示更多',style: TextStyle(fontSize: 12),),onPressed: () {setState(() {
             expanded = !expanded;
           });},)
       ]),

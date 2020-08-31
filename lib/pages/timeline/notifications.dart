@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dudu/api/notification_api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/notificate_item.dart';
@@ -15,8 +13,6 @@ import 'package:dudu/widget/status/status_item.dart';
 import 'package:dudu/widget/timeline/account_switch_timeline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../widget/other/follow_cell.dart';
@@ -29,7 +25,7 @@ class Notifications extends StatefulWidget {
 class _NotificationsState extends State<Notifications>
     with AutomaticKeepAliveClientMixin {
     ResultListProvider provider;
-    EasyRefreshController refreshController = EasyRefreshController();
+    RefreshController refreshController = RefreshController();
 
 
   List displayType;
@@ -111,7 +107,7 @@ class _NotificationsState extends State<Notifications>
       provider: provider,
       title: '通知',
       listView: ProviderEasyRefreshListView(
-        easyRefreshController: refreshController,
+        refreshController: refreshController,
       ),
       actions: [
         PopupMenuButton(

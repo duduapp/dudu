@@ -5,7 +5,6 @@ import 'package:dudu/pages/setting/edit_user_profile.dart';
 import 'package:dudu/pages/user_profile/user_follewers.dart';
 import 'package:dudu/pages/user_profile/user_follewing.dart';
 import 'package:dudu/pages/user_profile/user_profile.dart';
-import 'package:dudu/pages/user_profile/user_status.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/cache_manager.dart';
 import 'package:dudu/widget/common/no_splash_ink_well.dart';
