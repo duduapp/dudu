@@ -49,7 +49,7 @@ class SettingHead extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Text('$number',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              style: TextStyle(fontSize: 15)),
           Text(title, style: TextStyle(fontSize: 13,color: Theme.of(navGK.currentContext).accentColor))
         ],
       ),
@@ -89,7 +89,7 @@ class SettingHead extends StatelessWidget {
                 ),
                 title: Text(
                   StringUtil.displayName(account),
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18),
                 ),
                 subtitle: Text(StringUtil.accountFullAddress(account),
                     style: TextStyle(fontSize: 15)),

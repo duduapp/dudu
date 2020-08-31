@@ -53,7 +53,7 @@ class _CommonFilterListState extends State<CommonFilterList> {
                 )
               ],
             ),
-            body: ProviderEasyRefreshListView(useAnimatedList: true,),
+            body: ProviderEasyRefreshListView(useAnimatedList: false,),
           );
         });
   }
@@ -74,7 +74,7 @@ class _CommonFilterListState extends State<CommonFilterList> {
               padding: EdgeInsets.all(8),
               child: Text(
                 data['phrase'],
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 14),
               )),
         ),
       );

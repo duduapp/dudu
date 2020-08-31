@@ -419,7 +419,7 @@ class _UserProfileState extends State<UserProfile>
                               text: StringUtil.displayName(_account),
                               emojis: _account.emojis,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                             //     fontWeight: FontWeight.bold,
                                   color: Theme.of(context)
                                       .textTheme
                                       .bodyText1
@@ -565,7 +565,7 @@ class _UserProfileState extends State<UserProfile>
   Widget headerFollowsAndFollowers() {
     return DefaultTextStyle(
       style: TextStyle(
-          fontWeight: FontWeight.bold,
+         // fontWeight: FontWeight.bold,
           fontSize: 16,
           color: Theme.of(context).accentColor),
       child: Row(

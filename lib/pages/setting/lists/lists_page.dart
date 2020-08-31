@@ -48,7 +48,7 @@ class _ListsPageState extends State<ListsPage> {
               reverseData: true),
           builder: (context, snapshot) {
             providerContext = context;
-            return ProviderEasyRefreshListView(useAnimatedList: true,);
+            return ProviderEasyRefreshListView(useAnimatedList: false,);
           }),
     );
   }
@@ -60,7 +60,7 @@ class _ListsPageState extends State<ListsPage> {
       child: InkWell(
         onTap: () => AppNavigate.push(ListTimeline(list['id'])),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(6),
           child: Row(children: [
             Icon(
               IconFont.list,
@@ -69,7 +69,7 @@ class _ListsPageState extends State<ListsPage> {
             SizedBox(width: 5,),
             Text(
               list['title'],
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 14),
             ),
             Spacer(),
             PopupMenuButton(

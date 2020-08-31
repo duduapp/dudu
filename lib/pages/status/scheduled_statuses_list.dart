@@ -3,6 +3,7 @@ import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/pages/status/new_status.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
+import 'package:dudu/widget/common/list_row.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
@@ -35,7 +36,7 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
           builder: (context, snapshot) {
             providerContext = context;
             return ProviderEasyRefreshListView(
-              useAnimatedList: true,
+              useAnimatedList: false,
               //    triggerRefreshEvent: [EventBusKey.scheduledStatusDeleted,EventBusKey.scheduledStatusPublished],
             );
           }),
@@ -44,12 +45,13 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
 
   Widget _buildRow(int idx, List data,ResultListProvider provider) {
     var row = data[idx];
-    return InkWell(
-      child: Container(
-        padding: EdgeInsets.all(8),
+    return ListRow(
+      padding: 0,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(14,6,6,6),
         child: Row(
           children: <Widget>[
-            Text(row['params']['text'], style: TextStyle(fontSize: 18)),
+            Text(row['params']['text'], style: TextStyle(fontSize: 14)),
             Spacer(),
             IconButton(
               icon: Icon(Icons.edit),
@@ -69,9 +71,6 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
             )
           ],
         ),
-        decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(color: Theme.of(context).dividerColor))),
       ),
     );
   }

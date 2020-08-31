@@ -23,7 +23,7 @@ class StatusItemAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (noNavigateOnClick) {
+    if (!noNavigateOnClick) {
       return InkWell(
         onTap: noNavigateOnClick
             ? null
@@ -44,7 +44,7 @@ class StatusItemAccount extends StatelessWidget {
       children: <Widget>[
         Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-            child: Avatar(account: account,width: 40,height: 40,)),
+            child: Avatar(account: account,width: 40,height: 40,navigateToDetail: !noNavigateOnClick,)),
         Expanded(
           child: Container(
             height: 40,
