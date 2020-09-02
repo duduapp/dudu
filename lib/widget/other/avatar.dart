@@ -37,7 +37,7 @@ class Avatar extends StatelessWidget {
                 width: width,
                 height: height,
                 image: AssetImage(
-                    'image/missing.png'
+                    'assets/images/missing.png'
                 ),
               );
             },

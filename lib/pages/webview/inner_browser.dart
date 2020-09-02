@@ -6,6 +6,7 @@ import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:nav_router/nav_router.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -84,6 +85,7 @@ class _InnerBrowserState extends State<InnerBrowser> {
   @override
   Widget build(BuildContext context) {
     if (widget.appCredential != null) {
+      
 
      return WebviewScaffold(
         url: url,
@@ -95,8 +97,41 @@ class _InnerBrowserState extends State<InnerBrowser> {
                   .of(context)
                   .accentColor),)
             ],
+
           ),
           elevation: 0,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(IconFont.moreHoriz),
+              onPressed: () async{
+                _flutterWebviewPlugin.hide();
+                await DialogUtils.showBottomSheet(context: navGK.currentState.overlay.context, widgets: [
+                  BottomSheetItem(
+                    text: '分享',
+                    onTap: () => Share.share(url),
+                  ),
+                  Divider(indent: 60, height: 0),
+                  BottomSheetItem(
+                    text: '在浏览器中打开',
+                    onTap: () async {
+                      if (await canLaunch(widget.url)) {
+                        await launch(widget.url);
+                      } else {
+                        // do nothing
+                      }
+                    },
+                  ),
+                  Container(
+                    height: 8,
+                    color: Theme
+                        .of(context)
+                        .backgroundColor,
+                  ),
+                ]);
+                _flutterWebviewPlugin.show();
+              },
+            )
+          ],
           bottom: progress == 100
               ? null
               : PreferredSize(
@@ -142,7 +177,7 @@ class _InnerBrowserState extends State<InnerBrowser> {
                   DialogUtils.showBottomSheet(context: context, widgets: [
                     BottomSheetItem(
                       text: '分享',
-                      onTap: () => Share.share(widget.url),
+                      onTap: () => Share.share(url),
                     ),
                     Divider(indent: 60, height: 0),
                     BottomSheetItem(

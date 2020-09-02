@@ -83,6 +83,7 @@ class _LoginState extends State<Login> {
     paramsMap['client_secret'] = serverItem.clientSecret;
     paramsMap['grant_type'] = 'authorization_code';
     paramsMap['code'] = code;
+    paramsMap['website'] = AppConfig.website;
     paramsMap['redirect_uri'] = serverItem.redirectUri;
     try {
       Request.post(url: '$hostUrl' + Api.Token, params: paramsMap,showDialog: false).then((data) async{
@@ -210,7 +211,7 @@ class _LoginState extends State<Login> {
                                     fontSize: 20, )),
                           ),
                         )),
-                    Image.asset('image/wallpaper.png'),
+                    Image.asset('assets/images/wallpaper.png'),
                     Card(
                       margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       shape: RoundedRectangleBorder(

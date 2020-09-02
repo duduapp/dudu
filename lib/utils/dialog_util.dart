@@ -138,8 +138,8 @@ class DialogUtils {
     return res;
   }
 
-  static showBottomSheet({BuildContext context,List<Widget> widgets}) {
-    showModalBottomSheet(
+  static showBottomSheet({BuildContext context,List<Widget> widgets}) async{
+    await showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         shape: RoundedRectangleBorder(

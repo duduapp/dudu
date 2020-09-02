@@ -56,11 +56,8 @@ class SearchApi {
 
   static searchEmoji(String query) async {
     List res = [];
-    var cachedEmoji = await Storage.getStringWithAccount('cache_data' + Api.CustomEmojis);
-    if (cachedEmoji == null) {
-      return res;
-    }
-    List emojiList = json.decode(cachedEmoji);
+    var emojiList = await Request.get(url: Api.CustomEmojis,enableCache: true);
+
 
     if (emojiList != null && emojiList.isNotEmpty) {
       for (var emoji in emojiList) {

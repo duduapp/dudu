@@ -5,6 +5,7 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:dudu/pages/timeline/timeline.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/device_util.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/widget/common/normal_flat_button.dart';
 import 'package:flutter/material.dart';
@@ -16,16 +17,21 @@ import 'package:path_provider/path_provider.dart';
 class UpdateTask {
   static String key = "gityp34dkg" +
       TimelineType.federated.toString().split(".")[1].substring(0, 5);
-  static check() async {
+  static Future<bool> check() async {
     var rnd = StringUtil.getRandomString(20);
     try {
-      Response response =
-          await Dio().get("https://api.idudu.fans/app/android/update_check?auth=" + rnd);
+      String appId = DeviceUtil.generateAppId();
+      String checkUpdateUrl = "https://api.idudu.fans/app/android/update_check?auth=$rnd&id=$appId";
+      debugPrint(checkUpdateUrl);
+      Response response = await Dio().get(checkUpdateUrl);
 
       var data = response.data;
       if (data == null) {
-        return;
+        return true;
       }
+
+      Storage.saveString(StorageKey.lastCheckUpdateTime, DateTime.now().toIso8601String());
+
       var auth = data['auth'];
 
       if (sha256.convert(utf8.encode(rnd + key)).toString() == auth) {
@@ -50,11 +56,32 @@ class UpdateTask {
                 exit(0);
               },
               barrierDismissible: false);
+          return false;
         }
       }
-    } catch (e) {}
+      return true;
+    } catch (e) {return true;}
   }
 
+  static checkUpdateIfNeed() async{
+    if (await needCheckUpdate())
+      check();
+  }
+
+  // one day to send on request
+  static needCheckUpdate() async{
+    String lastUpdateTime = await Storage.getString(StorageKey.lastCheckUpdateTime);
+    if (lastUpdateTime == null) {
+      return true;
+    }
+    var now = DateTime.now();
+    var updateTime = DateTime.parse(lastUpdateTime);
+
+    if (now.difference(updateTime).inDays != 0 && now.day != updateTime.day) {
+      return true;
+    }
+    return false;
+  }
 
 }
 

@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Storage {
-  static void saveString(String key, String value) async {
+  static  saveString(String key, String value) async {
     try {
-      print(key + value);
+      debugPrint(key + value);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString(key, value);
     } catch (e) {

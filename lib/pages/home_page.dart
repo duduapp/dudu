@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      UpdateTask.check();
+      UpdateTask.checkUpdateIfNeed();
     }
   }
 
@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
 
 
 
-    UpdateTask.check();
+    UpdateTask.checkUpdateIfNeed();
     FilterUtil.getFiltersAndApply();
 
     NotificationTask.enable();

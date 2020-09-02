@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dudu/models/logined_user.dart';
@@ -10,13 +13,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nav_router/nav_router.dart';
+import 'package:http/http.dart' as http;
 
 enum RequestType { get, post, put, delete, patch }
 
 class Request {
   static Dio dioClient;
   static Dio dioClientWithCache;
-  
+  static http.Client client;
+
   static Future get({String url,Map params,bool showDialog = false,bool returnAll = false,Map header,CancelToken cancelToken,bool enableCache = false}) async{
     return await _request(requestType: RequestType.get,url: url,params: params,showDialog: showDialog,returnAll: returnAll,header: header,cancelToken: cancelToken,enableCache: enableCache);
   }
@@ -113,7 +118,22 @@ class Request {
           Map<String,dynamic> queryParams;
           if (params != null )
             queryParams =  Map.from(params);
-          response = await dio.get(url, queryParameters: queryParams,cancelToken: cancelToken,options: enableCache ? buildCacheOptions(Duration(days: 1)) : null);
+          Stopwatch stopwatch = new Stopwatch()..start();
+
+          url = LoginedUser().host+url;
+          var response = await getGetClient().get(url,headers: {'Authorization': LoginedUser().getToken()});
+          print('doSomething() executed in ${stopwatch.elapsed}');
+          print(url);
+
+          if (returnAll) {
+            Response returnResponse = Response(data: json.decode(response.body));
+            return returnResponse;
+          }
+      //    print(response.body);
+          return json.decode(response.body);
+
+         // response = await dio.get(url, queryParameters: queryParams,cancelToken: cancelToken,options: enableCache ? buildCacheOptions(Duration(days: 1)) : null);
+          ;
           break;
         case RequestType.post:
           response = await dio.post(url, data: params,cancelToken: cancelToken);
@@ -191,6 +211,8 @@ class Request {
       dio.options.baseUrl = urlHost;
     }
 
+    dio.httpClientAdapter = DefaultHttpClientAdapter();
+
     dio.interceptors.add(DioCacheManager(CacheConfig(baseUrl: urlHost)).interceptor);
 
     if (!kReleaseMode) {
@@ -210,6 +232,13 @@ class Request {
     dioClientWithCache = dio;
     return dioClientWithCache;
 
+  }
+
+  static http.Client getGetClient() {
+    if (client == null) {
+      client = http.Client();
+    }
+    return client;
   }
 
   static Dio getDio() {

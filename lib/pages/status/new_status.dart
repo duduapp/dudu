@@ -696,6 +696,11 @@ class _NewStatusState extends State<NewStatus> {
                       SizedIconButton(
                         onPressed: () {
                           DatePicker.showDateTimePicker(context,
+                              theme: DatePickerTheme(
+                                backgroundColor: Theme.of(context).primaryColor,
+                                cancelStyle: TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
+                                itemStyle: TextStyle(color: Theme.of(context).textTheme.bodyText2.color)
+                              ),
                               showTitleActions: true,
                               minTime:
                                   DateTime.now().add(Duration(minutes: 8)),

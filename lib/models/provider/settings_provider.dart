@@ -59,7 +59,7 @@ class SettingsProvider extends ChangeNotifier {
       'make_media_sensitive':false,
       'text_scale':'1',
 
-      'show_notifications':true,
+      'show_notifications':false,
       'show_notifications.reblog':true,
       'show_notifications.favourite': true,
       'show_notifications.follow_request':true,

@@ -2,6 +2,7 @@ import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/login/login.dart';
+import 'package:dudu/pages/setting/about_app.dart';
 import 'package:dudu/pages/setting/account_switch.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
@@ -93,6 +94,14 @@ class _GeneralSettingState extends State<GeneralSetting> {
             displayOptions: ['小','中','大'],
             type: SettingType.string,
           ),
+
+
+          SettingCell(
+    title: '关于嘟嘟',
+
+            onPress: () => AppNavigate.push(AboutApp()),
+          ),
+
           SizedBox(height: 30,),
           SettingCellText(
             text: Text('切换账号',style: TextStyle(fontSize: 16),),

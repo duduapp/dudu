@@ -18,10 +18,12 @@ class SettingCell extends StatelessWidget {
         size: 30,
         color: Colors.grey,
       ),
-      this.subTitle})
+      this.subTitle,
+      this.subTitleStyle})
       : super(key: key);
   final String title;
   final String subTitle;
+  final TextStyle subTitleStyle;
   final Widget leftIcon;
   final Function onPress;
   final Widget tail;
@@ -37,7 +39,7 @@ class SettingCell extends StatelessWidget {
           Text(title, style: TextStyle(fontSize: 15)),
           Text(
             subTitle,
-            style: TextStyle(fontSize: 12),
+            style: subTitleStyle ?? TextStyle(fontSize: 12),
           )
         ],
       );

@@ -58,7 +58,7 @@ class SettingHead extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    OwnerAccount account = Provider.of<SettingsProvider>(context).currentUser.account;
+    OwnerAccount account = Provider.of<SettingsProvider>(context)?.currentUser?.account;
 
     return account == null? Container(height: 180,):Column(
       children: [
