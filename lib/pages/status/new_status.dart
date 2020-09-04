@@ -331,8 +331,8 @@ class _NewStatusState extends State<NewStatus> {
     });
     var response;
     try {
-      response = await Request.post(
-          url: Api.attachMedia, params: formData, showDialog: false);
+      response = await Request.requestDio(
+          url: Api.attachMedia, params: formData);
     } on DioError catch (e) {
       images.remove(file);
       Fluttertoast.showToast(msg: '文件上传失败');

@@ -1,16 +1,16 @@
 package com.idudu.dudu;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+
 import io.flutter.app.FlutterActivity;
-import io.flutter.plugins.GeneratedPluginRegistrant;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-
-import android.os.Build;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
+import io.flutter.plugins.GeneratedPluginRegistrant;
 public class MainActivity extends FlutterActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {

@@ -68,6 +68,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
   }
   _onConfirmExit() async{
     await LocalStorageAccount.logout();
+    Request.closeHttpClient();
     AppNavigate.pushAndRemoveUntil(Login(),routeType: RouterType.fade);
   }
 
@@ -97,6 +98,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
 
 
           SettingCell(
+            leftIcon: Icon(IconFont.about),
     title: '关于嘟嘟',
 
             onPress: () => AppNavigate.push(AboutApp()),

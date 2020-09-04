@@ -1,4 +1,5 @@
 import 'package:dudu/api/scheduled_statuses_api.dart';
+import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/pages/status/new_status.dart';
 import 'package:dudu/public.dart';
@@ -54,7 +55,7 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
             Text(row['params']['text'], style: TextStyle(fontSize: 14)),
             Spacer(),
             IconButton(
-              icon: Icon(Icons.edit),
+              icon: Icon(IconFont.edit),
               onPressed: () {
                 AppNavigate.push(
                     NewStatus(
@@ -63,7 +64,7 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
               },
             ),
             IconButton(
-              icon: Icon(Icons.clear),
+              icon: Icon(IconFont.clear),
               onPressed: () async {
                 await ScheduledStatusesApi.delete(row['id']);
                 provider.removeByIdWithAnimation(row['id']);

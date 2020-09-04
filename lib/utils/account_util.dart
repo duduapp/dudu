@@ -13,7 +13,7 @@ class AccountUtil {
     await LocalStorageAccount.setActiveAccount(account);
     LoginedUser().loadFromLocalAccount(account);
     await SettingsProvider().load();
-    Request.closeDioClient();
+    Request.closeHttpClient();
     AppNavigate.pushAndRemoveUntil(HomePage(),
         routeType: RouterType.scale);
   }

@@ -44,6 +44,9 @@ class _StatusDetailState extends State<StatusDetail>
 
   _fetchData() async {
     var data = await StatusApi.getContext(widget.data.id,cancelToken: _cancelToken);
+    if (!mounted) {
+      return;
+    }
     if (data != null) {
       parentWidgets.clear();
       for (var d in data['ancestors']) {

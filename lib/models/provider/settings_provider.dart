@@ -78,6 +78,7 @@ class SettingsProvider extends ChangeNotifier {
     if (user.account == null) {
       return;
     }
+    currentUser = LoginedUser();
     storageKey = StringUtil.accountFullAddress(user.account)+'.settings';
     var keys = await Storage.getStringList(storageKey);
     if (keys == null) {
@@ -105,7 +106,6 @@ class SettingsProvider extends ChangeNotifier {
         }
       }
     }
-    currentUser = LoginedUser();
     notifyListeners();
   }
 

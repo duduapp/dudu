@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/local_account.dart';
@@ -14,6 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:nav_router/nav_router.dart';
+import 'package:http/http.dart' as http;
 
 import 'model/app_credential.dart';
 import 'model/server_item.dart';
@@ -50,17 +53,24 @@ class _LoginState extends State<Login> {
     paramsMap['client_name'] = AppConfig.ClientName;
     paramsMap['redirect_uris'] = AppConfig.RedirectUris;
     paramsMap['scopes'] = AppConfig.Scopes;
+    paramsMap['website'] = AppConfig.website;
 
-    var data = await Request.post(url: '$hostUrl' + Api.Apps, params: paramsMap,showDialog: false);
-    setState(() {
-      _clickButton = false;
-    });
-    if (data == null) {
+    var response;
+    try {
+      response = await http.post('$hostUrl' + Api.Apps, body: paramsMap);
+    } catch (e) {
       DialogUtils.showSimpleAlertDialog(context: navGK.currentState.overlay.context,text: '无法连接到服务器',onlyInfo: true);
       return;
+    } finally {
+      setState(() {
+        _clickButton = false;
+      });
     }
+    
 
-    AppCredential model = AppCredential.fromJson(data);
+
+
+    AppCredential model = AppCredential.fromJson(json.decode(response.body));
     setState(() {
       _clickButton = false;
     });
@@ -72,7 +82,7 @@ class _LoginState extends State<Login> {
     setState(() {
       isLoading = true;
     });
-    _getToken(result, model, hostUrl);
+    await _getToken(result, model, hostUrl);
   }
 
 // 获取token，此后的每次请求都需带上此token
@@ -83,14 +93,13 @@ class _LoginState extends State<Login> {
     paramsMap['client_secret'] = serverItem.clientSecret;
     paramsMap['grant_type'] = 'authorization_code';
     paramsMap['code'] = code;
-    paramsMap['website'] = AppConfig.website;
     paramsMap['redirect_uri'] = serverItem.redirectUri;
     try {
-      Request.post(url: '$hostUrl' + Api.Token, params: paramsMap,showDialog: false).then((data) async{
-        Token getToken = Token.fromJson(data);
+      await http.post('$hostUrl' + Api.Token, body: paramsMap).then((data) async{
+        Token getToken = Token.fromJson(json.decode(data.body));
         String token = '${getToken.tokenType} ${getToken.accessToken}';
         
-        Request.closeDioClient();
+        Request.closeHttpClient();
 
         LocalAccount localAccount = LocalAccount(hostUrl: hostUrl,token: token,active: true);
         await LocalStorageAccount.addLocalAccount(localAccount);
@@ -112,6 +121,7 @@ class _LoginState extends State<Login> {
         // eventBus.emit(EventBusKey.HidePresentWidegt);
       });
     } catch (e) {
+      throw e;
       debugPrint(e);
     }
   }

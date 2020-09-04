@@ -25,7 +25,7 @@ class ResultListProvider extends ChangeNotifier {
   bool noResults = true;
   bool isLoading = false;
   bool enableCache;
-  DioError error;
+  Exception error;
   String nextUrl;
   final bool listenBlockEvent;
   GlobalKey<SliverAnimatedListState> listKey;
@@ -37,6 +37,9 @@ class ResultListProvider extends ChangeNotifier {
   CancelToken token = CancelToken();
   final String tag;
   String lastRequestUrl = '';
+  bool _mounted = true;
+
+  bool get mounted => _mounted;
 
   RefreshController refreshController;
 
@@ -166,14 +169,17 @@ class ResultListProvider extends ChangeNotifier {
     } catch (e) {
       return false;
     }
+    if (!mounted) {
+      return false;
+    }
 
     //只有列表为空时，才显示错误，为了更好的用户体验
     if (response == null && list.isEmpty) {
       error = RuntimeConfig.error;
       if (error is DioError) {
-        if (error.type == DioErrorType.CANCEL) {
-          return false;
-        }
+//        if (error.type == DioErrorType.CANCEL) {
+//          return false;
+//        }
       }
       notifyListeners();
       return false;
@@ -184,7 +190,7 @@ class ResultListProvider extends ChangeNotifier {
     }else{
       error = null;
     }
-    var data = response.data;
+    var data = response.body;
 
     if (mapKey != null) {
       data = data[mapKey];
@@ -221,7 +227,7 @@ class ResultListProvider extends ChangeNotifier {
     }
 
     if (headerLinkPagination != null && headerLinkPagination == true) {
-      if (response.headers.map.containsKey('link')) {
+      if (response.headers.containsKey('link')) {
         var link = response.headers['link'][0].split(',');
         if (link.length < 2) {
           finishLoad = true;
@@ -338,6 +344,7 @@ class ResultListProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    _mounted = false;
     token.cancel('canceld');
     events.forEach((key, value) {
       eventBus.off(key, value);

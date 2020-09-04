@@ -20,7 +20,7 @@ class UpdateTask {
   static Future<bool> check() async {
     var rnd = StringUtil.getRandomString(20);
     try {
-      String appId = DeviceUtil.generateAppId();
+      String appId = await DeviceUtil.getAppId();
       String checkUpdateUrl = "https://api.idudu.fans/app/android/update_check?auth=$rnd&id=$appId";
       debugPrint(checkUpdateUrl);
       Response response = await Dio().get(checkUpdateUrl);
@@ -77,7 +77,7 @@ class UpdateTask {
     var now = DateTime.now();
     var updateTime = DateTime.parse(lastUpdateTime);
 
-    if (now.difference(updateTime).inDays != 0 && now.day != updateTime.day) {
+    if (now.difference(updateTime).inDays >= 1 || now.day != updateTime.day) {
       return true;
     }
     return false;

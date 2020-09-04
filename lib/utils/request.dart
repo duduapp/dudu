@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:dudu/models/http/http_client.dart';
+import 'package:dudu/models/http/http_response.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/runtime_config.dart';
+import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/widget/dialog/loading_dialog.dart';
 import 'package:dudu/widget/flutter_framework/progress_dialog.dart';
@@ -20,10 +24,25 @@ enum RequestType { get, post, put, delete, patch }
 class Request {
   static Dio dioClient;
   static Dio dioClientWithCache;
-  static http.Client client;
+  static HttpClient httpClient;
 
-  static Future get({String url,Map params,bool showDialog = false,bool returnAll = false,Map header,CancelToken cancelToken,bool enableCache = false}) async{
-    return await _request(requestType: RequestType.get,url: url,params: params,showDialog: showDialog,returnAll: returnAll,header: header,cancelToken: cancelToken,enableCache: enableCache);
+  static Future get(
+      {String url,
+      Map params,
+      bool showDialog = false,
+      bool returnAll = false,
+      Map header,
+      CancelToken cancelToken,
+      bool enableCache = false}) async {
+    return await _request(
+        requestType: RequestType.get,
+        url: url,
+        params: params,
+        showDialog: showDialog,
+        returnAll: returnAll,
+        header: header,
+        cancelToken: cancelToken,
+        enableCache: enableCache);
   }
 
   static Future post(
@@ -35,14 +54,15 @@ class Request {
       String successMessage,
       int closeDilogDelay}) async {
     return await _request(
-        requestType: RequestType.post,
-        url: url,
-        params: params,
-        errMsg: errMsg,
-        showDialog: showDialog,
-        dialogMessage: dialogMessage,
-        successMessage: successMessage,
-        closeDialogDelay: closeDilogDelay,);
+      requestType: RequestType.post,
+      url: url,
+      params: params,
+      errMsg: errMsg,
+      showDialog: showDialog,
+      dialogMessage: dialogMessage,
+      successMessage: successMessage,
+      closeDialogDelay: closeDilogDelay,
+    );
   }
 
   static Future put(
@@ -90,6 +110,32 @@ class Request {
         dialogMessage: dialogMessage);
   }
 
+  static uploadFile({String url, File file}) async {
+    final http.MultipartRequest request =
+        http.MultipartRequest('POST', Uri.parse(_realUrl(url)));
+    request.headers['Authorization'] = LoginedUser().getToken();
+    final http.MultipartFile multipartFile =
+        await http.MultipartFile.fromPath('image', file.path);
+    request.files.add(multipartFile);
+    final http.StreamedResponse response = await request.send();
+    final String res = await response.stream.transform(utf8.decoder).join();
+    return json.decode(res);
+  }
+
+  static requestDio({String url,dynamic params,RequestType type = RequestType.post}) async{
+    var response;
+    switch (type) {
+      case RequestType.post:
+        response = await getDio().post(url, data: params);
+        break;
+      case RequestType.patch:
+        response = await getDio().patch(url, data: params);
+        break;
+    }
+
+    return response.data;
+  }
+
   static Future _request(
       {String url,
       @required RequestType requestType,
@@ -104,48 +150,49 @@ class Request {
       CancelToken cancelToken,
       bool enableCache = false}) async {
     ProgressDialog dialog;
-    Response response;
+    http.Response response;
+    HttpClient client = getGetClient();
     if (showDialog != null && showDialog == true) {
       dialog = await DialogUtils.showProgressDialog(dialogMessage ?? '处理中...');
     }
-    var dio = enableCache ? getDioWithCache() : getDio();
     if (header != null && header.isNotEmpty) {
-      dio.options.headers = header;
+
     }
     try {
       switch (requestType) {
         case RequestType.get:
-          Map<String,dynamic> queryParams;
-          if (params != null )
-            queryParams =  Map.from(params);
-          Stopwatch stopwatch = new Stopwatch()..start();
-
-          url = LoginedUser().host+url;
-          var response = await getGetClient().get(url,headers: {'Authorization': LoginedUser().getToken()});
-          print('doSomething() executed in ${stopwatch.elapsed}');
-          print(url);
-
-          if (returnAll) {
-            Response returnResponse = Response(data: json.decode(response.body));
-            return returnResponse;
+          if (enableCache) {
+            var response = await getDioWithCache().get(url, queryParameters: params,cancelToken: cancelToken,options: enableCache ? buildCacheOptions(Duration(days: 1)) : null);
+            if (returnAll) {
+              dialog?.hide();
+              return HttpResponse(response.data,response.headers.map);
+            } else {
+              dialog.hide();
+              return response.data;
+            }
           }
-      //    print(response.body);
-          return json.decode(response.body);
+          response = await client.get(
+            buildGetUrl(_realUrl(url), params),
+          );
 
-         // response = await dio.get(url, queryParameters: queryParams,cancelToken: cancelToken,options: enableCache ? buildCacheOptions(Duration(days: 1)) : null);
-          ;
+          //
           break;
         case RequestType.post:
-          response = await dio.post(url, data: params,cancelToken: cancelToken);
+          //response = await dio.post(url, data: params,cancelToken: cancelToken);
+          response = await getGetClient().post(_realUrl(url),
+              headers: {'Content-Type': 'application/json'},
+              body: json.encode(params));
           break;
         case RequestType.put:
-          response = await dio.put(url, data: params,cancelToken: cancelToken);
+          response = await client.put(_realUrl(url), body: params);
           break;
         case RequestType.delete:
-          response = await dio.delete(url, data: params,cancelToken: cancelToken);
+          response =
+              await client.delete(buildGetUrl(_realUrl(url), params));
           break;
         case RequestType.patch:
-          response = await dio.patch(url, data: params,cancelToken: cancelToken);
+          response =
+              await client.patch(url, body: params);
           break;
       }
       if (closeDialogDelay != 0)
@@ -155,24 +202,11 @@ class Request {
           finished: true,
         ));
     } catch (e) {
-      if (e is DioError) {
-        dialog?.hide();
-        if (e.response != null && e.response.statusCode == 401) {
-          if (!RuntimeConfig.dialogOpened) {
-            DialogUtils.showSimpleAlertDialog(
-                    context: navGK.currentState.overlay.context,
-                    text: '你的登录信息已失效，你可以退出重新登录',
-                    onlyInfo: true)
-                .then((val) {
-              RuntimeConfig.dialogOpened = false;
-            });
-            RuntimeConfig.dialogOpened = true;
-          }
-        }
-        RuntimeConfig.error = e;
-      }
+      throw e;
+      dialog?.hide();
+     // throw e;
+      RuntimeConfig.error = e;
       return null;
-
     }
 
     if (closeDialogDelay == 0) {
@@ -182,7 +216,29 @@ class Request {
         dialog?.hide();
       });
     }
-    return returnAll ? response: response.data;
+    if (returnAll) {
+      return HttpResponse(json.decode(response.body), response.headers);
+    }
+    if (response.statusCode == 401) {
+      if (!RuntimeConfig.dialogOpened) {
+        DialogUtils.showSimpleAlertDialog(
+            context: navGK.currentState.overlay.context,
+            text: '你的登录信息已失效，你可以退出重新登录',
+            onlyInfo: true)
+            .then((val) {
+          RuntimeConfig.dialogOpened = false;
+        });
+        RuntimeConfig.dialogOpened = true;
+      }
+    }
+    debugPrint(response.body);
+    //    print(response.body);
+    return json.decode(response.body);
+
+  }
+
+  static _realUrl(String url) {
+    return LoginedUser().host + url;
   }
 
   static void showTotast(String errorMsg) {
@@ -197,7 +253,7 @@ class Request {
     throw (errorMsg);
   }
 
-  static getDioWithCache() {
+  static Dio getDioWithCache() {
     if (dioClientWithCache != null) {
       return dioClientWithCache;
     }
@@ -213,7 +269,8 @@ class Request {
 
     dio.httpClientAdapter = DefaultHttpClientAdapter();
 
-    dio.interceptors.add(DioCacheManager(CacheConfig(baseUrl: urlHost)).interceptor);
+    dio.interceptors
+        .add(DioCacheManager(CacheConfig(baseUrl: urlHost)).interceptor);
 
     if (!kReleaseMode) {
       dio.interceptors
@@ -231,14 +288,13 @@ class Request {
     }
     dioClientWithCache = dio;
     return dioClientWithCache;
-
   }
 
   static http.Client getGetClient() {
-    if (client == null) {
-      client = http.Client();
+    if (httpClient == null) {
+      httpClient = HttpClient(LoginedUser().token);
     }
-    return client;
+    return httpClient;
   }
 
   static Dio getDio() {
@@ -276,10 +332,13 @@ class Request {
     return dioClient;
   }
 
-  static closeDioClient() {
+  static closeHttpClient() {
     dioClient?.close(force: true);
     dioClientWithCache?.close(force: true);
+    httpClient?.close();
+
     dioClient = null;
+    httpClient = null;
     dioClientWithCache = null;
   }
 

@@ -9,6 +9,7 @@ import 'package:dudu/widget/common/bottom_navigation_item.dart';
 import 'package:dudu/widget/other/app_retain_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'setting/setting.dart';
 import 'status/new_status.dart';
@@ -134,19 +135,26 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                 onTap: (index) {
                   // 选中状态后继续点击，开启刷新
                   if (index == _tabIndex) {
+                    RefreshController refreshController;
                     switch (index) {
                       case 0:
-                        SettingsProvider().homeProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 1));
+                        refreshController = SettingsProvider().homeProvider.refreshController;
                         break;
                       case 1:
-                        SettingsProvider().localProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 1));
+                        refreshController = SettingsProvider().localProvider.refreshController;
                         break;
                       case 2:
-                        SettingsProvider().federatedProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 1));
+                        refreshController = SettingsProvider().federatedProvider.refreshController;
                         break;
                       case 3:
-                        SettingsProvider().notificationProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 1));
+                        refreshController = SettingsProvider().notificationProvider.refreshController;
                         break;
+                      case 4:
+                        return;
+                        break;
+                    }
+                    if (refreshController.position != null) {
+                      refreshController.requestRefresh(duration: Duration(milliseconds: 1));
                     }
                   } else {
               //      _tabIndex = index;

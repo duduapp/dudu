@@ -102,7 +102,7 @@ class AccountsApi {
 //        'header':MultipartFile.fromFileSync(header),
 //        'fields_attributes': fieldsAttributes
 //      };
-      return await Request.patch(url:api,params: FormData.fromMap(params));
+      return await Request.requestDio(url:api,params: FormData.fromMap(params),type: RequestType.patch);
   }
 
   static Future<List<FilterItem>> getFilters() async{
