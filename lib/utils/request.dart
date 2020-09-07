@@ -167,7 +167,7 @@ class Request {
               dialog?.hide();
               return HttpResponse(response.data,response.headers.map);
             } else {
-              dialog.hide();
+              dialog?.hide();
               return response.data;
             }
           }

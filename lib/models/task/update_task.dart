@@ -8,7 +8,9 @@ import 'package:dudu/public.dart';
 import 'package:dudu/utils/device_util.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/widget/common/normal_flat_button.dart';
+import 'package:dudu/widget/flutter_framework/progress_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nav_router/nav_router.dart';
 import 'package:open_file/open_file.dart';
 import 'package:package_info/package_info.dart';
@@ -17,11 +19,11 @@ import 'package:path_provider/path_provider.dart';
 class UpdateTask {
   static String key = "gityp34dkg" +
       TimelineType.federated.toString().split(".")[1].substring(0, 5);
-  static Future<bool> check() async {
+  static Future<bool> check({ProgressDialog dialog}) async {
     var rnd = StringUtil.getRandomString(20);
     try {
       String appId = await DeviceUtil.getAppId();
-      String checkUpdateUrl = "https://api.idudu.fans/app/android/update_check?auth=$rnd&id=$appId";
+      String checkUpdateUrl = "http://api.idudu.fans:4896/app/android/check_update?auth=$rnd&id=$appId";
       debugPrint(checkUpdateUrl);
       Response response = await Dio().get(checkUpdateUrl);
 
@@ -30,8 +32,6 @@ class UpdateTask {
         return true;
       }
 
-      Storage.saveString(StorageKey.lastCheckUpdateTime, DateTime.now().toIso8601String());
-
       var auth = data['auth'];
 
       if (sha256.convert(utf8.encode(rnd + key)).toString() == auth) {
@@ -39,24 +39,29 @@ class UpdateTask {
         String version = packageInfo.version;
 
         if (version != data['version']) {
+          dialog?.hide();
           // a new version is released
-          DialogUtils.showSimpleAlertDialog(
-              context: navGK.currentState.overlay.context,
-              text: data['text'],
-              confirmText: '更新',
-              cancelText: '关闭程序',
-              onConfirm: () async {
-                DialogUtils.showRoundedDialog(
-                    context: navGK.currentState.overlay.context,
-                    content: ApkDownloadProgress(
-                      url: data['apk_url'],
-                    ));
-              },
-              onCancel: () async {
-                exit(0);
-              },
-              barrierDismissible: false);
+//          DialogUtils.showSimpleAlertDialog(
+//              context: navGK.currentState.overlay.context,
+//              text: data['text'],
+//              confirmText: '更新',
+//              cancelText: '关闭程序',
+//              onConfirm: () async {
+//                DialogUtils.showRoundedDialog(
+//                    context: navGK.currentState.overlay.context,
+//                    content: ApkDownloadProgress(
+//                      url: data['apk_url'],
+//                    ));
+//              },
+//              onCancel: () async {
+//                exit(0);
+//              },
+//              popAfter: false,
+//              barrierDismissible: false,);
+          DialogUtils.showRoundedDialog(content: UpdateWindow(prompt: data['text'],apkUrl: data['apk_url'],),context: navGK.currentState.overlay.context);
           return false;
+        } else {
+          Storage.saveString(StorageKey.lastCheckUpdateTime, DateTime.now().toIso8601String());
         }
       }
       return true;
@@ -85,6 +90,63 @@ class UpdateTask {
 
 }
 
+class UpdateWindow extends StatelessWidget {
+  final String prompt;
+  final String apkUrl;
+
+  const UpdateWindow({Key key, this.prompt, this.apkUrl}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('检测到新版本',style: TextStyle(fontSize: 18),),
+              NormalFlatButton(
+                text: '复制网址',
+                onPressed: ()  {
+                  Clipboard.setData(new ClipboardData(text: apkUrl));
+                  DialogUtils.toastFinishedInfo('下载链接已复制');
+                }
+              ),
+            ],
+          ),
+          SizedBox(height: 10,),
+          Text(prompt),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              NormalFlatButton(
+                text: '关闭程序',
+                onPressed: () => exit(0),
+              ),
+
+              NormalFlatButton(
+                text: '更新',
+                onPressed: () {
+                                  DialogUtils.showRoundedDialog(
+                    context: navGK.currentState.overlay.context,
+                    content: ApkDownloadProgress(
+                      url: apkUrl,
+                    ));
+                },
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+
+
 class ApkDownloadProgress extends StatefulWidget {
   final String url;
 
@@ -98,22 +160,29 @@ class _ApkDownloadProgressState extends State<ApkDownloadProgress> {
   int download = 0;
   int total = 0;
   String savePath;
+  CancelToken cancelToken;
 
   @override
   void initState() {
+    cancelToken = CancelToken();
    startDownload();
     super.initState();
   }
 
   startDownload() async {
     savePath = (await getApplicationDocumentsDirectory()).path + widget.url.split("/").last;
-    var res = await Dio().download(widget.url, savePath,
-        onReceiveProgress: (count, total) {
-      setState(() {
-        this.download = count;
-        this.total = total;
-      });
-    });
+    try {
+      var res = await Dio().download(
+          widget.url, savePath, cancelToken: cancelToken,
+          onReceiveProgress: (count, total) {
+            setState(() {
+              this.download = count;
+              this.total = total;
+            });
+          });
+    } catch (e) {
+      // do nothing
+    }
   }
 
   @override
@@ -139,7 +208,10 @@ class _ApkDownloadProgressState extends State<ApkDownloadProgress> {
             children: <Widget>[
               NormalFlatButton(
                 text: '取消',
-                onPressed: () => AppNavigate.pop(),
+                onPressed: () {
+                  cancelToken.cancel();
+                  AppNavigate.pop();
+                },
               ),
               SizedBox(width: 10,),
               if (download != 0 && download == total)

@@ -5,12 +5,14 @@ import 'package:dudu/utils/notification_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'models/task/update_task.dart';
 import 'my_app.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   NotificationUtil.init();
   LocalAccount account = await LocalStorageAccount.getActiveAccount();
+ // UpdateTask.checkUpdateIfNeed();
   if (account != null) {
     LoginedUser().loadFromLocalAccount(account);
   }

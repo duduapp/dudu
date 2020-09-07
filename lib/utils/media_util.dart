@@ -11,6 +11,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:share_extend/share_extend.dart';
 
@@ -47,6 +48,11 @@ class MediaUtil {
   }
 
   static downloadMedia(MediaAttachment attachment) async {
+    if (await Permission.storage.request().isGranted) {
+
+    } else {
+      return DialogUtils.toastFinishedInfo('没有存储权限');
+    }
     if (attachment.type == 'image') {
       var file =
           (await CustomCacheManager().getFileFromCache(attachment.url))?.file;

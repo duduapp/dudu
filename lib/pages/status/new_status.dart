@@ -317,6 +317,10 @@ class _NewStatusState extends State<NewStatus> {
           AppNavigate.pop();
           if (!data.containsKey('scheduled_at'))
           SettingsProvider().homeProvider.addToListWithAnimation(data);
+          if (data.containsKey('visibility') && data['visibility'] == 'public') {
+            SettingsProvider().localProvider.addToListWithAnimation(data);
+            SettingsProvider().federatedProvider.addToListWithAnimation(data);
+          }
         }
       });
     } on DioError catch (e) {

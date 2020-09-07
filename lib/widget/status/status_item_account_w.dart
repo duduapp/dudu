@@ -154,7 +154,7 @@ class SubStatusAccountW extends StatelessWidget {
                   TextStyle(color: Theme.of(context).accentColor))
         ]),
         maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+        overflow: TextOverflow.visible,
       ),
     );
   }

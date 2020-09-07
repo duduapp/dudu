@@ -56,12 +56,10 @@ class _AboutAppState extends State<AboutApp> {
                   context: context,
                   applicationIcon: appIcon(),
                   applicationName: appName,
-                  applicationVersion: version,
-                  applicationLegalese: '哈哈哈'),
+                  applicationVersion: version),
             ),
             SettingCell(
-              title: '官方网址',
-              subTitle: 'dudu.today',
+              title: '官方网站',
               subTitleStyle: TextStyle(fontSize: 12,color: Theme.of(context).buttonColor),
               onPress: () => AppNavigate.push(InnerBrowser('http://dudu.today')),
             )
@@ -73,7 +71,7 @@ class _AboutAppState extends State<AboutApp> {
 
   _checkUpdate() async{
     ProgressDialog dialog = await DialogUtils.showProgressDialog('正在检查新版本');
-    bool newestVersion = await UpdateTask.check();
+    bool newestVersion = await UpdateTask.check(dialog: dialog);
     dialog.hide();
     if (newestVersion) {
       DialogUtils.showInfoDialog(context, '当前版本已是最新版本');
