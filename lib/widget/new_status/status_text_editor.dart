@@ -79,7 +79,7 @@ class _StatusTextEditorState extends State<StatusTextEditor> {
             OwnerAccount account = OwnerAccount.fromJson(suggestion);
             return Padding(
               padding: const EdgeInsets.all(10),
-              child: StatusItemAccount(account,noNavigateOnClick: true,),
+              child: StatusItemAccount(account,noNavigateOnClick: true,padding: 0,),
             );
           } else if (suggestion.containsKey('history')) {
             return Padding(

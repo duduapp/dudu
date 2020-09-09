@@ -82,7 +82,7 @@ class _ListsEditState extends State<ListsEdit> {
   }
 
   Widget _row(BuildContext context, int idx) {
-    return StatusItemAccount(lists[idx],action: _actionView(lists[idx]),);
+    return StatusItemAccount(lists[idx],action: _actionView(lists[idx]),padding: 0,);
   }
   
   _actionView(OwnerAccount account) {

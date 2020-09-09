@@ -20,6 +20,7 @@ class CommonBlockList extends StatelessWidget {
   Widget _buildMuteRow(int idx, List dynamic,ResultListProvider provider) {
     OwnerAccount account = OwnerAccount.fromJson(dynamic[idx]);
     return ListRow(
+      padding: 0,
         child: Container(
             child: StatusItemAccount(
       account,
@@ -38,6 +39,7 @@ class CommonBlockList extends StatelessWidget {
   Widget _buildBlockRow(int idx, List dynamic,ResultListProvider provider) {
     OwnerAccount account = OwnerAccount.fromJson(dynamic[idx]);
     return ListRow(
+        padding: 0,
         child: Container(
             child: StatusItemAccount(
               account,
@@ -55,19 +57,23 @@ class CommonBlockList extends StatelessWidget {
 
   Widget _buildBlockDomainRow(int idx, List dynamic,ResultListProvider provider) {
     return ListRow(
-      child: Row(
-        children: <Widget>[
-          Text(dynamic[idx]),
-          Spacer(),
-          IconButton(icon: Icon(IconFont.volumeUp),
-            onPressed: () async{
-              var res = await AccountsApi.unBlockDomain(dynamic[idx]);
-              if (res != null) {
-                provider.removeByValueWithAnimation(dynamic[idx]);
-              }
-            },
-          )
-        ],
+      padding: 0,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 0, 4),
+        child: Row(
+          children: <Widget>[
+            Text(dynamic[idx]),
+            Spacer(),
+            IconButton(icon: Icon(IconFont.volumeUp),
+              onPressed: () async{
+                var res = await AccountsApi.unBlockDomain(dynamic[idx]);
+                if (res != null) {
+                  provider.removeByValueWithAnimation(dynamic[idx]);
+                }
+              },
+            )
+          ],
+        ),
       ),
     );
   }
@@ -112,7 +118,7 @@ class CommonBlockList extends StatelessWidget {
           ),
         builder: (context, snapshot) {
           return ProviderEasyRefreshListView(
-            useAnimatedList: false,
+            useAnimatedList: true,
        //     triggerRefreshEvent: [refreshEvent],
           );
         }

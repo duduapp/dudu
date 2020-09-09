@@ -6,4 +6,6 @@ class RuntimeConfig {
 
   static int tabIndex;
 
+  static bool updateWindowDisplayed = false;
+
 }

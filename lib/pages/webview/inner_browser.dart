@@ -110,7 +110,7 @@ class _InnerBrowserState extends State<InnerBrowser> {
                     text: '分享',
                     onTap: () => Share.share(url),
                   ),
-                  Divider(indent: 60, height: 0),
+                  Divider(indent: 0, height: 0),
                   BottomSheetItem(
                     text: '在浏览器中打开',
                     onTap: () async {
@@ -179,7 +179,7 @@ class _InnerBrowserState extends State<InnerBrowser> {
                       text: '分享',
                       onTap: () => Share.share(url),
                     ),
-                    Divider(indent: 60, height: 0),
+                    Divider(indent: 0, height: 0),
                     BottomSheetItem(
                       text: '在浏览器中打开',
                       onTap: () async {

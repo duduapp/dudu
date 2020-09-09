@@ -102,6 +102,7 @@ class _AccountSwitchTimelineState extends State<AccountSwitchTimeline> {
         ]),
         GZXDropDownMenu(
           animationMilliseconds: 200,
+          backgroundColor: Theme.of(context).primaryColor,
           controller: _menuController,
           menus: [
             GZXDropdownMenuBuilder(dropDownHeight: _getDropMenuHeight(),dropDownWidget: SingleChildScrollView(

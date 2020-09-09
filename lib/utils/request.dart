@@ -152,6 +152,7 @@ class Request {
     ProgressDialog dialog;
     http.Response response;
     HttpClient client = getGetClient();
+    debugPrint(url);
     if (showDialog != null && showDialog == true) {
       dialog = await DialogUtils.showProgressDialog(dialogMessage ?? '处理中...');
     }
@@ -231,13 +232,15 @@ class Request {
         RuntimeConfig.dialogOpened = true;
       }
     }
-    debugPrint(response.body);
-    //    print(response.body);
+   // debugPrint(response.body);
+
     return json.decode(response.body);
 
   }
 
   static _realUrl(String url) {
+    if (url.startsWith('http://') || url.startsWith('https://'))
+      return url;
     return LoginedUser().host + url;
   }
 

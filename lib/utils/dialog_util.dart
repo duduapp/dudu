@@ -125,9 +125,10 @@ class DialogUtils {
   }
 
   static showRoundedDialog(
-      {Widget content, BuildContext context, double radius = 8}) async {
+      {Widget content, BuildContext context, double radius = 8, bool barrierDismissible = true}) async {
     var res = await showDialog(
         context: context,
+        barrierDismissible: barrierDismissible,
         builder: (context) {
           return Dialog(
             shape: RoundedRectangleBorder(

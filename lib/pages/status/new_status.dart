@@ -12,6 +12,7 @@ import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/media_util.dart';
+import 'package:dudu/utils/view/status_action_util.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/common/sized_icon_button.dart';
 import 'package:dudu/widget/new_status/emoji_widget.dart';
@@ -315,12 +316,15 @@ class _NewStatusState extends State<NewStatus> {
           .then((data) {
         if (data != null) {
           AppNavigate.pop();
-          if (!data.containsKey('scheduled_at'))
-          SettingsProvider().homeProvider.addToListWithAnimation(data);
-          if (data.containsKey('visibility') && data['visibility'] == 'public') {
-            SettingsProvider().localProvider.addToListWithAnimation(data);
-            SettingsProvider().federatedProvider.addToListWithAnimation(data);
+          if (!data.containsKey('scheduled_at')) {
+            SettingsProvider().homeProvider.addToListWithAnimation(data);
+            if (data.containsKey('visibility') && data['visibility'] == 'public') {
+              SettingsProvider().localProvider.addToListWithAnimation(data);
+              SettingsProvider().federatedProvider.addToListWithAnimation(data);
+            }
+            StatusActionUtil.changeStatusCount(1);
           }
+
         }
       });
     } on DioError catch (e) {

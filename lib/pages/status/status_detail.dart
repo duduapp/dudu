@@ -130,14 +130,18 @@ class _StatusDetailState extends State<StatusDetail>
     super.initState();
   }
 
+  _resetExpandState() {
+    SettingsProvider().statusDetailProviders.remove(providers[0]);
+    SettingsProvider().settings['always_expand_tools'] = _originExpandOption;
+  }
+
   @override
   void dispose() {
     _cancelToken.cancel();
 
     _scrollController.dispose();
     _tabController.dispose();
-    SettingsProvider().statusDetailProviders.remove(providers[0]);
-    SettingsProvider().settings['always_expand_tools'] = _originExpandOption;
+    _resetExpandState();
     super.dispose();
   }
 
@@ -296,7 +300,7 @@ class _StatusDetailState extends State<StatusDetail>
                       snap: false,
                       bottom: ColoredTabBar(
                         color: Theme.of(context).primaryColor,
-                        height: 38,
+                        height: 40,
                         tabBar: Align(
                           alignment: Alignment.centerRight,
                           child: Container(

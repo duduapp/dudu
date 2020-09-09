@@ -48,7 +48,7 @@ class _ListsPageState extends State<ListsPage> {
               reverseData: true),
           builder: (context, snapshot) {
             providerContext = context;
-            return ProviderEasyRefreshListView(useAnimatedList: false,);
+            return ProviderEasyRefreshListView(useAnimatedList: true,);
           }),
     );
   }

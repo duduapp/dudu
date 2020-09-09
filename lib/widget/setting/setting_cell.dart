@@ -170,13 +170,14 @@ class _ProviderSettingCellState extends State<ProviderSettingCell> {
               setState(() {
                 stringValue = widget.options[idx];
               });
+              if (widget.onPressed != null) {
+                widget.onPressed(widget.options[idx]);
+              }
             },
             groupValue: widget.options.indexOf(stringValue),
           );
         });
-    if (widget.onPressed != null) {
-      widget.onPressed(stringValue);
-    }
+
   }
 
   _onPressBool(bool value) {

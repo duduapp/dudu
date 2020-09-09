@@ -110,6 +110,7 @@ class _LoginState extends State<Login> {
 
         OwnerAccount account = await AccountsApi.getMyAccount();
         user.account = account;
+        user.requestPreference();
         await LocalStorageAccount.addOwnerAccount(account);
 
         await SettingsProvider().load(); // load new settings
@@ -290,18 +291,18 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                           ),
-//                          InkWell(
-//                            onTap: () {
-//                              _chooseServer(context);
-//                            },
-//                            child: Container(
-//                              child: Center(
-//                                child: Text('选择实例',
-//                                    style:
-//                                        TextStyle(color: Theme.of(context).primaryColor)),
-//                              ),
-//                            ),
-//                          ),
+                          InkWell(
+                            onTap: () {
+                              AppNavigate.push(InnerBrowser('http://dudu.today/instance'));
+                            },
+                            child: Container(
+                              child: Center(
+                                child: Text('实例推荐',
+                                    style:
+                                        TextStyle(color: Theme.of(context).primaryColor)),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

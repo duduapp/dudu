@@ -26,7 +26,10 @@ class _SearchResultState extends State<SearchResult>
     switch (widget.type) {
       case SearchType.accounts:
         var account = OwnerAccount.fromJson(data[idx]);
-        return ListRow(child: StatusItemAccount(account));
+        return ListRow(
+          child: StatusItemAccount(account),
+          padding: 0,
+        );
 
       case SearchType.statuses:
         var status = StatusItemData.fromJson(data[idx]);
@@ -35,10 +38,16 @@ class _SearchResultState extends State<SearchResult>
         );
 
       case SearchType.hashtags:
-        return InkWell(
-          onTap: () =>
-              AppNavigate.push(HashtagTimeline(data[idx]['name'])),
-          child: ListRow(child: Text('#' + data[idx]['name'], style: TextStyle(fontSize: 18)),padding: 18,),
+        return ListRow(
+          padding: 0,
+          child: InkWell(
+            onTap: () => AppNavigate.push(HashtagTimeline(data[idx]['name'])),
+            child: Padding(
+              padding: const EdgeInsets.all(12.5),
+              child:
+                  Text('#' + data[idx]['name'], style: TextStyle(fontSize: 14)),
+            ),
+          ),
         );
     }
     return Container();

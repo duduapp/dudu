@@ -93,7 +93,7 @@ class _PhotoGalleryState extends State<PhotoGallery> {
                       heroAttributes: PhotoViewHeroAttributes(
                           tag: widget.galleryItems[currentIndex].id),
                       initialScale: PhotoViewComputedScale.contained,
-                      loadingBuilder: null,
+                      loadingBuilder: (context,event) {return Container();},
                     ),
                   ),
                   Center(

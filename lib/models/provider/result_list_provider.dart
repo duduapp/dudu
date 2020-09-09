@@ -228,7 +228,7 @@ class ResultListProvider extends ChangeNotifier {
 
     if (headerLinkPagination != null && headerLinkPagination == true) {
       if (response.headers.containsKey('link')) {
-        var link = response.headers['link'][0].split(',');
+        var link = response.headers['link'].split(',');
         if (link.length < 2) {
           finishLoad = true;
           nextUrl = null;

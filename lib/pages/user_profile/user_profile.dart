@@ -4,6 +4,7 @@ import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/media_attachment.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
@@ -17,6 +18,7 @@ import 'package:dudu/public.dart';
 import 'package:dudu/utils/cache_manager.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
+import 'package:dudu/utils/view/status_action_util.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:dudu/widget/common/colored_tab_bar.dart';
 import 'package:dudu/widget/common/html_content.dart';
@@ -176,7 +178,7 @@ class _UserProfileState extends State<UserProfile>
       setState(() {
         relationShip = RelationShip.fromJson(data);
       });
-      eventBus.emit(EventBusKey.muteAccount, {'account_id': _account.id});
+      ListViewUtil.removeStatusFromProvider(_account.id);
     }
   }
 
@@ -186,7 +188,7 @@ class _UserProfileState extends State<UserProfile>
       setState(() {
         relationShip = RelationShip.fromJson(data);
       });
-      eventBus.emit(EventBusKey.blockAccount, {'account_id': _account.id});
+      ListViewUtil.removeStatusFromProvider(_account.id);
     }
   }
 
@@ -517,6 +519,8 @@ class _UserProfileState extends State<UserProfile>
                         child: Hero(
                           tag: 'user_avatar',
                           child: Avatar(
+                            width: 100,
+                            height: 100,
                             navigateToDetail: false,
                             account: _account,
                           ),
@@ -737,7 +741,11 @@ class _UserProfileState extends State<UserProfile>
         cancelToken: cancelToken);
     var newRelationShip = await AccountsApi.getRelationShip(widget.accountId,
         cancelToken: cancelToken);
-    if (newAccount != null && newRelationShip != null)
+    if (newAccount != null && newRelationShip != null && mounted)
+      if (newAccount.acct == mine.account.acct) {
+        mine.account = newAccount;
+        LocalStorageAccount.addOwnerAccount(newAccount);
+      }
       setState(() {
         _account = newAccount ?? _account;
         relationShip = newRelationShip ?? relationShip;

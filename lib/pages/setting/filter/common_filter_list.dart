@@ -53,7 +53,7 @@ class _CommonFilterListState extends State<CommonFilterList> {
                 )
               ],
             ),
-            body: ProviderEasyRefreshListView(useAnimatedList: false,),
+            body: ProviderEasyRefreshListView(useAnimatedList: true,),
           );
         });
   }
@@ -62,20 +62,25 @@ class _CommonFilterListState extends State<CommonFilterList> {
     var data = dynamic[idx];
     var context = data['context'];
     if (context.contains(widget.type.toString().split('.')[1])) {
-      return InkWell(
-        onTap: () => _editRow(
-            id: data['id'],
-            phrase: data['phrase'],
-            phraseContext: context,
-            wholeWord: data['whole_word'],
-            provider: provider),
-        child: ListRow(
-          child: Container(
-              padding: EdgeInsets.all(8),
-              child: Text(
-                data['phrase'],
-                style: TextStyle(fontSize: 14),
-              )),
+      return ListRow(
+        padding: 0,
+        child: InkWell(
+          onTap: () => _editRow(
+              id: data['id'],
+              phrase: data['phrase'],
+              phraseContext: context,
+              wholeWord: data['whole_word'],
+              provider: provider),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.all(8),
+                child: Text(
+                  data['phrase'],
+                  style: TextStyle(fontSize: 14),
+                )),
+          ),
         ),
       );
     } else {

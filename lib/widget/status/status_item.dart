@@ -81,42 +81,45 @@ class StatusItem extends StatelessWidget {
     } else {
       StatusItemData data = item.reblog ?? item;
       return Column(children: [
-        InkWell(
-          onTap: primary ? null : () => _onStatusClicked(context),
-          onLongPress: () =>
-              StatusActionUtil.showBottomSheetAction(context, data, subStatus),
-          child: Ink(
-            color: Theme.of(context).primaryColor,
-            padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
-            //margin: EdgeInsets.only(bottom: 8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                refHeader(context),
-                StatusItemAccountW(
-                  status: data,
-                  subStatus: subStatus,
-                  primary: primary,
-                ),
+        Material(
+          color: Theme.of(context).primaryColor,
+          child: InkWell(
+            onTap: primary ? null : () => _onStatusClicked(context),
+            onLongPress: () =>
+                StatusActionUtil.showBottomSheetAction(context, data, subStatus),
+            child: Container(
+              color: Colors.transparent,
+              padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
+              //margin: EdgeInsets.only(bottom: 8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  refHeader(context),
+                  StatusItemAccountW(
+                    status: data,
+                    subStatus: subStatus,
+                    primary: primary,
+                  ),
 
 //                StatusItemAccount(data.account,
 //                    createdAt: primary ? null : data.createdAt),
-                StatusItemContent(
-                  data,
-                  primary: primary,
-                ),
+                  StatusItemContent(
+                    data,
+                    primary: primary,
+                  ),
 
-                // if (primary) StatusItemPrimaryBottom(data),
-                if (!primary)
-                StatusItemActionW(
-                  status: data,
-                  subStatus: subStatus,
-                )
+                  // if (primary) StatusItemPrimaryBottom(data),
+                  if (!primary)
+                  StatusItemActionW(
+                    status: data,
+                    subStatus: subStatus,
+                  )
 //                StatusItemAction(
 //                  item: data,
 //                  subStatus: subStatus,
 //                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

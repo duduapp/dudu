@@ -1,10 +1,9 @@
-
-
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/vote.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/screen.dart';
 import 'package:dudu/widget/common/normal_flat_button.dart';
+import 'package:dudu/widget/common/sized_icon_button.dart';
 import 'package:flutter/material.dart';
 
 class HandleVoteDialog extends StatefulWidget {
@@ -34,192 +33,248 @@ class _HandleVoteDialogState extends State<HandleVoteDialog> {
   Widget build(BuildContext context) {
     var textWidth = ScreenUtil.width(context) * 0.6;
     return Theme(
-      data: Theme.of(context).copyWith(primaryColor: Theme.of(context).buttonColor),
+      data: Theme.of(context)
+          .copyWith(primaryColor: Theme.of(context).buttonColor),
       child: Container(
         width: ScreenUtil.width(context) * 0.9,
         padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Icon(IconFont.vote,color: Theme.of(context).buttonColor,size: 30,),
-                SizedBox(width: 5,),
-                Text('投票',style: TextStyle(fontSize: 20),)
-              ],
-            ),
-            SizedBox(height: 20,),
-            Container(
-              width: textWidth,
-              child: TextField(
-                onChanged: _optionChanged,
-                maxLines: null,
-                maxLength: 25,
-                controller: newVote.option1Controller,
-                decoration: InputDecoration(
-                    contentPadding:
-                    EdgeInsets.only(left: 10, right: 10),
-                    hintText: '选择1',
-                    counterText: '',
-                    border: new OutlineInputBorder(
-                        borderSide:
-                        new BorderSide(color: Colors.teal)),
-                    labelText: '选择1'),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Icon(
+                    IconFont.vote,
+                    color: Theme.of(context).buttonColor,
+                    size: 30,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    '投票',
+                    style: TextStyle(fontSize: 20),
+                  )
+                ],
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              width: textWidth,
-              child: TextField(
-                onChanged: _optionChanged,
-                maxLength: 25,
-                maxLines: null,
-                controller: newVote.option2Controller,
-                decoration: InputDecoration(
-                    contentPadding:
-                    EdgeInsets.only(left: 10, right: 10),
-                    hintText: '选择2',
-                    counterText: "",
-                    border: new OutlineInputBorder(
-                        borderSide:
-                        new BorderSide(color: Colors.teal)),
-                    labelText: '选择2'),
+              SizedBox(
+                height: 20,
               ),
-            ),
-            if (newVote.option3Enabled)
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      onChanged: _optionChanged,
+                      maxLines: null,
+                      maxLength: 25,
+                      controller: newVote.option1Controller,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(left: 10, right: 10),
+                          hintText: '选择1',
+                          counterText: '',
+                          border: new OutlineInputBorder(
+                              borderSide: new BorderSide(color: Colors.teal)),
+                          labelText: '选择1'),
+                    ),
+                  ),
+                  Visibility(
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    visible: false,
+                    child: ClickableIconButton(
+                      icon: Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Icon(Icons.clear),
+                      ),
+                      onTap: () {
+                        newVote.removeOption4();
+                        _optionChanged('');
+                        setState(() {});
+                      },
+                    ),
+                  )
+                ],
+              ),
               SizedBox(
                 height: 10,
               ),
-            if (newVote.option3Enabled)
-              Row(children: <Widget>[
-                Container(
-                  width: textWidth,
-                  child: TextField(
-                    onChanged: _optionChanged,
-                    maxLength: 25,
-                    maxLines: null,
-                    controller: newVote.option3Controller,
-                    decoration: InputDecoration(
-                        contentPadding:
-                        EdgeInsets.only(left: 10, right: 10),
-                        hintText: '选择3',
-                        counterText: "",
-                        border: new OutlineInputBorder(
-                            borderSide: new BorderSide(
-                                color: Colors.teal)),
-                        labelText: '选择3'),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      onChanged: _optionChanged,
+                      maxLength: 25,
+                      maxLines: null,
+                      controller: newVote.option2Controller,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(left: 10, right: 10),
+                          hintText: '选择2',
+                          counterText: "",
+                          border: new OutlineInputBorder(
+                              borderSide: new BorderSide(color: Colors.teal)),
+                          labelText: '选择2'),
+                    ),
                   ),
+                  Visibility(
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    visible: false,
+                    child: ClickableIconButton(
+                      icon: Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Icon(Icons.clear),
+                      ),
+                      onTap: () {
+                        newVote.removeOption4();
+                        _optionChanged('');
+                        setState(() {});
+                      },
+                    ),
+                  )
+                ],
+              ),
+              if (newVote.option3Enabled)
+                SizedBox(
+                  height: 10,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(0),
-                  child: IconButton(
-                    icon: Icon(Icons.clear),
-                    onPressed: () {
+              if (newVote.option3Enabled)
+                Row(children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      // width: textWidth,
+                      child: TextField(
+                        onChanged: _optionChanged,
+                        maxLength: 25,
+                        maxLines: null,
+                        controller: newVote.option3Controller,
+                        decoration: InputDecoration(
+                            contentPadding:
+                                EdgeInsets.only(left: 10, right: 10),
+                            hintText: '选择3',
+                            counterText: "",
+                            border: new OutlineInputBorder(
+                                borderSide: new BorderSide(color: Colors.teal)),
+                            labelText: '选择3'),
+                      ),
+                    ),
+                  ),
+                  ClickableIconButton(
+                    icon: Padding(
+                      padding: const EdgeInsets.only(left: 5),
+                      child: Icon(Icons.clear),
+                    ),
+                    onTap: () {
                       newVote.removeOption3();
                       _optionChanged('');
                       setState(() {});
                     },
-                  ),
-                )
-              ]),
-            if (newVote.option4Enabled)
-              SizedBox(
-                height: 10,
-              ),
-            if (newVote.option4Enabled)
-              Row(children: <Widget>[
-                Container(
-                  width: textWidth,
-                  child: TextField(
-                    onChanged: _optionChanged,
-                    maxLength: 25,
-                    maxLines: null,
-                    controller: newVote.option4Controller,
-                    decoration: InputDecoration(
-                        contentPadding:
-                        EdgeInsets.only(left: 10, right: 10),
-                        hintText: '选择4',
-                        counterText: '',
-                        border: new OutlineInputBorder(
-                            borderSide: new BorderSide(
-                                color: Colors.teal)),
-                        labelText: '选择4'),
-                  ),
+                  )
+                ]),
+              if (newVote.option4Enabled)
+                SizedBox(
+                  height: 10,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(0),
-                  child: IconButton(
-                    icon: Icon(Icons.clear),
-                    onPressed: () {
+              if (newVote.option4Enabled)
+                Row(children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      onChanged: _optionChanged,
+                      maxLength: 25,
+                      maxLines: null,
+                      controller: newVote.option4Controller,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(left: 10, right: 10),
+                          hintText: '选择4',
+                          counterText: '',
+                          border: new OutlineInputBorder(
+                              borderSide: new BorderSide(color: Colors.teal)),
+                          labelText: '选择4'),
+                    ),
+                  ),
+                  ClickableIconButton(
+                    icon: Padding(
+                      padding: const EdgeInsets.only(left: 5),
+                      child: Icon(Icons.clear),
+                    ),
+                    onTap: () {
                       newVote.removeOption4();
                       _optionChanged('');
                       setState(() {});
                     },
+                  )
+                ]),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: <Widget>[
+                  OutlineButton(
+                    onPressed: () {
+                      newVote.addOption();
+                      setState(() {});
+                    },
+                    child: Text('添加选择'),
                   ),
-                )
-              ]),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: <Widget>[
-                OutlineButton(
-                  onPressed: () {
-                    newVote.addOption();
-                    setState(() {});
-                  },
-                  child: Text('添加选择'),
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                DropdownButton(
-                  value: newVote.expiresInString,
-                  onChanged: (String newValue) {
-                    newVote.expiresIn =
-                    Vote.voteOptionsInSeconds[newValue];
+                  SizedBox(
+                    width: 30,
+                  ),
+                  DropdownButton(
+                    value: newVote.expiresInString,
+                    onChanged: (String newValue) {
+                      newVote.expiresIn = Vote.voteOptionsInSeconds[newValue];
 
-                    setState(() {
-                      newVote.expiresInString = newValue;
-                    });
-                  },
-                  items: Vote.voteOptions
-                      .map<DropdownMenuItem<String>>(
-                          (String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(0),
-                  child: Checkbox(
-                    value: newVote.multiChoice,
-                    onChanged: (value) {
                       setState(() {
-                        newVote.multiChoice = value;
+                        newVote.expiresInString = newValue;
                       });
                     },
+                    items: Vote.voteOptions
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(0),
+                    child: Checkbox(
+                      value: newVote.multiChoice,
+                      onChanged: (value) {
+                        setState(() {
+                          newVote.multiChoice = value;
+                        });
+                      },
+                    ),
                   ),
-                ),
-                Text('多个选择')
-              ],
-            ),
-            Row(children: <Widget>[
-              Spacer(),
-              NormalFlatButton(text: '取消',onPressed: () => AppNavigate.pop(),),
-              NormalFlatButton(text: '确定',onPressed: canCreate ?() => AppNavigate.pop(param: newVote) :null,)
-            ],)
-          ],
+                  Text('多个选择')
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Spacer(),
+                  NormalFlatButton(
+                    text: '取消',
+                    onPressed: () => AppNavigate.pop(),
+                  ),
+                  NormalFlatButton(
+                    text: '确定',
+                    onPressed: canCreate
+                        ? () => AppNavigate.pop(param: newVote)
+                        : null,
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

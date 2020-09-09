@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FollowRequestCell extends StatelessWidget {
-  FollowRequestCell({Key key, @required this.item}) : super(key: key);
+    FollowRequestCell({Key key, @required this.item}) : super(key: key);
   final NotificationItem item;
 
   @override
@@ -47,7 +47,7 @@ class FollowRequestCell extends StatelessWidget {
           ),
           Row(
             children: <Widget>[
-              Expanded(child: StatusItemAccount(item.account)),
+              Expanded(child: StatusItemAccount(item.account,padding: 0,)),
               FlatButton(child: Text('同意',style: TextStyle(color: Theme.of(context).buttonColor,fontWeight: FontWeight.normal),),onPressed: () => _acceptRequest(context),),
               FlatButton(child: Text('拒绝',style: TextStyle(color: Theme.of(context).buttonColor,fontWeight: FontWeight.normal)),onPressed: () => _rejectRequest(context),)
             ],

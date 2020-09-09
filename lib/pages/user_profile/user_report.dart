@@ -72,30 +72,34 @@ class _UserReportState extends State<UserReport> {
   Widget _buildRow(int idx,List data,ResultListProvider provider) {
     StatusItemData itemData = StatusItemData.fromJson(data[idx]);
     return ListRow(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Flexible(flex:7,child: StatusItemContent(itemData)),
-          Flexible(
-            flex: 3,
-            child: Column(
-              children: <Widget>[
-                Text(DateUntil.dateTime(itemData.createdAt)),
-                Checkbox(value: chooseStatues.contains(itemData.id),onChanged: (bool) {
-                  if (bool) {
-                    chooseStatues.add(itemData.id);
-                  } else {
-                    chooseStatues.remove(itemData.id);
-                  }
-                  setState(() {
+      padding: 0,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Flexible(flex:7,child: StatusItemContent(itemData)),
+            Flexible(
+              flex: 3,
+              child: Column(
+                children: <Widget>[
+                  Text(DateUntil.dateTime(itemData.createdAt)),
+                  Checkbox(value: chooseStatues.contains(itemData.id),onChanged: (bool) {
+                    if (bool) {
+                      chooseStatues.add(itemData.id);
+                    } else {
+                      chooseStatues.remove(itemData.id);
+                    }
+                    setState(() {
 
-                  });
-                },)
-              ],
+                    });
+                  },)
+                ],
 
-            ),
-          )
-        ],
+              ),
+            )
+          ],
+        ),
       ),
     );
 

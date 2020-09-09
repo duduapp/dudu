@@ -9,9 +9,9 @@ class StatusApi {
     Request.post(url: api,showDialog: false);
   }
 
-  static unReblog(String statusId) {
+  static unReblog(String statusId) async{
     var api = url+'/'+statusId+'/unreblog';
-    Request.post(url: api,showDialog: false);
+    return await Request.post(url: api,showDialog: false);
   }
 
   static favourite(String statusId) {

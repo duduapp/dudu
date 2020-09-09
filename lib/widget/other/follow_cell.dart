@@ -37,7 +37,7 @@ class FollowCell extends StatelessWidget {
               ],
             ),
           ),
-          StatusItemAccount(item.account,noNavigateOnClick: false,)
+          StatusItemAccount(item.account,noNavigateOnClick: false,padding: 0,)
         ],
       ),
     );

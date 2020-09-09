@@ -34,51 +34,54 @@ class _CommonFilterEditState extends State<CommonFilterEdit> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 6),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(widget.newFilter?'添加新的过滤器':'编辑过滤器',style: TextStyle(fontSize: 20),),
-          TextField(
-            controller: phraseController,
-            decoration: InputDecoration(
-                focusedBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Theme.of(context).buttonColor))),
-          ),
-          Row(
-            children: <Widget>[
-              Checkbox(
-                value: wholeWord,
-                onChanged: (bool value) {
-                  setState(() {
-                    wholeWord = value;
-                  });
-                },
-              ),
-              Text('整个单词')
-            ],
-          ),
-          Text('如果关键字或缩写只有字母或数字，则只有在匹配整个单词才会应用'),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: <Widget>[
-              NormalCancelFlatButton(),
-              Spacer(),
-              if (!widget.newFilter)
-                NormalFlatButton(
-                  text: '移除',
-                  onPressed: _remove,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(widget.newFilter?'添加新的过滤器':'编辑过滤器',style: TextStyle(fontSize: 20),),
+            TextField(
+              controller: phraseController,
+              maxLines: null,
+              decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Theme.of(context).buttonColor))),
+            ),
+            Row(
+              children: <Widget>[
+                Checkbox(
+                  value: wholeWord,
+                  onChanged: (bool value) {
+                    setState(() {
+                      wholeWord = value;
+                    });
+                  },
                 ),
-              NormalFlatButton(
-                text: widget.newFilter ?'新建':'更新',
-                onPressed: _updateOrCreate,
-              )
-            ],
-          )
-        ],
+                Text('整个单词')
+              ],
+            ),
+            Text('如果关键字或缩写只有字母或数字，则只有在匹配整个单词才会应用'),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: <Widget>[
+                NormalCancelFlatButton(),
+                Spacer(),
+                if (!widget.newFilter)
+                  NormalFlatButton(
+                    text: '移除',
+                    onPressed: _remove,
+                  ),
+                NormalFlatButton(
+                  text: widget.newFilter ?'新建':'更新',
+                  onPressed: _updateOrCreate,
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

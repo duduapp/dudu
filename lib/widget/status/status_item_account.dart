@@ -17,9 +17,10 @@ class StatusItemAccount extends StatelessWidget {
   final Widget action;
   final bool noNavigateOnClick;
   final StatusItemData statusData;
+  final double padding;
 
   StatusItemAccount(this.account,
-      {this.createdAt, this.action, this.statusData,this.noNavigateOnClick = false});
+      {this.createdAt, this.action, this.statusData,this.noNavigateOnClick = false,this.padding = 8});
 
   @override
   Widget build(BuildContext context) {
@@ -40,57 +41,60 @@ class StatusItemAccount extends StatelessWidget {
   }
 
   Widget accountWidget(BuildContext context) {
-    return  Row(
-      children: <Widget>[
-        Padding(
-            padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-            child: Avatar(account: account,width: 40,height: 40,navigateToDetail: !noNavigateOnClick,)),
-        Expanded(
-          child: Container(
-            height: 40,
-            //ns  margin: EdgeInsets.only(top: 8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Flexible(
-                      child: TextWithEmoji(
-                        text: StringUtil.displayName(account),
-                        emojis: account.emojis,
-                        maxLines: 1,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal,
-                            color:
-                            Theme.of(context).textTheme.bodyText1.color),
-                      ),
-                      flex: 2,
-                    ),
-                    if (createdAt != null)
+    return  Padding(
+      padding: EdgeInsets.all(padding),
+      child: Row(
+        children: <Widget>[
+          Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
+              child: Avatar(account: account,width: 40,height: 40,navigateToDetail: !noNavigateOnClick,)),
+          Expanded(
+            child: Container(
+              height: 40,
+              //ns  margin: EdgeInsets.only(top: 8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
                       Flexible(
-                        child: Text(DateUntil.dateTime(createdAt),
-                            style: TextStyle(
-                                fontSize: 13, color: Theme.of(context).accentColor),
-                            overflow: TextOverflow.ellipsis),
-                      )
-                  ],
-                ),
-                Flexible(
-                  child: Text(
-                    '@' + account.acct,
-                    style: TextStyle(fontSize: 12, color: Theme.of(context).accentColor),
-                    overflow: TextOverflow.ellipsis,
+                        child: TextWithEmoji(
+                          text: StringUtil.displayName(account),
+                          emojis: account.emojis,
+                          maxLines: 1,
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                              color:
+                              Theme.of(context).textTheme.bodyText1.color),
+                        ),
+                        flex: 2,
+                      ),
+                      if (createdAt != null)
+                        Flexible(
+                          child: Text(DateUntil.dateTime(createdAt),
+                              style: TextStyle(
+                                  fontSize: 13, color: Theme.of(context).accentColor),
+                              overflow: TextOverflow.ellipsis),
+                        )
+                    ],
                   ),
-                )
-              ],
+                  Flexible(
+                    child: Text(
+                      '@' + account.acct,
+                      style: TextStyle(fontSize: 12, color: Theme.of(context).accentColor),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-        if (action != null) action
-      ],
+          if (action != null) action
+        ],
+      ),
     );
   }
 }

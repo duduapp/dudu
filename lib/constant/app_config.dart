@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class AppConfig {
   static String ClientName = '嘟嘟';
-  static String RedirectUris = 'http://dudu.today';
+  static String RedirectUris = 'http://dudu.today/redirect.html';
   static String Scopes = 'read write follow push';
   static String website = 'http://dudu.today';
 

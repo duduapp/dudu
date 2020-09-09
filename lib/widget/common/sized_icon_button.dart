@@ -17,5 +17,23 @@ class SizedIconButton extends StatelessWidget {
   }
 }
 
+class ClickableIconButton extends StatelessWidget {
+
+  final Widget icon;
+  final Function onTap;
+
+  const ClickableIconButton({Key key, this.icon, this.onTap}) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: icon,
+      onTap: onTap,
+    );
+  }
+}
+
+
 
 

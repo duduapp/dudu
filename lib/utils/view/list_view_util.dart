@@ -22,7 +22,7 @@ class ListViewUtil {
   static accountRowFunction() {
     return (int index, List data, ResultListProvider provider) {
       OwnerAccount account = OwnerAccount.fromJson(data[index]);
-      return ListRow(child: StatusItemAccount(account));
+      return ListRow(child: StatusItemAccount(account),padding: 0,);
     };
   }
 
@@ -43,10 +43,9 @@ class ListViewUtil {
     }
     var res = await StatusApi.remove(status.id);
     if (res != null) {
-      Future.delayed(Duration(seconds: 1), () {
-        _removeStatusFromProviderByStatusId(status.id);
-      });
+      _removeStatusFromProviderByStatusId(status.id);
     }
+    return res;
   }
 
   static blockUser({BuildContext context, StatusItemData status}) async {
@@ -68,7 +67,7 @@ class ListViewUtil {
     provider.removeByIdWithAnimation(status.id);
     // 防止和上面的语句冲突
     Future.delayed(Duration(seconds: 1), () {
-      _removeStatusFromProvider(accountId);
+      removeStatusFromProvider(accountId);
     });
 
   }
@@ -93,7 +92,7 @@ class ListViewUtil {
 
       // 防止和上面的语句冲突
       await Future.delayed(Duration(seconds: 1), () {
-        _removeStatusFromProvider(accountId);
+        removeStatusFromProvider(accountId);
       });
    // }
   }
@@ -155,7 +154,7 @@ class ListViewUtil {
     }
   }
 
-  static _removeStatusFromProvider(String accountId) {
+  static removeStatusFromProvider(String accountId) {
     for (ResultListProvider provider
     in SettingsProvider().statusDetailProviders) {
       provider.removeWhere(
@@ -189,7 +188,7 @@ class ListViewUtil {
       provider.removeWhere((e) =>
       (e.containsKey('reblog') && e['reblog'] != null && e['reblog'].containsKey('id') &&
           e['reblog']['id'] == statusId) ||
-          e['id'] == statusId);
+          e['id'] == statusId || (e.containsKey('status') && e['status'] != null && e['status']['id'] == statusId));
     }
   }
 }

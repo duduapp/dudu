@@ -46,15 +46,37 @@ class StatusActionUtil {
       }
     });
     if (isLiked) {
-      StatusApi.unReblog(status.id);
       ListViewUtil.unreblogStatusInAllProvider(status);
+      var res = await StatusApi.unReblog(status.id);
+      if (res != null) {
+        changeStatusCount(-1);
+      }
+
     } else {
-      StatusApi.reblog(status.id);
       ListViewUtil.reblogStatusInAllProvider(status);
+      var res = StatusApi.reblog(status.id);
+      if (res != null) {
+        changeStatusCount(1);
+      }
     }
 
     return !isLiked;
   }
+
+  static changeStatusCount([int change = 1]) {
+    var count = LoginedUser().account.statusesCount;
+    if (count + change >= 0) {
+      LoginedUser().account.statusesCount =  count + change;
+    }
+  }
+
+  static changeFollowingCount([int change = 1]) {
+    var count = LoginedUser().account.followingCount;
+    if (count + change >= 0) {
+      LoginedUser().account.followingCount =  count + change;
+    }
+  }
+
 
   static Future<bool> favourite(
       bool isLiked, StatusItemData status, BuildContext context) async {
@@ -237,12 +259,18 @@ class StatusActionUtil {
     if (SettingsProvider().statusDetailProviders.contains(provider)) {
       // user is in status detail page
       if (subStatus) {
-        ListViewUtil.deleteStatus(context: context, status: data);
+        var res = await ListViewUtil.deleteStatus(context: context, status: data);
+        if (res != null) {
+          changeStatusCount(-1);
+        }
       } else {
         AppNavigate.pop(param: {'operation': 'delete', 'status': data});
       }
     } else {
-      ListViewUtil.deleteStatus(context: context, status: data);
+      var res = await ListViewUtil.deleteStatus(context: context, status: data);
+      if (res != null) {
+        changeStatusCount(-1);
+      }
     }
 //    var provider = Provider.of<ResultListProvider>(context, listen: false);
 //    provider.removeByIdWithAnimation(widget.item.id);
