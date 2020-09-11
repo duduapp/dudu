@@ -1,6 +1,7 @@
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/filter_util.dart';
 import 'package:dudu/widget/common/normal_flat_button.dart';
 import 'package:flutter/material.dart';
@@ -96,6 +97,10 @@ class _CommonFilterEditState extends State<CommonFilterEdit> {
   }
 
   _updateOrCreate() async{
+    if (phraseController.text.trim().isEmpty) {
+      DialogUtils.toastFinishedInfo('过滤器不能为空');
+      return;
+    }
     AppNavigate.pop();
     if (widget.newFilter) {
       var res = await AccountsApi.addFilter(phraseController.text.trim(), widget.context, wholeWord);

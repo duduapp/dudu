@@ -79,8 +79,11 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   }
 
   Widget mediaWithNoThumbnail() {
+    if (widget.images.isEmpty) {
+      return Container();
+    }
     return Padding(
-      padding: const EdgeInsets.only(top: 10,bottom: 9),
+      padding:  EdgeInsets.only(top: widget.data.content.isEmpty ? 5 : 0,bottom: 8),
       child: Column(
         children: <Widget>[
           for (MediaAttachment media in widget.images)
@@ -94,11 +97,13 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
                           ? Icons.videocam
                           : media.type == 'audio'
                               ? Icons.audiotrack
-                              : IconFont.picture),
+                              : IconFont.picture,size: 16,),
                   Expanded(
                       child: Text(
                     media.description ?? '没有描述信息',
                     overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 12),
+
                   ))
                 ],
               ),
@@ -218,7 +223,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   Widget imageWrapper(Widget widget) {
     var primaryColor = Theme.of(context).primaryColor;
     return Padding(
-      padding: EdgeInsets.only(top: 0,bottom: 13),
+      padding: EdgeInsets.only(top: this.widget.data.content.isEmpty ? 12 : 0 ,bottom: 13),
       child: Stack(
         children: <Widget>[
           widget,

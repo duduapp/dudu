@@ -47,7 +47,7 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
           data: expanded? widget.content : widget.content.length > 500 ? widget.content.substring(0,500)+'...' : widget.content,
           onLinkTap: _onLinkTap,
           padding: EdgeInsets.all(0),
-          blockSpacing: 5,
+          blockSpacing: 0,
           emojis: widget.emojis,
           renderNewlines: true,
           useRichText: true//widget.emojis.isEmpty,

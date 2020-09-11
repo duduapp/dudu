@@ -539,6 +539,7 @@ class _NewStatusState extends State<NewStatus> {
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(45.0),
           child: CustomAppBar(
+            automaticallyImplyLeading: false,
             leading: Container(
               padding: EdgeInsets.fromLTRB(20, 15, 0, 0),
               child: GestureDetector(

@@ -60,6 +60,11 @@ class StatusItemAccountW extends StatelessWidget {
                 ),
                 RichText(
                   text: TextSpan(children: [
+                    if (primary) ...[
+                    WidgetSpan(
+                      child: Icon(AppConfig.visibilityIcons[status.visibility],size: 14,)
+                    ),TextSpan(text: " ")],
+
                     TextSpan(
                         text: primary? DateUntil.absoluteTime(status.createdAt):DateUntil.dateTime(status.createdAt),
                         style: TextStyle(

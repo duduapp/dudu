@@ -1,6 +1,7 @@
 import 'package:dudu/api/lists_api.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/utils/app_navigate.dart';
+import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/widget/common/normal_flat_button.dart';
 import 'package:flutter/material.dart';
 
@@ -46,7 +47,12 @@ class _ListsAddState extends State<ListsAdd> {
               NormalFlatButton(
                 text: '新建列表',
                 onPressed: () async {
+                  if (_controller.text.trim().isEmpty) {
+                    DialogUtils.toastFinishedInfo('列表名不能为空');
+                    return;
+                  }
                   AppNavigate.pop();
+
                   var newList = await ListsApi.add(_controller.text.trim());
                   widget.provider.addToListWithAnimation(newList);
                 },

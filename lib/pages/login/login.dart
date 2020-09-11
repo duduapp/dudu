@@ -293,7 +293,7 @@ class _LoginState extends State<Login> {
                           ),
                           InkWell(
                             onTap: () {
-                              AppNavigate.push(InnerBrowser('http://dudu.today/instance'));
+                              AppNavigate.push(InnerBrowser('http://dudu.today/instance.html'));
                             },
                             child: Container(
                               child: Center(

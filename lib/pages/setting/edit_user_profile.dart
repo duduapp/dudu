@@ -130,9 +130,8 @@ class _EditUserProfileState extends State<EditUserProfile> {
     if (!StringUtil.isUrl(avatar)) {
       params['avatar'] = MultipartFile.fromFileSync(avatar);
     }
-    if (nameController.text.isNotEmpty)
-      params['display_name'] = nameController.text;
-    if (noteController.text.isNotEmpty) params['note'] = noteController.text;
+    params['display_name'] = nameController.text;
+    params['note'] = noteController.text;
 
     params['locked'] = locked;
     params['fields_attributes'] = _getFileds();

@@ -545,17 +545,21 @@ class _UserProfileState extends State<UserProfile>
         children: <Widget>[
           Expanded(
             flex: 3,
-            child: Text(
+            child: HtmlContent(
               filed['name'],
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+              emojis: _account.emojis,
+              //      shrinkToFit: true,
+            )
           ),
           Expanded(
             flex: 7,
-            child: HtmlContent(
-              filed['value'],
-              emojis: _account.emojis,
-              //      shrinkToFit: true,
+            child: DefaultTextStyle.merge(
+              style: TextStyle(color: Theme.of(context).accentColor),
+              child: HtmlContent(
+                filed['value'],
+                emojis: _account.emojis,
+                //      shrinkToFit: true,
+              ),
             ),
           )
         ],

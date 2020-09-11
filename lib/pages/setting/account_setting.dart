@@ -19,7 +19,7 @@ class _AccountSettingState extends State<AccountSetting> {
   @override
   void initState() {
     super.initState();
-    LoginedUser().requestPreference();
+  //  LoginedUser().requestPreference(); #有些可以获取，有些却不能写入，只在登录时请求
   }
 
   @override
