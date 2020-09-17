@@ -25,8 +25,14 @@ class UpdateTask {
     var rnd = StringUtil.getRandomString(20);
     try {
       String appId = await DeviceUtil.getAppId();
-      String checkUpdateUrl =
-          "http://api.idudu.fans/app/android/check_update?auth=$rnd&id=$appId";
+      String checkUpdateUrl;
+      if (Platform.isAndroid) {
+        checkUpdateUrl =
+        "http://api.idudu.fans/app/android/check_update?auth=$rnd&id=$appId";
+      } else if (Platform.isIOS) {
+        checkUpdateUrl =
+        "http://api.idudu.fans/app/ios/check_update?auth=$rnd&id=$appId";
+      }
       debugPrint(checkUpdateUrl);
       Response response = await Dio().get(checkUpdateUrl);
 
