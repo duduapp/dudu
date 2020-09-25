@@ -5,29 +5,39 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/models/json_serializable/media_attachment.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/json_serializable/vote.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/models/status/picked_media.dart';
+import 'package:dudu/pages/status/picked_media_preview.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/media_util.dart';
+import 'package:dudu/utils/themes.dart';
 import 'package:dudu/utils/view/status_action_util.dart';
+import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/common/sized_icon_button.dart';
+import 'package:dudu/widget/dialog/loading_dialog.dart';
 import 'package:dudu/widget/new_status/emoji_widget.dart';
 import 'package:dudu/widget/new_status/handle_vote_dialog.dart';
+import 'package:dudu/widget/new_status/picked_media_display.dart';
 import 'package:dudu/widget/new_status/status_reply_info.dart';
 import 'package:dudu/widget/new_status/status_text_editor.dart';
 import 'package:dudu/widget/new_status/vote_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:provider/provider.dart';
 import 'package:rich_text_controller/rich_text_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart' as picker;
+
 
 import '../../widget/new_status/new_status_publish_level.dart';
 
@@ -47,11 +57,15 @@ class _NewStatusState extends State<NewStatus> {
   final TextEditingController _warningController = new TextEditingController();
   OwnerAccount _myAcc;
   bool _hasWarning = false;
-  Icon _articleRange = Icon(IconFont.earth,size: 26,);
+  Icon _articleRange = Icon(
+    IconFont.earth,
+    size: 26,
+  );
   String _visibility = 'public';
   List<String> images = [];
   Map<String, String> imageTitles = {};
   Map<String, String> imageIds = {};
+  List<PickedMedia> medias = [];
   Vote vote;
   DateTime scheduledAt;
   bool sensitive = false;
@@ -76,7 +90,10 @@ class _NewStatusState extends State<NewStatus> {
     if (widget.replyTo != null) {
       replyToId = widget.replyTo.id;
       _visibility = widget.replyTo.visibility;
-      _articleRange = Icon(AppConfig.visibilityIcons[_visibility],size: 26,);
+      _articleRange = Icon(
+        AppConfig.visibilityIcons[_visibility],
+        size: 26,
+      );
       _controller.text = getMentionString();
       counter = _controller.text.length;
     }
@@ -84,8 +101,7 @@ class _NewStatusState extends State<NewStatus> {
     if (widget.scheduleInfo != null) {
       _loadFromScheduleInfo(widget.scheduleInfo);
     } else {
-      if (widget.replyTo == null)
-        _loadFromDraft();
+      if (widget.replyTo == null) _loadFromDraft();
     }
 
     if (widget.prepareText != null) {
@@ -99,13 +115,17 @@ class _NewStatusState extends State<NewStatus> {
         });
       }
     });
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async{
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      if (widget.replyTo == null && prefs.getBool(_spKey('have_draft')) == null) {
+      if (widget.replyTo == null &&
+          prefs.getBool(_spKey('have_draft')) == null) {
         SettingsProvider provider =
-        Provider.of<SettingsProvider>(context, listen: false);
+            Provider.of<SettingsProvider>(context, listen: false);
         _visibility = provider.get('default_post_privacy');
-        _articleRange = Icon(AppConfig.visibilityIcons[_visibility], size: 26,);
+        _articleRange = Icon(
+          AppConfig.visibilityIcons[_visibility],
+          size: 26,
+        );
         sensitive = provider.get('make_media_sensitive');
       }
     });
@@ -117,14 +137,20 @@ class _NewStatusState extends State<NewStatus> {
 
   _saveToDraft() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> imageLocalIds = [];
+    for (PickedMedia media in medias) {
+      if (media.local != null) {
+        imageLocalIds.add(media.local.id);
+      }
+    }
     prefs.setBool(_spKey('have_draft'), true);
     prefs.setString(_spKey('text'), _controller.text);
     prefs.setBool(_spKey('has_warning'), _hasWarning);
     prefs.setString(_spKey('warning'), _warningController.text);
     prefs.setString(_spKey('visibility'), _visibility);
-    prefs.setStringList(_spKey('images'), images);
-    prefs.setString(_spKey('image_titles'), json.encode(imageTitles));
-    prefs.setString(_spKey('image_ids'), json.encode(imageIds));
+
+ //   prefs.setString(_spKey('image_titles'), json.encode(imageTitles));
+    prefs.setStringList(_spKey('media_ids'), imageLocalIds);
     if (vote != null) {
       prefs.setStringList(_spKey('vote_options'), vote.getOptions());
       prefs.setInt(_spKey('vote_expires_in'), vote.expiresIn);
@@ -145,6 +171,7 @@ class _NewStatusState extends State<NewStatus> {
     prefs.remove(_spKey('images'));
     prefs.remove(_spKey('image_titles'));
     prefs.remove(_spKey('image_ids'));
+    prefs.remove(_spKey('media_ids'));
     prefs.remove(_spKey('vote_options'));
     prefs.remove(_spKey('vote_expires_in'));
     prefs.remove(_spKey('multi_choice'));
@@ -163,11 +190,16 @@ class _NewStatusState extends State<NewStatus> {
         AppConfig.visibilityIcons[_visibility],
         size: 26,
       );
-      images = prefs.getStringList(_spKey('images'));
-      imageTitles = Map<String, String>.from(
-          json.decode(prefs.getString(_spKey('image_titles'))));
-      imageIds = Map<String, String>.from(
-          json.decode(prefs.getString(_spKey('image_ids'))));
+      var mediaIds = prefs.getStringList(_spKey('media_ids'));
+      for (String mediaId in mediaIds) {
+        picker.AssetEntity entity = await picker.AssetEntity.fromId(mediaId);
+        if ((await entity.file) != null) {
+          medias.add(PickedMedia(local: entity));
+        }
+      }
+      // imageTitles = Map<String, String>.from(
+      //     json.decode(prefs.getString(_spKey('image_titles'))));
+
       var options = prefs.getStringList(_spKey('vote_options'));
       if (options != null) {
         vote = Vote.create(
@@ -197,11 +229,7 @@ class _NewStatusState extends State<NewStatus> {
       size: 26,
     );
     for (var media in info['media_attachments']) {
-      if (media['type'] == 'image') {
-        images.add(media['url']);
-        imageIds[media['url']] = media['id'];
-        imageTitles[media['url']] = media['description'];
-      }
+      medias.add(PickedMedia(remote: MediaAttachment.fromJson(media)));
     }
     if (params['poll'] != null) {
       var poll = params['poll'];
@@ -218,7 +246,7 @@ class _NewStatusState extends State<NewStatus> {
   }
 
   bool get tootEdited {
-    return (textEdited && _controller.text.isNotEmpty )||
+    return (textEdited && _controller.text.isNotEmpty) ||
         images.length > 0 ||
         (vote != null && vote.canCreate());
   }
@@ -275,12 +303,32 @@ class _NewStatusState extends State<NewStatus> {
     }
 
     var mediaIds = [];
-    for (String file in images) {
-      var id = imageIds[file];
-      if (id != null) {
-        mediaIds.add(id);
+
+
+    if (medias.isNotEmpty) {
+      var dialog = await DialogUtils.showProgressDialog('上传文件中...');
+      dialog.show();
+      for (PickedMedia media in medias) {
+        if (media.remote != null) {
+          mediaIds.add(media.remote.id);
+          continue;
+        }
+        String mediaId = await uploadMedia(media.local);
+        if (mediaId == null) {
+          dialog.hide();
+          return;
+        }
+        mediaIds.add(mediaId);
       }
+      dialog.hide();
     }
+
+//    for (String file in images) {
+//      var id = imageIds[file];
+//      if (id != null) {
+//        mediaIds.add(id);
+//      }
+//    }
     Map<String, dynamic> paramsMap = Map();
     paramsMap['in_reply_to_id'] = null;
     if (vote != null) {
@@ -315,16 +363,17 @@ class _NewStatusState extends State<NewStatus> {
               successMessage: '嘟文已发送')
           .then((data) {
         if (data != null) {
+          _clearDraft();
           AppNavigate.pop();
           if (!data.containsKey('scheduled_at')) {
             SettingsProvider().homeProvider.addToListWithAnimation(data);
-            if (data.containsKey('visibility') && data['visibility'] == 'public') {
+            if (data.containsKey('visibility') &&
+                data['visibility'] == 'public') {
               SettingsProvider().localProvider.addToListWithAnimation(data);
               SettingsProvider().federatedProvider.addToListWithAnimation(data);
             }
             StatusActionUtil.changeStatusCount(1);
           }
-
         }
       });
     } on DioError catch (e) {
@@ -332,24 +381,23 @@ class _NewStatusState extends State<NewStatus> {
     }
   }
 
-  uoloadImage(File file) async {
-    String fileName = file.path.split('/').last;
-    FormData formData = FormData.fromMap({
-      "file": await MultipartFile.fromFile(file.path, filename: fileName),
-    });
-    var response;
-    try {
-      response = await Request.requestDio(
-          url: Api.attachMedia, params: formData);
-    } on DioError catch (e) {
-      images.remove(file);
-      Fluttertoast.showToast(msg: '文件上传失败');
-      return;
-    }
-    String fileId = response['id'];
-    if (fileId.isNotEmpty) {
-      imageIds[file.path] = fileId;
-      setState(() {});
+  uploadMedia(picker.AssetEntity media) async {
+    File file = await media.file;
+    if (file != null) {
+      String fileName = file.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(file.path, filename: fileName),
+      });
+      var response;
+      try {
+        response =
+        await Request.requestDio(url: Api.attachMedia, params: formData);
+      } on DioError catch (e) {
+        Fluttertoast.showToast(msg: '文件上传失败');
+        return null;
+      }
+      String fileId = response['id'];
+      return fileId;
     }
   }
 
@@ -375,13 +423,27 @@ class _NewStatusState extends State<NewStatus> {
     if (images.length < 4) addImage(image);
   }
 
+  pickMedia(picker.RequestType type, int maxSize) async {
+
+    final List<picker.AssetEntity> assets = await picker.AssetPicker.pickAssets(
+        context,
+        maxAssets: maxSize,
+        themeColor: Colors.blue,
+        requestType: type);
+    if (assets != null)
+    medias.addAll(assets.map((e) => PickedMedia(local: e)));
+    setState(() {});
+//    for (var media in assets) {
+//      uploadMedia(media);
+//    }
+  }
+
   addImage(File file) {
     images.add(file.path);
     setState(() {});
-    uoloadImage(file);
   }
 
-  removeImage(String file) {
+  removeImage(dynamic file) {
     images.remove(file);
     setState(() {});
   }
@@ -415,7 +477,7 @@ class _NewStatusState extends State<NewStatus> {
     );
   }
 
-  void showBottomSheet() {
+  void showBottomSheetVisibility() {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -426,7 +488,10 @@ class _NewStatusState extends State<NewStatus> {
                 NewStatusPublishLevel(
                   title: '公开',
                   description: '所有人可见，并且会出现在公共时间轴上',
-                  leftIcon: Icon(IconFont.earth,size: 26,),
+                  leftIcon: Icon(
+                    IconFont.earth,
+                    size: 26,
+                  ),
                   onSelect: (Icon icons) {
                     setState(() {
                       _articleRange = icons;
@@ -438,7 +503,10 @@ class _NewStatusState extends State<NewStatus> {
                 NewStatusPublishLevel(
                   title: '不公开',
                   description: '所有人可见，但不会出现在公共时间轴上',
-                  leftIcon: Icon(IconFont.unlock,size: 26,),
+                  leftIcon: Icon(
+                    IconFont.unlock,
+                    size: 26,
+                  ),
                   onSelect: (Icon icons) {
                     setState(() {
                       _articleRange = icons;
@@ -450,7 +518,10 @@ class _NewStatusState extends State<NewStatus> {
                 NewStatusPublishLevel(
                   title: '仅关注者',
                   description: '只有关注你的用户可以看到',
-                  leftIcon: Icon(IconFont.lock,size: 26,),
+                  leftIcon: Icon(
+                    IconFont.lock,
+                    size: 26,
+                  ),
                   onSelect: (Icon icons) {
                     setState(() {
                       _articleRange = icons;
@@ -462,7 +533,10 @@ class _NewStatusState extends State<NewStatus> {
                 NewStatusPublishLevel(
                   title: '私信',
                   description: '只有被提及的用户可以看到',
-                  leftIcon: Icon(IconFont.message,size: 26,),
+                  leftIcon: Icon(
+                    IconFont.message,
+                    size: 26,
+                  ),
                   onSelect: (Icon icons) {
                     setState(() {
                       _articleRange = icons;
@@ -472,6 +546,67 @@ class _NewStatusState extends State<NewStatus> {
                   currentIcon: _articleRange,
                 ),
                 SizedBox(height: ScreenUtil.bottomSafeHeight(context))
+              ]);
+        });
+  }
+  
+  bool canPickMedia() {
+    if (medias.isEmpty) {
+      return true;
+    }
+    if (medias.length == 1) {
+      PickedMedia media = medias[0];
+      var localType = media?.local?.type;
+      if (localType != null && ( localType == picker.AssetType.audio || localType == picker.AssetType.video)) {
+        return false;
+      }
+      var remoteType = media?.remote?.type;
+      if (remoteType != null && remoteType != "image") {
+        return false;
+      }
+    }
+    if (medias.length < 4) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void showBottomSheetMediaTypeOrPickImage() {
+    if (medias.isNotEmpty) {
+      pickMedia(picker.RequestType.image, 4 - medias.length);
+      return;
+    }
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+
+                BottomSheetItem(
+                  text: "选择照片",
+                  onTap:() async=>  await pickMedia(picker.RequestType.image, 4 - medias.length),
+                ),
+                Divider(height: 0,),
+                BottomSheetItem(
+                  text: "选择视频",
+                  onTap:() async=>  await pickMedia(picker.RequestType.video, 1),
+                ),
+                Divider(height: 0,),
+                BottomSheetItem(
+                  text: "选择音频",
+                  onTap:() async=>  await pickMedia(picker.RequestType.audio, 1),
+                ),
+                Container(
+                  height: 8,
+                  color: Theme.of(context).backgroundColor,
+                ),
+
+                BottomSheetCancelItem(),
+
+
               ]);
         });
   }
@@ -502,7 +637,7 @@ class _NewStatusState extends State<NewStatus> {
     if (widget.replyTo.account.acct == myAccount.acct)
       mentionStr = '';
     else
-     mentionStr = '@' + widget.replyTo.account.acct + ' ';
+      mentionStr = '@' + widget.replyTo.account.acct + ' ';
     for (Map mention in widget.replyTo.mentions) {
       if (myAccount.acct == mention['acct']) {
         continue;
@@ -513,18 +648,12 @@ class _NewStatusState extends State<NewStatus> {
   }
 
   bool get canToot {
-    if (_controller.text.length == 0 && images.length == 0) {
+    if (_controller.text.length == 0 && medias.length == 0) {
       return false;
     }
-    for (String image in images) {
-      if (imageIds[image] == null) {
-       // showToast("请等待图片上传完毕");
-        return false;
-      }
-    }
+
     return true;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -537,7 +666,7 @@ class _NewStatusState extends State<NewStatus> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: PreferredSize(
-            preferredSize: Size.fromHeight(45.0),
+          preferredSize: Size.fromHeight(45.0),
           child: CustomAppBar(
             automaticallyImplyLeading: false,
             leading: Container(
@@ -553,29 +682,29 @@ class _NewStatusState extends State<NewStatus> {
             titleSpacing: 0,
             backgroundColor: Color.fromRGBO(appbarColor.red - 4,
                 appbarColor.green - 4, appbarColor.blue - 4, 1),
-            title: Column(mainAxisSize: MainAxisSize.min,
-                children: [
+            title: Column(mainAxisSize: MainAxisSize.min, children: [
               Text(
                 widget.replyTo == null ? '发嘟' : '回复',
                 style: TextStyle(fontSize: 16),
               ),
               Text(
                 StringUtil.displayName(LoginedUser().account),
-                style:
-                    TextStyle(fontSize: 12, color: Theme.of(context).accentColor),
+                style: TextStyle(
+                    fontSize: 12, color: Theme.of(context).accentColor),
               )
             ]),
             centerTitle: true,
             actions: <Widget>[
               Container(
-                padding: EdgeInsets.fromLTRB(0, 8, 12,6),
+                padding: EdgeInsets.fromLTRB(0, 8, 12, 6),
                 child: ButtonTheme(
                   minWidth: 60,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   child: RaisedButton(
                     disabledTextColor: Colors.white.withOpacity(0.5),
-                    disabledColor: Theme.of(context).buttonColor.withOpacity(0.5),
+                    disabledColor:
+                        Theme.of(context).buttonColor.withOpacity(0.5),
                     color: Theme.of(context).buttonColor,
                     textColor: Colors.white,
                     onPressed: !canToot
@@ -602,6 +731,7 @@ class _NewStatusState extends State<NewStatus> {
                 child: SingleChildScrollView(
                   child: Container(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       //   mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         warningWidget(),
@@ -622,7 +752,7 @@ class _NewStatusState extends State<NewStatus> {
                             height: 20,
                           ),
                         if (vote != null) voteView(),
-                        imagesList(),
+                        pickedMediaList(),
                         replyInfo(),
                       ],
                     ),
@@ -654,19 +784,16 @@ class _NewStatusState extends State<NewStatus> {
                       SizedIconButton(
                         width: 35,
                         icon: Icon(IconFont.picture),
-                        onPressed: vote != null
-                            ? null
-                            : () {
-                                chooseImage();
-                              },
+                        onPressed:
+                            vote != null ? null : canPickMedia() ? showBottomSheetMediaTypeOrPickImage : null,
                       ),
                       SizedIconButton(
                         onPressed: () {
-                          showBottomSheet();
+                          showBottomSheetVisibility();
                         },
                         icon: _articleRange,
                       ),
-                      if (images.isNotEmpty)
+                      if (medias.isNotEmpty)
                         SizedIconButton(
                           icon: sensitive
                               ? Icon(
@@ -685,7 +812,7 @@ class _NewStatusState extends State<NewStatus> {
                           IconFont.vote,
                           size: 26,
                         ),
-                        onPressed: images.length > 0
+                        onPressed: medias.length > 0
                             ? null
                             : () {
                                 showVoteDialog();
@@ -697,7 +824,12 @@ class _NewStatusState extends State<NewStatus> {
                             _hasWarning = !_hasWarning;
                           });
                         },
-                        icon: Icon(IconFont.cw,color: _hasWarning ? Theme.of(context).buttonColor: null,),
+                        icon: Icon(
+                          IconFont.cw,
+                          color: _hasWarning
+                              ? Theme.of(context).buttonColor
+                              : null,
+                        ),
 //                            child: Text('cw',
 //                                style: TextStyle(
 //                                    fontWeight: FontWeight.bold, fontSize: 20)),
@@ -706,13 +838,20 @@ class _NewStatusState extends State<NewStatus> {
                         onPressed: () {
                           DatePicker.showDateTimePicker(context,
                               theme: DatePickerTheme(
-                                backgroundColor: Theme.of(context).primaryColor,
-                                cancelStyle: TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
-                                itemStyle: TextStyle(color: Theme.of(context).textTheme.bodyText2.color)
-                              ),
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                  cancelStyle: TextStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          .color),
+                                  itemStyle: TextStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          .color)),
                               showTitleActions: true,
-                              minTime:
-                                  DateTime.now().add(Duration(minutes: 8)),
+                              minTime: DateTime.now().add(Duration(minutes: 8)),
                               maxTime: null,
                               onChanged: (date) {}, onConfirm: (date) {
                             if (date.difference(DateTime.now()).inSeconds >
@@ -737,9 +876,7 @@ class _NewStatusState extends State<NewStatus> {
                         },
                         icon: Icon(
                           IconFont.time,
-                          color: scheduledAt != null
-                              ? Colors.blue
-                              : null,
+                          color: scheduledAt != null ? Colors.blue : null,
                         ),
                       ),
                       SizedIconButton(
@@ -753,14 +890,12 @@ class _NewStatusState extends State<NewStatus> {
                   visible: showEmojiKeyboard,
                   child: SizedBox(
                     height: keyboardHeight,
-                    child: EmojiKeyboard(
-                        onChoose: (e) {
-                          setState(() {
-                            _controller.text =
-                                _controller.text + ' :' + e + ':';
-                            counter = _controller.text.length;
-                          });
-                        }),
+                    child: EmojiKeyboard(onChoose: (e) {
+                      setState(() {
+                        _controller.text = _controller.text + ' :' + e + ':';
+                        counter = _controller.text.length;
+                      });
+                    }),
                   ),
                 )
               ]),
@@ -816,128 +951,15 @@ class _NewStatusState extends State<NewStatus> {
     );
   }
 
-  Widget imagesList() {
-    if (images.length == 0)
-      return SizedBox(
-        height: 0,
-      );
-    List<Widget> lists = [];
-    for (int i = 0; i < images.length; i++) {
-      lists.add(imageDisplayView(images[i]));
-      lists.add(SizedBox(
-        width: 10,
-      ));
-    }
+  Widget pickedMediaList() {
+    return PickedMediaDisplay(medias,updateParentState: (){
+      setState(() {
 
-    return Container(
-      //width: Screen.width(context) - 60,
-      padding: EdgeInsets.only(left: 15, right: 10),
-      height: 110,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: lists,
-      ),
-    );
+      });
+    },onAddMediaClicked: () {
+      pickMedia(picker.RequestType.image, 4 - medias.length);
+    },);
   }
 
-  Widget imageDisplayView(String path) {
-    var color = Theme.of(context).popupMenuTheme.color;
-    var btnKey = GlobalKey();
-    PopupMenu menu = PopupMenu(
-      backgroundColor: color,
-      lineColor: color,
-      items: [
-        MenuItem(title: '辅助标题', image: Icon(Icons.accessible)),
-        MenuItem(title: '删除', image: Icon(Icons.delete))
-      ],
-      onClickMenu: (item) {
-        if (item.menuTitle == '删除') {
-          removeImage(path);
-        } else if (item.menuTitle == '辅助标题') {
-          openImageTitleDialog(path);
-        }
-      },
-    );
-    Widget imageView;
-    if (StringUtil.isUrl(path)) {
-      imageView = CachedNetworkImage(
-        imageUrl: path,
-      );
-    } else {
-      imageView = Image.file(File(path));
-    }
-    return InkWell(
-      key: btnKey,
-      onTap: () {
-        menu.show(
-          widgetKey: btnKey,
-        );
-      },
-      child: Stack(
-        children: [
-          Container(
-              width: 100,
-              height: 100,
-              child: FittedBox(
-                child: imageView,
-                fit: BoxFit.fitWidth,
-              )),
-          if (imageIds[path] == null)
-            Center(
-              widthFactor: 1.5,
-              child: JumpingText(
-                '上传中...',
-                style: TextStyle(color: Colors.white),
-              ),
-            )
-        ],
-      ),
-    );
-  }
 
-  openImageTitleDialog(String file) {
-    var imageTitle = imageTitles[file];
-    TextEditingController controller = TextEditingController(text: imageTitle);
-    var color = Theme.of(context).toggleableActiveColor;
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Theme(
-            data: ThemeData(primaryColor: color),
-            child: AlertDialog(
-              content: Container(
-                child: TextField(
-                  controller: controller,
-                  decoration: InputDecoration(
-                    hintText: '为视觉障碍人士添加文字说明',
-                  ),
-                  maxLength: 450,
-                  maxLines: null,
-                ),
-                width: ScreenUtil.width(context),
-              ),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text(
-                    '取消',
-                    style: TextStyle(color: color),
-                  ),
-                  onPressed: () => AppNavigate.pop(),
-                ),
-                FlatButton(
-                  child: Text(
-                    '确定',
-                    style: TextStyle(color: color, fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: () {
-                    imageTitles[file] = controller.text;
-                    updateImageTitle(file, controller.text);
-                    AppNavigate.pop();
-                  },
-                )
-              ],
-            ),
-          );
-        });
-  }
 }

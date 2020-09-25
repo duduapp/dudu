@@ -49,6 +49,12 @@ class _PhotoGalleryState extends State<PhotoGallery> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    widget.pageController.dispose();
+    super.dispose();
+  }
+
   void onPageChanged(int index) {
     setState(() {
       currentIndex = index;

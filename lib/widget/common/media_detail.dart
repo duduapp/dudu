@@ -20,46 +20,43 @@ class MediaDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: CustomAppBar(
-          leading: IconButton(
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: CustomAppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            AppNavigate.pop();
+          },
+        ),
+        title: Text(
+          title,
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.transparent,
+        brightness: Brightness.dark,
+        actions: <Widget>[
+          IconButton(
             icon: Icon(
-              Icons.arrow_back,
+              IconFont.download,
               color: Colors.white,
             ),
             onPressed: () {
-              AppNavigate.pop();
+              onDownloadClick();
             },
           ),
-          title: Text(
-            title,
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.transparent,
-          brightness: Brightness.dark,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                IconFont.download,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                onDownloadClick();
-              },
-            ),
-            IconButton(
-              icon: Icon(IconFont.share),
-              color: Colors.white,
-              onPressed: onShareClick,
-            )
-            //   IconButton(icon: Icon(Icons.share,color: Colors.white,))
-          ],
-        ),
-        body: child,
+          IconButton(
+            icon: Icon(IconFont.share),
+            color: Colors.white,
+            onPressed: onShareClick,
+          )
+          //   IconButton(icon: Icon(Icons.share,color: Colors.white,))
+        ],
       ),
+      body: child,
     );
   }
 

@@ -63,6 +63,8 @@ dependencies:
   flutter_webview_plugin: ^0.3.11 #登录账号用
   uuid: ^2.2.2
   permission_handler: ^5.0.1+1
+  wechat_assets_picker:
+    path: ../flutter_wechat_assets_picker/
 
 
 
