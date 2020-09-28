@@ -248,7 +248,7 @@ class Request {
         msg: errorMsg,
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
+        timeInSecForIosWeb: 1,
         backgroundColor: Colors.red,
         textColor: Theme.of(navGK.currentContext).primaryColor,
         fontSize: 16.0);

@@ -63,8 +63,8 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
           onPress: () => AppNavigate.push(ConversationTimeline()),
         ),
         SettingCell(
-          title: '赞',
-          leftIcon: Icon(IconFont.thumbUp),
+          title: '收藏',
+          leftIcon: Icon(IconFont.favorite),
           onPress: () => AppNavigate.push(FavouritesList()),
         ),
         SettingCell(

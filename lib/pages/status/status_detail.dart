@@ -52,7 +52,7 @@ class _StatusDetailState extends State<StatusDetail>
       for (var d in data['ancestors']) {
         d['__sub'] = true;
 
-        d['media_attachments'].forEach((e) => e['id'] = "c_" + e['id']);
+        d['media_attachments'].forEach((e) => e['id'] = "c##" + e['id']);
         parentWidgets.add(_buildStatusItem(
           StatusItemData.fromJson(d),
           subStatus: true,
@@ -69,7 +69,7 @@ class _StatusDetailState extends State<StatusDetail>
 
       itemPosition = data['ancestors'].length;
       for (var d in data['descendants']) {
-        d['media_attachments'].forEach((e) => e['id'] = "c_" + e['id']);
+        d['media_attachments'].forEach((e) => e['id'] = "c##" + e['id']);
         d['__sub'] = true;
       }
       descendants = data['descendants'];
@@ -98,7 +98,7 @@ class _StatusDetailState extends State<StatusDetail>
     }
     status.mediaAttachments = copyAttachments;
     status.mediaAttachments.forEach((e) {
-      e['id'] = "c_" + e['id'];
+      e['id'] = "c##" + e['id'];
     });
 
     _originExpandOption = SettingsProvider().settings['always_expand_tools'];
@@ -209,9 +209,13 @@ class _StatusDetailState extends State<StatusDetail>
             });
           }
         },
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: parentWidgets,
+        child: MediaQuery(
+          data: MediaQuery.of(context)
+              .copyWith(textScaleFactor: 1.0 + 0.18 * double.parse(SettingsProvider().get('text_scale'))),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: parentWidgets,
+          ),
         ),
       ),
     );

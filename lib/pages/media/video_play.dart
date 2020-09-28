@@ -1,14 +1,17 @@
 
+import 'package:cached_video_player/cached_video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:dio/dio.dart';
 import 'package:dudu/models/json_serializable/media_attachment.dart';
+import 'package:dudu/utils/cache_manager.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/media_util.dart';
+import 'package:dudu/widget/common/loading_view.dart';
 import 'package:dudu/widget/common/media_detail.dart';
+import 'package:dudu/widget/dialog/loading_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:video_player/video_player.dart';
 
 class VideoPlay extends StatefulWidget {
   final MediaAttachment media;
@@ -19,17 +22,20 @@ class VideoPlay extends StatefulWidget {
 }
 
 class _VideoPlayState extends State<VideoPlay> {
-  VideoPlayerController videoPlayerController;
+  CachedVideoPlayerController videoPlayerController;
   ChewieController chewieController;
 
-  @override
-  void initState() {
-    MediaAttachment media = widget.media;
-    videoPlayerController = VideoPlayerController.network(media.url);
+  bool fileDownloaded = false;
 
+  void setPlayer() async{
+
+    videoPlayerController = CachedVideoPlayerController.network(widget.media.url);
+
+
+    MediaAttachment media = widget.media;
     var aspect;
-    if (media.meta.containsKey('rotate')) {
-      aspect = media.meta['height'] / media.meta['width'];
+    if ((media.type == "video" || media.type == "gifv")&& media.meta.containsKey('original')) {
+      aspect =   media.meta['original']['width'] / media.meta['original']['height'];
     } else {
       aspect = media.meta['aspect'];
     }
@@ -38,7 +44,18 @@ class _VideoPlayState extends State<VideoPlay> {
         autoPlay: true,
         looping: true,
         aspectRatio: aspect,
-        showControlsOnInitialize: false);
+
+        showControlsOnInitialize: widget.media.type == 'audio' ? true : false);
+    setState(() {
+      fileDownloaded = true;
+    });
+  }
+
+  @override
+  void initState() {
+    setPlayer();
+
+
     super.initState();
   }
 
@@ -51,9 +68,9 @@ class _VideoPlayState extends State<VideoPlay> {
         color: Colors.black,
         child: Hero(
           tag: widget.media.id,
-          child: Chewie(
+          child: fileDownloaded ? Chewie(
             controller: chewieController,
-          ),
+          ) : Center(child: CircularProgressIndicator(strokeWidth: 2,)),
         ),
       ),
       title: "1/1",
@@ -77,8 +94,8 @@ class _VideoPlayState extends State<VideoPlay> {
 
   @override
   void dispose() {
-    videoPlayerController.dispose();
-    chewieController.dispose();
+    videoPlayerController?.dispose();
+    chewieController?.dispose();
     super.dispose();
   }
 }

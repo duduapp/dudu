@@ -28,16 +28,15 @@ import 'package:dudu/widget/new_status/status_reply_info.dart';
 import 'package:dudu/widget/new_status/status_text_editor.dart';
 import 'package:dudu/widget/new_status/vote_display.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:provider/provider.dart';
 import 'package:rich_text_controller/rich_text_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart' as picker;
-
 
 import '../../widget/new_status/new_status_publish_level.dart';
 
@@ -73,6 +72,7 @@ class _NewStatusState extends State<NewStatus> {
   bool showEmojiKeyboard = false;
   double keyboardHeight = 0;
   bool textEdited = false;
+  int cursorPositionWhenUnfocus = 0;
   var focusNode = new FocusNode();
 
   int counter = 0;
@@ -80,7 +80,8 @@ class _NewStatusState extends State<NewStatus> {
   @override
   void initState() {
     _controller = RichTextController({
-      RegExp(r"\B#[a-zA-Z0-9-_]+\b"): TextStyle(color: AppConfig.buttonColor),
+      RegExp(r"#[\u4E00-\u9FCC_a-zA-Z]+", unicode: true, multiLine: true):
+          TextStyle(color: AppConfig.buttonColor),
       RegExp(r"\B@[@\.a-zA-Z0-9-_]+\b"): TextStyle(color: AppConfig.buttonColor)
     }, onMatch: (List<String> matches) {});
     super.initState();
@@ -149,7 +150,7 @@ class _NewStatusState extends State<NewStatus> {
     prefs.setString(_spKey('warning'), _warningController.text);
     prefs.setString(_spKey('visibility'), _visibility);
 
- //   prefs.setString(_spKey('image_titles'), json.encode(imageTitles));
+    //   prefs.setString(_spKey('image_titles'), json.encode(imageTitles));
     prefs.setStringList(_spKey('media_ids'), imageLocalIds);
     if (vote != null) {
       prefs.setStringList(_spKey('vote_options'), vote.getOptions());
@@ -220,8 +221,16 @@ class _NewStatusState extends State<NewStatus> {
   }
 
   _loadFromScheduleInfo(dynamic info) {
-    var params = info['params'];
-    _controller.text = params['text'];
+    var params;
+    if (info.containsKey('params')) {
+        params = info['params'];
+        _controller.text = params['text'];
+    } else {
+      params = info;
+      _controller.text = StringUtil.removeAllHtmlTags(params['content']);
+    }
+
+
     _warningController.text = params['spoiler_text'];
     _visibility = params['visibility'];
     _articleRange = Icon(
@@ -233,10 +242,22 @@ class _NewStatusState extends State<NewStatus> {
     }
     if (params['poll'] != null) {
       var poll = params['poll'];
-      vote = Vote.create(List<String>.from(poll['options']), poll['expires_in'],
+      List<String> options = [];
+      var expiresIn;
+      if (info.containsKey('params')) {
+        options = List<String>.from(poll['options']);
+        expiresIn = poll['expires_in'];
+      } else {
+        for (var opt in poll['options']) {
+          options.add(opt['title']);
+        }
+        expiresIn = 86400;
+      }
+      vote = Vote.create(options, expiresIn,
           poll['multiple']);
     }
 
+    if (info['scheduled_at'] != null)
     scheduledAt = DateTime.parse(info['scheduled_at']);
     sensitive = params['sensitive'];
     replyToId = params['in_reply_to_id'];
@@ -247,7 +268,7 @@ class _NewStatusState extends State<NewStatus> {
 
   bool get tootEdited {
     return (textEdited && _controller.text.isNotEmpty) ||
-        images.length > 0 ||
+        medias.length > 0 ||
         (vote != null && vote.canCreate());
   }
 
@@ -284,16 +305,7 @@ class _NewStatusState extends State<NewStatus> {
     }
   }
 
-  showToast(String str) {
-    Fluttertoast.showToast(
-        msg: str,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
-        backgroundColor: Colors.red,
-        textColor: Theme.of(context).primaryColor,
-        fontSize: 16.0);
-  }
+
 
   Future<void> _pushNewToot() async {
     if (scheduledAt != null &&
@@ -304,16 +316,20 @@ class _NewStatusState extends State<NewStatus> {
 
     var mediaIds = [];
 
-
     if (medias.isNotEmpty) {
       var dialog = await DialogUtils.showProgressDialog('上传文件中...');
       dialog.show();
       for (PickedMedia media in medias) {
         if (media.remote != null) {
-          mediaIds.add(media.remote.id);
+          var remoteId = media.remote.id;
+          // fix hero
+          if (remoteId.contains('##')) {
+            remoteId = remoteId.substring(remoteId.lastIndexOf('##') + 2);
+          }
+          mediaIds.add(remoteId);
           continue;
         }
-        String mediaId = await uploadMedia(media.local);
+        String mediaId = await uploadMedia(media);
         if (mediaId == null) {
           dialog.hide();
           return;
@@ -368,7 +384,12 @@ class _NewStatusState extends State<NewStatus> {
           if (!data.containsKey('scheduled_at')) {
             SettingsProvider().homeProvider.addToListWithAnimation(data);
             if (data.containsKey('visibility') &&
-                data['visibility'] == 'public') {
+                data['visibility'] == 'public' &&
+                (data.containsKey('in_reply_to_id') &&
+                        data['in_reply_to_id'] == null ||
+                    data.containsKey('in_reply_to_account_id') &&
+                        data['in_reply_to_account_id'] ==
+                            LoginedUser().account.id)) {
               SettingsProvider().localProvider.addToListWithAnimation(data);
               SettingsProvider().federatedProvider.addToListWithAnimation(data);
             }
@@ -377,21 +398,25 @@ class _NewStatusState extends State<NewStatus> {
         }
       });
     } on DioError catch (e) {
-      showToast('发送嘟嘟失败！');
+      DialogUtils.toastErrorInfo('发送嘟嘟失败！');
     }
   }
 
-  uploadMedia(picker.AssetEntity media) async {
-    File file = await media.file;
+  uploadMedia(PickedMedia media) async {
+    File file = await media.local.file;
+    if (!file.path.endsWith('.gif') && media.local.type == picker.AssetType.image) {
+      file = await MediaUtil.compressImageFile(file);
+    }
     if (file != null) {
       String fileName = file.path.split('/').last;
       FormData formData = FormData.fromMap({
         "file": await MultipartFile.fromFile(file.path, filename: fileName),
+        "description" : media.description
       });
       var response;
       try {
         response =
-        await Request.requestDio(url: Api.attachMedia, params: formData);
+            await Request.requestDio(url: Api.attachMedia, params: formData);
       } on DioError catch (e) {
         Fluttertoast.showToast(msg: '文件上传失败');
         return null;
@@ -424,14 +449,26 @@ class _NewStatusState extends State<NewStatus> {
   }
 
   pickMedia(picker.RequestType type, int maxSize) async {
-
     final List<picker.AssetEntity> assets = await picker.AssetPicker.pickAssets(
         context,
         maxAssets: maxSize,
         themeColor: Colors.blue,
+        previewThumbSize: const <int>[1200, 1200],
         requestType: type);
-    if (assets != null)
-    medias.addAll(assets.map((e) => PickedMedia(local: e)));
+    if (assets == null) return;
+    for (picker.AssetEntity entity in assets) {
+      if (entity.type == picker.AssetType.video || entity.type == picker.AssetType.audio) {
+        // file length will return 0
+        var file = await entity.originFile;
+        var fileLength = file.lengthSync();
+        print(fileLength);
+        if (fileLength > 40*1024*1024) {
+          DialogUtils.toastFinishedInfo('文件大小必须小于40M');
+          continue;
+        }
+      }
+      medias.add(PickedMedia(local: entity));
+    }
     setState(() {});
 //    for (var media in assets) {
 //      uploadMedia(media);
@@ -549,7 +586,7 @@ class _NewStatusState extends State<NewStatus> {
               ]);
         });
   }
-  
+
   bool canPickMedia() {
     if (medias.isEmpty) {
       return true;
@@ -557,10 +594,15 @@ class _NewStatusState extends State<NewStatus> {
     if (medias.length == 1) {
       PickedMedia media = medias[0];
       var localType = media?.local?.type;
-      if (localType != null && ( localType == picker.AssetType.audio || localType == picker.AssetType.video)) {
+      if (localType != null &&
+          (localType == picker.AssetType.audio ||
+              localType == picker.AssetType.video)) {
         return false;
       }
       var remoteType = media?.remote?.type;
+      if (remoteType == 'gifv') {
+        return true;
+      }
       if (remoteType != null && remoteType != "image") {
         return false;
       }
@@ -584,29 +626,32 @@ class _NewStatusState extends State<NewStatus> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-
                 BottomSheetItem(
                   text: "选择照片",
-                  onTap:() async=>  await pickMedia(picker.RequestType.image, 4 - medias.length),
+                  onTap: () async => await pickMedia(
+                      picker.RequestType.image, 4 - medias.length),
                 ),
-                Divider(height: 0,),
+                Divider(
+                  height: 0,
+                ),
                 BottomSheetItem(
                   text: "选择视频",
-                  onTap:() async=>  await pickMedia(picker.RequestType.video, 1),
+                  onTap: () async =>
+                      await pickMedia(picker.RequestType.video, 1),
                 ),
-                Divider(height: 0,),
+                Divider(
+                  height: 0,
+                ),
                 BottomSheetItem(
                   text: "选择音频",
-                  onTap:() async=>  await pickMedia(picker.RequestType.audio, 1),
+                  onTap: () async =>
+                      await pickMedia(picker.RequestType.audio, 1),
                 ),
                 Container(
                   height: 8,
                   color: Theme.of(context).backgroundColor,
                 ),
-
                 BottomSheetCancelItem(),
-
-
               ]);
         });
   }
@@ -669,10 +714,10 @@ class _NewStatusState extends State<NewStatus> {
           preferredSize: Size.fromHeight(45.0),
           child: CustomAppBar(
             automaticallyImplyLeading: false,
-            leading: Container(
-              padding: EdgeInsets.fromLTRB(20, 15, 0, 0),
-              child: GestureDetector(
-                onTap: () => _onPressBack(),
+            leading: InkWell(
+              onTap: () => _onPressBack(),
+              child: Container(
+                padding: EdgeInsets.fromLTRB(20, 15, 0, 0),
                 child: Text(
                   '取消',
                   style: TextStyle(fontSize: 15),
@@ -739,6 +784,9 @@ class _NewStatusState extends State<NewStatus> {
                           controller: _controller,
                           focusNode: focusNode,
                           onChanged: (value) {
+                            if (value.isEmpty) {
+                              focusNode.requestFocus();
+                            }
                             setState(() {
                               textEdited = true;
                               counter = value.length > 500
@@ -784,8 +832,11 @@ class _NewStatusState extends State<NewStatus> {
                       SizedIconButton(
                         width: 35,
                         icon: Icon(IconFont.picture),
-                        onPressed:
-                            vote != null ? null : canPickMedia() ? showBottomSheetMediaTypeOrPickImage : null,
+                        onPressed: vote != null
+                            ? null
+                            : canPickMedia()
+                                ? showBottomSheetMediaTypeOrPickImage
+                                : null,
                       ),
                       SizedIconButton(
                         onPressed: () {
@@ -892,7 +943,12 @@ class _NewStatusState extends State<NewStatus> {
                     height: keyboardHeight,
                     child: EmojiKeyboard(onChoose: (e) {
                       setState(() {
-                        _controller.text = _controller.text + ' :' + e + ':';
+                        var emoji = ' :' + e + ': ';
+                        _controller.text = _controller.text.replaceRange(
+                            cursorPositionWhenUnfocus,
+                            cursorPositionWhenUnfocus,
+                            emoji);
+                        cursorPositionWhenUnfocus += emoji.length;
                         counter = _controller.text.length;
                       });
                     }),
@@ -914,6 +970,7 @@ class _NewStatusState extends State<NewStatus> {
     var kHeight = MediaQuery.of(context).viewInsets.bottom;
     // keyboard is shown up
     if (kHeight > 0) {
+      cursorPositionWhenUnfocus = _controller.selection.baseOffset;
       FocusScope.of(context).unfocus();
       if (kHeight != keyboardHeight) {
         setState(() {
@@ -922,6 +979,7 @@ class _NewStatusState extends State<NewStatus> {
       }
     } else {
       FocusScope.of(context).requestFocus(focusNode);
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
     }
   }
 
@@ -944,22 +1002,25 @@ class _NewStatusState extends State<NewStatus> {
         }
       },
     );
-    return InkWell(
-      key: btnKey,
-      onTap: () => menu.show(widgetKey: btnKey),
-      child: VoteDisplay(vote),
+    return Padding(
+      padding: const EdgeInsets.only(left: 15),
+      child: InkWell(
+        key: btnKey,
+        onTap: () => menu.show(widgetKey: btnKey),
+        child: VoteDisplay(vote),
+      ),
     );
   }
 
   Widget pickedMediaList() {
-    return PickedMediaDisplay(medias,updateParentState: (){
-      setState(() {
-
-      });
-    },onAddMediaClicked: () {
-      pickMedia(picker.RequestType.image, 4 - medias.length);
-    },);
+    return PickedMediaDisplay(
+      medias,
+      updateParentState: () {
+        setState(() {});
+      },
+      onAddMediaClicked: () {
+        pickMedia(picker.RequestType.image, 4 - medias.length);
+      },
+    );
   }
-
-
 }

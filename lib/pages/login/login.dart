@@ -5,6 +5,7 @@ import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/models/runtime_config.dart';
 import 'package:dudu/pages/home_page.dart';
 import 'package:dudu/pages/webview/inner_browser.dart';
 import 'package:dudu/public.dart';
@@ -41,6 +42,9 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
+    if (!widget.showBackButton && RuntimeConfig.defaultServer != null) {
+      _controller.text = RuntimeConfig.defaultServer;
+    }
   }
 
 // 请求app的信息

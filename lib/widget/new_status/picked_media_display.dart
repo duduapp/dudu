@@ -127,14 +127,14 @@ class PickedMediaDisplay extends StatelessWidget {
           }
           return _localNavigateWrapper(
               context,
-              FutureBuilder<Uint8List>(
-                future: media.local.thumbData, // a Future<String> or null
+              FutureBuilder<File>(
+                future: media.localThumbFile(), // a Future<String> or null
                 builder:
-                    (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
+                    (BuildContext context, AsyncSnapshot<File> snapshot) {
                   if (snapshot.hasData)
                     return Stack(
                       children: [
-                        Image.memory(
+                        Image.file(
                           snapshot.data,
                           width: 110,
                           height: 110,
@@ -171,6 +171,7 @@ class PickedMediaDisplay extends StatelessWidget {
             assets: pickedMedias,
             actionIcons: [Icon(IconFont.delete), Icon(IconFont.edit)],
             originList: medias,
+            previewThumbSize: const [1200,1200],
             onEditClicked: (dynamic media) {
               if (media is PickedMedia) {
                 openMediaDescriptionDialog(context, media);
@@ -303,16 +304,43 @@ class PickedMediaDisplay extends StatelessWidget {
           context,
           Padding(
             padding: const EdgeInsets.only(left: 15),
-            child: Stack(
-              children: [
-                Icon(
-                  Icons.music_note,
-                  size: 80,
-                ),
-                _cornerDeleteIcon(media),
-              ],
+            child: Container(
+              height: 80,
+              width: 80,
+              color: Theme.of(context).backgroundColor,
+              child: Stack(
+                children: [
+                  Center(
+                    child: Icon(
+                      IconFont.audio,
+                      size: 40,
+                    ),
+                  ),
+                  _cornerDeleteIcon(media),
+                ],
+              ),
             ),
           ));
+    } else {
+      return Padding(
+        padding: const EdgeInsets.only(left: 15),
+        child: Container(
+          height: 80,
+          width: 80,
+          color: Theme.of(context).backgroundColor,
+          child: Stack(
+            children: [
+              Center(
+                child: Icon(
+                  IconFont.audio,
+                  size: 40,
+                ),
+              ),
+              _cornerDeleteIcon(media),
+            ],
+          ),
+        ),
+      );
     }
     return Container();
   }
@@ -349,6 +377,8 @@ class PickedMediaDisplay extends StatelessWidget {
               return buildImage(context);
             case "audio":
               return buildAudio(context);
+            case "gifv":
+              return buildImage(context);
           }
         }
       }

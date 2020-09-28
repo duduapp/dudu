@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -5,9 +6,11 @@ import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/media_attachment.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/pages/media/audio_play.dart';
 import 'package:dudu/pages/media/photo_gallery.dart';
 import 'package:dudu/pages/media/video_play.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/media_util.dart';
 import 'package:dudu/widget/common/no_splash_ink_well.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -83,7 +86,8 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
       return Container();
     }
     return Padding(
-      padding:  EdgeInsets.only(top: widget.data.content.isEmpty ? 5 : 0,bottom: 8),
+      padding:
+          EdgeInsets.only(top: widget.data.content.isEmpty ? 5 : 0, bottom: 8),
       child: Column(
         children: <Widget>[
           for (MediaAttachment media in widget.images)
@@ -91,19 +95,21 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
               onTap: () => open(context, widget.images.indexOf(media)),
               child: Row(
                 children: <Widget>[
-                  Icon(media.type == 'image'
-                      ? IconFont.picture
-                      : media.type == 'video'
-                          ? Icons.videocam
-                          : media.type == 'audio'
-                              ? Icons.audiotrack
-                              : IconFont.picture,size: 16,),
+                  Icon(
+                    media.type == 'image'
+                        ? IconFont.picture
+                        : media.type == 'video'
+                            ? IconFont.video
+                            : media.type == 'audio'
+                                ? IconFont.audio
+                                : IconFont.picture,
+                    size: 16,
+                  ),
                   Expanded(
                       child: Text(
-                    media.description ?? '没有描述信息',
+                    media.description ?? ' 没有描述信息',
                     overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 12),
-
+                    style: TextStyle(fontSize: 12),
                   ))
                 ],
               ),
@@ -125,16 +131,50 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   Widget audio() {
     return InkWell(
       onTap: () {
-        AppNavigate.push(VideoPlay(widget.images[0]));
+        if (Platform.isIOS)
+          AppNavigate.push(AudioPlay(widget.images[0]));
+        else
+          AppNavigate.push(VideoPlay(widget.images[0]));
       },
-      child: ListTile(
-        leading: Icon(Icons.music_note),
-        title: Text(
-          widget.images[0].description ?? '',
-          overflow: TextOverflow.ellipsis,
-          maxLines: 2,
+      child: Container(
+        padding: EdgeInsets.only(
+            bottom: 7, top: widget.data.content.isEmpty ? 6 : 0),
+        child: Row(
+          children: [
+            Icon(
+              IconFont.audio,
+              size: 20,
+            ),
+            SizedBox(
+              width: 3,
+            ),
+            Text(
+                MediaUtil.secondsToMedisDuration(
+                        widget.images[0].meta['original']['duration']) ??
+                    '',
+                style: TextStyle(fontSize: 11)),
+            SizedBox(
+              width: 3,
+            ),
+            Flexible(
+              child: Text(
+                widget.images[0].description ?? '没有描述信息',
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                style: TextStyle(fontSize: 12),
+              ),
+            )
+          ],
         ),
       ),
+      // child: ListTile(
+      //   leading: Icon(IconFont.audio,size: 30,),
+      //   title: Text(
+      //     widget.images[0].description ?? '没有描述信息',
+      //     overflow: TextOverflow.ellipsis,
+      //     maxLines: 2,
+      //   ),
+      // ),
     );
   }
 
@@ -223,7 +263,8 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   Widget imageWrapper(Widget widget) {
     var primaryColor = Theme.of(context).primaryColor;
     return Padding(
-      padding: EdgeInsets.only(top: this.widget.data.content.isEmpty ? 12 : 0 ,bottom: 13),
+      padding: EdgeInsets.only(
+          top: this.widget.data.content.isEmpty ? 12 : 0, bottom: 13),
       child: Stack(
         children: <Widget>[
           widget,
@@ -302,13 +343,15 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
           child: Hero(
             tag: image.id,
             flightShuttleBuilder: (
-                BuildContext flightContext,
-                Animation<double> animation,
-                HeroFlightDirection flightDirection,
-                BuildContext fromHeroContext,
-                BuildContext toHeroContext,
-                ) {
-              final Hero hero = flightDirection == HeroFlightDirection.push ? fromHeroContext.widget : toHeroContext.widget;
+              BuildContext flightContext,
+              Animation<double> animation,
+              HeroFlightDirection flightDirection,
+              BuildContext fromHeroContext,
+              BuildContext toHeroContext,
+            ) {
+              final Hero hero = flightDirection == HeroFlightDirection.push
+                  ? fromHeroContext.widget
+                  : toHeroContext.widget;
               return hero.child;
             },
             child: CachedNetworkImage(
@@ -316,7 +359,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
               width: width,
               height: height,
               fit: BoxFit.cover,
-              progressIndicatorBuilder :  (context, widget,chunk) {
+              progressIndicatorBuilder: (context, widget, chunk) {
                 return Container(
                   color: Theme.of(context).backgroundColor,
                   width: width,
@@ -373,9 +416,11 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
         if (hideImage)
           Positioned.fill(
             child: ClipRRect(
-                child: image.blurhash != null ?BlurHash(
-                  hash: image.blurhash,
-                ):Container(),
+                child: image.blurhash != null
+                    ? BlurHash(
+                        hash: image.blurhash,
+                      )
+                    : Container(),
                 borderRadius: BorderRadius.circular(8.0)),
           ),
         if ((image.type == 'video' || image.type == 'gifv') &&
@@ -399,9 +444,15 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
     if (type == 'video' || type == 'gifv' || type == 'audio') {
       to = VideoPlay(widget.images[index]);
     } else {
+      List<MediaAttachment> medias = [];
+      for (var media in widget.images) {
+        if (media.type == 'image') {
+          medias.add(media);
+        }
+      }
       to = PhotoGallery(
-        galleryItems: widget.images,
-        initialIndex: index,
+        galleryItems: medias,
+        initialIndex: medias.indexOf(widget.images[index]),
       );
     }
 //    Navigator.of(context).push(

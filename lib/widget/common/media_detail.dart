@@ -23,15 +23,11 @@ class MediaDetail extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            AppNavigate.pop();
-          },
+        leading: InkWell(
+          onTap: () => AppNavigate.pop(),
+          child: Icon(IconFont.back,size: 28,color: Colors.white,),
         ),
+        automaticallyImplyLeading: false,
         title: Text(
           title,
           style: TextStyle(color: Colors.white),

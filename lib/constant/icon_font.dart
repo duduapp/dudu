@@ -96,4 +96,10 @@ class IconFont {
   static const IconData about = IconData(0xe60f,fontFamily: 'IconFont');
 
   static const IconData edit = IconData(0xe662,fontFamily: 'IconFont');
+
+  static const IconData favorite = IconData(0xe913,fontFamily: 'IconFont');
+
+  static const IconData video = IconData(0xe6a0,fontFamily: 'IconFont');
+
+  static const IconData audio = IconData(0xed23,fontFamily: 'IconFont');
 }

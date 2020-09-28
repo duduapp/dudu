@@ -854,7 +854,7 @@ class HtmlRichTextParser extends StatelessWidget {
 //                          bottom: 8.0,
                           left: parseContext.indentLevel * indentSize)
                   : EdgeInsets.zero,
-                  padding: EdgeInsets.only(top: 5,bottom: 5),
+                  padding: EdgeInsets.only(top: 5,bottom: 4), // Space Location
               decoration: decoration,
               child: RichText(
                 textScaleFactor: ScreenUtil.scaleFromSetting(textScale),

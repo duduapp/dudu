@@ -35,7 +35,12 @@ class ListViewUtil {
   }
 
   static deleteStatus({BuildContext context, StatusItemData status}) async{
-    var provider = Provider.of<ResultListProvider>(context, listen: false);
+    ResultListProvider provider;
+    try {
+      provider = Provider.of<ResultListProvider>(context, listen: false);
+    } catch (e) {
+      provider = SettingsProvider().statusDetailProviders.last;
+    }
     if (provider.tag == 'conversation') {
       provider.removeWhere((e) => e['last_status']['id'] == status.id);
     } else {

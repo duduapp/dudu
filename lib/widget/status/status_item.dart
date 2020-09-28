@@ -1,6 +1,7 @@
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/status/status_detail.dart';
 import 'package:dudu/pages/user_profile/user_profile.dart';
 import 'package:dudu/public.dart';
@@ -40,8 +41,8 @@ class StatusItem extends StatelessWidget {
       return Column(children: [
         NoSplashInkWell(
           onTap: () => _onStatusClicked(context),
-          onLongPress: () =>
-              StatusActionUtil.showBottomSheetAction(context, item, subStatus),
+          // onLongPress: () =>
+          //     StatusActionUtil.showBottomSheetAction(context, item, subStatus),
           child: Ink(
             color: Theme.of(context).primaryColor,
             padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
@@ -62,7 +63,6 @@ class StatusItem extends StatelessWidget {
                     children: <Widget>[
                       SubStatusAccountW(status: item),
                       StatusItemContent(item,subStatus: true,),
-                      StatusItemCard(item),
                       StatusItemActionW(
                         status: item,
                         subStatus: subStatus,
@@ -85,8 +85,8 @@ class StatusItem extends StatelessWidget {
           color: Theme.of(context).primaryColor,
           child: InkWell(
             onTap: primary ? null : () => _onStatusClicked(context),
-            onLongPress: () =>
-                StatusActionUtil.showBottomSheetAction(context, data, subStatus),
+            // onLongPress: () =>
+            //     StatusActionUtil.showBottomSheetAction(context, data, subStatus),
             child: Container(
               color: Colors.transparent,
               padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
