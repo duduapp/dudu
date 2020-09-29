@@ -1,6 +1,7 @@
 import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/models/task/defalut_server_task.dart';
 import 'package:dudu/utils/notification_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,10 @@ void main() async{
  // UpdateTask.checkUpdateIfNeed();
   if (account != null) {
     LoginedUser().loadFromLocalAccount(account);
+  } else {
+    await  DefaultServerTask.getServer();
   }
+
   await SettingsProvider().init();
   await LocalStorageAccount.load();
   if (kReleaseMode) {

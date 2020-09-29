@@ -55,10 +55,10 @@ class _AccountSwitchTimelineState extends State<AccountSwitchTimeline> {
             height: 40,
             color: Theme.of(context).appBarTheme.color,
             child: Row(children: [
-              SizedBox(width: (widget.actions.length * 35 + 22).toDouble()),
+              SizedBox(width: (widget.actions.length * 40 + 22).toDouble()),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.only(top: 4),
                   child: GZXDropDownHeader(
                       items: [
                         GZXDropDownHeaderItem(widget.title,
@@ -78,14 +78,10 @@ class _AccountSwitchTimelineState extends State<AccountSwitchTimeline> {
                 ),
               ),
               for (var actionWidget in widget.actions)
-              ...[SizedBox(
-                width: 30,
-                child: actionWidget,
-              ),SizedBox(width: 5,),
+              ...[actionWidget
               ],
 
-              SizedBox(width: 12,
-              )
+
             ]),
           ),
           Divider(

@@ -62,6 +62,17 @@ class _AboutAppState extends State<AboutApp> {
               title: '官方网站',
               subTitleStyle: TextStyle(fontSize: 12,color: Theme.of(context).buttonColor),
               onPress: () => AppNavigate.push(InnerBrowser('http://dudu.today')),
+            ),
+
+            SizedBox(height: 150,),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(child: Text('隐私协议',style: TextStyle(color: Colors.blue,fontSize: 12),),onTap: () => AppNavigate.push(InnerBrowser('http://dudu.today/privacy.html')),),
+                SizedBox(width: 10,),
+                InkWell(child: Text('服务协议',style: TextStyle(color: Colors.blue,fontSize: 12)),onTap: () => AppNavigate.push(InnerBrowser('http://dudu.today/contract.html')))
+              ],
             )
           ],
         ),

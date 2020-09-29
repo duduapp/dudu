@@ -7,20 +7,55 @@ import 'package:dudu/utils/cache_manager.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/widget/flutter_framework/progress_dialog.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
+import 'package:nav_router/nav_router.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:share_extend/share_extend.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class MediaUtil {
   static Future<File> pickAndCompressImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if (image == null) {
+    final List<AssetEntity> assets = await AssetPicker.pickAssets(
+        navGK.currentContext,
+        maxAssets: 1,
+        themeColor: Colors.blue,
+        requestType: RequestType.image);
+
+    if (assets == null || assets.isEmpty) {
       return null;
     }
+
+    var image = await assets[0].file;
+
+    if (Platform.isIOS) {
+      var orignalFile = await assets[0].originFile;
+      if (orignalFile.lengthSync() > 2 * 1024 * 1024) {
+        DialogUtils.toastFinishedInfo("图片文件必须小于2M");
+        return null;
+      }
+      if (orignalFile.path.endsWith(".gif") || orignalFile.path.endsWith(".GIF")) {
+        return orignalFile;
+      }
+    }
+
+    if (image.lengthSync() > 2 * 1024 * 1024) {
+      return await compressImageFile(image);
+    }
+    // do not compress gif
+    if (image.path.endsWith(".gif") || image.path.endsWith(".GIF")) {
+      return image;
+    }
+
+
+    return await compressImageFile(image);
+  }
+  
+  static Future<File> compressImageFile(File image) async {
     final directory = await getTemporaryDirectory();
     var targetPath = directory.path + '/compress_' + image.path.split('/').last;
     var result = await FlutterImageCompress.compressAndGetFile(
@@ -31,6 +66,15 @@ class MediaUtil {
     debugPrint(image.lengthSync().toString());
     debugPrint(result.lengthSync().toString());
     return result;
+  }
+
+  static String secondsToMedisDuration(double sec) {
+    if (sec == null) return null;
+    var duration = Duration(seconds: sec.toInt());
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 
   static shareMedia(MediaAttachment attachment) async {
@@ -53,25 +97,19 @@ class MediaUtil {
     } else {
       return DialogUtils.toastFinishedInfo('没有存储权限');
     }
-    if (attachment.type == 'image') {
-      var file =
-          (await CustomCacheManager().getFileFromCache(attachment.url))?.file;
-      if (file != null) {
-        ImageGallerySaver.saveFile(file.path);
-        DialogUtils.toastDownloadInfo('文件已保存');
-        return;
-      }
-    }
 
-    DialogUtils.toastDownloadInfo('正在下载中...');
-    Response response;
-    try {
-      response = await Dio().get(attachment.url,
-          options: Options(responseType: ResponseType.bytes));
-    } catch (e) {
+    var file =
+        (await CustomCacheManager().getFileFromCache(attachment.url))?.file;
+    if (file != null) {
+      ImageGallerySaver.saveFile(file.path);
+      DialogUtils.toastDownloadInfo('文件已保存');
       return;
     }
-    final result =
-        await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
+
+
+    DialogUtils.toastDownloadInfo('正在下载中...');
+    file =
+        await CustomCacheManager().getSingleFile(attachment.url);
+        ImageGallerySaver.saveFile(file.path);
   }
 }

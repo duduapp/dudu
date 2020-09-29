@@ -12,7 +12,7 @@ class DialogUtils {
         msg: msg,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
+        timeInSecForIosWeb: 1,
         backgroundColor: Theme.of(navGK.currentContext).accentColor.withOpacity(0.8),
         textColor: Colors.white,
         fontSize: 14.0);
@@ -23,7 +23,7 @@ class DialogUtils {
         msg: msg,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
+        timeInSecForIosWeb: 1,
         backgroundColor: Theme.of(navGK.currentContext).accentColor.withOpacity(0.8),
         textColor: Colors.white,
         fontSize: 14.0);
@@ -34,7 +34,7 @@ class DialogUtils {
         msg: msg,
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
+        timeInSecForIosWeb: 1,
         backgroundColor: Colors.red,
         textColor: Colors.white,
         fontSize: 16.0);
@@ -147,12 +147,14 @@ class DialogUtils {
           borderRadius: BorderRadius.circular(12),
         ),
         builder: (context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ...widgets,
-              BottomSheetCancelItem()
-            ],
+          return SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ...widgets,
+                BottomSheetCancelItem()
+              ],
+            ),
           );
         });
   }

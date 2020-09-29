@@ -8,4 +8,6 @@ class RuntimeConfig {
 
   static bool updateWindowDisplayed = false;
 
+  static String defaultServer;
+
 }

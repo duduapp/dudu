@@ -15,6 +15,7 @@ class NotificationTask {
   static enable() async {
     var settings = SettingsProvider().settings;
     if (!settings['show_notifications']) return;
+    //NotificationUtil.init();
     userNotificationEvents?.cancel();
     
     LoginedUser user = LoginedUser();

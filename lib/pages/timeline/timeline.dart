@@ -60,7 +60,7 @@ class _TimelineState extends State<Timeline> {
         buildRow: ListViewUtil.statusRowFunction(),
         listenBlockEvent: false,
         dataHandler: ListViewUtil.dataHandlerPrefixIdFunction(
-            widget.type.toString().split('.')[1]));
+            widget.type.toString().split('.')[1]+"##"));
     switch (widget.type) {
       case TimelineType.home:
         SettingsProvider().homeProvider = provider;

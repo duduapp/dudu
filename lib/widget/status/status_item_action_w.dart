@@ -31,7 +31,7 @@ class StatusItemActionW extends StatelessWidget {
         decoration: BoxDecoration(
             border: (subStatus || !showNum) ? null : Border(
                 top: BorderSide(
-                    width: 0.5, color: Theme.of(context).dividerColor))) ,
+                    width: 0, color: Theme.of(context).backgroundColor))) ,
         padding:  EdgeInsets.fromLTRB(subStatus ? 0 :20,0,subStatus ? 0 :20,0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,7 +44,7 @@ class StatusItemActionW extends StatelessWidget {
                 Spacer()
               ],
 
-            GestureDetector(
+            InkWell(
               onTap: () => AppNavigate.push(NewStatus(replyTo: status)),
               child: Padding(
                 padding: EdgeInsets.all(subStatus ? 4.0 : 8.0),
@@ -85,91 +85,34 @@ class StatusItemActionW extends StatelessWidget {
                 size: 20,
               ),
             if (status.visibility != 'private' && status.visibility != 'direct')
-              Padding(
+              LikeButton(
                 padding: EdgeInsets.all(subStatus ? 4.0 :8.0),
-                child: LikeButton(
-                  size: 20 * ScreenUtil.scaleFromSetting(textScale),
-
-                  likeCountPadding: EdgeInsets.zero,
-                  likeCount: status.reblogsCount,
-                  countBuilder: (int count, bool isLiked, String text) {
-                    return (count <= 0 || !showNum)
-                        ? Container()
-                        : Text(count.toString(),
-                            style: TextStyle(
-                                fontSize: fontSize - 1,
-                                color: isLiked
-                                    ? Colors.blue[800]
-                                    : Theme.of(context).accentColor));
-                  },
-                  countDecoration: (Widget count, int likeCount) {
-                    return Row(
-                      children: <Widget>[
-                        SizedBox(width: 3,),
-                        Text(
-                          subStatus ? '' :'转嘟',
-                          style: TextStyle(
-                              fontSize: fontSize ,
-
-
-                              color: status.reblogged
-                                  ? Colors.blue[800]
-                                  : Theme.of(context).accentColor),
-                        ),
-                        SizedBox(
-                          width: 2,
-                        ),
-                        count
-                      ],
-                    );
-                  },
-                  likeBuilder: (bool isLiked) {
-                    return isLiked
-                        ? Icon(
-                            IconFont.reblog,
-                            color: Colors.blue[800],
-                            size: iconSize,
-                          )
-                        : Icon(
-                            IconFont.reblog,
-                            color: Theme.of(context).accentColor,
-                            size: iconSize,
-                          );
-                  },
-                  isLiked: status.reblogged,
-                  bubblesColor: BubblesColor(
-                      dotPrimaryColor: Colors.blue[700],
-                      dotSecondaryColor: Colors.blue[300]),
-                  circleColor:
-                      CircleColor(start: Colors.blue[300], end: Colors.blue[700]),
-                  onTap: (isLiked) => StatusActionUtil.reblog(isLiked, status,context),
-                ),
-              ),
-            SizedBox(width: 10,),
-            Padding(
-              padding: EdgeInsets.all(subStatus? 4.0 :8.0),
-              child: LikeButton(
                 size: 20 * ScreenUtil.scaleFromSetting(textScale),
+
                 likeCountPadding: EdgeInsets.zero,
-                likeCount: status.favouritesCount,
+                likeCount: status.reblogsCount,
                 countBuilder: (int count, bool isLiked, String text) {
                   return (count <= 0 || !showNum)
                       ? Container()
-                      : Text(count.toString(),
+                      : Text(text,
                           style: TextStyle(
                               fontSize: fontSize - 1,
-                              color: isLiked ? Colors.yellow[800] : color));
+                              color: isLiked
+                                  ? Colors.blue[800]
+                                  : Theme.of(context).accentColor));
                 },
                 countDecoration: (Widget count, int likeCount) {
                   return Row(
                     children: <Widget>[
                       SizedBox(width: 3,),
                       Text(
-                        subStatus ? '':'赞',
+                        subStatus ? '' :'转嘟',
                         style: TextStyle(
-                            fontSize: fontSize,
-                            color: status.favourited
-                                ? Colors.yellow[800]
+                            fontSize: fontSize ,
+
+
+                            color: status.reblogged
+                                ? Colors.blue[800]
                                 : Theme.of(context).accentColor),
                       ),
                       SizedBox(
@@ -182,19 +125,72 @@ class StatusItemActionW extends StatelessWidget {
                 likeBuilder: (bool isLiked) {
                   return isLiked
                       ? Icon(
-                          IconFont.thumbUp,
-                          color: Colors.yellow[800],
+                          IconFont.reblog,
+                          color: Colors.blue[800],
                           size: iconSize,
                         )
                       : Icon(
-                          IconFont.thumbUp,
+                          IconFont.reblog,
                           color: Theme.of(context).accentColor,
                           size: iconSize,
                         );
                 },
-                isLiked: status.favourited,
-                onTap: (isLiked) => StatusActionUtil.favourite(isLiked, status ,context),
+                isLiked: status.reblogged,
+                bubblesColor: BubblesColor(
+                    dotPrimaryColor: Colors.blue[700],
+                    dotSecondaryColor: Colors.blue[300]),
+                circleColor:
+                    CircleColor(start: Colors.blue[300], end: Colors.blue[700]),
+                onTap: (isLiked) => StatusActionUtil.reblog(isLiked, status,context),
               ),
+            SizedBox(width: 10,),
+            LikeButton(
+              padding: EdgeInsets.all(subStatus? 4.0 :8.0),
+              size: 20 * ScreenUtil.scaleFromSetting(textScale),
+              likeCountPadding: EdgeInsets.zero,
+              likeCount: status.favouritesCount,
+              countBuilder: (int count, bool isLiked, String text) {
+                return (count <= 0 || !showNum)
+                    ? Container()
+                    : Text(text,
+                        style: TextStyle(
+                            fontSize: fontSize - 1,
+                            color: isLiked ? Colors.yellow[800] : color));
+              },
+              countDecoration: (Widget count, int likeCount) {
+                return Row(
+                  children: <Widget>[
+                    SizedBox(width: 3,),
+                    Text(
+                      subStatus ? '':'收藏',
+                      style: TextStyle(
+                          fontSize: fontSize,
+                          color: status.favourited
+                              ? Colors.yellow[800]
+                              : Theme.of(context).accentColor),
+                    ),
+                    SizedBox(
+                      width: 2,
+                    ),
+                    count
+                  ],
+                );
+              },
+              likeBuilder: (bool isLiked) {
+                return isLiked
+                    ? Icon(
+                        IconFont.favorite,
+                        color: Colors.yellow[800],
+                        size: iconSize,
+                      )
+                    : Icon(
+                        IconFont.favorite,
+                        color: Theme.of(context).accentColor,
+                        size: iconSize,
+                      );
+              },
+              isLiked: status.favourited,
+              onTap: (isLiked) => StatusActionUtil.favourite(isLiked, status ,context),
             ),
           ],
         ),

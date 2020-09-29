@@ -26,56 +26,58 @@ class StatusItemAccountW extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Avatar(
-          width: 40,
-          height: 40,
+          width: ScreenUtil.scaleFromSetting(textScale)*36,
+          height: ScreenUtil.scaleFromSetting(textScale)*36,
           account: status.account,
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(left: 8,bottom: 6),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                RichText(
-                  text: TextSpan(children: [
-                    ...TextWithEmoji.getTextSpans(
-                        text: StringUtil.displayName(status.account),
-                        emojis: status.account.emojis,
-                        style: TextStyle(
-                            fontSize: 13.5,
-                            color:
-                                Theme.of(context).textTheme.bodyText1.color)),
-                    TextSpan(text: " "),
-                    TextSpan(
-                        text: '@' + status.account.acct,
-                        style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color))
-                  ]),
-                  textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(
-                  height: 3,
-                ),
-                RichText(
-                  text: TextSpan(children: [
-                    if (primary) ...[
-                    WidgetSpan(
-                      child: Icon(AppConfig.visibilityIcons[status.visibility],size: 14,)
-                    ),TextSpan(text: " ")],
+            padding: const EdgeInsets.only(left: 13,bottom: 0),
+            child: Container(
+              height: ScreenUtil.scaleFromSetting(textScale)*36,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  RichText(
+                    text: TextSpan(children: [
+                      ...TextWithEmoji.getTextSpans(
+                          text: StringUtil.displayName(status.account),
+                          emojis: status.account.emojis,
+                          style: TextStyle(
+                              fontSize: 13.5,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color)),
+                      TextSpan(text: " "),
+                      TextSpan(
+                          text: '@' + status.account.acct,
+                          style: TextStyle(
+                              color: Theme.of(context).textTheme.bodyText1.color))
+                    ]),
+                    textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Spacer(),
+                  RichText(
+                    text: TextSpan(children: [
+                      if (primary) ...[
+                      WidgetSpan(
+                        child: Icon(AppConfig.visibilityIcons[status.visibility],size: 14,)
+                      ),TextSpan(text: " ")],
 
-                    TextSpan(
-                        text: primary? DateUntil.absoluteTime(status.createdAt):DateUntil.dateTime(status.createdAt),
-                        style: TextStyle(
-                            color: Theme.of(context).accentColor,
-                            fontSize: 11)),
-                    TextSpan(text: " "),
-                    ...fromWidgetSpans(context)
-                  ]),
-                  textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
-                )
-              ],
+                      TextSpan(
+                          text: primary? DateUntil.absoluteTime(status.createdAt):DateUntil.dateTime(status.createdAt),
+                          style: TextStyle(
+                              color: Theme.of(context).accentColor,
+                              fontSize: 10)),
+                      TextSpan(text: " "),
+                      ...fromWidgetSpans(context)
+                    ]),
+                    textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -111,21 +113,21 @@ class StatusItemAccountW extends StatelessWidget {
         TextSpan(
             text: '来自',
             style:
-                TextStyle(fontSize: 11, color: Theme.of(context).accentColor)),
-        TextSpan(text: " ")
+                TextStyle(fontSize: 10, color: Theme.of(context).accentColor)),
+       // TextSpan(text: " ")
       ]);
       if (appWebsite == null) {
         spans.add(TextSpan(
             text: status.application?.name,
             style:
-                TextStyle(fontSize: 11, color: Theme.of(context).accentColor)));
+                TextStyle(fontSize: 10, color: Theme.of(context).accentColor)));
       } else {
         spans.add(TextSpan(
             text: status.application?.name,
             recognizer: TapGestureRecognizer()
               ..onTap = () => AppNavigate.push(InnerBrowser(appWebsite)),
             style:
-                TextStyle(fontSize: 11, color: Color.fromRGBO(80, 125, 175, 1))));
+                TextStyle(fontSize: 10, color: Color.fromRGBO(80, 125, 175, 1))));
       }
       return spans;
     } else {
@@ -143,7 +145,7 @@ class SubStatusAccountW extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.only(bottom: 6),
+      padding: EdgeInsets.only(bottom: 0),
       child: RichText(
         text: TextSpan(children: [
           ...TextWithEmoji.getTextSpans(

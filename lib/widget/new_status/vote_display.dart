@@ -14,15 +14,17 @@ class VoteDisplay extends StatelessWidget {
       padding: EdgeInsets.only(left: 10, right: 20, top: 10, bottom: 10),
       constraints: BoxConstraints(maxWidth: ScreenUtil.width(context) - 60),
       decoration: BoxDecoration(
-          border: Border.all(),
+          border: Border.all(color: Theme.of(context).backgroundColor),
           borderRadius: BorderRadius.all(Radius.circular(5))),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Icon(IconFont.vote),
+              Icon(IconFont.vote,color: Colors.blue,),
+              SizedBox(width: 5,),
               Text(
                 '投票',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

@@ -203,9 +203,8 @@ class Request {
           finished: true,
         ));
     } catch (e) {
-      throw e;
       dialog?.hide();
-     // throw e;
+      DialogUtils.toastErrorInfo('网络请求出错');
       RuntimeConfig.error = e;
       return null;
     }
@@ -249,7 +248,7 @@ class Request {
         msg: errorMsg,
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
+        timeInSecForIosWeb: 1,
         backgroundColor: Colors.red,
         textColor: Theme.of(navGK.currentContext).primaryColor,
         fontSize: 16.0);

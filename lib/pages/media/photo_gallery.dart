@@ -49,6 +49,12 @@ class _PhotoGalleryState extends State<PhotoGallery> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    widget.pageController.dispose();
+    super.dispose();
+  }
+
   void onPageChanged(int index) {
     setState(() {
       currentIndex = index;
@@ -175,7 +181,7 @@ class _PhotoGalleryState extends State<PhotoGallery> {
 //      ),
       //  childSize: const Size(300, 300),
       initialScale: PhotoViewComputedScale.contained,
-      minScale: PhotoViewComputedScale.contained * 0.5,
+      minScale: PhotoViewComputedScale.contained * 1,
       maxScale: PhotoViewComputedScale.contained * 3.0,
       // heroAttributes: PhotoViewHeroAttributes(tag: item.id),
     );

@@ -5,11 +5,13 @@ import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/pages/status/new_status.dart';
 import 'package:dudu/pages/user_profile/user_report.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
@@ -155,6 +157,7 @@ class StatusActionUtil {
         text: data.bookmarked ? '删除书签' : '添加书签',
         onTap: () => onPressBookmark(data),
       ),
+
       Divider(indent: 60, height: 0),
       if (mentioned) ...[
         BottomSheetItem(
@@ -172,8 +175,6 @@ class StatusActionUtil {
         text: '分享链接',
         onTap: () {
           Share.share(data.url);
-//                  Clipboard.setData(new ClipboardData(text: data.url));
-//                  DialogUtils.toastFinishedInfo('链接已复制');
         },
       ),
       Divider(indent: 60, height: 0),
@@ -182,13 +183,38 @@ class StatusActionUtil {
         text: '分享嘟文',
         onTap: () {
           Share.share(StringUtil.removeAllHtmlTags(data.content));
-//                  Clipboard.setData(new ClipboardData(
-//                      text: StringUtil.removeAllHtmlTags(data.content)));
-//                  DialogUtils.toastFinishedInfo('嘟文已复制');
         },
       ),
       Divider(indent: 60, height: 0),
+      BottomSheetItem(
+        icon: IconFont.copy,
+        text: '复制嘟文',
+        onTap: () {
+
+                 Clipboard.setData(new ClipboardData(
+                     text: StringUtil.removeAllHtmlTags(data.content)));
+                 DialogUtils.toastFinishedInfo('嘟文已复制');
+        },
+      ),
+
+
+      Divider(indent: 60, height: 0),
       if (myAccount.id != data.account.id) ...[
+
+        BottomSheetItem(
+          icon: IconFont.report,
+          text: '举报 ',
+          onTap: () {
+            AppNavigate.push(UserReport(
+              account: data.account,
+              fromStatusId: data.id,
+            ));
+          },
+        ),
+        Divider(
+          indent: 60,
+          height: 0,
+        ),
         BottomSheetItem(
           icon: IconFont.volumeOff,
           text: '隐藏 @' + data.account.username,
@@ -212,20 +238,7 @@ class StatusActionUtil {
           text: '屏蔽 @' + data.account.username,
           subText: '屏蔽后该用户将无法看到你发的嘟文',
         ),
-        Divider(
-          indent: 60,
-          height: 0,
-        ),
-        BottomSheetItem(
-          icon: IconFont.report,
-          text: '举报 ',
-          onTap: () {
-            AppNavigate.push(UserReport(
-              account: data.account,
-              fromStatusId: data.id,
-            ));
-          },
-        ),
+
       ] else ...[
         BottomSheetItem(
           icon: IconFont.delete,
@@ -238,6 +251,15 @@ class StatusActionUtil {
                 onConfirm: () {
                   _onPressRemove(modalContext, data, subStatus);
                 });
+          },
+        ),
+        BottomSheetItem(
+          icon: IconFont.edit,
+          text: '删除并重新编辑',
+          color: Colors.red,
+          onTap: () {
+            _onPressRemove(modalContext, data, subStatus);
+            AppNavigate.push(NewStatus(scheduleInfo: data.toJson(),));
           },
         )
       ],
