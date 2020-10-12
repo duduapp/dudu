@@ -105,27 +105,30 @@ class _LoginState extends State<Login> {
         
         Request.closeHttpClient();
 
-        LocalAccount localAccount = LocalAccount(hostUrl: hostUrl,token: token,active: true);
+        LoginedUser user = new LoginedUser();
+        user.token = token;
+        user.host = hostUrl;
+        OwnerAccount account = await AccountsApi.getMyAccount();
+
+        LocalAccount localAccount = LocalAccount(hostUrl: hostUrl,token: token,active: true,account: account);
         await LocalStorageAccount.addLocalAccount(localAccount);
         
 
-        LoginedUser user = new LoginedUser();
+        user = new LoginedUser();
         user.loadFromLocalAccount(localAccount);
-
-        OwnerAccount account = await AccountsApi.getMyAccount();
-        user.account = account;
-        user.requestPreference();
-        await LocalStorageAccount.addOwnerAccount(account);
 
         await SettingsProvider().load(); // load new settings
 
         AccountUtil.cacheEmoji();
+        AccountUtil.requestPreference();
 
         pushAndRemoveUntil(HomePage());
 
         // eventBus.emit(EventBusKey.HidePresentWidegt);
       });
     } catch (e) {
+      await DialogUtils.showInfoDialog(context,'出现一些错误，可以重试看看');
+      pushAndRemoveUntil(Login());
       throw e;
       debugPrint(e);
     }

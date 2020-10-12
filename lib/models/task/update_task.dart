@@ -13,9 +13,10 @@ import 'package:dudu/widget/flutter_framework/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nav_router/nav_router.dart';
-import 'package:open_file/open_file.dart';
+
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UpdateTask {
   static String key = "gityp34dkg" +
@@ -28,10 +29,10 @@ class UpdateTask {
       String checkUpdateUrl;
       if (Platform.isAndroid) {
         checkUpdateUrl =
-        "http://api.idudu.fans/app/android/check_update?auth=$rnd&id=$appId";
+            "http://api.idudu.fans/app/android/check_update?auth=$rnd&id=$appId";
       } else if (Platform.isIOS) {
         checkUpdateUrl =
-        "http://api.idudu.fans/app/ios/check_update?auth=$rnd&id=$appId";
+            "http://api.idudu.fans/app/ios/check_update?auth=$rnd&id=$appId";
       }
       debugPrint(checkUpdateUrl);
       Response response = await Dio().get(checkUpdateUrl);
@@ -74,8 +75,7 @@ class UpdateTask {
                 apkUrl: data['apk_url'],
               ),
               context: navGK.currentState.overlay.context,
-            barrierDismissible: false
-          );
+              barrierDismissible: false);
           RuntimeConfig.updateWindowDisplayed = false;
           return false;
         } else {
@@ -119,7 +119,9 @@ class UpdateWindow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{return false;},
+      onWillPop: () async {
+        return false;
+      },
       child: Container(
         padding: EdgeInsets.all(10),
         child: SingleChildScrollView(
@@ -155,12 +157,12 @@ class UpdateWindow extends StatelessWidget {
                   ),
                   NormalFlatButton(
                     text: '更新',
-                    onPressed: () {
-                      DialogUtils.showRoundedDialog(
-                          context: navGK.currentState.overlay.context,
-                          content: ApkDownloadProgress(
-                            url: apkUrl,
-                          ));
+                    onPressed: () async {
+
+                        if (await canLaunch(apkUrl)) {
+                          await launch(apkUrl);
+                        }
+
                     },
                   )
                 ],
@@ -251,7 +253,7 @@ class _ApkDownloadProgressState extends State<ApkDownloadProgress> {
                 NormalFlatButton(
                   text: '安装',
                   onPressed: () async {
-                    var res = await OpenFile.open(savePath);
+                 //   var res = await OpenFile.open(savePath);
                   },
                 )
             ],

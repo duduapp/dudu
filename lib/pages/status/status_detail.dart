@@ -254,7 +254,7 @@ class _StatusDetailState extends State<StatusDetail>
             value: providers[2],
             child: ProviderEasyRefreshListView(
               firstRefresh: true,
-              emptyView: EmptyViewWithHeight(text: '还没有点赞',),
+              emptyView: EmptyViewWithHeight(text: '还没有收藏',),
               loadingView: LoadingView(height: 200,),
             ),
           ),
@@ -345,7 +345,7 @@ class _StatusDetailState extends State<StatusDetail>
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        '赞 ' +
+                                        '收藏 ' +
                                             widget.data.favouritesCount
                                                 .toString(),
                                       ),

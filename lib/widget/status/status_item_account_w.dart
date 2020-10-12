@@ -22,19 +22,21 @@ class StatusItemAccountW extends StatelessWidget {
   Widget build(BuildContext context) {
     var textScale =
     SettingsProvider.getWithCurrentContext('text_scale', listen: true);
+    double headerHeight;
+    headerHeight = ScreenUtil.scaleFromSetting(textScale)*36;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Avatar(
-          width: ScreenUtil.scaleFromSetting(textScale)*36,
-          height: ScreenUtil.scaleFromSetting(textScale)*36,
+          width: headerHeight,
+          height: headerHeight,
           account: status.account,
         ),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(left: 13,bottom: 0),
             child: Container(
-              height: ScreenUtil.scaleFromSetting(textScale)*36,
+              height: headerHeight,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,

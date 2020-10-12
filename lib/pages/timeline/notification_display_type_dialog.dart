@@ -50,7 +50,7 @@ class _NotificationDisplayTypeDialogState
           children: <Widget>[
             typeRow('提及', 'mention'),
             typeRow('转嘟', 'reblog'),
-            typeRow('赞', 'favourite'),
+            typeRow('收藏', 'favourite'),
             typeRow('关注', 'follow'),
             typeRow('关注请求', 'follow_request'),
             typeRow('投票', 'poll'),

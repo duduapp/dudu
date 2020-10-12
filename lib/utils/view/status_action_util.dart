@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dudu/api/status_api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
@@ -186,6 +188,7 @@ class StatusActionUtil {
         },
       ),
       Divider(indent: 60, height: 0),
+      if (Platform.isAndroid)
       BottomSheetItem(
         icon: IconFont.copy,
         text: '复制嘟文',

@@ -101,7 +101,12 @@ class MediaUtil {
     var file =
         (await CustomCacheManager().getFileFromCache(attachment.url))?.file;
     if (file != null) {
-      ImageGallerySaver.saveFile(file.path);
+      // if (attachment.type == "video" || attachment.type == "gifv")
+      //   await PhotoManager.editor.saveVideo(file);
+      // else
+      //   await PhotoManager.editor.saveImageWithPath(file.path);
+
+      await ImageGallerySaver.saveFile(file.path);
       DialogUtils.toastDownloadInfo('文件已保存');
       return;
     }
@@ -110,6 +115,7 @@ class MediaUtil {
     DialogUtils.toastDownloadInfo('正在下载中...');
     file =
         await CustomCacheManager().getSingleFile(attachment.url);
-        ImageGallerySaver.saveFile(file.path);
+
+    ImageGallerySaver.saveFile(file.path);
   }
 }

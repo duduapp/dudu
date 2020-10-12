@@ -74,7 +74,7 @@ class _NotificationsState extends State<Notifications>
       return StatusItem(
           item: item.status,
           refIcon: IconFont.thumbUp,
-          refString: '${StringUtil.displayName(item.account)} 赞了你的嘟文',
+          refString: '${StringUtil.displayName(item.account)} 收藏了你的嘟文',
           refAccount: item.account,);
     } else if (item.type == 'mention') {
       return StatusItem(

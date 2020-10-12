@@ -459,7 +459,7 @@ class _NewStatusState extends State<NewStatus> {
     for (picker.AssetEntity entity in assets) {
       if (entity.type == picker.AssetType.video || entity.type == picker.AssetType.audio) {
         // file length will return 0
-        var file = await entity.originFile;
+        var file = await entity.file;
         var fileLength = file.lengthSync();
         print(fileLength);
         if (fileLength > 40*1024*1024) {

@@ -20,12 +20,26 @@ class AccountUtil {
 
   //第一次登录缓存emoji,加快emoji显示速度
   static cacheEmoji() async{
-    var res = await Request.get(url: Api.CustomEmojis);
-    if (res != null)
-    for (var row in res) {
-      if (row['visible_in_picker']) {
-        CustomCacheManager().downloadFile(row['static_url']);
-      }
+    try {
+      var res = await Request.get(url: Api.CustomEmojis);
+      if (res != null)
+        for (var row in res) {
+          if (row['visible_in_picker']) {
+            CustomCacheManager().downloadFile(row['static_url']);
+          }
+        }
+    } catch (e) {
+      // ignore
+    }
+
+  }
+
+  static requestPreference() async {
+    try {
+      LoginedUser user = LoginedUser();
+      user.requestPreference();
+    } catch (e) {
+      // ignore
     }
   }
 }
