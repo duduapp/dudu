@@ -28,11 +28,25 @@
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
+		<key>NSAllowsArbitraryLoadsForMedia</key>
+		<true/>
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
 		<true/>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>请求AppleMusic权限</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>请求访问日历权限</string>
+	<key>NSContactsUsageDescription</key>
+	<string>请求访问通讯录权限</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>请求位置权限</string>
+	<key>NSMotionUsageDescription</key>
+	<string>请求运动与健身权限</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>需要您的允许，才能上传照片</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>请求Speech权限</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
