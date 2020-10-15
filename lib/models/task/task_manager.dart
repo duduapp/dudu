@@ -1,0 +1,7 @@
+class TaskManager {
+
+  static runDailyTask() {
+
+  }
+
+}

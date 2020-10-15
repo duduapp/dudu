@@ -10,6 +10,7 @@ import 'package:dudu/utils/device_util.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/widget/common/normal_flat_button.dart';
 import 'package:dudu/widget/flutter_framework/progress_dialog.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nav_router/nav_router.dart';
@@ -33,6 +34,9 @@ class UpdateTask {
       } else if (Platform.isIOS) {
         checkUpdateUrl =
             "http://api.idudu.fans/app/ios/check_update?auth=$rnd&id=$appId";
+      }
+      if (kDebugMode) {
+        checkUpdateUrl = 'aaa';
       }
       debugPrint(checkUpdateUrl);
       Response response = await Dio().get(checkUpdateUrl);

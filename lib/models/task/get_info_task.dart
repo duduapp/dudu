@@ -1,5 +1,0 @@
-class GetInfoTask {
-  static getMyAccount() {
-
-  }
-}
