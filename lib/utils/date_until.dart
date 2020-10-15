@@ -1,4 +1,7 @@
+import 'package:dudu/constant/storage_key.dart';
 import 'package:intl/intl.dart';
+
+import 'local_storage.dart';
 
 class DateUntil {
   static String dateTime(String timestamp) {
@@ -30,5 +33,27 @@ class DateUntil {
     } else {
       return DateFormat('yyyy-MM-dd HH:mm').format(time);
     }
+  }
+
+
+  static hasMarkedTimeDaily(String storageKey) {
+    String lastUpdateTime =
+     Storage.getString(storageKey);
+    if (lastUpdateTime == null) {
+      return true;
+    }
+    var now = DateTime.now();
+    var updateTime = DateTime.parse(lastUpdateTime);
+
+    if (now.difference(updateTime).inDays >= 1 || now.day != updateTime.day) {
+      return true;
+    }
+    return false;
+  }
+
+  // set task has executed
+  static markTime(String storageKey) {
+    Storage.saveString(
+        storageKey, DateTime.now().toIso8601String());
   }
 }

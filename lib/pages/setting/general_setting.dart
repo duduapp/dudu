@@ -27,12 +27,8 @@ class _GeneralSettingState extends State<GeneralSetting> {
   }
 
   _getTextScale() {
-    Storage.getInt('mastodon.text_scale').then((value) {
-      if (value != null) {
-        setState(() {
-          textScale = value;
-        });
-      }
+    setState(() {
+      textScale = Storage.getInt('mastodon.text_scale');
     });
   }
 

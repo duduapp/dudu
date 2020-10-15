@@ -52,6 +52,7 @@ class Request {
       bool showDialog = true,
       String dialogMessage,
       String successMessage,
+        bool returnAll,
       int closeDilogDelay}) async {
     return await _request(
       requestType: RequestType.post,
@@ -62,6 +63,7 @@ class Request {
       dialogMessage: dialogMessage,
       successMessage: successMessage,
       closeDialogDelay: closeDilogDelay,
+      returnAll: returnAll
     );
   }
 
@@ -166,7 +168,7 @@ class Request {
             var response = await getDioWithCache().get(url, queryParameters: params,cancelToken: cancelToken,options: enableCache ? buildCacheOptions(Duration(days: 1)) : null);
             if (returnAll) {
               dialog?.hide();
-              return HttpResponse(response.data,response.headers.map);
+              return HttpResponse(response.data,response.headers.map,response.statusCode);
             } else {
               dialog?.hide();
               return response.data;
@@ -217,7 +219,7 @@ class Request {
       });
     }
     if (returnAll) {
-      return HttpResponse(json.decode(response.body), response.headers);
+      return HttpResponse(json.decode(response.body), response.headers, response.statusCode);
     }
     if (response.statusCode == 401) {
       if (!RuntimeConfig.dialogOpened) {

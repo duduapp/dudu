@@ -7,6 +7,7 @@ import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/pages/admin/account_action_dialog.dart';
 import 'package:dudu/pages/status/new_status.dart';
 import 'package:dudu/pages/user_profile/user_report.dart';
 import 'package:dudu/public.dart';
@@ -141,6 +142,10 @@ class StatusActionUtil {
     }, ListViewUtil.sameStatusCondition(status));
   }
 
+  static showAdminAccountActionDialog(BuildContext context, StatusItemData data) {
+    DialogUtils.showRoundedDialog(context: context,content: AccountActionDialog(data.account));
+  }
+
   static showBottomSheetAction(
       BuildContext context, StatusItemData data, bool subStatus) {
     OwnerAccount myAccount = LoginedUser().account;
@@ -241,6 +246,14 @@ class StatusActionUtil {
           text: '屏蔽 @' + data.account.username,
           subText: '屏蔽后该用户将无法看到你发的嘟文',
         ),
+        if (LoginedUser().isAdmin && data.account.url.contains(LoginedUser().host))
+          BottomSheetItem(
+            onTap: () {
+              showAdminAccountActionDialog(context, data);
+            },
+            icon: IconFont.block,
+            text: '管理员: 对账号进行操作',
+          ),
 
       ] else ...[
         BottomSheetItem(

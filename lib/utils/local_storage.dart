@@ -4,19 +4,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Storage {
+  static SharedPreferences prefs;
+  
+  static loadSharedPrefrences() async{
+    prefs = await SharedPreferences.getInstance();
+  }
+  
   static  saveString(String key, String value) async {
     try {
-      debugPrint(key + value);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString(key, value);
     } catch (e) {
       debugPrint('存储失败');
     }
   }
 
-  static Future<String> getString(String key) async {
+  static String getString(String key) {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       String response = prefs.getString(key);
       return response;
     } catch (e) {
@@ -25,9 +28,8 @@ class Storage {
     }
   }
 
-  static Future<int> getInt(String key) async {
+  static int getInt(String key) {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       int response = prefs.getInt(key);
       return response;
     } catch (e) {
@@ -38,7 +40,6 @@ class Storage {
 
   static void removeString(String key) async {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.remove(key);
     } catch (e) {
       debugPrint(e.toString());
@@ -46,9 +47,8 @@ class Storage {
     }
   }
 
-  static Future<List<String>> getStringList(String key) async {
+  static List<String> getStringList(String key) {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       return prefs.getStringList(key);
     } catch (e) {
       debugPrint(e.toString());
@@ -56,9 +56,8 @@ class Storage {
     }
   }
 
-  static Future<bool> getBool(String key) async {
+  static bool getBool(String key) {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       return prefs.getBool(key);
     } catch (e) {
       debugPrint(e.toString());
@@ -101,16 +100,24 @@ class Storage {
     return StringUtil.accountFullAddress(myAccount.account);
   }
 
-  static Future getIntWithAccount(String key) {
+  static  getIntWithAccount(String key) {
 
     return getInt(_accountPrefix()+key);
+  }
+  static  getBoolWithAccount(String key) {
+
+    return getBool(_accountPrefix()+key);
   }
 
   static void saveIntWithAccount(String key,int value) {
     saveInt(_accountPrefix()+key, value);
   }
 
-  static Future getStringWithAccount(String key) {
+  static void saveBoolWithAccount(String key,bool value) {
+    saveBool(_accountPrefix()+key, value);
+  }
+
+  static getStringWithAccount(String key) {
 
     return getString(_accountPrefix()+key);
   }

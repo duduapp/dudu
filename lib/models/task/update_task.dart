@@ -83,8 +83,7 @@ class UpdateTask {
           RuntimeConfig.updateWindowDisplayed = false;
           return false;
         } else {
-          Storage.saveString(
-              StorageKey.lastCheckUpdateTime, DateTime.now().toIso8601String());
+          DateUntil.markTime(StorageKey.lastCheckUpdateTime);
         }
       }
       return true;
@@ -94,7 +93,7 @@ class UpdateTask {
   }
 
   static checkUpdateIfNeed() async {
-    if (await needCheckUpdate()) check();
+    if (await DateUntil.hasMarkedTimeDaily(StorageKey.lastCheckUpdateTime)) check();
   }
 
   // one day to send on request

@@ -1,6 +1,9 @@
+import 'package:dudu/api/admin_api.dart';
 import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/models/runtime_config.dart';
+import 'package:dudu/models/task/check_role_task.dart';
 import 'package:dudu/models/task/notification_task.dart';
 import 'package:dudu/models/task/update_task.dart';
 import 'package:dudu/public.dart';
@@ -30,6 +33,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       UpdateTask.checkUpdateIfNeed();
+      CheckRoleTask.checkUserRole();
     }
   }
 

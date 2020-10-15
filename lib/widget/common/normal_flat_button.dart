@@ -7,6 +7,7 @@ class NormalFlatButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
+
   const NormalFlatButton({Key key, this.text, this.onPressed}) : super(key: key);
 
 
@@ -15,7 +16,7 @@ class NormalFlatButton extends StatelessWidget {
     return FlatButton(
       child: Text(
         text,
-        style: TextStyle(fontWeight: FontWeight.normal),
+        style: TextStyle(fontWeight: FontWeight.normal,color: Theme.of(context).buttonColor),
       ),
       onPressed: onPressed,
     );

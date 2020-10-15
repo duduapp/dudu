@@ -2,12 +2,15 @@ import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/public.dart';
+import 'package:dudu/utils/local_storage.dart';
 
 class LoginedUser {
   String host;
   String token;
 
   OwnerAccount account;
+  bool _isAdmin;
 
   // 工厂模式
   factory LoginedUser() =>_getInstance();
@@ -27,6 +30,21 @@ class LoginedUser {
     host = localAccount.hostUrl;
     token = localAccount.token;
     account = localAccount.account;
+  }
+
+  bool get isAdmin {
+    if (_isAdmin == null) {
+      var admin =  Storage.getBoolWithAccount(StorageKey.isAdmin);
+      if (admin == null) {
+        return false;
+      }
+      _isAdmin = admin;
+    }
+    return _isAdmin;
+  }
+
+  set admin(bool admin) {
+    _isAdmin = admin;
   }
 
   setHost(String host) {

@@ -87,14 +87,10 @@ class _ProviderEasyRefreshListViewState
     _refreshController =
         widget.refreshController ?? RefreshController(initialRefresh: false);
 
-    Storage.getInt("mastodon.text_scale").then((value) {
-      if (value != null && value != textScale) {
-        if (mounted)
-          setState(() {
-            textScale = value;
-          });
-      }
+    setState(() {
+      textScale = Storage.getInt("mastodon.text_scale");
     });
+
 
     eventBus.on(widget.type, (arg) {
       _scrollController.jumpTo(0);

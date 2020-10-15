@@ -1,5 +1,6 @@
 import 'package:dudu/public.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
+import 'package:dudu/widget/common/normal_flat_button.dart';
 import 'package:dudu/widget/dialog/loading_dialog.dart';
 import 'package:dudu/widget/flutter_framework/progress_dialog.dart';
 import 'package:flutter/material.dart';
@@ -95,8 +96,8 @@ class DialogUtils {
             content: Text(text),
             actions: <Widget>[
               if (!onlyInfo)
-              FlatButton(
-                child: Text(cancelText ?? '取消'),
+              NormalFlatButton(
+                text: cancelText ?? '取消',
                 onPressed: () {
                   if (onCancel != null) {
                     onCancel();
@@ -104,8 +105,8 @@ class DialogUtils {
                   AppNavigate.pop();
                 },
               ),
-              FlatButton(
-                child: Text(confirmText ?? '确定'),
+              NormalFlatButton(
+                text: confirmText ?? '确定',
                 onPressed: onConfirmCallback,
               )
             ],

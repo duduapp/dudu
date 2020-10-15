@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/models/logined_user.dart';
 
 class StringUtil {
   static String displayName(OwnerAccount item) {
@@ -29,6 +30,10 @@ class StringUtil {
     );
 
     return htmlText?.replaceAll(exp, '');
+  }
+
+  static String strWithAccountPrefix(String key) {
+    return accountFullAddress(LoginedUser().account)+'/'+key;
   }
 
   static String urlToFullAccountAddress(String url) {
