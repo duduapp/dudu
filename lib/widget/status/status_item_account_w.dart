@@ -54,7 +54,7 @@ class StatusItemAccountW extends StatelessWidget {
                       TextSpan(
                           text: '@' + status.account.acct,
                           style: TextStyle(
-                              color: Theme.of(context).textTheme.bodyText1.color))
+                              color: Theme.of(context).textTheme.subtitle1.color))
                     ]),
                     textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
                     maxLines: 1,

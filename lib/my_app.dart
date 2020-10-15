@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
       child: ThemeProvider(
           themes: [
             AppTheme(id: '普通模式', data: ThemeUtil.lightTheme(context), description: ''),
+            AppTheme(id: '暗色模式', data: ThemeUtil.lightDartTheme(context), description: ''),
             AppTheme(id: '深色模式', data: ThemeUtil.darkTheme(context), description: ''),
           ],
           saveThemesOnChange: true,

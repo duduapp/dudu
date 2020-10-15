@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
       return Icon(_tabIcons[index],
           color: activeColor,); //_tabSelectedImages[index];
     } else {
-      return Icon(_tabIcons[index],color: Theme.of(context).textTheme.bodyText1.color,); //_tabImages[index];
+      return Icon(_tabIcons[index],color: Theme.of(context).textTheme.bodyText2.color,); //_tabImages[index];
     }
   }
 
@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
         style: TextStyle(color: activeColor, fontWeight: FontWeight.normal),
       );
     } else {
-      return Text(_tabTitles[index],style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),);
+      return Text(_tabTitles[index],style: TextStyle(color: Theme.of(context).textTheme.bodyText2.color),);
     }
   }
 
@@ -113,6 +113,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
             children: [
               Divider(height: 0,),
               CupertinoTabBar(
+                backgroundColor: Theme.of(context).appBarTheme.color,
                 iconSize: 30,
                 items: [
                   BottomNavigationBarItem(

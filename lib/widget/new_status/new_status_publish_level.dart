@@ -45,7 +45,7 @@ class NewStatusPublishLevel extends StatelessWidget {
             ),
             leftIcon.icon == currentIcon.icon ? Padding(
               padding: EdgeInsets.all(15),
-              child: Icon(Icons.check),
+              child: Icon(Icons.check,color: Theme.of(context).buttonColor,),
             ): Container(),
           ],
         ),

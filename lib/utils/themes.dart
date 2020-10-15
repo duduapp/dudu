@@ -15,6 +15,9 @@ class ThemeUtil {
           InputDecorationTheme(fillColor: Color.fromRGBO(240, 240, 240, 1)),
       backgroundColor: Color.fromRGBO(238, 238, 238, 1),
       buttonColor: Colors.blue,
+      textTheme: TextTheme(
+        headline5: TextStyle(color: Color.fromRGBO(68, 75, 91, 1))
+      ),
       bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
       splashColor: Colors.transparent,
       accentColor: Colors.grey[600],
@@ -43,5 +46,29 @@ class ThemeUtil {
         buttonColor: Colors.blue //Colors.grey[800],
 
         );
+  }
+
+  static ThemeData lightDartTheme(BuildContext context) {
+    return ThemeData.dark().copyWith(
+        primaryColor: Color.fromRGBO(49,52,67, 1),
+        accentColor: Color.fromRGBO(154, 174, 199, 1),
+        textTheme: TextTheme(
+          bodyText1: TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
+          subtitle1: TextStyle(color: Color.fromRGBO(216, 225, 232, 1)),
+          headline5: TextStyle(color: Color.fromRGBO(154, 174, 199, 1)), // 转嘟前面颜色
+          bodyText2: TextStyle(color: Color.fromRGBO(226, 226, 226, 1)),),
+
+        toggleableActiveColor: Colors.blue,
+        backgroundColor: Color.fromRGBO(40, 44, 53, 1),
+        appBarTheme:
+        AppBarTheme(color: Color.fromRGBO(68, 75, 93, 1), elevation: 1.0),
+        splashColor: Colors.transparent,
+        scaffoldBackgroundColor: Color.fromRGBO(40,44,55, 1),
+        buttonColor: Colors.blue, //Colors.grey[800],
+        dialogTheme: DialogTheme(backgroundColor: Color.fromRGBO(49,52,67, 1)),
+      bottomSheetTheme: BottomSheetThemeData(backgroundColor: Color.fromRGBO(49,52,67, 1)),
+      cardColor: Color.fromRGBO(40,44,55, 1),
+
+    );
   }
 }

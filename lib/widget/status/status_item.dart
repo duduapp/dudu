@@ -170,14 +170,14 @@ class StatusItem extends StatelessWidget {
                 children: <Widget>[
                   Icon(
                     icon,
-                    color: Theme.of(context).buttonColor,
+                    color: Theme.of(context).accentColor,
                     size: 18,
                   ),
                   SizedBox(
                     width: 5,
                   ),
                   TextWithEmoji(
-                    style: TextStyle(fontSize: 12.5,color: Theme.of(context).textTheme.bodyText1.color),
+                    style: TextStyle(fontSize: 12.5,color: Theme.of(context).accentColor,),
                     text: str,
                     emojis: refAccount == null
                         ? item.account.emojis
