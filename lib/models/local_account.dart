@@ -41,8 +41,8 @@ class LocalAccount {
 class LocalStorageAccount {
   static List<LocalAccount> accounts = [];
 
-  static Future<List<LocalAccount>> load() async{
-    List<String> accs = await Storage.getStringList('mastodon_accounts');
+  static List<LocalAccount> load() {
+    List<String> accs = Storage.getStringList('mastodon_accounts');
     if (accs == null) return [];
     List<LocalAccount> storageAccounts = [];
     for (String s in accs) {
@@ -54,7 +54,7 @@ class LocalStorageAccount {
   static Future<List<LocalAccount>> getAccounts() async{
     if (accounts.isNotEmpty) return accounts;
 
-    accounts = await load();
+    accounts = load();
     return accounts;
   }
 

@@ -109,6 +109,12 @@ class _LoginState extends State<Login> {
         user.token = token;
         user.host = hostUrl;
         OwnerAccount account = await AccountsApi.getMyAccount();
+        if (account == null) {
+          DialogUtils.toastErrorInfo('出现错误，可以稍后试试');
+          setState(() {
+            isLoading = false;
+          });
+        }
 
         LocalAccount localAccount = LocalAccount(hostUrl: hostUrl,token: token,active: true,account: account);
         await LocalStorageAccount.addLocalAccount(localAccount);
@@ -127,9 +133,10 @@ class _LoginState extends State<Login> {
         // eventBus.emit(EventBusKey.HidePresentWidegt);
       });
     } catch (e) {
-      await DialogUtils.showInfoDialog(context,'出现一些错误，可以重试看看');
-      pushAndRemoveUntil(Login());
-      throw e;
+      DialogUtils.toastErrorInfo('出现错误，可以稍后试试');
+      setState(() {
+        isLoading = false;
+      });
       debugPrint(e);
     }
   }

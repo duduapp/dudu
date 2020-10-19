@@ -170,7 +170,7 @@ class StatusItem extends StatelessWidget {
                 children: <Widget>[
                   Icon(
                     icon,
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).buttonColor,
                     size: 18,
                   ),
                   SizedBox(

@@ -176,7 +176,7 @@ class Request {
           }
           response = await client.get(
             buildGetUrl(_realUrl(url), params),
-          );
+          ).timeout(Duration(seconds: 10));
 
           //
           break;
@@ -184,7 +184,7 @@ class Request {
           //response = await dio.post(url, data: params,cancelToken: cancelToken);
           response = await getGetClient().post(_realUrl(url),
               headers: {'Content-Type': 'application/json'},
-              body: json.encode(params));
+              body: json.encode(params)).timeout(Duration(seconds: 10));
           break;
         case RequestType.put:
           response = await client.put(_realUrl(url), body: params);
@@ -206,7 +206,7 @@ class Request {
         ));
     } catch (e) {
       dialog?.hide();
-      DialogUtils.toastErrorInfo('网络请求出错');
+     // DialogUtils.toastErrorInfo('网络请求出错');
       RuntimeConfig.error = e;
       return null;
     }

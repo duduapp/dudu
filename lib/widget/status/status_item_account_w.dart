@@ -58,7 +58,8 @@ class StatusItemAccountW extends StatelessWidget {
                     ]),
                     textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
                   ),
                   Spacer(),
                   RichText(

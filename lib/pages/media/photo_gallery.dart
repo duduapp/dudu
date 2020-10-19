@@ -81,11 +81,18 @@ class _PhotoGalleryState extends State<PhotoGallery> {
               itemCount: widget.galleryItems.length,
               loadFailedChild: Container(
                 color: Colors.black,
-                child: Center(
-                  child: Text(
-                    '图片加载出现错误',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
+                child: PhotoView(
+                  imageProvider: CachedNetworkImageProvider(
+                      widget.galleryItems[currentIndex].previewUrl,
+                      cacheManager: CustomCacheManager()),
+                  heroAttributes: PhotoViewHeroAttributes(
+                      tag: widget.galleryItems[currentIndex].id),
+                  initialScale: PhotoViewComputedScale.contained,
+                  minScale: PhotoViewComputedScale.contained,
+                  maxScale: PhotoViewComputedScale.contained * 2,
+                  loadingBuilder: (context, event) {
+                    return Container();
+                  },
                 ),
               ),
               loadingBuilder: (context, event) => Stack(
@@ -99,7 +106,11 @@ class _PhotoGalleryState extends State<PhotoGallery> {
                       heroAttributes: PhotoViewHeroAttributes(
                           tag: widget.galleryItems[currentIndex].id),
                       initialScale: PhotoViewComputedScale.contained,
-                      loadingBuilder: (context,event) {return Container();},
+                      minScale: PhotoViewComputedScale.contained,
+                      maxScale: PhotoViewComputedScale.contained * 2,
+                      loadingBuilder: (context, event) {
+                        return Container();
+                      },
                     ),
                   ),
                   Center(
@@ -129,12 +140,13 @@ class _PhotoGalleryState extends State<PhotoGallery> {
       title: widget.galleryItems.length > 1
           ? '${currentIndex + 1}/${widget.galleryItems.length}'
           : '',
-      onDownloadClick: () async => await MediaUtil.downloadMedia(widget.galleryItems[currentIndex]),
+      onDownloadClick: () async =>
+          await MediaUtil.downloadMedia(widget.galleryItems[currentIndex]),
       onShareClick: _onShareClick,
     );
   }
 
-  _onShareClick() async{
+  _onShareClick() async {
     await MediaUtil.shareMedia(widget.galleryItems[currentIndex]);
   }
 

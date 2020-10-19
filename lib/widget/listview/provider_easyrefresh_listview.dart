@@ -152,8 +152,7 @@ class _ProviderEasyRefreshListViewState
                     onNotification: (ScrollNotification notification) {
                       double progress = notification.metrics.maxScrollExtent -
                           notification.metrics.pixels;
-                      if (progress < 2000 &&
-                          provider.list.length != requestLoadSize &&
+                      if (progress < 2000  &&
                           provider.enableLoad) {
                         requestLoadSize = provider.list.length;
                         provider.load();

@@ -4,6 +4,7 @@ import 'package:dudu/pages/login/login.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
+import 'package:dudu/widget/other/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
 
@@ -209,8 +210,8 @@ class _AccountSwitchState extends State<AccountSwitch> {
             // margin: EdgeInsets.only(bottom: 10),
             color: Theme.of(context).primaryColor,
             child: ListTile(
-              leading: CachedNetworkImage(
-                imageUrl: accountInfo.account?.avatarStatic,
+              leading: Avatar(
+                account: accountInfo.account,
               ),
               title: Row(
                 children: <Widget>[
