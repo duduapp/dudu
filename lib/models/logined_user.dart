@@ -10,6 +10,7 @@ class LoginedUser {
   String token;
 
   OwnerAccount account;
+  String _fullAddress;
   bool _isAdmin;
 
   // 工厂模式
@@ -30,6 +31,12 @@ class LoginedUser {
     host = localAccount.hostUrl;
     token = localAccount.token;
     account = localAccount.account;
+  }
+
+  String get fullAddress {
+    if (_fullAddress == null)
+      _fullAddress = StringUtil.accountFullAddress(account);
+    return _fullAddress;
   }
 
   bool get isAdmin {

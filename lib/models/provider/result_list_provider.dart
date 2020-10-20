@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:dudu/db/tb_cache.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/models/runtime_config.dart';
 import 'package:dudu/public.dart';
@@ -7,6 +10,8 @@ import 'package:dudu/utils/request.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import '../logined_user.dart';
 
 typedef ResultListDataHandler = Function(dynamic data);
 typedef RowBuilder = Function(int idx, List data, ResultListProvider provider);
@@ -42,6 +47,7 @@ class ResultListProvider extends ChangeNotifier {
   bool get mounted => _mounted;
 
   RefreshController refreshController;
+  ScrollController scrollController;
 
   /// map key 的优先级高于 data handler
   ResultListProvider(
@@ -56,11 +62,10 @@ class ResultListProvider extends ChangeNotifier {
       this.listenBlockEvent = false,
       this.onlyMedia = false,
       this.dataHandler,
-        bool firstRefresh = true,
+      bool firstRefresh = true,
       bool showLoading = true, // 给list 第一次赋值，刷新后用结果值
-        this.enableCache = false,
+      this.enableCache = false,
       this.tag}) {
-
     if (listenBlockEvent) {
       _addEvent(EventBusKey.blockAccount, (arg) {
         var accountId = arg['account_id'];
@@ -75,11 +80,8 @@ class ResultListProvider extends ChangeNotifier {
       });
     }
 
-    if (firstRefresh)
-    refresh(showLoading: showLoading);
+    if (firstRefresh) refresh(showLoading: showLoading);
   }
-
-
 
   reConstructFilterList() {
     list = _filterData(list);
@@ -87,7 +89,7 @@ class ResultListProvider extends ChangeNotifier {
   }
 
   _filterData(List data) {
-    if (['home','thread'].contains(tag)) {
+    if (['home', 'thread'].contains(tag)) {
       return FilterUtil.filterData(data, tag);
     }
 
@@ -95,7 +97,7 @@ class ResultListProvider extends ChangeNotifier {
       return FilterUtil.filterData(data, tag, mapKey: 'status');
     }
 
-    if (['local','federated'].contains(tag)) {
+    if (['local', 'federated'].contains(tag)) {
       return FilterUtil.filterData(data, 'public');
     }
     return List.from(data);
@@ -131,12 +133,10 @@ class ResultListProvider extends ChangeNotifier {
     }
   }
 
-
   Future<void> load() async {
     if (headerLinkPagination != null && headerLinkPagination == true) {
       if (nextUrl != null) {
-       await _startRequest(nextUrl);
-
+        await _startRequest(nextUrl);
       }
     } else {
       String appendOffset = "";
@@ -160,12 +160,13 @@ class ResultListProvider extends ChangeNotifier {
       lastRequestUrl = url;
     }
 
-
-
     var response;
     try {
       response = await Request.get(
-          url: url, returnAll: true, cancelToken: token,enableCache: enableCache);
+          url: url,
+          returnAll: true,
+          cancelToken: token,
+          enableCache: enableCache);
     } catch (e) {
       return false;
     }
@@ -185,9 +186,9 @@ class ResultListProvider extends ChangeNotifier {
       return false;
     } else if (response is DioError) {
       return false;
-    } else if (response == null){
+    } else if (response == null) {
       return false;
-    }else{
+    } else {
       error = null;
     }
     var data = response.body;
@@ -200,31 +201,7 @@ class ResultListProvider extends ChangeNotifier {
       data = dataHandler(data);
     }
 
-    if (data.length > 0 && data[data.length - 1].isNotEmpty && !headerLinkPagination) {
-      lastCellId = data[data.length - 1]['id'];
-    }
-
-    // 下拉刷新的时候，只需要将新的数组赋值到数据list中
-    // 上拉加载的时候，需要将新的数组添加到现有数据list中
-    if (refresh == true) {
-      list = _filterData(data);
-      if (data.length == 0) {
-        noResults = true;
-      } else {
-        noResults = false;
-      }
-    } else {
-      list.addAll(_filterData(data));
-    }
-
-    if (data.length == 0) {
-      finishLoad = true;
-    } else {
-      finishLoad = false;
-    }
-    if (reverseData && enableRefresh) {
-      list = _filterData(list.reversed);
-    }
+    addData(data, refresh);
 
     if (headerLinkPagination != null && headerLinkPagination == true) {
       if (response.headers.containsKey('link')) {
@@ -244,6 +221,75 @@ class ResultListProvider extends ChangeNotifier {
     return true;
   }
 
+  addData(List data, bool refresh) {
+    if (data.length > 0 &&
+        data[data.length - 1].isNotEmpty &&
+        !headerLinkPagination) {
+      lastCellId = data[data.length - 1]['id'];
+    }
+    // 下拉刷新的时候，只需要将新的数组赋值到数据list中
+    // 上拉加载的时候，需要将新的数组添加到现有数据list中
+    if (refresh == true) {
+      list = _filterData(data);
+      if (data.length == 0) {
+        noResults = true;
+      } else {
+        noResults = false;
+      }
+    } else {
+      list.addAll(_filterData(data));
+    }
+    if (data.length == 0) {
+      finishLoad = true;
+    } else {
+      finishLoad = false;
+    }
+    if (reverseData && enableRefresh) {
+      list = _filterData(list.reversed);
+    }
+  }
+
+  loadCacheDataOrRefresh() async {
+    error = null;
+    isLoading = true;
+    notifyListeners();
+
+    var cache = await TbCacheHelper.getCache(LoginedUser().fullAddress, tag);
+    TbCacheHelper.removeCache(LoginedUser().fullAddress, tag);
+    if (cache == null) {
+      await refresh(showLoading: true);
+    } else {
+      addData(json.decode(cache.content), true);
+    }
+
+    isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> checkCachePosition() async {
+    var scrollPositionCache = await TbCacheHelper.getCache(LoginedUser().fullAddress,tag+'/sp');
+    TbCacheHelper.removeCache(LoginedUser().fullAddress,tag+'/sp');
+    if (scrollPositionCache != null) {
+      scrollController.jumpTo(double.parse(scrollPositionCache.content));
+    }
+  }
+
+  saveDataToCache() {
+    TbCacheHelper.setCache(TbCache(
+        account: LoginedUser().fullAddress,
+        tag: tag,
+        content: json.encode(list),));
+    TbCacheHelper.setCache(TbCache(
+      account: LoginedUser().fullAddress,
+      tag: tag+'/sp',
+      content: scrollController.position.pixels.toString()
+    ));
+  }
+
+  removeCache() {
+    TbCacheHelper.removeCache(LoginedUser().fullAddress, tag);
+    TbCacheHelper.removeCache(LoginedUser().fullAddress,tag+'/sp');
+  }
 
 
   removeByIdWithAnimation(String id) {
@@ -312,7 +358,7 @@ class ResultListProvider extends ChangeNotifier {
     }
     list.insert(0, data);
     if (listKey != null)
-    listKey?.currentState?.insertItem(0);
+      listKey?.currentState?.insertItem(0);
     else
       notifyListeners();
   }
@@ -335,9 +381,8 @@ class ResultListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  setData(List listData,{bool updateNoResults = true}) {
-    if (updateNoResults)
-      noResults = false;
+  setData(List listData, {bool updateNoResults = true}) {
+    if (updateNoResults) noResults = false;
     list = _filterData(listData);
     notifyListeners();
   }

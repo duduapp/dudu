@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/db/tb_cache.dart';
+import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/search/search_page_delegate.dart';
@@ -31,8 +35,7 @@ class Timeline extends StatefulWidget {
 
 class _TimelineState extends State<Timeline> {
   ScrollController _scrollController = ScrollController();
-  RefreshController refreshController = RefreshController();
-  GlobalKey _stackKey = GlobalKey();
+  RefreshController _refreshController = RefreshController();
   GZXDropdownMenuController _menuController = GZXDropdownMenuController();
   ResultListProvider provider;
 
@@ -55,6 +58,7 @@ class _TimelineState extends State<Timeline> {
         break;
     }
     provider = ResultListProvider(
+        firstRefresh: false,
         requestUrl: url,
         tag: widget.type.toString().split('.').last,
         buildRow: ListViewUtil.statusRowFunction(),
@@ -72,14 +76,23 @@ class _TimelineState extends State<Timeline> {
         SettingsProvider().federatedProvider = provider;
         break;
     }
-    provider.refreshController = refreshController;
+    provider.refreshController = _refreshController;
+    provider.scrollController = _scrollController;
+
+    provider.loadCacheDataOrRefresh();
+
+    WidgetsBinding.instance
+        .addPostFrameCallback((_){
+      provider.checkCachePosition();
+    });
   }
+
 
   @override
   void dispose() {
     super.dispose();
     _scrollController.dispose();
-    refreshController.dispose();
+    _refreshController.dispose();
     _menuController.dispose();
   }
 
@@ -102,7 +115,7 @@ class _TimelineState extends State<Timeline> {
       listView: ProviderEasyRefreshListView(
         type: widget.type,
         scrollController: _scrollController,
-        refreshController: refreshController,
+        refreshController: _refreshController,
       ),
       title: title,
       actions: [

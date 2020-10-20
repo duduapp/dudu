@@ -52,7 +52,7 @@ class Request {
       bool showDialog = true,
       String dialogMessage,
       String successMessage,
-        bool returnAll,
+        bool returnAll = false,
       int closeDilogDelay}) async {
     return await _request(
       requestType: RequestType.post,

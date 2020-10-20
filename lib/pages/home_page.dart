@@ -34,8 +34,25 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     if (state == AppLifecycleState.resumed) {
       UpdateTask.checkUpdateIfNeed();
       CheckRoleTask.checkUserRole();
+
+      removeState();
+    } else if (state == AppLifecycleState.paused) {
+      saveState();
     }
   }
+
+  saveState() {
+    SettingsProvider().homeProvider.saveDataToCache();
+    SettingsProvider().localProvider.saveDataToCache();
+    SettingsProvider().federatedProvider.saveDataToCache();
+  }
+
+  removeState() {
+    SettingsProvider().homeProvider.removeCache();
+    SettingsProvider().localProvider.removeCache();
+    SettingsProvider().federatedProvider.removeCache();
+  }
+
 
   int _tabIndex;
 
