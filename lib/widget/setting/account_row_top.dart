@@ -5,16 +5,19 @@ import 'package:dudu/public.dart';
 import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/widget/other/avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:mk_drop_down_menu/mk_drop_down_menu.dart';
 
 class AccountRowTop extends StatelessWidget {
   final LocalAccount account;
+  final MKDropDownMenuController controller;
   
-  AccountRowTop(this.account);
+  AccountRowTop(this.account,[this.controller]);
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         if (!account.active) {
+          controller?.hideMenu();
           AccountUtil.switchToAccount(account);
         }
       },
