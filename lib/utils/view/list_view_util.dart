@@ -1,15 +1,22 @@
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/api/status_api.dart';
+import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/models/json_serializable/notificate_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/widget/common/list_row.dart';
+import 'package:dudu/widget/other/follow_cell.dart';
+import 'package:dudu/widget/other/follow_request_cell.dart';
 import 'package:dudu/widget/status/status_item.dart';
 import 'package:dudu/widget/status/status_item_account.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../string_until.dart';
 
 class ListViewUtil {
   static statusRowFunction() {
@@ -19,10 +26,50 @@ class ListViewUtil {
     };
   }
 
+
   static accountRowFunction() {
     return (int index, List data, ResultListProvider provider) {
       OwnerAccount account = OwnerAccount.fromJson(data[index]);
       return ListRow(child: StatusItemAccount(account),padding: 0,);
+    };
+  }
+
+  static notificationRowFunction() {
+    return  (int index, List data, ResultListProvider provider) {
+      NotificationItem item = NotificationItem.fromJson(data[index]);
+      if (item.type == 'follow') {
+        return FollowCell(
+          item: item,
+        );
+      } else if (item.type == 'favourite') {
+        return StatusItem(
+          item: item.status,
+          refIcon: IconFont.thumbUp,
+          refString: '${StringUtil.displayName(item.account)} 收藏了你的嘟文',
+          refAccount: item.account,);
+      } else if (item.type == 'mention') {
+        return StatusItem(
+          item: item.status,
+        );
+      } else if (item.type == 'poll') {
+        bool self = item.status.account == LoginedUser().account;
+        return StatusItem(
+          item: item.status,
+          refIcon: IconFont.vote,
+          refString: '你${self ? '创建' : '参与'}的投票已结束',
+        );
+      } else if (item.type == 'reblog') {
+        return StatusItem(
+          item: item.status,
+          refIcon: IconFont.reblog,
+          refString: '${StringUtil.displayName(item.account)} 转嘟了你的嘟文',
+          refAccount: item.account,
+        );
+      } else if (item.type == 'follow_request') {
+        return FollowRequestCell(item: item,);
+      }else {
+        return Container();
+      }
     };
   }
 

@@ -9,8 +9,10 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class TimelineContent extends StatefulWidget {
   final String url;
   final String tag;
+  final RowBuilder rowBuilder;
+  final bool prefixId; // solve hero problem
 
-  TimelineContent({this.url, this.tag});
+  TimelineContent({this.url, this.tag,this.rowBuilder,this.prefixId = true});
   @override
   _TimelineContentState createState() => _TimelineContentState();
 }
@@ -26,10 +28,10 @@ class _TimelineContentState extends State<TimelineContent> {
         firstRefresh: false,
         requestUrl: widget.url,
         tag: widget.tag,
-        buildRow: ListViewUtil.statusRowFunction(),
+        buildRow: widget.rowBuilder ?? ListViewUtil.statusRowFunction(),
         listenBlockEvent: false,
         dataHandler:
-            ListViewUtil.dataHandlerPrefixIdFunction(widget.tag + "##"));
+             widget.prefixId ? ListViewUtil.dataHandlerPrefixIdFunction(widget.tag + "##"): null) ;
     switch (widget.tag) {
       case 'home':
         SettingsProvider().homeProvider = provider;
