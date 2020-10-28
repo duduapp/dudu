@@ -1,10 +1,12 @@
 import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/timeline/hashtag_timeline.dart';
 import 'package:dudu/pages/user_profile/user_profile.dart';
 import 'package:dudu/pages/webview/inner_browser.dart';
 import 'package:dudu/plugin/flutter_html/flutter_html.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/view/status_action_util.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 
@@ -83,7 +85,7 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
             if (mention['url'] == link) {
               AppNavigate.push(
                   UserProfile(
-                    accountId: mention['id'],
+                    OwnerAccount.fromJson(mention),!StatusActionUtil.sameInstance(context)
                   ));
               return;
             }

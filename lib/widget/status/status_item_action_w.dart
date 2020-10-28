@@ -1,12 +1,18 @@
+import 'package:dudu/api/search_api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
+import 'package:dudu/models/logined_user.dart';
+import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/status/new_status.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/app_navigate.dart';
+import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/utils/view/list_view_util.dart';
 import 'package:dudu/utils/view/status_action_util.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
+import 'package:provider/provider.dart';
 
 class StatusItemActionW extends StatelessWidget {
   final StatusItemData status;
@@ -45,7 +51,11 @@ class StatusItemActionW extends StatelessWidget {
               ],
 
             InkWell(
-              onTap: () => AppNavigate.push(NewStatus(replyTo: status)),
+              onTap: () async{
+                var realStatus = await StatusActionUtil.getStatusInLocal(context,status);
+                if (realStatus == null) return;
+                AppNavigate.push(NewStatus(replyTo: realStatus));
+              },
               child: Padding(
                 padding: EdgeInsets.all(subStatus ? 4.0 : 8.0),
                 child: Row(
@@ -97,7 +107,7 @@ class StatusItemActionW extends StatelessWidget {
                       : Text(text,
                           style: TextStyle(
                               fontSize: fontSize - 1,
-                              color: isLiked
+                              color: isLiked != null && isLiked
                                   ? Colors.blue[800]
                                   : Theme.of(context).accentColor));
                 },
@@ -111,7 +121,7 @@ class StatusItemActionW extends StatelessWidget {
                             fontSize: fontSize ,
 
 
-                            color: status.reblogged
+                            color: status.reblogged != null && status.reblogged
                                 ? Colors.blue[800]
                                 : Theme.of(context).accentColor),
                       ),
@@ -123,7 +133,7 @@ class StatusItemActionW extends StatelessWidget {
                   );
                 },
                 likeBuilder: (bool isLiked) {
-                  return isLiked
+                  return isLiked != null && isLiked
                       ? Icon(
                           IconFont.reblog,
                           color: Colors.blue[800],
@@ -135,7 +145,7 @@ class StatusItemActionW extends StatelessWidget {
                           size: iconSize,
                         );
                 },
-                isLiked: status.reblogged,
+                isLiked: status.reblogged == null ? false : status.reblogged,
                 bubblesColor: BubblesColor(
                     dotPrimaryColor: Colors.blue[700],
                     dotSecondaryColor: Colors.blue[300]),
@@ -155,7 +165,7 @@ class StatusItemActionW extends StatelessWidget {
                     : Text(text,
                         style: TextStyle(
                             fontSize: fontSize - 1,
-                            color: isLiked ? Colors.yellow[800] : color));
+                            color: isLiked != null && isLiked ? Colors.yellow[800] : color));
               },
               countDecoration: (Widget count, int likeCount) {
                 return Row(
@@ -165,7 +175,7 @@ class StatusItemActionW extends StatelessWidget {
                       subStatus ? '':'收藏',
                       style: TextStyle(
                           fontSize: fontSize,
-                          color: status.favourited
+                          color: status.favourited != null && status.favourited
                               ? Colors.yellow[800]
                               : Theme.of(context).accentColor),
                     ),
@@ -189,7 +199,7 @@ class StatusItemActionW extends StatelessWidget {
                         size: iconSize,
                       );
               },
-              isLiked: status.favourited,
+              isLiked: status.favourited ?? false,
               onTap: (isLiked) => StatusActionUtil.favourite(isLiked, status ,context),
             ),
           ],

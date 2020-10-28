@@ -33,7 +33,12 @@ class Request {
       bool returnAll = false,
       Map header,
       CancelToken cancelToken,
-      bool enableCache = false}) async {
+      HttpClient httpClient,
+      bool enableCache = false,
+      bool withToken = true,
+      String handlingMessage,
+      String successMessage,
+      int closeDialogDelay}) async {
     return await _request(
         requestType: RequestType.get,
         url: url,
@@ -42,7 +47,11 @@ class Request {
         returnAll: returnAll,
         header: header,
         cancelToken: cancelToken,
-        enableCache: enableCache);
+        enableCache: enableCache,
+        handlingMessage: handlingMessage,
+        successMessage: successMessage,
+        withToken: withToken,
+        closeDialogDelay: closeDialogDelay);
   }
 
   static Future post(
@@ -52,19 +61,18 @@ class Request {
       bool showDialog = true,
       String dialogMessage,
       String successMessage,
-        bool returnAll = false,
+      bool returnAll = false,
       int closeDilogDelay}) async {
     return await _request(
-      requestType: RequestType.post,
-      url: url,
-      params: params,
-      errMsg: errMsg,
-      showDialog: showDialog,
-      dialogMessage: dialogMessage,
-      successMessage: successMessage,
-      closeDialogDelay: closeDilogDelay,
-      returnAll: returnAll
-    );
+        requestType: RequestType.post,
+        url: url,
+        params: params,
+        errMsg: errMsg,
+        showDialog: showDialog,
+        handlingMessage: dialogMessage,
+        successMessage: successMessage,
+        closeDialogDelay: closeDilogDelay,
+        returnAll: returnAll);
   }
 
   static Future put(
@@ -79,7 +87,7 @@ class Request {
         params: params,
         errMsg: errMsg,
         showDialog: showDialog,
-        dialogMessage: dialogMessage);
+        handlingMessage: dialogMessage);
   }
 
   static Future patch(
@@ -94,7 +102,7 @@ class Request {
         params: params,
         errMsg: errMsg,
         showDialog: showDialog,
-        dialogMessage: dialogMessage);
+        handlingMessage: dialogMessage);
   }
 
   static Future delete(
@@ -109,7 +117,7 @@ class Request {
         params: params,
         errMsg: errMsg,
         showDialog: showDialog,
-        dialogMessage: dialogMessage);
+        handlingMessage: dialogMessage);
   }
 
   static uploadFile({String url, File file}) async {
@@ -124,7 +132,8 @@ class Request {
     return json.decode(res);
   }
 
-  static requestDio({String url,dynamic params,RequestType type = RequestType.post}) async{
+  static requestDio(
+      {String url, dynamic params, RequestType type = RequestType.post}) async {
     var response;
     switch (type) {
       case RequestType.post:
@@ -144,58 +153,83 @@ class Request {
       Object params,
       String errMsg,
       bool showDialog,
-      String dialogMessage,
+      String handlingMessage,
       String successMessage,
       int closeDialogDelay,
       bool returnAll = false,
       Map header,
       CancelToken cancelToken,
-      bool enableCache = false}) async {
+      bool enableCache = false,
+      bool withToken = true}) async {
+    //some request do not need token
     ProgressDialog dialog;
     http.Response response;
     HttpClient client = getGetClient();
     debugPrint(url);
     if (showDialog != null && showDialog == true) {
-      dialog = await DialogUtils.showProgressDialog(dialogMessage ?? '处理中...');
+      dialog =
+          await DialogUtils.showProgressDialog(handlingMessage ?? '处理中...');
     }
-    if (header != null && header.isNotEmpty) {
-
-    }
+    if (header != null && header.isNotEmpty) {}
     try {
       switch (requestType) {
         case RequestType.get:
           if (enableCache) {
-            var response = await getDioWithCache().get(url, queryParameters: params,cancelToken: cancelToken,options: enableCache ? buildCacheOptions(Duration(days: 1)) : null);
+            var response;
+            if (withToken)
+              response = await getDioWithCache().get(url,
+                  queryParameters: params,
+                  cancelToken: cancelToken,
+                  options: enableCache
+                      ? buildCacheOptions(Duration(days: 1))
+                      : null);
+            else
+              response = await Dio().get(url,
+                  queryParameters: params,
+                  cancelToken: cancelToken,
+                  options: enableCache
+                      ? buildCacheOptions(Duration(days: 1))
+                      : null);
             if (returnAll) {
               dialog?.hide();
-              return HttpResponse(response.data,response.headers.map,response.statusCode);
+              return HttpResponse(
+                  response.data, response.headers.map, response.statusCode);
             } else {
               dialog?.hide();
               return response.data;
             }
           }
-          response = await client.get(
-            buildGetUrl(_realUrl(url), params),
-          ).timeout(Duration(seconds: 10));
+          if (withToken || url.startsWith('https://'))
+            response = await client
+                .get(
+                  buildGetUrl(_realUrl(url), params),
+                )
+                .timeout(Duration(seconds: 10));
+          else
+            response = await http
+                .get(
+                  buildGetUrl(_realUrl(url), params),
+                )
+                .timeout(Duration(seconds: 10));
 
           //
           break;
         case RequestType.post:
           //response = await dio.post(url, data: params,cancelToken: cancelToken);
-          response = await getGetClient().post(_realUrl(url),
-              headers: {'Content-Type': 'application/json'},
-              body: json.encode(params)).timeout(Duration(seconds: 10));
+          response = await getGetClient()
+              .post(_realUrl(url),
+                  headers: {'Content-Type': 'application/json'},
+                  body: json.encode(params))
+              .timeout(Duration(seconds: 10));
           break;
         case RequestType.put:
           response = await client.put(_realUrl(url), body: params);
           break;
         case RequestType.delete:
-          response =
-              await client.delete(buildGetUrl(_realUrl(url), params));
+          response = await client.delete(buildGetUrl(_realUrl(url), params));
           break;
         case RequestType.patch:
-          response =
-              await client.patch(url, body: params);
+          response = await client.patch(url, body: params);
           break;
       }
       if (closeDialogDelay != 0)
@@ -206,7 +240,7 @@ class Request {
         ));
     } catch (e) {
       dialog?.hide();
-     // DialogUtils.toastErrorInfo('网络请求出错');
+      // DialogUtils.toastErrorInfo('网络请求出错');
       RuntimeConfig.error = e;
       return null;
     }
@@ -219,29 +253,28 @@ class Request {
       });
     }
     if (returnAll) {
-      return HttpResponse(json.decode(response.body), response.headers, response.statusCode);
+      return HttpResponse(
+          json.decode(response.body), response.headers, response.statusCode);
     }
     if (response.statusCode == 401) {
-      if (!RuntimeConfig.dialogOpened) {
-        DialogUtils.showSimpleAlertDialog(
-            context: navGK.currentState.overlay.context,
-            text: '你的登录信息已失效，你可以退出重新登录',
-            onlyInfo: true)
-            .then((val) {
-          RuntimeConfig.dialogOpened = false;
-        });
-        RuntimeConfig.dialogOpened = true;
-      }
+      // if (!RuntimeConfig.dialogOpened) {
+      //   DialogUtils.showSimpleAlertDialog(
+      //           context: navGK.currentState.overlay.context,
+      //           text: '你的登录信息已失效，你可以退出重新登录',
+      //           onlyInfo: true)
+      //       .then((val) {
+      //     RuntimeConfig.dialogOpened = false;
+      //   });
+      //   RuntimeConfig.dialogOpened = true;
+      // }
     }
-   // debugPrint(response.body);
+    // debugPrint(response.body);
 
     return json.decode(response.body);
-
   }
 
   static _realUrl(String url) {
-    if (url.startsWith('http://') || url.startsWith('https://'))
-      return url;
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
     return LoginedUser().host + url;
   }
 

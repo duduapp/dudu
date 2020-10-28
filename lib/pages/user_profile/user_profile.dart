@@ -39,9 +39,10 @@ import '../setting/model/relation_ship.dart';
 LoginedUser mine = LoginedUser();
 
 class UserProfile extends StatefulWidget {
-  UserProfile({Key key, this.accountId}) : super(key: key);
+  UserProfile(this.account, this.requestOriginal, {Key key}) : super(key: key);
 
-  final String accountId;
+  final OwnerAccount account;
+  final bool requestOriginal;
 
   @override
   _UserProfileState createState() => _UserProfileState();
@@ -87,19 +88,23 @@ class _UserProfileState extends State<UserProfile>
       });
     providers.addAll([
       ResultListProvider(
-        requestUrl: Api.UersArticle(widget.accountId, 'exclude_replies=true'),
+        requestUrl: AccountsApi.statusUrl(
+            widget.account, widget.requestOriginal,
+            param: 'exclude_replies=true'),
         buildRow: ListViewUtil.statusRowFunction(),
         dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('status_'),
         enableRefresh: false,
       ),
       ResultListProvider(
-          requestUrl: AccountsApi.accountStatusUrl(widget.accountId),
+          requestUrl:
+              AccountsApi.statusUrl(widget.account, widget.requestOriginal),
           buildRow: ListViewUtil.statusRowFunction(),
           dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('replies_'),
           enableRefresh: false,
           firstRefresh: false),
       ResultListProvider(
-        requestUrl: AccountsApi.accountStatusUrl(widget.accountId,
+        requestUrl: AccountsApi.statusUrl(
+            widget.account, widget.requestOriginal,
             param: 'pinned=true'),
         buildRow: ListViewUtil.statusRowFunction(),
         dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('pinned_'),
@@ -107,7 +112,8 @@ class _UserProfileState extends State<UserProfile>
         firstRefresh: false,
       ),
       ResultListProvider(
-          requestUrl: AccountsApi.accountStatusUrl(widget.accountId,
+          requestUrl: AccountsApi.statusUrl(
+              widget.account, widget.requestOriginal,
               param: 'only_media=true'),
           buildRow: _buildGridItem,
           enableRefresh: false,
@@ -128,7 +134,9 @@ class _UserProfileState extends State<UserProfile>
   Future<void> _followByid() async {
     Map paramsMap = Map();
     paramsMap['reblogs'] = true;
-
+    if (widget.requestOriginal) {
+      _account = await StatusActionUtil.getAccountInLocal(null, _account);
+    }
     var data = await AccountsApi.follow(_account.id);
     if (data != null) {
       relationShip = RelationShip.fromJson(data);
@@ -173,6 +181,9 @@ class _UserProfileState extends State<UserProfile>
   }
 
   _muteUser() async {
+    if (widget.requestOriginal) {
+      _account = await StatusActionUtil.getAccountInLocal(null, _account);
+    }
     var data = await AccountsApi.mute(_account.id);
     if (data != null) {
       setState(() {
@@ -183,6 +194,9 @@ class _UserProfileState extends State<UserProfile>
   }
 
   _blockUser() async {
+    if (widget.requestOriginal) {
+      _account = await StatusActionUtil.getAccountInLocal(null, _account);
+    }
     var data = await AccountsApi.block(_account.id);
     if (data != null) {
       setState(() {
@@ -213,14 +227,14 @@ class _UserProfileState extends State<UserProfile>
   }
 
   _onPressHideButton() async {
-    if (relationShip.muting) {
-      _onPressUnmute();
-    } else {
+    if (relationShip == null || !relationShip.muting) {
       DialogUtils.showSimpleAlertDialog(
         context: context,
         text: '确定要隐藏@${_account.acct}吗',
         onConfirm: _muteUser,
       );
+    } else {
+      _onPressUnmute();
     }
   }
 
@@ -240,6 +254,8 @@ class _UserProfileState extends State<UserProfile>
   _onPressButton() async {
     if (mine.account.id == _account.id) {
       AppNavigate.push(EditUserProfile(_account));
+    } else if (relationShip == null) {
+      _followByid();
     } else if (relationShip.blocking) {
       _unBlockUser();
     } else if (relationShip.following) {
@@ -261,7 +277,7 @@ class _UserProfileState extends State<UserProfile>
         });
   }
 
-  _showMore() {
+  _showMore() async {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -288,10 +304,13 @@ class _UserProfileState extends State<UserProfile>
                 )
               ],
               if (_account != null && mine.account.id != _account.id) ...[
-                if (!relationShip.blocking && !relationShip.requested) ...[
+                if (relationShip == null ||
+                    !relationShip.blocking && !relationShip.requested) ...[
                   BottomSheetItem(
                     icon: IconFont.follow,
-                    text: relationShip.following ? '取消关注' : '关注',
+                    text: relationShip == null || !relationShip.following
+                        ? '关注'
+                        : '取消关注',
                     onTap: _onPressButton,
                   ),
                   Divider(
@@ -301,7 +320,9 @@ class _UserProfileState extends State<UserProfile>
                 ],
                 BottomSheetItem(
                   icon: IconFont.volumeOff,
-                  text: relationShip.muting ? '取消隐藏' : '隐藏',
+                  text: relationShip == null || !relationShip.muting
+                      ? '隐藏'
+                      : '取消隐藏',
                   subText: '隐藏后该用户的嘟文将不会显示在你的时间轴中',
                   onTap: _onPressHideButton,
                 ),
@@ -311,7 +332,9 @@ class _UserProfileState extends State<UserProfile>
                 ),
                 BottomSheetItem(
                   icon: IconFont.block,
-                  text: relationShip.blocking ? '取消屏蔽' : '屏蔽',
+                  text: relationShip == null || !relationShip.blocking
+                      ? '屏蔽'
+                      : '取消屏蔽',
                   subText: '屏蔽后该用户将无法看到你发的嘟文',
                   onTap: _onPressBlockButton,
                 ),
@@ -333,13 +356,14 @@ class _UserProfileState extends State<UserProfile>
                   indent: 60,
                   height: 0,
                 ),
-                BottomSheetItem(
-                  icon: IconFont.report,
-                  text: '举报',
-                  onTap: () => AppNavigate.push(UserReport(
-                    account: _account,
-                  )),
-                )
+                if (relationShip != null)
+                  BottomSheetItem(
+                    icon: IconFont.report,
+                    text: '举报',
+                    onTap: () => AppNavigate.push(UserReport(
+                      account: _account,
+                    )),
+                  )
               ],
               Container(
                 height: 8,
@@ -421,7 +445,7 @@ class _UserProfileState extends State<UserProfile>
                               text: StringUtil.displayName(_account),
                               emojis: _account.emojis,
                               style: TextStyle(
-                             //     fontWeight: FontWeight.bold,
+                                  //     fontWeight: FontWeight.bold,
                                   color: Theme.of(context)
                                       .textTheme
                                       .bodyText1
@@ -544,13 +568,12 @@ class _UserProfileState extends State<UserProfile>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Expanded(
-            flex: 3,
-            child: HtmlContent(
-              filed['name'],
-              emojis: _account.emojis,
-              //      shrinkToFit: true,
-            )
-          ),
+              flex: 3,
+              child: HtmlContent(
+                filed['name'],
+                emojis: _account.emojis,
+                //      shrinkToFit: true,
+              )),
           Expanded(
             flex: 7,
             child: DefaultTextStyle.merge(
@@ -573,7 +596,7 @@ class _UserProfileState extends State<UserProfile>
   Widget headerFollowsAndFollowers() {
     return DefaultTextStyle(
       style: TextStyle(
-         // fontWeight: FontWeight.bold,
+          // fontWeight: FontWeight.bold,
           fontSize: 16,
           color: Theme.of(context).accentColor),
       child: Row(
@@ -599,7 +622,12 @@ class _UserProfileState extends State<UserProfile>
             width: 10,
           ),
           InkWell(
-            onTap: () => AppNavigate.push(UserFollowing(_account.id)),
+            onTap: () async {
+              if (widget.requestOriginal)
+                _account =
+                    await StatusActionUtil.getAccountInLocal(null, _account);
+              AppNavigate.push(UserFollowing(_account.id));
+            },
             child: Row(
               children: <Widget>[
                 Text(_account.followingCount.toString()),
@@ -618,7 +646,12 @@ class _UserProfileState extends State<UserProfile>
             width: 10,
           ),
           InkWell(
-            onTap: () => AppNavigate.push(UserFollowers(_account.id)),
+            onTap: () async {
+              if (widget.requestOriginal)
+                _account =
+                    await StatusActionUtil.getAccountInLocal(null, _account);
+              AppNavigate.push(UserFollowers(_account.id));
+            },
             child: Row(
               children: <Widget>[
                 Text(_account.followersCount.toString()),
@@ -720,13 +753,14 @@ class _UserProfileState extends State<UserProfile>
           return hero.child;
         },
         child: CachedNetworkImage(
-            progressIndicatorBuilder :  (context, widget,chunk) {
+            progressIndicatorBuilder: (context, widget, chunk) {
               return Container(
                 color: Theme.of(context).accentColor,
               );
             },
             fit: BoxFit.cover,
-            imageUrl: media.previewUrl, cacheManager: CustomCacheManager()),
+            imageUrl: media.previewUrl,
+            cacheManager: CustomCacheManager()),
       ),
     );
   }
@@ -741,21 +775,27 @@ class _UserProfileState extends State<UserProfile>
 
   Future<void> _onRefreshPage({bool firstRefresh = false}) async {
     if (!firstRefresh) providers[_tabController.index]?.refresh();
-    var newAccount = await AccountsApi.getAccount(widget.accountId,
+    var newAccount = await AccountsApi.getAccount(
+        widget.account, widget.requestOriginal,
         cancelToken: cancelToken);
-    var newRelationShip = await AccountsApi.getRelationShip(widget.accountId,
+    var newRelationShip = await AccountsApi.getRelationShip(
+        widget.account, widget.requestOriginal,
         cancelToken: cancelToken);
-    if (newAccount != null && newRelationShip != null && mounted)
-      if (newAccount.acct == mine.account.acct) {
-        mine.account = newAccount;
-        LocalStorageAccount.addOwnerAccount(newAccount);
-      }
-      setState(() {
-        _account = newAccount ?? _account;
-        relationShip = newRelationShip ?? relationShip;
+    if (newAccount != null &&
+        newRelationShip != null &&
+        mounted) if (newAccount.acct == mine.account.acct) {
+      mine.account = newAccount;
+      LocalStorageAccount.addOwnerAccount(newAccount);
+    }
+    if (newAccount == null) {
+      DialogUtils.showInfoDialog(context, '获取用户信息失败，也许服务器开启了权限验证');
+    }
+    setState(() {
+      _account = newAccount ?? _account;
+      relationShip = newRelationShip ?? relationShip;
 
-        _resetExpandHeight();
-      });
+      _resetExpandHeight();
+    });
   }
 
   @override

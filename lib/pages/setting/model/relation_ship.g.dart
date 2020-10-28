@@ -8,16 +8,17 @@ part of 'relation_ship.dart';
 
 RelationShip _$RelationShipFromJson(Map<String, dynamic> json) {
   return RelationShip(
-      json['id'] as String,
-      json['following'] as bool,
-      json['showing_reblogs'] as bool,
-      json['followed_by'] as bool,
-      json['blocking'] as bool,
-      json['muting'] as bool,
-      json['muting_notifications'] as bool,
-      json['requested'] as bool,
-      json['domain_blocking'] as bool,
-      json['endorsed'] as bool);
+    json['id'] as String,
+    json['following'] as bool,
+    json['showing_reblogs'] as bool,
+    json['followed_by'] as bool,
+    json['blocking'] as bool,
+    json['muting'] as bool,
+    json['muting_notifications'] as bool,
+    json['requested'] as bool,
+    json['domain_blocking'] as bool,
+    json['endorsed'] as bool,
+  );
 }
 
 Map<String, dynamic> _$RelationShipToJson(RelationShip instance) =>
@@ -31,5 +32,5 @@ Map<String, dynamic> _$RelationShipToJson(RelationShip instance) =>
       'muting_notifications': instance.mutingNotifications,
       'requested': instance.requested,
       'domain_blocking': instance.domainBlocking,
-      'endorsed': instance.endorsed
+      'endorsed': instance.endorsed,
     };

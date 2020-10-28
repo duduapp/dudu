@@ -88,7 +88,7 @@ class DialogUtils {
 
     return await showDialog(
       barrierDismissible: barrierDismissible,
-        context: context,
+        context: context ?? navGK.currentState.overlay.context,
         builder: (BuildContext context) {
           return AlertDialog(
             shape:

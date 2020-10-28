@@ -66,6 +66,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
             Api.Notifications, getRequestParams(displayType)),
         buildRow: ListViewUtil.notificationRowFunction(),
         tag: 'notifications');
+    SettingsProvider().notificationProvider = provider;
     super.initState();
   }
 

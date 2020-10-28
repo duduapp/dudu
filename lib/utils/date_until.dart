@@ -1,4 +1,5 @@
 import 'package:dudu/constant/storage_key.dart';
+import 'package:dudu/db/tb_cache.dart';
 import 'package:intl/intl.dart';
 
 import 'local_storage.dart';
@@ -35,15 +36,14 @@ class DateUntil {
     }
   }
 
+  static hasMarkedTimeToday(String account,String key) async{
+    var cache = await TbCacheHelper.getCache(account, key);
 
-  static hasMarkedTimeDaily(String storageKey) {
-    String lastUpdateTime =
-     Storage.getString(storageKey);
-    if (lastUpdateTime == null) {
-      return true;
+    if (cache == null) {
+      return false;
     }
+    var updateTime = DateTime.fromMillisecondsSinceEpoch(int.parse(cache.content));
     var now = DateTime.now();
-    var updateTime = DateTime.parse(lastUpdateTime);
 
     if (now.difference(updateTime).inDays >= 1 || now.day != updateTime.day) {
       return true;
@@ -51,9 +51,24 @@ class DateUntil {
     return false;
   }
 
+  // deprecated in next version
+  static hasMarkedTimeDaily(String storageKey) {
+    String lastUpdateTime =
+     Storage.getString(storageKey);
+    if (lastUpdateTime == null) {
+      return false;
+    }
+    var now = DateTime.now();
+    var updateTime = DateTime.parse(lastUpdateTime);
+
+    if (now.difference(updateTime).inDays >= 1 || now.day != updateTime.day) {
+      return false;
+    }
+    return true;
+  }
+
   // set task has executed
-  static markTime(String storageKey) {
-    Storage.saveString(
-        storageKey, DateTime.now().toIso8601String());
+  static markTime(String account,String storageKey) {
+    TbCacheHelper.setCache(TbCache(account: account,tag: storageKey,content: DateTime.now().millisecondsSinceEpoch.toString()));
   }
 }

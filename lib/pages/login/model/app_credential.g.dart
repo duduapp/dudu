@@ -8,12 +8,13 @@ part of 'app_credential.dart';
 
 AppCredential _$AppCredentialFromJson(Map<String, dynamic> json) {
   return AppCredential(
-      json['id'] as String,
-      json['name'] as String,
-      json['redirect_uri'] as String,
-      json['client_id'] as String,
-      json['client_secret'] as String,
-      json['vapid_key'] as String);
+    json['id'] as String,
+    json['name'] as String,
+    json['redirect_uri'] as String,
+    json['client_id'] as String,
+    json['client_secret'] as String,
+    json['vapid_key'] as String,
+  );
 }
 
 Map<String, dynamic> _$AppCredentialToJson(AppCredential instance) =>
@@ -23,5 +24,5 @@ Map<String, dynamic> _$AppCredentialToJson(AppCredential instance) =>
       'redirect_uri': instance.redirectUri,
       'client_id': instance.clientId,
       'client_secret': instance.clientSecret,
-      'vapid_key': instance.vapidKey
+      'vapid_key': instance.vapidKey,
     };

@@ -7,6 +7,8 @@ class AppConfig {
   static String Scopes = 'read write follow push admin:write:accounts';
   static String website = 'http://dudu.today';
 
+  static const String instancesUrl = 'http://api.idudu.fans/static/instances';
+
   static String dbName = "dudu.db";
 
   static String seed = 'DC814F2E67852803889C9EE84D189E1D255AF04F270D';

@@ -5,6 +5,7 @@ import 'package:dudu/pages/user_profile/user_profile.dart';
 import 'package:dudu/utils/app_navigate.dart';
 import 'package:dudu/utils/date_until.dart';
 import 'package:dudu/utils/string_until.dart';
+import 'package:dudu/utils/view/status_action_util.dart';
 import 'package:dudu/widget/status/text_with_emoji.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,7 @@ class StatusItemAccount extends StatelessWidget {
             ? null
             : () {
           if (createdAt == null)
-            AppNavigate.push(UserProfile(accountId: account.id));
+            AppNavigate.push(UserProfile(account,!StatusActionUtil.sameInstance(context)));
         }, // 用作搜索页时，整个页面可点击
         child: accountWidget(context),
       );

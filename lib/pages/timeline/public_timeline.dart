@@ -18,6 +18,10 @@ import 'package:nav_router/nav_router.dart';
 import '../../widget/other/search.dart' as customSearch;
 
 class PublicTimeline extends StatefulWidget {
+  final String url;
+
+  PublicTimeline({this.url});
+
   @override
   _PublicTimelineState createState() => _PublicTimelineState();
 }
@@ -63,7 +67,16 @@ class _PublicTimelineState extends State<PublicTimeline>
             height: 45,
             child: Row(
               children: [
-                SizedBox(width: 102,),
+                if (widget.url == null)
+                  SizedBox(
+                    width: 102,
+                  ),
+                if (widget.url != null) ...[
+                  IconButton(
+                      icon: Icon(IconFont.back),
+                      onPressed: () => AppNavigate.pop()),
+                    Expanded(child: Text(widget.url,overflow: TextOverflow.ellipsis,)),
+                ],
                 Expanded(
                   child: ColoredTabBar(
                     key: _headerKey,
@@ -80,7 +93,7 @@ class _PublicTimelineState extends State<PublicTimeline>
                       labelPadding: EdgeInsets.all(0),
                       indicatorSize: TabBarIndicatorSize.label,
                       tabs: [
-                        _tabController.index == 0
+                        (_tabController.index == 0 && widget.url == null)
                             ? MKDropDownMenu(
                                 controller: _menuController1,
                                 headerBuilder: (menuShowing) {
@@ -98,7 +111,7 @@ class _PublicTimelineState extends State<PublicTimeline>
                             : DropDownTitle(
                                 title: '本站',
                               ),
-                        _tabController.index == 1
+                        (_tabController.index == 1 && widget.url == null)
                             ? MKDropDownMenu(
                                 controller: _menuController2,
                                 headerKey: _headerKey,
@@ -121,28 +134,31 @@ class _PublicTimelineState extends State<PublicTimeline>
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: Icon(
-                    IconFont.search,
-                    size: 26,
+                if (widget.url == null) ...[
+                  IconButton(
+                    icon: Icon(
+                      IconFont.search,
+                      size: 26,
+                    ),
+                    onPressed: () {
+                      customSearch.showSearch(
+                          context: context, delegate: SearchPageDelegate());
+                    },
                   ),
-                  onPressed: () {
-                    customSearch.showSearch(
-                        context: context, delegate: SearchPageDelegate());
-                  },
-                ),
-                IconButton(
-                  icon: Icon(
-                    IconFont.follow,
-                    //  color: Theme.of(context).buttonColor,
-                    size: 26,
-                  ),
-                  onPressed: () => AppNavigate.push(NewStatus(),
-                      routeType: RouterType.material),
-                )
+                  IconButton(
+                    icon: Icon(
+                      IconFont.follow,
+                      //  color: Theme.of(context).buttonColor,
+                      size: 26,
+                    ),
+                    onPressed: () => AppNavigate.push(NewStatus(),
+                        routeType: RouterType.material),
+                  )
+                ],
               ],
             ),
           ),
+
           Divider(
             height: 0,
           ),
@@ -151,11 +167,15 @@ class _PublicTimelineState extends State<PublicTimeline>
             controller: _tabController,
             children: [
               TimelineContent(
-                url: Api.LocalTimeLine,
+                url: widget.url != null
+                    ? 'https://' + widget.url + Api.LocalTimeLine
+                    : Api.LocalTimeLine,
                 tag: 'local',
               ),
               TimelineContent(
-                url: Api.FederatedTimeLine,
+                url: widget.url != null
+                    ? 'https://' + widget.url + Api.FederatedTimeLine
+                    : Api.FederatedTimeLine,
                 tag: 'federated',
               ),
             ],

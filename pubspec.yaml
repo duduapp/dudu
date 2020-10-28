@@ -69,6 +69,8 @@ dependencies:
   sqflite: 1.3.0+1
   mk_drop_down_menu:
     path: ../mk_drop_down_menu/
+  auto_size_text: ^2.1.0
+  modal_bottom_sheet: ^0.2.2
 
 
 

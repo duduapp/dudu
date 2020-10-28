@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:dudu/models/json_serializable/filter_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/pages/setting/model/relation_ship.dart';
+import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/utils/request.dart';
 
 class AccountsApi {
@@ -20,17 +21,27 @@ class AccountsApi {
     return OwnerAccount.fromJson(data);
   }
 
-  static Future<OwnerAccount> getAccount(String id,{CancelToken cancelToken}) async {
-    var api = '$url/$id';
+  static Future<OwnerAccount> getAccount(OwnerAccount account,bool requestOriginal,{CancelToken cancelToken}) async {
+    var prefix = '';
+    if (requestOriginal) prefix = accountHost(account);
+
+
+    var api = '$prefix$url/${account.id}';
+
+
     var res =  await Request.get(url: api,cancelToken: cancelToken);
     if (res == null) {
       return null;
     } else {
-      return OwnerAccount.fromJson(res);
+      var account =  OwnerAccount.fromJson(res);
+      if (account.url != null)
+        return account;
     }
+    return null;
   }
 
-  static Future<RelationShip> getRelationShip(String id,{CancelToken cancelToken}) async {
+  static Future<RelationShip> getRelationShip(OwnerAccount id,bool requestOriginal,{CancelToken cancelToken}) async {
+    if (requestOriginal) return null;
     var params = {
       'id[]':id
     };
@@ -140,8 +151,15 @@ class AccountsApi {
     return await Request.put(url: api,params: params);
   }
 
-  static String accountStatusUrl(String accountId,{String param = ''}) {
-    return '$url/$accountId/statuses?$param';
+
+  static String statusUrl(OwnerAccount account,bool requestOriginal,{String param = ''}) {
+    var prefix = '';
+    if (requestOriginal) prefix = accountHost(account);
+    return '$prefix$url/${account.id}/statuses?$param';
+  }
+
+  static String accountHost(OwnerAccount account) {
+    return account.url.substring(0,account.url.lastIndexOf('/'));
   }
 
   static  reportUser(String accountId,List<String> statusesIds,String comment,bool forward) async{

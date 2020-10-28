@@ -9,7 +9,6 @@ export 'package:dudu/utils/app_navigate.dart';
 export 'package:dudu/utils/date_until.dart';
 export 'package:dudu/utils/event_bus.dart';
 export 'package:dudu/utils/local_storage.dart';
-export 'package:dudu/utils/open_url.dart';
 export 'package:dudu/utils/request.dart';
 export 'package:dudu/utils/screen.dart';
 export 'package:dudu/utils/string_until.dart';

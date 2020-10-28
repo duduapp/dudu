@@ -4,8 +4,9 @@ class DropDownTitle extends StatelessWidget {
   final String title;
   final bool expand;
   final bool showIcon;
+  final bool iconMaintainSize;
 
-  DropDownTitle({this.title, this.expand = false, this.showIcon = false});
+  DropDownTitle({this.title, this.expand = false, this.showIcon = false, this.iconMaintainSize = true});
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +21,9 @@ class DropDownTitle extends StatelessWidget {
             style: TextStyle(fontSize: 17),
           ),
           Visibility(
-              maintainSize: true,
-              maintainAnimation: true,
-              maintainState: true,
+              maintainSize: iconMaintainSize,
+              maintainAnimation: iconMaintainSize,
+              maintainState: iconMaintainSize,
               visible: showIcon,
               child: Icon(
             expand ? Icons.arrow_drop_up : Icons.arrow_drop_down,

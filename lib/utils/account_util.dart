@@ -1,3 +1,4 @@
+import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
@@ -42,4 +43,13 @@ class AccountUtil {
       // ignore
     }
   }
+
+  static bool sameInstance(String url) {
+    if (url.startsWith(LoginedUser().host)) {
+      return true;
+    }
+    return false;
+  }
+
+
 }

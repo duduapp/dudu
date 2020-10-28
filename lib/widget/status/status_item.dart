@@ -131,7 +131,7 @@ class StatusItem extends StatelessWidget {
   }
 
   _onStatusClicked(BuildContext context) async {
-    var res = await AppNavigate.push(StatusDetail(item.reblog ?? item));
+    var res = await AppNavigate.push(StatusDetail(item.reblog ?? item,!StatusActionUtil.sameInstance(context)));
     if (res is Map && res.containsKey('operation')) {
       switch (res['operation']) {
         case 'mute':
@@ -162,7 +162,7 @@ class StatusItem extends StatelessWidget {
     return (icon != null && str != null)
         ? InkWell(
             onTap: () => AppNavigate.push(UserProfile(
-              accountId: refAccount?.id ?? item.account.id,
+              refAccount ?? item.account, !StatusActionUtil.sameInstance(context)
             )),
             child: Container(
               padding: EdgeInsets.only(top: 3, bottom: 8),

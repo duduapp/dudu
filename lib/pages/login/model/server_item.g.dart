@@ -8,29 +8,30 @@ part of 'server_item.dart';
 
 ServerItem _$ServerItemFromJson(Map<String, dynamic> json) {
   return ServerItem(
-      json['id'] as String,
-      json['name'] as String,
-      json['updated_at'] as String,
-      json['checked_at'] as String,
-      json['uptime'] as int,
-      json['up'] as bool,
-      json['dead'] as bool,
-      json['version'] as String,
-      json['ipv6'] as bool,
-      json['https_score'] as int,
-      json['https_rank'] as String,
-      json['obs_score'] as int,
-      json['obs_rank'] as String,
-      json['users'] as String,
-      json['statuses'] as String,
-      json['connections'] as String,
-      json['open_registrations'] as bool,
-      json['info'] == null
-          ? null
-          : Info.fromJson(json['info'] as Map<String, dynamic>),
-      json['thumbnail'] as String,
-      json['thumbnail_proxy'] as String,
-      json['active_users'] as int);
+    json['id'] as String,
+    json['name'] as String,
+    json['updated_at'] as String,
+    json['checked_at'] as String,
+    json['uptime'] as int,
+    json['up'] as bool,
+    json['dead'] as bool,
+    json['version'] as String,
+    json['ipv6'] as bool,
+    json['https_score'] as int,
+    json['https_rank'] as String,
+    json['obs_score'] as int,
+    json['obs_rank'] as String,
+    json['users'] as String,
+    json['statuses'] as String,
+    json['connections'] as String,
+    json['open_registrations'] as bool,
+    json['info'] == null
+        ? null
+        : Info.fromJson(json['info'] as Map<String, dynamic>),
+    json['thumbnail'] as String,
+    json['thumbnail_proxy'] as String,
+    json['active_users'] as int,
+  );
 }
 
 Map<String, dynamic> _$ServerItemToJson(ServerItem instance) =>
@@ -55,17 +56,18 @@ Map<String, dynamic> _$ServerItemToJson(ServerItem instance) =>
       'info': instance.info,
       'thumbnail': instance.thumbnail,
       'thumbnail_proxy': instance.thumbnailProxy,
-      'active_users': instance.activeUsers
+      'active_users': instance.activeUsers,
     };
 
 Info _$InfoFromJson(Map<String, dynamic> json) {
   return Info(
-      json['short_description'] as String,
-      json['full_description'] as String,
-      (json['languages'] as List)?.map((e) => e as String)?.toList(),
-      json['other_languages_accepted'] as bool,
-      (json['prohibited_content'] as List)?.map((e) => e as String)?.toList(),
-      json['categories'] as List);
+    json['short_description'] as String,
+    json['full_description'] as String,
+    (json['languages'] as List)?.map((e) => e as String)?.toList(),
+    json['other_languages_accepted'] as bool,
+    (json['prohibited_content'] as List)?.map((e) => e as String)?.toList(),
+    json['categories'] as List,
+  );
 }
 
 Map<String, dynamic> _$InfoToJson(Info instance) => <String, dynamic>{
@@ -74,5 +76,5 @@ Map<String, dynamic> _$InfoToJson(Info instance) => <String, dynamic>{
       'languages': instance.languages,
       'other_languages_accepted': instance.otherLanguagesAccepted,
       'prohibited_content': instance.prohibitedContent,
-      'categories': instance.categories
+      'categories': instance.categories,
     };

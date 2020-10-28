@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dudu/api/search_api.dart';
 import 'package:dudu/api/status_api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
@@ -11,7 +12,9 @@ import 'package:dudu/pages/admin/account_action_dialog.dart';
 import 'package:dudu/pages/status/new_status.dart';
 import 'package:dudu/pages/user_profile/user_report.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/utils/url_util.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,6 +26,10 @@ import 'list_view_util.dart';
 class StatusActionUtil {
   static Future<bool> reblog(
       bool isLiked, StatusItemData status, BuildContext context) async {
+
+    status = await getStatusInLocal(context,status);
+    if (status == null) return false;
+
     status.reblogged = !isLiked;
     status.reblogsCount = status.reblogsCount + (!isLiked ? 1 : -1);
 
@@ -85,6 +92,9 @@ class StatusActionUtil {
 
   static Future<bool> favourite(
       bool isLiked, StatusItemData status, BuildContext context) async {
+    status = await getStatusInLocal(context,status);
+    if (status == null) return false;
+
     status.favourited = !isLiked;
     status.favouritesCount = status.favouritesCount + (!isLiked ? 1 : -1);
 
@@ -161,15 +171,15 @@ class StatusActionUtil {
     DialogUtils.showBottomSheet(context: modalContext, widgets: [
       BottomSheetItem(
         icon: IconFont.bookmark,
-        text: data.bookmarked ? '删除书签' : '添加书签',
-        onTap: () => onPressBookmark(data),
+        text: (data.bookmarked == null || !data.bookmarked ) ? '添加书签' : '删除书签' ,
+        onTap: () => onPressBookmark(modalContext,data),
       ),
 
       Divider(indent: 60, height: 0),
       if (mentioned) ...[
         BottomSheetItem(
           icon: IconFont.volumeOff,
-          text: data.muted ? '取消隐藏该对话' : '隐藏该对话',
+          text: (data.muted == null || !data.muted) ?  '隐藏该对话': '取消隐藏该对话',
           subText: '隐藏后将不会从该对话中接收到通知',
           onTap: () {
             _onPressMuteConversation(data);
@@ -208,13 +218,15 @@ class StatusActionUtil {
 
       Divider(indent: 60, height: 0),
       if (myAccount.id != data.account.id) ...[
-
+        if (sameInstance(context))
         BottomSheetItem(
           icon: IconFont.report,
           text: '举报 ',
-          onTap: () {
+          onTap: () async{
+            var accountLocal = await getAccountInLocal(modalContext,data.account);
+            if (accountLocal == null) return;
             AppNavigate.push(UserReport(
-              account: data.account,
+              account: accountLocal,
               fromStatusId: data.id,
             ));
           },
@@ -315,7 +327,8 @@ class StatusActionUtil {
 //    StatusApi.remove(widget.item.id);
   }
 
-  static onPressBookmark(StatusItemData data) async {
+  static onPressBookmark(BuildContext context,StatusItemData data) async {
+    data = await getStatusInLocal(context,data);
     if (!data.bookmarked) {
       StatusApi.bookmark(data.id);
       DialogUtils.toastFinishedInfo('已添加书签');
@@ -402,6 +415,47 @@ class StatusActionUtil {
       }
     } else {
       ListViewUtil.muteUser(context: context, status: data);
+    }
+  }
+
+  static bool sameInstance(BuildContext context) {
+    var provider;
+    try {
+      provider = Provider.of<ResultListProvider>(context, listen: false);
+    } catch (e) {
+      return false;
+    }
+    if (provider.requestUrl.startsWith('https://')) {
+      return false;
+    }
+    return true;
+  }
+
+  static Future<StatusItemData> getStatusInLocal(BuildContext context,StatusItemData status) async{
+    if (!sameInstance(context)) {
+      if (!ListViewUtil.loginnedAndPrompt()) return null;
+      var statusLocal = await SearchApi.resolveStatus(status.url);
+      if (statusLocal == null) {
+        DialogUtils.toastErrorInfo('出现错误');
+        return null;
+      }
+      return statusLocal;
+    } else {
+      return status;
+    }
+  }
+
+  static Future<OwnerAccount> getAccountInLocal(BuildContext context,OwnerAccount account) async {
+    if (context != null && !sameInstance(context) || !AccountUtil.sameInstance(account.url)) {
+      if (!ListViewUtil.loginnedAndPrompt()) return null;
+      var statusLocal = await SearchApi.resolveAccount(account.url);
+      if (statusLocal == null) {
+        DialogUtils.toastErrorInfo('出现错误');
+        return null;
+      }
+      return statusLocal;
+    } else {
+      return account;
     }
   }
 }

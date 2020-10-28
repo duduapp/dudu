@@ -7,6 +7,8 @@ import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/utils/view/status_action_util.dart';
 import 'package:dudu/widget/common/list_row.dart';
 import 'package:dudu/widget/other/follow_cell.dart';
 import 'package:dudu/widget/other/follow_request_cell.dart';
@@ -112,7 +114,9 @@ class ListViewUtil {
         provider = SettingsProvider().statusDetailProviders.last;
       }
     }
-    var accountId = status.account.id;
+    var accountLocal = await StatusActionUtil.getAccountInLocal(context,status.account);
+    if (accountLocal == null) return;
+    var accountId = accountLocal.id;
     AccountsApi.block(accountId);
 
 
@@ -136,7 +140,9 @@ class ListViewUtil {
         provider = SettingsProvider().statusDetailProviders.last;
       }
     }
-    var accountId = status.account.id;
+    var accountLocal = await StatusActionUtil.getAccountInLocal(context,status.account);
+    if (accountLocal == null) return;
+    var accountId = accountLocal.id;
     AccountsApi.mute(accountId);
 
    // if (res != null) {
@@ -183,6 +189,7 @@ class ListViewUtil {
 
   static handleAllStatuses(handle(dynamic e),bool test(dynamic e)) {
     for (ResultListProvider provider in getRootProviders()) {
+      if (provider != null)
       for (var row in provider.list.where(test)){
           handle(row);
       }
@@ -242,5 +249,13 @@ class ListViewUtil {
           e['reblog']['id'] == statusId) ||
           e['id'] == statusId || (e.containsKey('status') && e['status'] != null && e['status']['id'] == statusId));
     }
+  }
+
+  static bool loginnedAndPrompt() {
+    if (LoginedUser().account == null) {
+      DialogUtils.showSimpleAlertDialog(text: '你需要登录才能执行该操作',confirmText: '去登录',onConfirm: () {});
+      return false;
+    }
+    return true;
   }
 }

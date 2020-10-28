@@ -1,5 +1,6 @@
 import 'package:dudu/constant/app_config.dart';
 import 'package:dudu/db/tb_cache.dart';
+import 'package:dudu/db/tb_instance.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
@@ -21,21 +22,28 @@ class DBProvider {
 
       var adb = await openDatabase(path, version: 1,
           onCreate: (Database db, int version) async {
-            await db.execute("CREATE TABLE ${CacheColumn.table}("
-                "${CacheColumn.account} Text,"
-                "${CacheColumn.tag} TEXT,"
-                "${CacheColumn.content} TEXT,"
-                "${CacheColumn.time} INTEGER"
-                ")");
+        await db.execute("CREATE TABLE ${CacheColumn.table}("
+            "${CacheColumn.account} Text,"
+            "${CacheColumn.tag} TEXT,"
+            "${CacheColumn.content} TEXT,"
+            "${CacheColumn.time} INTEGER"
+            ")");
 
-            await db.execute("CREATE UNIQUE INDEX ${CacheColumn.table}U1 ON ${CacheColumn.table}(${CacheColumn.account},${CacheColumn.tag})");
+        await db.execute(
+            "CREATE UNIQUE INDEX ${CacheColumn.table}U1 ON ${CacheColumn.table}(${CacheColumn.account},${CacheColumn.tag})");
+
+        await db.execute("CREATE TABLE ${InstanceColumn.table}("
+            "${InstanceColumn.instance} Text,"
+            "${InstanceColumn.type} INTEGER,"
+            "${InstanceColumn.info} TEXT,"
+            ")");
+
+        await db.execute(
+            "CREATE UNIQUE INDEX ${InstanceColumn.table}U1 ON ${InstanceColumn.table}(${InstanceColumn.instance})");
           });
       database = adb;
     }
     return database;
-
-
-
   }
 
   DBProvider._internal();

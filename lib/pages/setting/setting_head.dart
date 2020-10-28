@@ -28,7 +28,7 @@ class SettingHead extends StatelessWidget {
         children: <Widget>[
           NoSplashInkWell(
             child: headerSection(account.statusesCount, '嘟文'),
-            onTap: () => AppNavigate.push(UserProfile(accountId: account.id,)),
+            onTap: () => AppNavigate.push(UserProfile(account,false)),
           ),
           NoSplashInkWell(
             child: headerSection(account.followingCount, '关注'),

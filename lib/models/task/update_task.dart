@@ -3,11 +3,13 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
+import 'package:dudu/constant/db_key.dart';
 import 'package:dudu/models/runtime_config.dart';
 import 'package:dudu/pages/timeline/timeline.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/device_util.dart';
 import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/utils/url_util.dart';
 import 'package:dudu/widget/common/normal_flat_button.dart';
 import 'package:dudu/widget/flutter_framework/progress_dialog.dart';
 import 'package:flutter/foundation.dart';
@@ -83,7 +85,7 @@ class UpdateTask {
           RuntimeConfig.updateWindowDisplayed = false;
           return false;
         } else {
-          DateUntil.markTime(StorageKey.lastCheckUpdateTime);
+          DateUntil.markTime(null, DbKey.lastCheckUpdateTime);
         }
       }
       return true;
@@ -93,7 +95,9 @@ class UpdateTask {
   }
 
   static checkUpdateIfNeed() async {
-    if (await DateUntil.hasMarkedTimeDaily(StorageKey.lastCheckUpdateTime)) check();
+    if (!DateUntil.hasMarkedTimeDaily(StorageKey.lastCheckUpdateTime) &&
+        !(await DateUntil.hasMarkedTimeToday(null, DbKey.lastCheckUpdateTime)))
+      check();
   }
 
   // one day to send on request
@@ -161,11 +165,7 @@ class UpdateWindow extends StatelessWidget {
                   NormalFlatButton(
                     text: '更新',
                     onPressed: () async {
-
-                        if (await canLaunch(apkUrl)) {
-                          await launch(apkUrl);
-                        }
-
+                      UrlUtil.openUrl(apkUrl);
                     },
                   )
                 ],
@@ -256,7 +256,7 @@ class _ApkDownloadProgressState extends State<ApkDownloadProgress> {
                 NormalFlatButton(
                   text: '安装',
                   onPressed: () async {
-                 //   var res = await OpenFile.open(savePath);
+                    //   var res = await OpenFile.open(savePath);
                   },
                 )
             ],

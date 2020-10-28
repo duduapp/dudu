@@ -1,4 +1,7 @@
+
 import 'package:dio/dio.dart';
+import 'package:dudu/api/accounts_api.dart';
+import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/public.dart';
 
 class StatusApi {
@@ -44,9 +47,28 @@ class StatusApi {
     return await Request.post(url: api,showDialog: false);
   }
 
-  static getContext(String statusId,{CancelToken cancelToken}) async{
-    var api = '$url/$statusId/context';
+  static getContext(StatusItemData data,bool requestOriginal,{CancelToken cancelToken}) async{
+    var prefix = '';
+    if (requestOriginal)
+      prefix = statusHost(data);
+    var api = '$prefix$url/${data.id}/context';
     return await Request.get(url: api,cancelToken: cancelToken);
+  }
+  
+  static String statusPrefix(StatusItemData data,bool requestOriginal) {
+    return requestOriginal ? statusHost(data) : '';
+  }
+  
+  static String reblogByUrl(StatusItemData data, bool requestOriginal) {
+    return statusPrefix(data, requestOriginal) + '/$url/${data.id}/reblogged_by';
+  }
+
+  static String favouritedByUrl(StatusItemData data,bool requestOriginal) {
+    return statusPrefix(data, requestOriginal) + '/$url/${data.id}/favourited_by';
+  }
+
+  static String statusHost(StatusItemData data) {
+    return data.url.substring(0,data.url.indexOf('/@'));
   }
 
   static remove(String statusId) async{

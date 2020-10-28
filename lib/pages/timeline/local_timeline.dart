@@ -17,12 +17,12 @@ import 'package:mk_drop_down_menu/mk_drop_down_menu.dart';
 import 'package:nav_router/nav_router.dart';
 import '../../widget/other/search.dart' as customSearch;
 
-class LocalTimeline extends StatefulWidget {
+class HomeTimeline extends StatefulWidget {
   @override
-  _LocalTimelineState createState() => _LocalTimelineState();
+  _HomeTimelineState createState() => _HomeTimelineState();
 }
 
-class _LocalTimelineState extends State<LocalTimeline> {
+class _HomeTimelineState extends State<HomeTimeline> {
   GlobalKey _headerKey;
   MKDropDownMenuController _downMenuController;
 
@@ -83,8 +83,8 @@ class _LocalTimelineState extends State<LocalTimeline> {
         ],
       ),
       body: TimelineContent(
-        url: Api.LocalTimeLine,
-        tag: 'local',
+        url: Api.HomeTimeLine,
+        tag: 'home',
       ),
     );
   }

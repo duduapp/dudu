@@ -20,7 +20,8 @@ import 'package:provider/provider.dart';
 
 class StatusDetail extends StatefulWidget {
   final StatusItemData data;
-  StatusDetail(this.data);
+  final bool requestOriginal;
+  StatusDetail(this.data,this.requestOriginal);
   @override
   _StatusDetailState createState() => _StatusDetailState();
 }
@@ -43,7 +44,7 @@ class _StatusDetailState extends State<StatusDetail>
   CancelToken _cancelToken;
 
   _fetchData() async {
-    var data = await StatusApi.getContext(widget.data.id,cancelToken: _cancelToken);
+    var data = await StatusApi.getContext(widget.data,widget.requestOriginal,cancelToken: _cancelToken);
     if (!mounted) {
       return;
     }
@@ -113,13 +114,13 @@ class _StatusDetailState extends State<StatusDetail>
           firstRefresh: false,
           buildRow: _buildRow),
       ResultListProvider(
-          requestUrl: '${StatusApi.url}/${widget.data.id}/reblogged_by',
+          requestUrl: StatusApi.reblogByUrl(widget.data, widget.requestOriginal),
           enableRefresh: false,
           enableLoad: false,
           firstRefresh: false,
           buildRow: ListViewUtil.accountRowFunction()),
       ResultListProvider(
-          requestUrl: '${StatusApi.url}/${widget.data.id}/favourited_by',
+          requestUrl: StatusApi.favouritedByUrl(widget.data, widget.requestOriginal),
           enableRefresh: false,
           enableLoad: false,
           firstRefresh: false,

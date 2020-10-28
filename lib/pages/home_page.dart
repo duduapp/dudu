@@ -6,6 +6,7 @@ import 'package:dudu/models/runtime_config.dart';
 import 'package:dudu/models/task/check_role_task.dart';
 import 'package:dudu/models/task/notification_task.dart';
 import 'package:dudu/models/task/update_task.dart';
+import 'package:dudu/pages/discovery/instance_list.dart';
 import 'package:dudu/pages/timeline/local_timeline.dart';
 import 'package:dudu/pages/timeline/notification_timeline.dart';
 import 'package:dudu/pages/timeline/public_timeline.dart';
@@ -129,7 +130,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
       child: Scaffold(
 
           body: IndexedStack(
-            children: <Widget>[LocalTimeline(), PublicTimeline(), Container(),NotificationTimeline(), Setting()],
+            children: <Widget>[HomeTimeline(), PublicTimeline(), InstanceList(),NotificationTimeline(), Setting()],
             index: _tabIndex,
           ),
           bottomNavigationBar: Column(
