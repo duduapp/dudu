@@ -6,6 +6,8 @@ import 'package:dudu/pages/user_profile/user_profile.dart';
 import 'package:dudu/pages/webview/inner_browser.dart';
 import 'package:dudu/plugin/flutter_html/flutter_html.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/provider_util.dart';
+import 'package:dudu/utils/url_util.dart';
 import 'package:dudu/utils/view/status_action_util.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
@@ -83,9 +85,10 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
           List mentions = widget.statusData.mentions;
           for (var mention in mentions) {
             if (mention['url'] == link) {
+
               AppNavigate.push(
                   UserProfile(
-                    OwnerAccount.fromJson(mention),!StatusActionUtil.sameInstance(context)
+                    OwnerAccount.fromJson(mention),hostUrl: ProviderUtil.hostUrl(context),
                   ));
               return;
             }

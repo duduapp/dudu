@@ -419,7 +419,7 @@ class StatusActionUtil {
   }
 
   static bool sameInstance(BuildContext context) {
-    var provider;
+    ResultListProvider provider;
     try {
       provider = Provider.of<ResultListProvider>(context, listen: false);
     } catch (e) {
@@ -430,6 +430,9 @@ class StatusActionUtil {
     }
     return true;
   }
+
+
+
 
   static Future<StatusItemData> getStatusInLocal(BuildContext context,StatusItemData status) async{
     if (!sameInstance(context)) {

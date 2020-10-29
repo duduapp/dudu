@@ -35,7 +35,7 @@ class DBProvider {
         await db.execute("CREATE TABLE ${InstanceColumn.table}("
             "${InstanceColumn.instance} Text,"
             "${InstanceColumn.type} INTEGER,"
-            "${InstanceColumn.info} TEXT,"
+            "${InstanceColumn.info} TEXT"
             ")");
 
         await db.execute(

@@ -193,7 +193,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
             ),
           ),
           Divider(
-            height: 0,
+            height: 1,
           ),
           Expanded(
               child: TabBarView(

@@ -10,5 +10,9 @@ class UrlUtil {
     }
   }
 
+  static String hostUrl(String url) {
+    return 'https://' + Uri.parse(url).host;
+  }
+
 
 }

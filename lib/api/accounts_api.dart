@@ -21,12 +21,11 @@ class AccountsApi {
     return OwnerAccount.fromJson(data);
   }
 
-  static Future<OwnerAccount> getAccount(OwnerAccount account,bool requestOriginal,{CancelToken cancelToken}) async {
-    var prefix = '';
-    if (requestOriginal) prefix = accountHost(account);
+  static Future<OwnerAccount> getAccount(OwnerAccount account,{String hostUrl,CancelToken cancelToken}) async {
 
 
-    var api = '$prefix$url/${account.id}';
+
+    var api = '${hostUrl ?? ''}$url/${account.id}';
 
 
     var res =  await Request.get(url: api,cancelToken: cancelToken);
@@ -40,10 +39,10 @@ class AccountsApi {
     return null;
   }
 
-  static Future<RelationShip> getRelationShip(OwnerAccount id,bool requestOriginal,{CancelToken cancelToken}) async {
-    if (requestOriginal) return null;
+  static Future<RelationShip> getRelationShip(OwnerAccount account,{String hostUrl,CancelToken cancelToken}) async {
+    if (hostUrl != null) return null;
     var params = {
-      'id[]':id
+      'id[]':account.id
     };
     var res = await Request.get(url: relationShipUrl,params: params,cancelToken: cancelToken);
     if (res == null) {
@@ -152,10 +151,8 @@ class AccountsApi {
   }
 
 
-  static String statusUrl(OwnerAccount account,bool requestOriginal,{String param = ''}) {
-    var prefix = '';
-    if (requestOriginal) prefix = accountHost(account);
-    return '$prefix$url/${account.id}/statuses?$param';
+  static String statusUrl({OwnerAccount account,String hostUrl,String param = ''}) {
+    return '${hostUrl ?? ''}$url/${account.id}/statuses?$param';
   }
 
   static String accountHost(OwnerAccount account) {

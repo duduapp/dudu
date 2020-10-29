@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/pages/user_profile/user_profile.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/provider_util.dart';
+import 'package:dudu/utils/url_util.dart';
 import 'package:dudu/utils/view/status_action_util.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +32,10 @@ class Avatar extends StatelessWidget {
       );
     }
     return GestureDetector(
-      onTap: navigateToDetail ? () => AppNavigate.push(UserProfile(account,!StatusActionUtil.sameInstance(context))) : null,
+      onTap: navigateToDetail ? () {
+
+        AppNavigate.push(UserProfile(account,hostUrl: ProviderUtil.hostUrl(context)));
+      }  : null,
       child: ClipRRect(
         child: CachedNetworkImage(
             placeholder: (context,string) {

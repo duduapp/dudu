@@ -9,6 +9,7 @@ import 'package:dudu/public.dart';
 import 'package:dudu/utils/screen.dart';
 import 'package:dudu/utils/string_until.dart';
 import 'package:dudu/utils/url_util.dart';
+import 'package:dudu/widget/button/text_ink_well.dart';
 import 'package:dudu/widget/common/html_content.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -20,6 +21,11 @@ class InstanceSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textScale =
+    SettingsProvider.getWithCurrentContext('text_scale', listen: true);
+    double headerHeight;
+    headerHeight = ScreenUtil.scaleFromSetting(textScale)*36;
+
     return Column(
       children: [
         MediaQuery(
@@ -28,7 +34,9 @@ class InstanceSummary extends StatelessWidget {
                   SettingsProvider().get('text_scale'))),
           child: InkWell(
             onTap: () {
-              AppNavigate.push(PublicTimeline(url: item.uri,));
+              AppNavigate.push(PublicTimeline(
+                url: item.uri,
+              ));
               // showMaterialModalBottomSheet(
               //   expand: true,
               //     useRootNavigator: true,
@@ -54,33 +62,39 @@ class InstanceSummary extends StatelessWidget {
                             borderRadius: BorderRadius.circular(6),
                             child: CachedNetworkImage(
                               imageUrl: item.thumbnail,
-                              width: 50,
-                              height: 50,
+                              width: headerHeight,
+                              height: headerHeight,
                               fit: BoxFit.cover,
                               placeholder: (context, str) {
                                 return Container(
                                   color: Theme.of(context).backgroundColor,
-                                  height: 50,
-                                  width: 50,
+                                  height: headerHeight,
+                                  width: headerHeight,
                                 );
                               },
                             ),
                           ),
                         ),
-                         SizedBox(
-                           height: 50,
-                           child: Column(
-                             crossAxisAlignment: CrossAxisAlignment.start,
+                        SizedBox(
+                          height: headerHeight,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(item.uri,style: TextStyle(color: Theme.of(context).accentColor)),
+                              SizedBox(height: 5,),
+                              Text(
+                                item.title,
+                                style: TextStyle(height: 1, fontSize: 13.5),
+                              ),
                               Spacer(),
-                              Text(item.title)
+                              Text(item.uri,
+                                  style: TextStyle(
+                                      color: Theme.of(context).accentColor,
+                                      height: 1,
+                                      fontSize: 10)),
                             ],
-                           ),
-                         ),
-
-
+                          ),
+                        ),
                       ],
                     ),
 
@@ -94,29 +108,41 @@ class InstanceSummary extends StatelessWidget {
                     //     overflow: TextOverflow.ellipsis,
                     //   ),
                     // ),
-                    SizedBox(height: 12),
+                    SizedBox(height: 9),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 4.0, right: 5),
+                      padding: const EdgeInsets.only(bottom: 10.0, right: 5),
                       child: Text(
-                    StringUtil.removeAllHtmlTags(
-                        item.description.isEmpty
+                        StringUtil.removeAllHtmlTags(item.description.isEmpty
                             ? item.shortDescription
                             : item.description),
-                    style: TextStyle(fontSize: 12),
-                     maxLines: 4,
+                        style: TextStyle(),
+                        maxLines: 4,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     // SizedBox(
                     //   height: 4,
                     // ),
+                    Divider(height: 0,),
                     Container(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          TextButton(onPressed: (){}, child: Text('登录')),
-                          TextButton(onPressed: (){UrlUtil.openUrl('https://'+item.uri+'/auth/sign_up');}, child: Text('注册')),
-                          TextButton(onPressed: (){UrlUtil.openUrl('https://'+item.uri+'/about');}, child: Text('更多')),
+                          TextInkWell(
+                              onTap: () {},
+                              text: '登录',),
+                          TextInkWell(
+                              onTap: () {
+                                UrlUtil.openUrl(
+                                    'https://' + item.uri + '/auth/sign_up');
+                              },
+                              text: '注册',),
+                          TextInkWell(
+                              onTap: () {
+                                UrlUtil.openUrl(
+                                    'https://' + item.uri + '/about');
+                              },
+                              text: '更多',),
                         ],
                       ),
                     ),
@@ -126,7 +152,9 @@ class InstanceSummary extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 10,)
+        SizedBox(
+          height: 10,
+        )
       ],
     );
 

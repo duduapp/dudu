@@ -47,11 +47,9 @@ class StatusApi {
     return await Request.post(url: api,showDialog: false);
   }
 
-  static getContext(StatusItemData data,bool requestOriginal,{CancelToken cancelToken}) async{
-    var prefix = '';
-    if (requestOriginal)
-      prefix = statusHost(data);
-    var api = '$prefix$url/${data.id}/context';
+  static getContext({StatusItemData data,String hostUrl,CancelToken cancelToken}) async{
+
+    var api = '${hostUrl ?? ''}$url/${data.id}/context';
     return await Request.get(url: api,cancelToken: cancelToken);
   }
   
@@ -59,12 +57,12 @@ class StatusApi {
     return requestOriginal ? statusHost(data) : '';
   }
   
-  static String reblogByUrl(StatusItemData data, bool requestOriginal) {
-    return statusPrefix(data, requestOriginal) + '/$url/${data.id}/reblogged_by';
+  static String reblogByUrl({StatusItemData data, String hostUrl}) {
+    return '${hostUrl ?? ''}/$url/${data.id}/reblogged_by';
   }
 
-  static String favouritedByUrl(StatusItemData data,bool requestOriginal) {
-    return statusPrefix(data, requestOriginal) + '/$url/${data.id}/favourited_by';
+  static String favouritedByUrl({StatusItemData data,String hostUrl}) {
+    return '${hostUrl ?? ''}/$url/${data.id}/favourited_by';
   }
 
   static String statusHost(StatusItemData data) {

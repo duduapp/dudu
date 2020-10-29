@@ -39,10 +39,10 @@ import '../setting/model/relation_ship.dart';
 LoginedUser mine = LoginedUser();
 
 class UserProfile extends StatefulWidget {
-  UserProfile(this.account, this.requestOriginal, {Key key}) : super(key: key);
+  UserProfile(this.account, {this.hostUrl, Key key}) : super(key: key);
 
   final OwnerAccount account;
-  final bool requestOriginal;
+  final String hostUrl;
 
   @override
   _UserProfileState createState() => _UserProfileState();
@@ -89,7 +89,7 @@ class _UserProfileState extends State<UserProfile>
     providers.addAll([
       ResultListProvider(
         requestUrl: AccountsApi.statusUrl(
-            widget.account, widget.requestOriginal,
+            account:widget.account, hostUrl:widget.hostUrl,
             param: 'exclude_replies=true'),
         buildRow: ListViewUtil.statusRowFunction(),
         dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('status_'),
@@ -97,14 +97,14 @@ class _UserProfileState extends State<UserProfile>
       ),
       ResultListProvider(
           requestUrl:
-              AccountsApi.statusUrl(widget.account, widget.requestOriginal),
+              AccountsApi.statusUrl(account:widget.account, hostUrl:widget.hostUrl,),
           buildRow: ListViewUtil.statusRowFunction(),
           dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('replies_'),
           enableRefresh: false,
           firstRefresh: false),
       ResultListProvider(
         requestUrl: AccountsApi.statusUrl(
-            widget.account, widget.requestOriginal,
+            account:widget.account, hostUrl:widget.hostUrl,
             param: 'pinned=true'),
         buildRow: ListViewUtil.statusRowFunction(),
         dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('pinned_'),
@@ -113,7 +113,7 @@ class _UserProfileState extends State<UserProfile>
       ),
       ResultListProvider(
           requestUrl: AccountsApi.statusUrl(
-              widget.account, widget.requestOriginal,
+              account:widget.account, hostUrl:widget.hostUrl,
               param: 'only_media=true'),
           buildRow: _buildGridItem,
           enableRefresh: false,
@@ -134,7 +134,7 @@ class _UserProfileState extends State<UserProfile>
   Future<void> _followByid() async {
     Map paramsMap = Map();
     paramsMap['reblogs'] = true;
-    if (widget.requestOriginal) {
+    if (widget.hostUrl != null) {
       _account = await StatusActionUtil.getAccountInLocal(null, _account);
     }
     var data = await AccountsApi.follow(_account.id);
@@ -181,7 +181,7 @@ class _UserProfileState extends State<UserProfile>
   }
 
   _muteUser() async {
-    if (widget.requestOriginal) {
+    if (widget.hostUrl != null) {
       _account = await StatusActionUtil.getAccountInLocal(null, _account);
     }
     var data = await AccountsApi.mute(_account.id);
@@ -194,7 +194,7 @@ class _UserProfileState extends State<UserProfile>
   }
 
   _blockUser() async {
-    if (widget.requestOriginal) {
+    if (widget.hostUrl != null) {
       _account = await StatusActionUtil.getAccountInLocal(null, _account);
     }
     var data = await AccountsApi.block(_account.id);
@@ -623,9 +623,8 @@ class _UserProfileState extends State<UserProfile>
           ),
           InkWell(
             onTap: () async {
-              if (widget.requestOriginal)
-                _account =
-                    await StatusActionUtil.getAccountInLocal(null, _account);
+              if (widget.hostUrl != null)
+                return null;
               AppNavigate.push(UserFollowing(_account.id));
             },
             child: Row(
@@ -647,9 +646,8 @@ class _UserProfileState extends State<UserProfile>
           ),
           InkWell(
             onTap: () async {
-              if (widget.requestOriginal)
-                _account =
-                    await StatusActionUtil.getAccountInLocal(null, _account);
+              if (widget.hostUrl != null)
+                return;
               AppNavigate.push(UserFollowers(_account.id));
             },
             child: Row(
@@ -776,10 +774,10 @@ class _UserProfileState extends State<UserProfile>
   Future<void> _onRefreshPage({bool firstRefresh = false}) async {
     if (!firstRefresh) providers[_tabController.index]?.refresh();
     var newAccount = await AccountsApi.getAccount(
-        widget.account, widget.requestOriginal,
+        widget.account, hostUrl: widget.hostUrl,
         cancelToken: cancelToken);
     var newRelationShip = await AccountsApi.getRelationShip(
-        widget.account, widget.requestOriginal,
+        widget.account, hostUrl: widget.hostUrl,
         cancelToken: cancelToken);
     if (newAccount != null &&
         newRelationShip != null &&

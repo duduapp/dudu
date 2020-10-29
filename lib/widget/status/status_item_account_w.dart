@@ -41,6 +41,7 @@ class StatusItemAccountW extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
+                  SizedBox(height: 5,),
                   RichText(
                     text: TextSpan(children: [
                       ...TextWithEmoji.getTextSpans(
@@ -48,12 +49,14 @@ class StatusItemAccountW extends StatelessWidget {
                           emojis: status.account.emojis,
                           style: TextStyle(
                               fontSize: 13.5,
+                              height: 1,
                               color:
                                   Theme.of(context).textTheme.bodyText1.color)),
-                      TextSpan(text: " "),
+                      TextSpan(text: " ",style: TextStyle(height: 1)),
                       TextSpan(
                           text: '@' + status.account.acct,
                           style: TextStyle(
+                              height: 1,
                               color: Theme.of(context).textTheme.subtitle1.color))
                     ]),
                     textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
@@ -67,14 +70,15 @@ class StatusItemAccountW extends StatelessWidget {
                       if (primary) ...[
                       WidgetSpan(
                         child: Icon(AppConfig.visibilityIcons[status.visibility],size: 14,)
-                      ),TextSpan(text: " ")],
+                      ),TextSpan(text: " ",style: TextStyle(height: 1))],
 
                       TextSpan(
                           text: primary? DateUntil.absoluteTime(status.createdAt):DateUntil.dateTime(status.createdAt),
                           style: TextStyle(
+                            height: 1,
                               color: Theme.of(context).accentColor,
                               fontSize: 10)),
-                      TextSpan(text: " "),
+                      TextSpan(text: " ",style: TextStyle(height: 1)),
                       ...fromWidgetSpans(context)
                     ]),
                     textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
@@ -116,21 +120,21 @@ class StatusItemAccountW extends StatelessWidget {
         TextSpan(
             text: '来自',
             style:
-                TextStyle(fontSize: 10, color: Theme.of(context).accentColor)),
+                TextStyle(fontSize: 10, height:1,color: Theme.of(context).accentColor)),
        // TextSpan(text: " ")
       ]);
       if (appWebsite == null) {
         spans.add(TextSpan(
             text: status.application?.name,
             style:
-                TextStyle(fontSize: 10, color: Theme.of(context).accentColor)));
+                TextStyle(fontSize: 10, height: 1,color: Theme.of(context).accentColor)));
       } else {
         spans.add(TextSpan(
             text: status.application?.name,
             recognizer: TapGestureRecognizer()
               ..onTap = () => AppNavigate.push(InnerBrowser(appWebsite)),
             style:
-                TextStyle(fontSize: 10, color: Color.fromRGBO(80, 125, 175, 1))));
+                TextStyle(fontSize: 10, height: 1, color: Color.fromRGBO(80, 125, 175, 1))));
       }
       return spans;
     } else {

@@ -5,6 +5,8 @@ import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/status/status_detail.dart';
 import 'package:dudu/pages/user_profile/user_profile.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/provider_util.dart';
+import 'package:dudu/utils/url_util.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
 import 'package:dudu/utils/view/status_action_util.dart';
 import 'package:dudu/widget/common/no_splash_ink_well.dart';
@@ -33,14 +35,14 @@ class StatusItem extends StatelessWidget {
   final String refString;
   final OwnerAccount refAccount;
   final bool subStatus;
-  final bool primary;// 点击status详情页后该status
+  final bool primary; // 点击status详情页后该status
 
   @override
   Widget build(BuildContext context) {
     if (subStatus != null && subStatus) {
       return Column(children: [
         NoSplashInkWell(
-          onTap: () => _onStatusClicked(context),
+          onTap: () => _onStatusClicked(context, true),
           // onLongPress: () =>
           //     StatusActionUtil.showBottomSheetAction(context, item, subStatus),
           child: Ink(
@@ -62,7 +64,10 @@ class StatusItem extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       SubStatusAccountW(status: item),
-                      StatusItemContent(item,subStatus: true,),
+                      StatusItemContent(
+                        item,
+                        subStatus: true,
+                      ),
                       StatusItemActionW(
                         status: item,
                         subStatus: subStatus,
@@ -84,7 +89,7 @@ class StatusItem extends StatelessWidget {
         Material(
           color: Theme.of(context).primaryColor,
           child: InkWell(
-            onTap: primary ? null : () => _onStatusClicked(context),
+            onTap: primary ? null : () => _onStatusClicked(context, false),
             // onLongPress: () =>
             //     StatusActionUtil.showBottomSheetAction(context, data, subStatus),
             child: Container(
@@ -110,10 +115,10 @@ class StatusItem extends StatelessWidget {
 
                   // if (primary) StatusItemPrimaryBottom(data),
                   if (!primary)
-                  StatusItemActionW(
-                    status: data,
-                    subStatus: subStatus,
-                  )
+                    StatusItemActionW(
+                      status: data,
+                      subStatus: subStatus,
+                    )
 //                StatusItemAction(
 //                  item: data,
 //                  subStatus: subStatus,
@@ -130,8 +135,10 @@ class StatusItem extends StatelessWidget {
     }
   }
 
-  _onStatusClicked(BuildContext context) async {
-    var res = await AppNavigate.push(StatusDetail(item.reblog ?? item,!StatusActionUtil.sameInstance(context)));
+  _onStatusClicked(BuildContext context, bool subStatus) async {
+
+    var res = await AppNavigate.push(StatusDetail(
+        data: item.reblog ?? item, hostUrl: ProviderUtil.hostUrl(context)));
     if (res is Map && res.containsKey('operation')) {
       switch (res['operation']) {
         case 'mute':
@@ -162,8 +169,8 @@ class StatusItem extends StatelessWidget {
     return (icon != null && str != null)
         ? InkWell(
             onTap: () => AppNavigate.push(UserProfile(
-              refAccount ?? item.account, !StatusActionUtil.sameInstance(context)
-            )),
+                refAccount ?? item.account,
+                hostUrl: ProviderUtil.hostUrl(context),)),
             child: Container(
               padding: EdgeInsets.only(top: 3, bottom: 8),
               child: Row(
@@ -177,7 +184,10 @@ class StatusItem extends StatelessWidget {
                     width: 5,
                   ),
                   TextWithEmoji(
-                    style: TextStyle(fontSize: 12.5,color: Theme.of(context).accentColor,),
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      color: Theme.of(context).accentColor,
+                    ),
                     text: str,
                     emojis: refAccount == null
                         ? item.account.emojis

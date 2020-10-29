@@ -160,7 +160,7 @@ class _PublicTimelineState extends State<PublicTimeline>
           ),
 
           Divider(
-            height: 0,
+            height: 1,
           ),
           Expanded(
               child: TabBarView(

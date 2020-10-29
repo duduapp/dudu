@@ -18,7 +18,7 @@ class AccountItem extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(0, 15, 15, 0),
             child: GestureDetector(
               onTap: () {
-                AppNavigate.push(UserProfile(account,false));
+                AppNavigate.push(UserProfile(account));
               },
               child: Avatar(account: account,),
             )),

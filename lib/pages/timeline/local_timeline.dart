@@ -42,7 +42,6 @@ class _HomeTimelineState extends State<HomeTimeline> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        elevation: 0.3,
         centerTitle: true,
         automaticallyImplyLeading: false,
         key: _headerKey,
