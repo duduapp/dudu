@@ -96,7 +96,7 @@ class UpdateTask {
 
   static checkUpdateIfNeed() async {
     if (!DateUntil.hasMarkedTimeDaily(StorageKey.lastCheckUpdateTime) &&
-        !(await DateUntil.hasMarkedTimeToday(null, DbKey.lastCheckUpdateTime)))
+        !(await DateUntil.hasMarkedTimeToday('', DbKey.lastCheckUpdateTime)))
       check();
   }
 

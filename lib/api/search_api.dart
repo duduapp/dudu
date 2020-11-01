@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dudu/constant/api.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';

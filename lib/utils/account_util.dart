@@ -1,3 +1,4 @@
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/logined_user.dart';
@@ -22,11 +23,11 @@ class AccountUtil {
   //第一次登录缓存emoji,加快emoji显示速度
   static cacheEmoji() async{
     try {
-      var res = await Request.get(url: Api.CustomEmojis);
+      var res = await Request.get(url: Api.CustomEmojis,enableCache: true,cacheOption: buildCacheOptions(Duration(days: 7),forceRefresh: true));
       if (res != null)
         for (var row in res) {
           if (row['visible_in_picker']) {
-            CustomCacheManager().downloadFile(row['static_url']);
+            CustomCacheManager().getSingleFile(row['static_url']);
           }
         }
     } catch (e) {

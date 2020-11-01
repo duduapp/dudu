@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:dudu/db/tb_cache.dart';
+import 'package:dudu/models/http/cache_response.dart';
 import 'package:dudu/models/http/http_client.dart';
 import 'package:dudu/models/http/http_response.dart';
 import 'package:dudu/models/logined_user.dart';
@@ -23,8 +25,28 @@ enum RequestType { get, post, put, delete, patch }
 
 class Request {
   static Dio dioClient;
-  static Dio dioClientWithCache;
+  static Dio dioCacheClientWithBaseUrl;
+  static Dio dioCacheClient;
   static HttpClient httpClient;
+
+  static Future<CacheResponse> cacheGet({String url,Duration duration = const Duration(days: 1)}) async{
+    var cache = await TbCacheHelper.getCache('', url);
+    if (cache == null) {
+      var res = await Request.get(url: url,decodeJson: false);
+      if (res == null) return CacheResponse(null, CacheResponseType.stale);
+      TbCacheHelper.setCache(TbCache(account: '',tag: url,content: res));
+      return CacheResponse(res, CacheResponseType.net);
+    } else {
+      if (DateTime.now().difference(cache.time).compareTo(duration) <= 0) {
+        return CacheResponse(cache.content, CacheResponseType.cache);
+      } else {
+        var res = await Request.get(url: url,decodeJson: false);
+        if (res == null) return CacheResponse(null, CacheResponseType.stale);
+        TbCacheHelper.setCache(TbCache(account: '',tag: url,content: res));
+        return CacheResponse(res, CacheResponseType.net);
+      }
+    }
+  }
 
   static Future get(
       {String url,
@@ -35,10 +57,12 @@ class Request {
       CancelToken cancelToken,
       HttpClient httpClient,
       bool enableCache = false,
+      Options cacheOption,
       bool withToken = true,
       String handlingMessage,
       String successMessage,
-      int closeDialogDelay}) async {
+      int closeDialogDelay,
+      bool decodeJson}) async {
     return await _request(
         requestType: RequestType.get,
         url: url,
@@ -48,10 +72,12 @@ class Request {
         header: header,
         cancelToken: cancelToken,
         enableCache: enableCache,
+        cacheOptions: cacheOption,
         handlingMessage: handlingMessage,
         successMessage: successMessage,
         withToken: withToken,
-        closeDialogDelay: closeDialogDelay);
+        closeDialogDelay: closeDialogDelay,
+        decodeJson: decodeJson);
   }
 
   static Future post(
@@ -160,7 +186,9 @@ class Request {
       Map header,
       CancelToken cancelToken,
       bool enableCache = false,
-      bool withToken = true}) async {
+        Options cacheOptions,
+      bool withToken = true,
+      bool decodeJson = true}) async {
     //some request do not need token
     ProgressDialog dialog;
     http.Response response;
@@ -177,19 +205,16 @@ class Request {
           if (enableCache) {
             var response;
             if (withToken)
-              response = await getDioWithCache().get(url,
+              response = await getDioCacheWithBaseUrl().get(url,
                   queryParameters: params,
                   cancelToken: cancelToken,
-                  options: enableCache
-                      ? buildCacheOptions(Duration(days: 1))
-                      : null);
+                  options: cacheOptions
+                      );
             else
-              response = await Dio().get(url,
+              response = await getDioCache().get(url,
                   queryParameters: params,
                   cancelToken: cancelToken,
-                  options: enableCache
-                      ? buildCacheOptions(Duration(days: 1))
-                      : null);
+                  options: cacheOptions);
             if (returnAll) {
               dialog?.hide();
               return HttpResponse(
@@ -199,7 +224,7 @@ class Request {
               return response.data;
             }
           }
-          if (withToken || url.startsWith('https://'))
+          if (withToken && !url.startsWith('http'))
             response = await client
                 .get(
                   buildGetUrl(_realUrl(url), params),
@@ -270,7 +295,7 @@ class Request {
     }
     // debugPrint(response.body);
 
-    return json.decode(response.body);
+    return (decodeJson == null || decodeJson) ? json.decode(response.body) : response.body;
   }
 
   static _realUrl(String url) {
@@ -290,9 +315,9 @@ class Request {
     throw (errorMsg);
   }
 
-  static Dio getDioWithCache() {
-    if (dioClientWithCache != null) {
-      return dioClientWithCache;
+  static Dio getDioCacheWithBaseUrl() {
+    if (dioCacheClientWithBaseUrl != null) {
+      return dioCacheClientWithBaseUrl;
     }
     Dio dio = Dio();
     LoginedUser user = new LoginedUser();
@@ -323,8 +348,36 @@ class Request {
         return e; //continue
       }));
     }
-    dioClientWithCache = dio;
-    return dioClientWithCache;
+    dioCacheClientWithBaseUrl = dio;
+    return dioCacheClientWithBaseUrl;
+  }
+
+  static Dio getDioCache() {
+    if (dioCacheClient != null) {
+      return dioCacheClient;
+    }
+    Dio dio = Dio();
+
+    dio.httpClientAdapter = DefaultHttpClientAdapter();
+
+    dio.interceptors.add(DioCacheManager(CacheConfig()).interceptor);
+
+    if (!kReleaseMode) {
+      dio.interceptors
+          .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
+        debugPrint(options.uri.toString());
+        return options; //continue
+      }, onResponse: (Response response) {
+        debugPrint('收到了json信息');
+        // print(response);
+        return response; // continue
+      }, onError: (DioError e) {
+        // 当请求失败时做一些预处理
+        return e; //continue
+      }));
+    }
+    dioCacheClient = dio;
+    return dioCacheClient;
   }
 
   static http.Client getGetClient() {
@@ -371,12 +424,14 @@ class Request {
 
   static closeHttpClient() {
     dioClient?.close(force: true);
-    dioClientWithCache?.close(force: true);
+    dioCacheClientWithBaseUrl?.close(force: true);
+    dioCacheClient?.close(force: true);
     httpClient?.close();
 
     dioClient = null;
     httpClient = null;
-    dioClientWithCache = null;
+    dioCacheClientWithBaseUrl = null;
+    dioCacheClient = null;
   }
 
   static String buildGetUrl(String url, Map params) {

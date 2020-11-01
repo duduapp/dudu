@@ -2,6 +2,7 @@ import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/pages/login/model/app_credential.dart';
 import 'package:dudu/utils/app_navigate.dart';
 import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/utils/url_util.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -80,13 +81,7 @@ class _InnerBrowserState extends State<InnerBrowser> {
                   Divider(indent: 0, height: 0),
                   BottomSheetItem(
                     text: '在浏览器中打开',
-                    onTap: () async {
-                      if (await canLaunch(widget.url)) {
-                        await launch(widget.url);
-                      } else {
-                        // do nothing
-                      }
-                    },
+                    onTap: () => UrlUtil.openUrl(widget.url),
                   ),
                   Container(
                     height: 8,

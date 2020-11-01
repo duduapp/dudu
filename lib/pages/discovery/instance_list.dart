@@ -1,14 +1,23 @@
-
-
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dudu/constant/db_key.dart';
+import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/models/instance/instance_manager.dart';
+import 'package:dudu/models/instance/server_instance.dart';
 import 'package:dudu/models/json_serializable/instance_item.dart';
+import 'package:dudu/pages/discovery/add_instance.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/widget/common/app_bar_title.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
+import 'package:dudu/widget/common/loading_view.dart';
 import 'package:dudu/widget/discovery/instance_summary.dart';
+import 'package:dudu/widget/setting/account_list_header.dart';
 import 'package:flutter/material.dart';
+import 'package:mk_drop_down_menu/mk_drop_down_menu.dart';
 
 class InstanceList extends StatefulWidget {
   @override
@@ -16,73 +25,91 @@ class InstanceList extends StatefulWidget {
 }
 
 class _InstanceListState extends State<InstanceList> {
-  
-  List<String> instances = [];
-  Map<String,dynamic> instancesInfo = {};
+  GlobalKey _headerKey;
+  MKDropDownMenuController _downMenuController;
+  ScrollController _scrollController;
+  List<ServerInstance> instances = [];
+  bool loading = true;
 
   @override
   void initState() {
+    _headerKey = GlobalKey();
+    _downMenuController = MKDropDownMenuController();
+    _scrollController = ScrollController();
     getInstances();
     super.initState();
   }
 
-  getInstances() async{
-
-    await getInstancesFromServer();
-
-    getInstancesFromDb();
-
-    getInstanceDetail();
+  getInstances() async {
+    instances = await InstanceManager.getList();
+    loading = false;
+    setState(() {});
   }
 
-  getInstancesFromServer() async{
-    String res = await Request.get(url:AppConfig.instancesUrl,withToken: false,enableCache: true);
-    if (res != null) {
-      List<String> ins = res.split('\n');
-      ins.forEach((element) => element.trim());
-      ins.removeWhere((element) => element.isEmpty);
-      instances.addAll(ins);
-    }
+  Widget rowBuilder(BuildContext context, int idx) {
+    return InstanceSummary(
+      instances[idx],
+      onDelete: () {
+        setState(() {});
+      },
+    );
   }
-
-  getInstanceDetail() async{
-    for (var url in instances) {
-      Request.get(url:'https://'+url+'/api/v1/instance',withToken: false,enableCache: true).then((res){
-        instancesInfo[url] = res;
-        setState(() {
-
-        });
-      });
-
-    }
-
-  }
-
-  getInstancesFromDb() {
-
-  }
-
-
-   Widget rowBuilder(BuildContext context,int idx) {
-    var url = instances[idx];
-    InstanceItem info;
-    if (instancesInfo.containsKey(url)) {
-      var infoStr = instancesInfo[url];
-      if (infoStr != null)
-        info = InstanceItem.fromJson(infoStr);
-    }
-    return info == null ? Container() : InstanceSummary(info);
-   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('发现'),
+        centerTitle: true,
         automaticallyImplyLeading: false,
+        key: _headerKey,
+        title: MKDropDownMenu(
+          controller: _downMenuController,
+          headerBuilder: (menuShowing) {
+            return DropDownTitle(
+              title: '发现',
+              expand: menuShowing,
+              showIcon: true,
+            );
+          },
+          headerKey: _headerKey,
+          menuBuilder: () {
+            return AccountListHeader(_downMenuController);
+          },
+        ),
+        actions: [
+          IconButton(
+              icon: Icon(IconFont.follow),
+              onPressed: () async {
+                var res = await DialogUtils.showRoundedDialog(
+                    context: context, content: AddInstance());
+                if (res != null) {
+                  setState(() {});
+                  Timer(Duration(milliseconds: 200),(){
+                    _scrollController.animateTo(
+                        _scrollController.position.maxScrollExtent,
+                        duration: Duration(milliseconds: 200),
+                        curve: Curves.fastOutSlowIn);
+                  });
+
+                }
+              })
+        ],
       ),
-      body: ListView.builder(itemBuilder: rowBuilder,itemCount: instances.length,),
+      body: loading
+          ? LoadingView()
+          : ListView.builder(
+              controller: _scrollController,
+              itemBuilder: rowBuilder,
+              itemCount: instances.length,
+            ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _scrollController.dispose();
+    _downMenuController.dispose();
   }
 }

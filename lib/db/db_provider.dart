@@ -33,13 +33,12 @@ class DBProvider {
             "CREATE UNIQUE INDEX ${CacheColumn.table}U1 ON ${CacheColumn.table}(${CacheColumn.account},${CacheColumn.tag})");
 
         await db.execute("CREATE TABLE ${InstanceColumn.table}("
-            "${InstanceColumn.instance} Text,"
-            "${InstanceColumn.type} INTEGER,"
-            "${InstanceColumn.info} TEXT"
+            "${InstanceColumn.account} TEXT,"
+            "${InstanceColumn.instance} Text"
             ")");
 
         await db.execute(
-            "CREATE UNIQUE INDEX ${InstanceColumn.table}U1 ON ${InstanceColumn.table}(${InstanceColumn.instance})");
+            "CREATE UNIQUE INDEX ${InstanceColumn.table}U1 ON ${InstanceColumn.table}(${InstanceColumn.account},${InstanceColumn.instance})");
           });
       database = adb;
     }

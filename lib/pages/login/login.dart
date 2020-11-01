@@ -133,6 +133,8 @@ class _LoginState extends State<Login> {
         // eventBus.emit(EventBusKey.HidePresentWidegt);
       });
     } catch (e) {
+      print(e);
+      debugPrint(e.toString());
       DialogUtils.toastErrorInfo('出现错误，可以稍后试试');
       setState(() {
         isLoading = false;
