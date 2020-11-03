@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:dudu/models/exception/auth_required_exception.dart';
 import 'package:flutter/material.dart';
 
 class ErrorView extends StatelessWidget {
@@ -31,6 +32,9 @@ class ErrorView extends StatelessWidget {
   String getErrorString() {
     if (error is SocketException) {
       return '网络请求出错，请检查互联网并重试';
+    }
+    if (error is AuthRequiredException) {
+      return '需要登录才能查看当前实例内容';
     }
     return '应用程序出现错误';
   }

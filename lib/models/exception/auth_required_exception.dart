@@ -1,0 +1,4 @@
+
+class AuthRequiredException implements Exception {
+
+}

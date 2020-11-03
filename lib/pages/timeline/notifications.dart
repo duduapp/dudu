@@ -1,4 +1,5 @@
 import 'package:dudu/api/notification_api.dart';
+import 'package:dudu/api/timeline_api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/notificate_item.dart';
 import 'package:dudu/models/logined_user.dart';
@@ -39,7 +40,7 @@ class _NotificationsState extends State<Notifications>
     displayType = SettingsProvider().settings['notification_display_type'];
     // parameters will be added in build method
     provider = ResultListProvider(
-        requestUrl: Request.buildGetUrl(Api.Notifications, getRequestParams(displayType)),
+        requestUrl: Request.buildGetUrl(TimelineApi.notification, getRequestParams(displayType)),
         buildRow: row,
       tag: 'notifications'
     );
@@ -145,7 +146,7 @@ class _NotificationsState extends State<Notifications>
         content: NotificationDisplayTypeDialog());
     if (newDisplayType != null) {
       provider.requestUrl = Request.buildGetUrl(
-          Api.Notifications, getRequestParams(newDisplayType));
+          TimelineApi.notification, getRequestParams(newDisplayType));
       provider.refresh();
     }
   }

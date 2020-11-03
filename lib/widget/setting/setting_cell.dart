@@ -12,12 +12,8 @@ class SettingCell extends StatelessWidget {
         child: Icon(Icons.remove),
         opacity: 0,
       ),
+        this.tail,
       this.onPress,
-      this.tail = const Icon(
-        Icons.keyboard_arrow_right,
-        size: 30,
-        color: Colors.grey,
-      ),
       this.subTitle,
       this.subTitleStyle})
       : super(key: key);
@@ -31,6 +27,11 @@ class SettingCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget cont;
+    Widget newTail = tail ?? Icon(
+      Icons.keyboard_arrow_right,
+      size: 30,
+      color: Colors.grey,
+    );
     if (subTitle != null) {
       cont = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,8 +64,8 @@ class SettingCell extends StatelessWidget {
                   leftIcon,
                   SizedBox(width: 10),
                   cont,
-                  if (tail != null) Spacer(),
-                  if (tail != null) tail
+                   Spacer(),
+                  newTail
                 ],
               ),
             ),

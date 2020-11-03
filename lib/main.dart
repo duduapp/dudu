@@ -4,6 +4,7 @@ import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/models/task/defalut_server_task.dart';
+import 'package:dudu/models/task/check_new_task.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/local_storage.dart';
@@ -44,6 +45,7 @@ void main() async {
   // };
 
   await SettingsProvider().init();
+  CheckNewTask.start();
   LocalStorageAccount.load();
   if (kReleaseMode) {
     debugPrint = (String message, {int wrapWidth}) {};

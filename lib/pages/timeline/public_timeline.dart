@@ -1,6 +1,9 @@
+import 'package:badges/badges.dart';
+import 'package:dudu/api/timeline_api.dart';
 import 'package:dudu/constant/api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/local_account.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/login/login.dart';
 import 'package:dudu/pages/search/search_page_delegate.dart';
 import 'package:dudu/pages/status/new_status.dart';
@@ -15,6 +18,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mk_drop_down_menu/mk_drop_down_menu.dart';
 import 'package:nav_router/nav_router.dart';
+import 'package:provider/provider.dart';
 import '../../widget/other/search.dart' as customSearch;
 
 class PublicTimeline extends StatefulWidget {
@@ -53,6 +57,8 @@ class _PublicTimelineState extends State<PublicTimeline>
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<SettingsProvider>(context);
+
     return Scaffold(
       appBar: PreferredSize(
         child: CustomAppBar(
@@ -93,42 +99,50 @@ class _PublicTimelineState extends State<PublicTimeline>
                       labelPadding: EdgeInsets.all(0),
                       indicatorSize: TabBarIndicatorSize.label,
                       tabs: [
-                        (_tabController.index == 0 && widget.url == null)
-                            ? MKDropDownMenu(
-                                controller: _menuController1,
-                                headerBuilder: (menuShowing) {
-                                  return DropDownTitle(
-                                    title: '本站',
-                                    expand: menuShowing,
-                                    showIcon: true,
-                                  );
-                                },
-                                headerKey: _headerKey,
-                                menuBuilder: () {
-                                  return AccountListHeader(_menuController1);
-                                },
-                              )
-                            : DropDownTitle(
-                                title: '本站',
-                              ),
-                        (_tabController.index == 1 && widget.url == null)
-                            ? MKDropDownMenu(
-                                controller: _menuController2,
-                                headerKey: _headerKey,
-                                headerBuilder: (menuShowing) {
-                                  return DropDownTitle(
-                                    title: '跨站',
-                                    expand: menuShowing,
-                                    showIcon: true,
-                                  );
-                                },
-                                menuBuilder: () {
-                                  return AccountListHeader(_menuController2);
-                                },
-                              )
-                            : DropDownTitle(
-                                title: '跨站',
-                              ),
+                        Badge(
+                          position: BadgePosition.topEnd(top: 5,end: 18),
+                          showBadge: provider.unread[TimelineApi.local] != 0,
+                          child: (_tabController.index == 0 && widget.url == null)
+                              ? MKDropDownMenu(
+                                  controller: _menuController1,
+                                  headerBuilder: (menuShowing) {
+                                    return DropDownTitle(
+                                      title: '本站',
+                                      expand: menuShowing,
+                                      showIcon: true,
+                                    );
+                                  },
+                                  headerKey: _headerKey,
+                                  menuBuilder: () {
+                                    return AccountListHeader(_menuController1);
+                                  },
+                                )
+                              : DropDownTitle(
+                                  title: '本站',
+                                ),
+                        ),
+                        Badge(
+                          position: BadgePosition.topEnd(top: 5,end: 18),
+                          showBadge: provider.unread[TimelineApi.federated] != 0,
+                          child: (_tabController.index == 1 && widget.url == null)
+                              ? MKDropDownMenu(
+                                  controller: _menuController2,
+                                  headerKey: _headerKey,
+                                  headerBuilder: (menuShowing) {
+                                    return DropDownTitle(
+                                      title: '跨站',
+                                      expand: menuShowing,
+                                      showIcon: true,
+                                    );
+                                  },
+                                  menuBuilder: () {
+                                    return AccountListHeader(_menuController2);
+                                  },
+                                )
+                              : DropDownTitle(
+                                  title: '跨站',
+                                ),
+                        ),
                       ],
                       controller: _tabController,
                     ),
@@ -168,14 +182,14 @@ class _PublicTimelineState extends State<PublicTimeline>
             children: [
               TimelineContent(
                 url: widget.url != null
-                    ? 'https://' + widget.url + Api.LocalTimeLine
-                    : Api.LocalTimeLine,
+                    ? 'https://' + widget.url + TimelineApi.local
+                    : TimelineApi.local,
                 tag: 'local',
               ),
               TimelineContent(
                 url: widget.url != null
-                    ? 'https://' + widget.url + Api.FederatedTimeLine
-                    : Api.FederatedTimeLine,
+                    ? 'https://' + widget.url + TimelineApi.federated
+                    : TimelineApi.federated,
                 tag: 'federated',
               ),
             ],

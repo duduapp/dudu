@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dudu/api/timeline_api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/db/tb_cache.dart';
 import 'package:dudu/models/logined_user.dart';
@@ -47,14 +48,14 @@ class _TimelineState extends State<Timeline> {
     var url;
     switch (widget.type) {
       case TimelineType.home:
-        url = Api.HomeTimeLine;
+        url = TimelineApi.home;
         break;
       case TimelineType.local:
-        url = Api.LocalTimeLine;
+        url = TimelineApi.local;
         break;
       case TimelineType.federated:
 
-        url = Api.FederatedTimeLine;
+        url = TimelineApi.federated;
         break;
     }
     provider = ResultListProvider(

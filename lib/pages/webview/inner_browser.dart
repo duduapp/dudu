@@ -132,6 +132,7 @@ class _InnerBrowserState extends State<InnerBrowser> {
             gestureNavigationEnabled: true,
             debuggingEnabled: true,
             onProgress: (p) async {
+              if (mounted)
               setState(() {
                 progress = p;
                 //ToDo solve first open webview black,not perfectly
@@ -141,7 +142,6 @@ class _InnerBrowserState extends State<InnerBrowser> {
                   });
                 }
               });
-              if (progress == 100) {}
             },
 
             onWebViewCreated: (controller) {

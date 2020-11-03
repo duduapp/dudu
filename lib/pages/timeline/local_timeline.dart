@@ -1,3 +1,4 @@
+import 'package:dudu/api/timeline_api.dart';
 import 'package:dudu/constant/api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/local_account.dart';
@@ -82,7 +83,7 @@ class _HomeTimelineState extends State<HomeTimeline> {
         ],
       ),
       body: TimelineContent(
-        url: Api.HomeTimeLine,
+        url: TimelineApi.home,
         tag: 'home',
       ),
     );

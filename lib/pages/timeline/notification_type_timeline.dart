@@ -1,3 +1,4 @@
+import 'package:dudu/api/timeline_api.dart';
 import 'package:dudu/constant/api.dart';
 import 'package:dudu/models/notification/NotificationType.dart';
 import 'package:dudu/utils/request.dart';
@@ -16,7 +17,7 @@ class NotificationTypeTimeline extends StatelessWidget {
     var notificationTypes = ['follow', 'favourite', 'reblog', 'mention', 'poll', 'follow_request'];
     notificationTypes.remove(type);
 
-    var url = Request.buildGetUrl(Api.Notifications, {'exclude_types':notificationTypes});
+    var url = Request.buildGetUrl(TimelineApi.notificationUrl, {'exclude_types':notificationTypes});
     return Scaffold(
       appBar: CustomAppBar(
         title: Text(NotificationType.notificationDescription[type]),

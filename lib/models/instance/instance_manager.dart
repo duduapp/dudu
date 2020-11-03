@@ -22,6 +22,7 @@ import 'package:dudu/utils/app_navigate.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/request.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:nav_router/nav_router.dart';
 
@@ -106,16 +107,18 @@ class InstanceManager {
     paramsMap['website'] = AppConfig.website;
 
     var response;
+
     try {
-      response = await http.post(hostUrl + Api.Apps, body: paramsMap);
+      response = await http.post(hostUrl + Api.Apps, body: paramsMap).timeout(Duration(seconds: 10));
       pd.hide();
     } catch (e) {
-      DialogUtils.showSimpleAlertDialog(context: navGK.currentState.overlay.context,text: '无法连接到服务器',onlyInfo: true);
       pd.hide();
+      DialogUtils.showInfoDialog(navGK.currentState.overlay.context,'无法连接到服务器');
       return;
     } finally {
       pd.hide();
     }
+
 
     AppCredential model = AppCredential.fromJson(json.decode(response.body));
     if (model.clientId == null) {
@@ -164,6 +167,7 @@ class InstanceManager {
         AccountUtil.cacheEmoji();
         AccountUtil.requestPreference();
 
+        pd.hide();
         pushAndRemoveUntil(HomePage());
 
         // eventBus.emit(EventBusKey.HidePresentWidegt);

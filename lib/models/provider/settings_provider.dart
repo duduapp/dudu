@@ -1,3 +1,6 @@
+import 'package:dudu/api/timeline_api.dart';
+import 'package:dudu/db/tb_cache.dart';
+import 'package:dudu/models/http/request_manager.dart';
 import 'package:dudu/models/json_serializable/filter_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/local_account.dart';
@@ -10,11 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
 
-enum SettingType {
-  bool,
-  string,
-  string_list
-}
+enum SettingType { bool, string, string_list }
 
 class SettingsProvider extends ChangeNotifier {
   static final SettingsProvider _singleton = SettingsProvider._internal();
@@ -24,12 +23,11 @@ class SettingsProvider extends ChangeNotifier {
 
   SettingsProvider._internal();
 
-  init() async{
+  init() async {
     await load();
   }
 
-  Map<String,dynamic> settings = {
-  };
+  Map<String, dynamic> settings = {};
 
   String storageKey;
 
@@ -40,46 +38,53 @@ class SettingsProvider extends ChangeNotifier {
   ResultListProvider notificationProvider;
   ResultListProvider federatedProvider;
 
+  Map<String, int> unread = {};
+  Map<String,String> latestIds = {};
+
   LoginedUser currentUser;
 
-  Map<String,List<FilterItem>> filters = {
-    'home' : [],
-    'notifications' : [],
-    'public' : [],
-    'thread' :[]
+  Map<String, List<FilterItem>> filters = {
+    'home': [],
+    'notifications': [],
+    'public': [],
+    'thread': []
   };
 
-
-  load() async{
+  load() async {
     settings = {
-      'show_thumbnails':true,
-      'always_show_sensitive':false,
-      'always_expand_tools':false,
-      'default_post_privacy':'public',
-      'make_media_sensitive':false,
-      'text_scale':'1',
-
-      'show_notifications':false,
-      'show_notifications.reblog':true,
+      'show_thumbnails': true,
+      'always_show_sensitive': false,
+      'always_expand_tools': false,
+      'default_post_privacy': 'public',
+      'make_media_sensitive': false,
+      'text_scale': '1',
+      'show_notifications': false,
+      'show_notifications.reblog': true,
       'show_notifications.favourite': true,
-      'show_notifications.follow_request':true,
-      'show_notifications.follow':true,
-      'show_notifications.mention':true,
-      'show_notifications.poll':true,
-      'notification_display_type': ['reblog','favourite','follow_request','follow','mention','poll'],
-
-
+      'show_notifications.follow_request': true,
+      'show_notifications.follow': true,
+      'show_notifications.mention': true,
+      'show_notifications.poll': true,
+      'notification_display_type': [
+        'reblog',
+        'favourite',
+        'follow_request',
+        'follow',
+        'mention',
+        'poll'
+      ],
     };
-   await _loadFromStorage();
+    await _loadFromStorage();
+    await _loadUnread();
   }
 
-  _loadFromStorage() async{
+  _loadFromStorage() async {
     LoginedUser user = LoginedUser();
     if (user.account == null) {
       return;
     }
     currentUser = LoginedUser();
-    storageKey = StringUtil.accountFullAddress(user.account)+'.settings';
+    storageKey = StringUtil.accountFullAddress(user.account) + '.settings';
     var keys = await Storage.getStringList(storageKey);
     if (keys == null) {
       await Storage.saveStringList(storageKey, settings.keys.toList());
@@ -87,7 +92,8 @@ class SettingsProvider extends ChangeNotifier {
     }
     for (String key in keys) {
       var type = await Storage.getString('$storageKey.$key.type');
-      var settingType = SettingType.values.firstWhere((e) => describeEnum(e) == type,orElse: () => null);
+      var settingType = SettingType.values
+          .firstWhere((e) => describeEnum(e) == type, orElse: () => null);
       if (settingType != null) {
         dynamic value;
         switch (settingType) {
@@ -109,7 +115,52 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  update(String key,dynamic value) {
+  _loadUnread() async {
+    unread.clear();
+    unread = {
+      TimelineApi.home: await _getUnreadFromDb(TimelineApi.home),
+      TimelineApi.local: await _getUnreadFromDb(TimelineApi.local),
+  //    TimelineApi.federated: await _getUnreadFromDb(TimelineApi.federated),
+      TimelineApi.notification:
+          await _getUnreadFromDb(TimelineApi.notification),
+      TimelineApi.conversations:
+          await _getUnreadFromDb(TimelineApi.conversations),
+      TimelineApi.followRquest:
+          await _getUnreadFromDb(TimelineApi.followRquest),
+      TimelineApi.mention:
+          await _getUnreadFromDb(TimelineApi.mention)
+    };
+
+    for (var key in unread.keys) {
+      var res = await _getLatestId(key);
+      if (res != null) {
+        latestIds[key] = res;
+      }
+    }
+  }
+
+  updateUnread(String key, int value) {
+    unread[key] = value;
+    notifyListeners();
+  }
+
+  Future<int> _getUnreadFromDb(String tag) async {
+    var res = await TbCacheHelper.getCache(
+        LoginedUser().fullAddress, 'unread.' + tag);
+    if (res == null) return 0;
+    int value = int.tryParse(res.content);
+    if (value != null) return value;
+    return 0;
+  }
+
+  Future<String> _getLatestId(String tag) async {
+    var res = await TbCacheHelper.getCache(
+        LoginedUser().fullAddress, RequestManager.latestIdPrefix + tag);
+    if (res == null) return null;
+    return res.content;
+  }
+
+  update(String key, dynamic value) {
     settings[key] = value;
     if (value is String) {
       Storage.saveString('$storageKey.$key.type', 'string');
@@ -144,18 +195,16 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   static SettingsProvider getCurrentContextProvider({listen = false}) {
-    return Provider.of<SettingsProvider>(navGK.currentContext,listen: listen);
+    return Provider.of<SettingsProvider>(navGK.currentContext, listen: listen);
   }
 
-  static dynamic getWithCurrentContext(String key,{listen = false}) {
+  static dynamic getWithCurrentContext(String key, {listen = false}) {
     SettingsProvider provider = getCurrentContextProvider(listen: listen);
     return provider.get(key);
   }
 
-  static updateWithCurrentContext(String key,dynamic value) {
+  static updateWithCurrentContext(String key, dynamic value) {
     SettingsProvider provider = getCurrentContextProvider();
     provider.update(key, value);
   }
-
-
 }

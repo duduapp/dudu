@@ -1,4 +1,6 @@
+import 'package:badges/badges.dart';
 import 'package:dudu/api/notification_api.dart';
+import 'package:dudu/api/timeline_api.dart';
 import 'package:dudu/constant/api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/notificate_item.dart';
@@ -60,27 +62,13 @@ class _NotificationTimelineState extends State<NotificationTimeline>
     _headerKey = GlobalKey();
     _menuController1 = MKDropDownMenuController();
     _menuController2 = MKDropDownMenuController();
-    displayType = SettingsProvider().settings['notification_display_type'];
+
     provider = ResultListProvider(
-        requestUrl: Request.buildGetUrl(
-            Api.Notifications, getRequestParams(displayType)),
+        requestUrl: TimelineApi.notification,
         buildRow: ListViewUtil.notificationRowFunction(),
         tag: 'notifications');
     SettingsProvider().notificationProvider = provider;
     super.initState();
-  }
-
-  Map getRequestParams(List displayType) {
-    var notificationTypes = [
-      'follow',
-      'favourite',
-      'reblog',
-      'mention',
-      'poll',
-      'follow_request'
-    ];
-    notificationTypes.removeWhere((element) => displayType.contains(element));
-    return {'exclude_types': notificationTypes};
   }
 
   @override
@@ -91,6 +79,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
 
   @override
   Widget build(BuildContext context) {
+    var settings = Provider.of<SettingsProvider>(context);
     return Scaffold(
       appBar: PreferredSize(
         child: CustomAppBar(
@@ -124,42 +113,55 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                       labelPadding: EdgeInsets.all(0),
                       indicatorSize: TabBarIndicatorSize.label,
                       tabs: [
-                        _tabController.index == 0
-                            ? MKDropDownMenu(
-                                controller: _menuController1,
-                                headerBuilder: (menuShowing) {
-                                  return DropDownTitle(
-                                    title: '全部',
-                                    expand: menuShowing,
-                                    showIcon: true,
-                                  );
-                                },
-                                headerKey: _headerKey,
-                                menuBuilder: () {
-                                  return AccountListHeader(_menuController1);
-                                },
-                              )
-                            : DropDownTitle(
-                                title: '全部',
-                              ),
-                        _tabController.index == 1
-                            ? MKDropDownMenu(
-                                controller: _menuController2,
-                                headerKey: _headerKey,
-                                headerBuilder: (menuShowing) {
-                                  return DropDownTitle(
-                                    title: '分类',
-                                    expand: menuShowing,
-                                    showIcon: true,
-                                  );
-                                },
-                                menuBuilder: () {
-                                  return AccountListHeader(_menuController2);
-                                },
-                              )
-                            : DropDownTitle(
-                                title: '分类',
-                              ),
+                        Badge(
+                          position: BadgePosition.topEnd(top: 5, end: 18),
+                          showBadge:
+                              settings.unread[TimelineApi.notification] != 0,
+                          child: _tabController.index == 0
+                              ? MKDropDownMenu(
+                                  controller: _menuController1,
+                                  headerBuilder: (menuShowing) {
+                                    return DropDownTitle(
+                                      title: '全部',
+                                      expand: menuShowing,
+                                      showIcon: true,
+                                    );
+                                  },
+                                  headerKey: _headerKey,
+                                  menuBuilder: () {
+                                    return AccountListHeader(_menuController1);
+                                  },
+                                )
+                              : DropDownTitle(
+                                  title: '全部',
+                                ),
+                        ),
+                        Badge(
+                          position: BadgePosition.topEnd(top: 5, end: 18),
+                          showBadge:
+                              settings.unread[TimelineApi.conversations] != 0 ||
+                                  settings.unread[TimelineApi.followRquest] !=
+                                      0 ||
+                                  settings.unread[TimelineApi.mention] != 0,
+                          child: _tabController.index == 1
+                              ? MKDropDownMenu(
+                                  controller: _menuController2,
+                                  headerKey: _headerKey,
+                                  headerBuilder: (menuShowing) {
+                                    return DropDownTitle(
+                                      title: '分类',
+                                      expand: menuShowing,
+                                      showIcon: true,
+                                    );
+                                  },
+                                  menuBuilder: () {
+                                    return AccountListHeader(_menuController2);
+                                  },
+                                )
+                              : DropDownTitle(
+                                  title: '分类',
+                                ),
+                        ),
                       ],
                       controller: _tabController,
                     ),
@@ -213,7 +215,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
     );
   }
 
-  _clearNotification() async{
+  _clearNotification() async {
     await NotificationApi.clear();
     provider.clearData();
   }
@@ -222,8 +224,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
     var newDisplayType = await DialogUtils.showRoundedDialog(
         context: context, content: NotificationDisplayTypeDialog());
     if (newDisplayType != null) {
-      provider.requestUrl = Request.buildGetUrl(
-          Api.Notifications, getRequestParams(newDisplayType));
+      provider.requestUrl = TimelineApi.notification;
       provider.refresh();
     }
   }
@@ -232,22 +233,41 @@ class _NotificationTimelineState extends State<NotificationTimeline>
 class NotificationTypeList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<SettingsProvider>(context);
     return SingleChildScrollView(
       child: Column(
         children: [
-          SettingCell(
-            title: "私信",
-            onPress: () => AppNavigate.push(ConversationTimeline()),
+          Badge(
+            position: BadgePosition.topEnd(top: 20, end: 20),
+            showBadge: provider.unread[TimelineApi.conversations] != 0,
+            child: SettingCell(
+                title: "私信",
+                onPress: () => AppNavigate.push(ConversationTimeline()),
+                tail: provider.unread[TimelineApi.conversations] != 0
+                    ? Container()
+                    : null),
           ),
-          SettingCell(
-            title: "关注请求",
-            onPress: () => AppNavigate.push(
-                NotificationTypeTimeline(NotificationType.followRequest)),
+          Badge(
+            position: BadgePosition.topEnd(top: 20, end: 20),
+            showBadge: provider.unread[TimelineApi.followRquest] != 0,
+            child: SettingCell(
+                title: "关注请求",
+                onPress: () => AppNavigate.push(
+                    NotificationTypeTimeline(NotificationType.followRequest)),
+                tail: provider.unread[TimelineApi.followRquest] != 0
+                    ? Container()
+                    : null),
           ),
-          SettingCell(
-            title: "@我的",
-            onPress: () => AppNavigate.push(
-                NotificationTypeTimeline(NotificationType.mention)),
+          Badge(
+            position: BadgePosition.topEnd(top: 20, end: 20),
+            showBadge: provider.unread[TimelineApi.mention] != 0,
+            child: SettingCell(
+                title: "@我的",
+                onPress: () => AppNavigate.push(
+                    NotificationTypeTimeline(NotificationType.mention)),
+                tail: provider.unread[TimelineApi.mention] != 0
+                    ? Container()
+                    : null),
           ),
           SettingCell(
             title: '转嘟',

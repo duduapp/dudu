@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:dudu/db/tb_cache.dart';
+import 'package:dudu/models/exception/auth_required_exception.dart';
+import 'package:dudu/models/http/http_response.dart';
+import 'package:dudu/models/http/request_manager.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/models/runtime_config.dart';
 import 'package:dudu/public.dart';
@@ -39,7 +42,6 @@ class ResultListProvider extends ChangeNotifier {
   final bool onlyMedia;
   final ResultListDataHandler dataHandler;
   String lastCellId = '0';
-  CancelToken token = CancelToken();
   final String tag;
   String lastRequestUrl = '';
   bool _mounted = true;
@@ -65,22 +67,22 @@ class ResultListProvider extends ChangeNotifier {
       bool firstRefresh = true,
       bool showLoading = true, // 给list 第一次赋值，刷新后用结果值
       this.enableCache = false,
-      this.tag}) {
-    if (listenBlockEvent) {
-      _addEvent(EventBusKey.blockAccount, (arg) {
-        var accountId = arg['account_id'];
-        list.removeWhere((element) => element['account']['id'] == accountId);
-        notifyListeners();
-      });
-      _addEvent(EventBusKey.muteAccount, (arg) {
-        var accountId = arg['account_id'];
+    this.tag}) {
+  if (listenBlockEvent) {
+  _addEvent(EventBusKey.blockAccount, (arg) {
+  var accountId = arg['account_id'];
+  list.removeWhere((element) => element['account']['id'] == accountId);
+  notifyListeners();
+  });
+  _addEvent(EventBusKey.muteAccount, (arg) {
+  var accountId = arg['account_id'];
 
-        list.removeWhere((element) => element['account']['id'] == accountId);
-        notifyListeners();
-      });
-    }
+  list.removeWhere((element) => element['account']['id'] == accountId);
+  notifyListeners();
+  });
+  }
 
-    if (firstRefresh) refresh(showLoading: showLoading);
+  if (firstRefresh) refresh(showLoading: showLoading);
   }
 
   reConstructFilterList() {
@@ -160,17 +162,19 @@ class ResultListProvider extends ChangeNotifier {
       lastRequestUrl = url;
     }
 
-    var response;
+    HttpResponse response;
     try {
-      response = await Request.get(
-          url: url,
-          returnAll: true,
-          cancelToken: token,
-          enableCache: enableCache);
+      response = await RequestManager.getTimeline(url, enableCache);
     } catch (e) {
       return false;
     }
     if (!mounted) {
+      return false;
+    }
+
+    if (response.statusCode == 422) {
+      error = AuthRequiredException();
+      notifyListeners();
       return false;
     }
 
@@ -390,7 +394,6 @@ class ResultListProvider extends ChangeNotifier {
   @override
   void dispose() {
     _mounted = false;
-    token.cancel('canceld');
     events.forEach((key, value) {
       eventBus.off(key, value);
     });
