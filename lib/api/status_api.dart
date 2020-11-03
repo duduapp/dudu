@@ -32,6 +32,16 @@ class StatusApi {
     return await Request.post(url: api,showDialog: false);
   }
 
+  static pin(String statusId) async {
+    var api = url+ '/' + statusId + '/pin';
+    return await Request.post(url: api,showDialog: false);
+  }
+
+  static unpin(String statusId) async {
+    var api = url+ '/' + statusId + '/unpin';
+    return await Request.post(url: api,showDialog: false);
+  }
+
   static unBookmark(String statusId) async{
     var api = url+'/'+statusId+'/unbookmark';
     return await Request.post(url: api,showDialog: false);

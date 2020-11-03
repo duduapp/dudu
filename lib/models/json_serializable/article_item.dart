@@ -62,6 +62,9 @@ class StatusItemData extends Object {
   @JsonKey(name: 'bookmarked')
   bool bookmarked;
 
+  @JsonKey(name: 'pinned')
+  bool pinned;
+
   @JsonKey(name: 'reblog')
   StatusItemData reblog;
 
@@ -109,6 +112,7 @@ class StatusItemData extends Object {
       this.reblogged,
       this.muted,
       this.bookmarked,
+      this.pinned,
       this.reblog,
       this.application,
       this.account,

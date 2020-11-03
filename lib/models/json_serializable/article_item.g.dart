@@ -27,6 +27,7 @@ StatusItemData _$StatusItemDataFromJson(Map<String, dynamic> json) {
       json['reblogged'] as bool,
       json['muted'] as bool,
       json['bookmarked'] as bool,
+      json['pinned'] as bool,
       json['reblog'] == null
           ? null
           : StatusItemData.fromJson(json['reblog'] as Map<String, dynamic>),
@@ -69,6 +70,7 @@ Map<String, dynamic> _$StatusItemDataToJson(StatusItemData instance) =>
       'reblogged': instance.reblogged,
       'muted': instance.muted,
       'bookmarked': instance.bookmarked,
+      'pinned': instance.pinned,
       'reblog': instance.reblog?.toJson(),
       'application': instance.application?.toJson(),
       'account': instance.account?.toJson(),

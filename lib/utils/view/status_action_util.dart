@@ -16,6 +16,7 @@ import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/url_util.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -268,6 +269,12 @@ class StatusActionUtil {
           ),
 
       ] else ...[
+        if (data.visibility == 'public' || data.visibility == 'unlisted')
+        BottomSheetItem(
+          icon: Icons.vertical_align_top,
+          text: data.pinned == null || !data.pinned ? '置顶' : '取消置顶',
+          onTap: () => onPressPin(data),
+        ),
         BottomSheetItem(
           icon: IconFont.delete,
           text: '删除',
@@ -338,6 +345,19 @@ class StatusActionUtil {
     }
     data.bookmarked = !data.bookmarked;
     ListViewUtil.handleAllStatuses((e) => e['bookmarked'] = data.bookmarked,
+        ListViewUtil.sameStatusCondition(data));
+  }
+
+  static onPressPin(StatusItemData data) {
+    if (data.pinned != null && data.pinned) {
+      StatusApi.unpin(data.id);
+      DialogUtils.toastFinishedInfo('已取消置顶');
+    } else {
+      StatusApi.pin(data.id);
+      DialogUtils.toastFinishedInfo('已置顶');
+    }
+    data.pinned = !data.pinned;
+    ListViewUtil.handleAllStatuses((e) => e['pinned'] = data.pinned,
         ListViewUtil.sameStatusCondition(data));
   }
 
