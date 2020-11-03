@@ -4,6 +4,7 @@ import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/login/login.dart';
 import 'package:dudu/pages/setting/about_app.dart';
 import 'package:dudu/pages/setting/account_switch.dart';
+import 'package:dudu/pages/setting/setting_content.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
@@ -90,6 +91,10 @@ class _GeneralSettingState extends State<GeneralSetting> {
             options: ['0','1','2'],
             displayOptions: ['小','中','大'],
             type: SettingType.string,
+          ),
+          SettingCell(
+            title: '显示设置',
+            onPress: () => AppNavigate.push(SettingContent()),
           ),
 
 

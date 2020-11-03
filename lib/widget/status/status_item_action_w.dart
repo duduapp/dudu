@@ -24,8 +24,12 @@ class StatusItemActionW extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var textScale =
-    SettingsProvider.getWithCurrentContext('text_scale', listen: true);
+    var settings = Provider.of<SettingsProvider>(context);
+    var textScale = settings.get('text_scale');
+    var zan_or_shoucang = settings.get('zan_or_shoucang');
+    var zan_icon = zan_or_shoucang == '0' ? IconFont.thumbUp : IconFont.favorite;
+    var zan_text = zan_or_shoucang == '0' ? '赞' : '收藏';
+
     Color color = Theme.of(context).accentColor;
     double fontSize = 12 ;
     double iconSize = 16 * ScreenUtil.scaleFromSetting(textScale) ;
@@ -172,7 +176,7 @@ class StatusItemActionW extends StatelessWidget {
                   children: <Widget>[
                     SizedBox(width: 3,),
                     Text(
-                      subStatus ? '':'收藏',
+                      subStatus ? '':zan_text,
                       style: TextStyle(
                           fontSize: fontSize,
                           color: status.favourited != null && status.favourited
@@ -189,12 +193,12 @@ class StatusItemActionW extends StatelessWidget {
               likeBuilder: (bool isLiked) {
                 return isLiked
                     ? Icon(
-                        IconFont.favorite,
+                        zan_icon,
                         color: Colors.yellow[800],
                         size: iconSize,
                       )
                     : Icon(
-                        IconFont.favorite,
+                        zan_icon,
                         color: Theme.of(context).accentColor,
                         size: iconSize,
                       );

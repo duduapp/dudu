@@ -59,6 +59,7 @@ class SettingsProvider extends ChangeNotifier {
       'default_post_privacy': 'public',
       'make_media_sensitive': false,
       'text_scale': '1',
+      'zan_or_shoucang': '0',
       'show_notifications': true,
       'show_notifications.reblog': true,
       'show_notifications.favourite': true,
