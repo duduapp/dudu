@@ -1,4 +1,5 @@
 import 'package:dudu/api/timeline_api.dart';
+import 'package:dudu/db/db_constant.dart';
 import 'package:dudu/db/tb_cache.dart';
 import 'package:dudu/models/http/request_manager.dart';
 import 'package:dudu/models/json_serializable/filter_item.dart';
@@ -58,7 +59,7 @@ class SettingsProvider extends ChangeNotifier {
       'default_post_privacy': 'public',
       'make_media_sensitive': false,
       'text_scale': '1',
-      'show_notifications': false,
+      'show_notifications': true,
       'show_notifications.reblog': true,
       'show_notifications.favourite': true,
       'show_notifications.follow_request': true,
@@ -146,7 +147,7 @@ class SettingsProvider extends ChangeNotifier {
 
   Future<int> _getUnreadFromDb(String tag) async {
     var res = await TbCacheHelper.getCache(
-        LoginedUser().fullAddress, 'unread.' + tag);
+        LoginedUser().fullAddress, DbConstant.unreadPrefix + tag);
     if (res == null) return 0;
     int value = int.tryParse(res.content);
     if (value != null) return value;
@@ -155,7 +156,7 @@ class SettingsProvider extends ChangeNotifier {
 
   Future<String> _getLatestId(String tag) async {
     var res = await TbCacheHelper.getCache(
-        LoginedUser().fullAddress, RequestManager.latestIdPrefix + tag);
+        LoginedUser().fullAddress, DbConstant.latestIdPrefix + tag);
     if (res == null) return null;
     return res.content;
   }

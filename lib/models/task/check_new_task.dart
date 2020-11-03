@@ -6,8 +6,8 @@ import 'package:flutter/cupertino.dart';
 
 class CheckNewTask {
     static start() {
-        debugPrint('fetch new task');
-        RequestManager.checkNewRecords();
+        // debugPrint('fetch new task');
+        // RequestManager.checkNewRecords();
         Timer.periodic(Duration(minutes: 10),(t){
             debugPrint('fetch new task');
             RequestManager.checkNewRecords();

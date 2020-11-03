@@ -172,11 +172,7 @@ class ResultListProvider extends ChangeNotifier {
       return false;
     }
 
-    if (response.statusCode == 422) {
-      error = AuthRequiredException();
-      notifyListeners();
-      return false;
-    }
+
 
     //只有列表为空时，才显示错误，为了更好的用户体验
     if (response == null && list.isEmpty) {
@@ -195,6 +191,12 @@ class ResultListProvider extends ChangeNotifier {
     } else {
       error = null;
     }
+    if (response.statusCode == 422) {
+      error = AuthRequiredException();
+      notifyListeners();
+      return false;
+    }
+
     var data = response.body;
 
     if (mapKey != null) {

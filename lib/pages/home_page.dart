@@ -47,15 +47,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   saveState() {
-    SettingsProvider().homeProvider.saveDataToCache();
-    SettingsProvider().localProvider.saveDataToCache();
-    SettingsProvider().federatedProvider.saveDataToCache();
+    debugPrint('start save state');
+    SettingsProvider().homeProvider?.saveDataToCache();
+    SettingsProvider().localProvider?.saveDataToCache();
+    SettingsProvider().federatedProvider?.saveDataToCache();
   }
 
   removeState() {
-    SettingsProvider().homeProvider.removeCache();
-    SettingsProvider().localProvider.removeCache();
-    SettingsProvider().federatedProvider.removeCache();
+    debugPrint('remove state');
+    SettingsProvider().homeProvider?.removeCache();
+    SettingsProvider().localProvider?.removeCache();
+    SettingsProvider().federatedProvider?.removeCache();
   }
 
   int _tabIndex;

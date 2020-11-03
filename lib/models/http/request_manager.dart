@@ -1,5 +1,6 @@
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/api/timeline_api.dart';
+import 'package:dudu/db/db_constant.dart';
 import 'package:dudu/db/tb_cache.dart';
 import 'package:dudu/models/http/http_response.dart';
 import 'package:dudu/models/logined_user.dart';
@@ -8,8 +9,6 @@ import 'package:dudu/utils/request.dart';
 import 'package:flutter/foundation.dart';
 
 class RequestManager {
-  static const latestIdPrefix = 'latest_id.';
-  static const unreadPrefix = 'unread.';
 
 
   static getTimeline(String url,bool enableCache) async{
@@ -18,8 +17,9 @@ class RequestManager {
         url: url,
         returnAll: true,
         enableCache: enableCache);
+    if (response == null) return null;
     if (provider.unread.containsKey(url)) {
-      provider.updateUnread(url, 0);
+      _updateUnread(provider, url, 0);
       if (response.body.isNotEmpty && response.body is List) {
         var latestId;
         if (url == TimelineApi.conversations) {
@@ -32,6 +32,7 @@ class RequestManager {
         _updateLatestId(provider, url, latestId);
       }
     }
+    return response;
   }
 
   static _requestedStatusDetail(String statusId) {
@@ -45,11 +46,11 @@ class RequestManager {
 
   static _updateLatestId(SettingsProvider provider,String url,String id) {
     provider.latestIds[url] = id;
-    TbCacheHelper.setCache(TbCache(account: LoginedUser().fullAddress,tag: latestIdPrefix+url,content: id));
+    TbCacheHelper.setCache(TbCache(account: LoginedUser().fullAddress,tag: DbConstant.latestIdPrefix+url,content: id));
   }
 
   static _updateUnread(SettingsProvider provider,String url,int count) {
-    SettingsProvider().updateUnread(url, 1);
+    SettingsProvider().updateUnread(url, count);
     TbCacheHelper.setCache(TbCache(account: LoginedUser().fullAddress,tag: url,content: count.toString()));
   }
 
@@ -62,7 +63,7 @@ class RequestManager {
           HttpResponse response = await Request.get(
               url: key,
               returnAll: true);
-          if (response.body.isNotEmpty) {
+          if (response.body.isNotEmpty && response.body is List) {
             var newLatestId = response.body[0]['id'];
             if (key == TimelineApi.conversations) {
               newLatestId = response.body[0]['last_status']['id'];
