@@ -12,18 +12,25 @@ import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 
 class AddInstance extends StatefulWidget {
+  final String url;
+
+  AddInstance([this.url]);
+
   @override
   _AddInstanceState createState() => _AddInstanceState();
 }
 
 class _AddInstanceState extends State<AddInstance> {
-  TextEditingController _controller = TextEditingController();
+  TextEditingController _controller;
   Timer _debounce;
   Map<String, InstanceItem> requests = {};
   bool loading = false;
 
+
+
   @override
   void initState() {
+    _controller = TextEditingController(text: widget.url);
     _controller.addListener(() {
       setState(() {});
       if (_debounce?.isActive ?? false) _debounce.cancel();
@@ -31,6 +38,9 @@ class _AddInstanceState extends State<AddInstance> {
         getUrlInfo();
       });
     });
+    if (widget.url != null) {
+      getUrlInfo();
+    }
     super.initState();
   }
 

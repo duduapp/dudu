@@ -24,33 +24,38 @@ class _TimelineContentState extends State<TimelineContent> {
 
   @override
   void initState() {
+    bool sameInstance = !widget.url.startsWith('https://');
     provider = ResultListProvider(
-        firstRefresh: false,
+        firstRefresh: sameInstance ?false :true,
         requestUrl: widget.url,
         tag: widget.tag,
         buildRow: widget.rowBuilder ?? ListViewUtil.statusRowFunction(),
         listenBlockEvent: false,
         dataHandler:
              widget.prefixId ? ListViewUtil.dataHandlerPrefixIdFunction(widget.tag + "##"): null) ;
-    switch (widget.tag) {
-      case 'home':
-        SettingsProvider().homeProvider = provider;
-        break;
-      case 'local':
-        SettingsProvider().localProvider = provider;
-        break;
-      case 'federated':
-        SettingsProvider().federatedProvider = provider;
-        break;
+    if (sameInstance) {
+      switch (widget.tag) {
+        case 'home':
+          SettingsProvider().homeProvider = provider;
+          break;
+        case 'local':
+          SettingsProvider().localProvider = provider;
+          break;
+        case 'federated':
+          SettingsProvider().federatedProvider = provider;
+          break;
+      }
+      provider.refreshController = _refreshController;
+      provider.scrollController = _scrollController;
+      provider.loadCacheDataOrRefresh();
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        provider.checkCachePosition();
+      });
     }
-    provider.refreshController = _refreshController;
-    provider.scrollController = _scrollController;
 
-    provider.loadCacheDataOrRefresh();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      provider.checkCachePosition();
-    });
+
     super.initState();
   }
 

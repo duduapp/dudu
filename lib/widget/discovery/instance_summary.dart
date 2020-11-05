@@ -33,7 +33,11 @@ class InstanceSummary extends StatelessWidget {
         SettingsProvider.getWithCurrentContext('text_scale', listen: true);
     double headerHeight;
     headerHeight = ScreenUtil.scaleFromSetting(textScale) * 36;
-
+    String urlWithoutHttpPrefix;
+    if (item.detail.uri.startsWith('https://'))
+      urlWithoutHttpPrefix = item.detail.uri.replaceFirst('https://', '');
+    else
+      urlWithoutHttpPrefix = item.detail.uri;
     return Column(
       children: [
         MediaQuery(
@@ -58,8 +62,11 @@ class InstanceSummary extends StatelessWidget {
               ]);
             } : null,
             onTap: showAction && !item.fromStale ?() {
+              var url = item.detail.uri;
+              if (url.startsWith('https://'))
+                url = url.replaceFirst('https://', '');
               AppNavigate.push(PublicTimeline(
-                url: item.detail.uri,
+                url: url,
               ));
               // showMaterialModalBottomSheet(
               //   expand: true,
@@ -114,7 +121,7 @@ class InstanceSummary extends StatelessWidget {
                                 style: TextStyle(height: 1, fontSize: 13.5),
                               ),
                               Spacer(),
-                              Text(item.detail.uri,
+                              Text(urlWithoutHttpPrefix,
                                   style: TextStyle(
                                       color: Theme.of(context).accentColor,
                                       height: 1,
@@ -165,14 +172,14 @@ class InstanceSummary extends StatelessWidget {
                             TextInkWell(
                               onTap: item.fromStale ? null :() {
                                 UrlUtil.openUrl(
-                                    'https://' + item.detail.uri + '/auth/sign_up');
+                                    'https://' + urlWithoutHttpPrefix + '/auth/sign_up');
                               },
                               text: '注册',
                             ),
                             TextInkWell(
                               onTap: item.fromStale ? null : () {
                                 UrlUtil.openUrl(
-                                    'https://' + item.detail.uri + '/about');
+                                    'https://' + urlWithoutHttpPrefix + '/about');
                               },
                               text: '更多',
                             ),

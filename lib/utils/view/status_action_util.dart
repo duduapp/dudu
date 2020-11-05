@@ -10,6 +10,7 @@ import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/admin/account_action_dialog.dart';
+import 'package:dudu/pages/discovery/add_instance.dart';
 import 'package:dudu/pages/status/new_status.dart';
 import 'package:dudu/pages/user_profile/user_report.dart';
 import 'package:dudu/public.dart';
@@ -28,8 +29,7 @@ import 'list_view_util.dart';
 class StatusActionUtil {
   static Future<bool> reblog(
       bool isLiked, StatusItemData status, BuildContext context) async {
-
-    status = await getStatusInLocal(context,status);
+    status = await getStatusInLocal(context, status);
     if (status == null) return false;
 
     status.reblogged = !isLiked;
@@ -37,35 +37,31 @@ class StatusActionUtil {
 
     ResultListProvider provider;
     try {
-      provider =
-          Provider.of<ResultListProvider>(context, listen: false);
-    } catch (e) {
-
-    }
+      provider = Provider.of<ResultListProvider>(context, listen: false);
+    } catch (e) {}
     if (provider != null)
-    provider.list.forEach((element) {
-      if (element['id'] == status.id) {
-        element['reblogged'] = !isLiked;
-        element['reblogs_count'] =
-            element['reblogs_count'] + (!isLiked ? 1 : -1);
-      }
+      provider.list.forEach((element) {
+        if (element['id'] == status.id) {
+          element['reblogged'] = !isLiked;
+          element['reblogs_count'] =
+              element['reblogs_count'] + (!isLiked ? 1 : -1);
+        }
 
-      // handle reblog status
-      if ((element.containsKey('reblog') &&
-          element['reblog'] != null &&
-          element['reblog']['id'] == status.id)) {
-        element['reblog']['reblogged'] = !isLiked;
-        element['reblog']['reblogs_count'] =
-            element['reblogs_count'] + (!isLiked ? 1 : -1);
-      }
-    });
+        // handle reblog status
+        if ((element.containsKey('reblog') &&
+            element['reblog'] != null &&
+            element['reblog']['id'] == status.id)) {
+          element['reblog']['reblogged'] = !isLiked;
+          element['reblog']['reblogs_count'] =
+              element['reblogs_count'] + (!isLiked ? 1 : -1);
+        }
+      });
     if (isLiked) {
       ListViewUtil.unreblogStatusInAllProvider(status);
       var res = await StatusApi.unReblog(status.id);
       if (res != null) {
         changeStatusCount(-1);
       }
-
     } else {
       ListViewUtil.reblogStatusInAllProvider(status);
       var res = StatusApi.reblog(status.id);
@@ -80,21 +76,20 @@ class StatusActionUtil {
   static changeStatusCount([int change = 1]) {
     var count = LoginedUser().account.statusesCount;
     if (count + change >= 0) {
-      LoginedUser().account.statusesCount =  count + change;
+      LoginedUser().account.statusesCount = count + change;
     }
   }
 
   static changeFollowingCount([int change = 1]) {
     var count = LoginedUser().account.followingCount;
     if (count + change >= 0) {
-      LoginedUser().account.followingCount =  count + change;
+      LoginedUser().account.followingCount = count + change;
     }
   }
 
-
   static Future<bool> favourite(
       bool isLiked, StatusItemData status, BuildContext context) async {
-    status = await getStatusInLocal(context,status);
+    status = await getStatusInLocal(context, status);
     if (status == null) return false;
 
     status.favourited = !isLiked;
@@ -102,11 +97,8 @@ class StatusActionUtil {
 
     ResultListProvider provider;
     try {
-      provider =
-          Provider.of<ResultListProvider>(context, listen: false);
-    } catch (e) {
-
-    }
+      provider = Provider.of<ResultListProvider>(context, listen: false);
+    } catch (e) {}
     if (provider != null) {
       provider.list.forEach((element) {
         if (element['id'] == status.id) {
@@ -154,8 +146,10 @@ class StatusActionUtil {
     }, ListViewUtil.sameStatusCondition(status));
   }
 
-  static showAdminAccountActionDialog(BuildContext context, StatusItemData data) {
-    DialogUtils.showRoundedDialog(context: context,content: AccountActionDialog(data.account));
+  static showAdminAccountActionDialog(
+      BuildContext context, StatusItemData data) {
+    DialogUtils.showRoundedDialog(
+        context: context, content: AccountActionDialog(data.account));
   }
 
   static showBottomSheetAction(
@@ -170,18 +164,22 @@ class StatusActionUtil {
       }
     }
 
+    ResultListProvider provider;
+    try {
+      provider = Provider.of<ResultListProvider>(context, listen: false);
+    } catch (e) {}
+
     DialogUtils.showBottomSheet(context: modalContext, widgets: [
       BottomSheetItem(
         icon: IconFont.bookmark,
-        text: (data.bookmarked == null || !data.bookmarked ) ? '添加书签' : '删除书签' ,
-        onTap: () => onPressBookmark(modalContext,data),
+        text: (data.bookmarked == null || !data.bookmarked) ? '添加书签' : '删除书签',
+        onTap: () => onPressBookmark(modalContext, data),
       ),
-
       Divider(indent: 60, height: 0),
       if (mentioned) ...[
         BottomSheetItem(
           icon: IconFont.volumeOff,
-          text: (data.muted == null || !data.muted) ?  '隐藏该对话': '取消隐藏该对话',
+          text: (data.muted == null || !data.muted) ? '隐藏该对话' : '取消隐藏该对话',
           subText: '隐藏后将不会从该对话中接收到消息',
           onTap: () {
             _onPressMuteConversation(data);
@@ -204,35 +202,48 @@ class StatusActionUtil {
           Share.share(StringUtil.removeAllHtmlTags(data.content));
         },
       ),
-      Divider(indent: 60, height: 0),
-      if (Platform.isAndroid)
-      BottomSheetItem(
-        icon: IconFont.copy,
-        text: '复制嘟文',
-        onTap: () {
-
-                 Clipboard.setData(new ClipboardData(
-                     text: StringUtil.removeAllHtmlTags(data.content)));
-                 DialogUtils.toastFinishedInfo('嘟文已复制');
-        },
-      ),
-
-
-      Divider(indent: 60, height: 0),
-      if (myAccount.id != data.account.id) ...[
-        if (sameInstance(context))
+      if (Platform.isAndroid) ...[
+        Divider(indent: 60, height: 0),
         BottomSheetItem(
-          icon: IconFont.report,
-          text: '投诉 ',
-          onTap: () async{
-            var accountLocal = await getAccountInLocal(modalContext,data.account);
-            if (accountLocal == null) return;
-            AppNavigate.push(UserReport(
-              account: accountLocal,
-              fromStatusId: data.id,
-            ));
+          icon: IconFont.copy,
+          text: '复制嘟文',
+          onTap: () {
+            Clipboard.setData(new ClipboardData(
+                text: StringUtil.removeAllHtmlTags(data.content)));
+            DialogUtils.toastFinishedInfo('嘟文已复制');
           },
-        ),
+        )
+      ],
+      if (myAccount.id != data.account.id) ...[
+        if (sameInstance(context) &&
+            provider != null &&
+            provider.tag == 'federated') ...[
+          Divider(indent: 60, height: 0),
+          BottomSheetItem(
+            icon: IconFont.follow,
+            text: '关注' + data.account.acct,
+            onTap: () async {
+              var res = await AccountsApi.follow(data.account.id);
+              if (res != null) DialogUtils.toastFinishedInfo('已关注或发送关注请求');
+            },
+          )
+        ],
+        if (sameInstance(context)) ...[
+          Divider(indent: 60, height: 0),
+          BottomSheetItem(
+            icon: IconFont.report,
+            text: '投诉 ',
+            onTap: () async {
+              var accountLocal =
+                  await getAccountInLocal(modalContext, data.account);
+              if (accountLocal == null) return;
+              AppNavigate.push(UserReport(
+                account: accountLocal,
+                fromStatusId: data.id,
+              ));
+            },
+          )
+        ],
         Divider(
           indent: 60,
           height: 0,
@@ -260,18 +271,38 @@ class StatusActionUtil {
           text: '屏蔽 @' + data.account.username,
           subText: '屏蔽后该用户将无法看到你发的嘟文',
         ),
-        if (data.account.acct.contains('@'))
-        BottomSheetItem(
-          icon: IconFont.www,
-          text: '隐藏该用户所在实例所有内容',
-          onTap: () => DialogUtils.showSimpleAlertDialog(
-              context: context,
-              text:
-              '你确定要屏蔽@${StringUtil.accountDomain(data.account)}实例吗？你将不会在任何公共时间轴或消息中看到该实例的内容，而且该实例的关注者也会被删除',
-              onConfirm: () { AccountsApi.blockDomain(StringUtil.accountDomain(data.account));},
-              popFirst: false),
-        ),
-        if (LoginedUser().isAdmin && data.account.url.contains(LoginedUser().host))
+        if (data.account.acct.contains('@')) ...[
+          BottomSheetItem(
+            icon: IconFont.favorite,
+            text: '收藏实例',
+            onTap: () async{
+              var res = await DialogUtils.showRoundedDialog(
+                  context: context, content: AddInstance(StringUtil.accountDomain(data.account)));
+              if (res != null) {
+                DialogUtils.toastFinishedInfo('添加实例成功');
+              }
+            },
+          ),
+          Divider(
+            indent: 60,
+            height: 0,
+          ),
+          BottomSheetItem(
+            icon: IconFont.www,
+            text: '隐藏该用户所在实例所有内容',
+            onTap: () => DialogUtils.showSimpleAlertDialog(
+                context: context,
+                text:
+                    '你确定要屏蔽@${StringUtil.accountDomain(data.account)}实例吗？你将不会在任何公共时间轴或消息中看到该实例的内容，而且该实例的关注者也会被删除',
+                onConfirm: () {
+                  AccountsApi.blockDomain(
+                      StringUtil.accountDomain(data.account));
+                },
+                popFirst: false),
+          )
+        ],
+        if (LoginedUser().isAdmin &&
+            data.account.url.contains(LoginedUser().host))
           BottomSheetItem(
             onTap: () {
               showAdminAccountActionDialog(context, data);
@@ -279,14 +310,13 @@ class StatusActionUtil {
             icon: IconFont.block,
             text: '管理员: 对账号进行操作',
           ),
-
       ] else ...[
         if (data.visibility == 'public' || data.visibility == 'unlisted')
-        BottomSheetItem(
-          icon: Icons.vertical_align_top,
-          text: data.pinned == null || !data.pinned ? '置顶' : '取消置顶',
-          onTap: () => onPressPin(data),
-        ),
+          BottomSheetItem(
+            icon: Icons.vertical_align_top,
+            text: data.pinned == null || !data.pinned ? '置顶' : '取消置顶',
+            onTap: () => onPressPin(data),
+          ),
         BottomSheetItem(
           icon: IconFont.delete,
           text: '删除',
@@ -306,7 +336,9 @@ class StatusActionUtil {
           color: Colors.red,
           onTap: () {
             _onPressRemove(modalContext, data, subStatus);
-            AppNavigate.push(NewStatus(scheduleInfo: data.toJson(),));
+            AppNavigate.push(NewStatus(
+              scheduleInfo: data.toJson(),
+            ));
           },
         )
       ],
@@ -328,7 +360,8 @@ class StatusActionUtil {
     if (SettingsProvider().statusDetailProviders.contains(provider)) {
       // user is in status detail page
       if (subStatus) {
-        var res = await ListViewUtil.deleteStatus(context: context, status: data);
+        var res =
+            await ListViewUtil.deleteStatus(context: context, status: data);
         if (res != null) {
           changeStatusCount(-1);
         }
@@ -346,8 +379,8 @@ class StatusActionUtil {
 //    StatusApi.remove(widget.item.id);
   }
 
-  static onPressBookmark(BuildContext context,StatusItemData data) async {
-    data = await getStatusInLocal(context,data);
+  static onPressBookmark(BuildContext context, StatusItemData data) async {
+    data = await getStatusInLocal(context, data);
     if (!data.bookmarked) {
       StatusApi.bookmark(data.id);
       DialogUtils.toastFinishedInfo('已添加书签');
@@ -427,8 +460,7 @@ class StatusActionUtil {
       provider = SettingsProvider().statusDetailProviders.last;
     }
 
-
-     if (SettingsProvider().statusDetailProviders.contains(provider)) {
+    if (SettingsProvider().statusDetailProviders.contains(provider)) {
       // user is in status detail page
       if (subStatus) {
         // 当前页的的字嘟文是否和主嘟文是同一个作者
@@ -463,10 +495,8 @@ class StatusActionUtil {
     return true;
   }
 
-
-
-
-  static Future<StatusItemData> getStatusInLocal(BuildContext context,StatusItemData status) async{
+  static Future<StatusItemData> getStatusInLocal(
+      BuildContext context, StatusItemData status) async {
     if (!sameInstance(context)) {
       if (!ListViewUtil.loginnedAndPrompt()) return null;
       var statusLocal = await SearchApi.resolveStatus(status.url);
@@ -480,8 +510,10 @@ class StatusActionUtil {
     }
   }
 
-  static Future<OwnerAccount> getAccountInLocal(BuildContext context,OwnerAccount account) async {
-    if (context != null && !sameInstance(context) || !AccountUtil.sameInstance(account.url)) {
+  static Future<OwnerAccount> getAccountInLocal(
+      BuildContext context, OwnerAccount account) async {
+    if (context != null && !sameInstance(context) ||
+        !AccountUtil.sameInstance(account.url)) {
       if (!ListViewUtil.loginnedAndPrompt()) return null;
       var statusLocal = await SearchApi.resolveAccount(account.url);
       if (statusLocal == null) {

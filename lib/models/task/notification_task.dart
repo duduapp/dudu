@@ -13,11 +13,11 @@ class NotificationTask {
   static StreamSubscription userNotificationEvents;
 
   static enable() async {
+    userNotificationEvents?.cancel();
     var settings = SettingsProvider().settings;
     if (!settings['show_notifications']) return;
     //NotificationUtil.init();
-    userNotificationEvents?.cancel();
-    
+
     LoginedUser user = LoginedUser();
     final events = EventSource(
         Uri.parse(user.getHost() + '/api/v1/streaming/user'),

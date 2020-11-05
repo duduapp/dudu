@@ -72,9 +72,14 @@ class BottomSheetItem extends StatelessWidget {
                 ],
               ),
             ] else ...[
-              Text(
-                text,
-                style: TextStyle(fontSize: 16, color: color),
+              Flexible(
+                child: Text(
+                  text,
+                  style: TextStyle(fontSize: 16, color: color),
+                  maxLines: 1,
+                  overflow: TextOverflow.clip,
+                  softWrap: false,
+                ),
               )
             ],
           ],

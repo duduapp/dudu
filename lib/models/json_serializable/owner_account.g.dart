@@ -26,7 +26,7 @@ OwnerAccount _$OwnerAccountFromJson(Map<String, dynamic> json) {
       json['statuses_count'] as int,
       json['source'] == null
           ? null
-          : Source.fromJson(json['source'] as Map<String, dynamic>),
+          : json['source'] is Source ? json['source'] :Source.fromJson(json['source'] as Map<String, dynamic>),
       json['emojis'] as List,
       json['fields'] as List);
 }

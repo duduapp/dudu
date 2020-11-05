@@ -376,23 +376,27 @@ class _StatusDetailState extends State<StatusDetail>
           MediaQuery(
             data: MediaQuery.of(context)
                 .copyWith(textScaleFactor: ScreenUtil.scaleFromSetting(SettingsProvider().get('text_scale')) + 0.1),
-            child: Container(
-                decoration: BoxDecoration(
-                    color: Theme.of(context).appBarTheme.color,
-                    border: Border(
-                        top: BorderSide(
-                            width: 0.5, color: Theme.of(context).dividerColor))),
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Container(
-                  padding: EdgeInsets.all(8),
-               //   color: Colors.red,
-                  alignment: Alignment.topCenter,
-                  child: StatusItemActionW(
-                  status: widget.data,
-                  subStatus: false,
-                  showNum: false,
-                ),
-                )),
+            // fake result list provider
+            child: ChangeNotifierProvider<ResultListProvider>(
+              create: (context) => ResultListProvider(requestUrl: widget.hostUrl ?? '', buildRow: null,firstRefresh: false),
+              child: Container(
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).appBarTheme.color,
+                      border: Border(
+                          top: BorderSide(
+                              width: 0.5, color: Theme.of(context).dividerColor))),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Container(
+                    padding: EdgeInsets.all(8),
+                    //   color: Colors.red,
+                    alignment: Alignment.topCenter,
+                    child: StatusItemActionW(
+                      status: widget.data,
+                      subStatus: false,
+                      showNum: false,
+                    ),
+                  )),
+            ),
           )
         ],
       ),

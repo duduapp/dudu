@@ -103,7 +103,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
             child: Row(
               children: [
                 SizedBox(
-                  width: 102,
+                  width: 60,
                 ),
                 Expanded(
                   child: ColoredTabBar(

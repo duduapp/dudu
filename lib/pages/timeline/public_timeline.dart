@@ -38,6 +38,8 @@ class _PublicTimelineState extends State<PublicTimeline>
   MKDropDownMenuController _menuController1;
   MKDropDownMenuController _menuController2;
 
+  String url;
+
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
@@ -47,6 +49,15 @@ class _PublicTimelineState extends State<PublicTimeline>
     _headerKey = GlobalKey();
     _menuController1 = MKDropDownMenuController();
     _menuController2 = MKDropDownMenuController();
+
+    if (widget.url != null) {
+      if (widget.url.startsWith('https://')) {
+        url = widget.url;
+      } else {
+        url = 'https://' + widget.url;
+      }
+    }
+
     super.initState();
   }
 
@@ -103,7 +114,7 @@ class _PublicTimelineState extends State<PublicTimeline>
                       tabs: [
                         Badge(
                           position: BadgePosition.topEnd(top: 5,end: 18),
-                          showBadge: provider.unread[TimelineApi.local] != 0,
+                          showBadge: provider.unread[TimelineApi.local] != 0 && widget.url == null,
                           child: (_tabController.index == 0 && widget.url == null)
                               ? MKDropDownMenu(
                                   controller: _menuController1,
@@ -180,13 +191,13 @@ class _PublicTimelineState extends State<PublicTimeline>
             children: [
               TimelineContent(
                 url: widget.url != null
-                    ? 'https://' + widget.url + TimelineApi.local
+                    ? url + TimelineApi.local
                     : TimelineApi.local,
                 tag: 'local',
               ),
               TimelineContent(
                 url: widget.url != null
-                    ? 'https://' + widget.url + TimelineApi.federated
+                    ? url + TimelineApi.federated
                     : TimelineApi.federated,
                 tag: 'federated',
               ),

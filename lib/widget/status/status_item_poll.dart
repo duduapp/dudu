@@ -125,11 +125,11 @@ class _StatusItemPollState extends State<StatusItemPoll> {
   vote() async{
     Map<String, dynamic> paramsMap = Map();
     paramsMap['choices'] = choices;
-    var response = await Request.post(url:'${Api.poll}/${widget.status.poll.id}/votes',params: paramsMap,showDialog: true);
+    var local = await StatusActionUtil.getStatusInLocal(context, widget.status);
+    if (local == null) return;
+    var response = await Request.post(url:'${Api.poll}/${local.poll.id}/votes',params: paramsMap,showDialog: true);
     if (response != null)
     StatusActionUtil.updateStatusVote(widget.status, response, context);
-
-
   }
 
   Widget pollInfo() {
