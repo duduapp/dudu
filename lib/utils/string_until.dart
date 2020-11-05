@@ -19,7 +19,7 @@ class StringUtil {
   }
   
   static String accountDomain(OwnerAccount account) {
-    return account.url.substring(account.url.indexOf('\/\/')+2,account.url.lastIndexOf('\/'));
+    return account.url.substring(account.url.indexOf('\/\/')+2,account.url.indexOf(RegExp('[a-zA-Z0-9]\/[a-zA-Z0-9@]'))+1);
   }
 
   static String removeAllHtmlTags(String htmlText) {

@@ -98,7 +98,7 @@ class CommonBlockList extends StatelessWidget {
         refreshEvent = EventBusKey.userUnblocked;
         break;
       case BlockType.hideDomain:
-        title = '隐藏域名';
+        title = '被隐藏的实例';
         url = AccountsApi.blockDomainUrl;
         buildRow = _buildBlockDomainRow;
         refreshEvent = EventBusKey.domainUnblocked;

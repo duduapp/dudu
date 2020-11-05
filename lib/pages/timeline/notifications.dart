@@ -106,7 +106,7 @@ class _NotificationsState extends State<Notifications>
   Widget build(BuildContext context) {
     return AccountSwitchTimeline(
       provider: provider,
-      title: '通知',
+      title: '消息',
       listView: ProviderEasyRefreshListView(
         refreshController: refreshController,
       ),
@@ -122,7 +122,7 @@ class _NotificationsState extends State<Notifications>
           onSelected: (String value) {
             switch (value) {
               case 'clear':
-                DialogUtils.showSimpleAlertDialog(context: context,text: '你确定要永远删除通知列表吗',onConfirm: _clearNotification);
+                DialogUtils.showSimpleAlertDialog(context: context,text: '你确定要永远删除消息列表吗',onConfirm: _clearNotification);
                 break;
               case 'choose_type':
                 showChooseTypeDialog();

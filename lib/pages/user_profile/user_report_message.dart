@@ -34,7 +34,7 @@ class _UserReportMessageState extends State<UserReportMessage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('举报@${widget.account.acct}的滥用行为',overflow: TextOverflow.fade,),
+        title: Text('投诉@${widget.account.acct}的滥用行为',overflow: TextOverflow.fade,),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -43,7 +43,7 @@ class _UserReportMessageState extends State<UserReportMessage> {
           child: Column(
             children: <Widget>[
               Text(
-                '该报告将发送给您的服务器管理员。你可以在下面填写举报该用户的理由：',
+                '该报告将发送给您的服务器管理员。你可以在下面填写投诉该用户的理由：',
                 maxLines: null,
               ),
               SizedBox(
@@ -72,7 +72,7 @@ class _UserReportMessageState extends State<UserReportMessage> {
                 height: 20,
               ),
               if (widget.account.acct != widget.account.username) ...[
-                Text('这名用户来自另一个服务器。是否要向那个服务器发送一条匿名的举报？',),
+                Text('这名用户来自另一个服务器。是否要向那个服务器发送一条匿名的投诉？',),
                 SizedBox(height: 20,),
                 Row(
                   children: <Widget>[
@@ -103,7 +103,7 @@ class _UserReportMessageState extends State<UserReportMessage> {
                     ),
                     RaisedButton(
                       textColor: Colors.white,
-                      child: Text('举报'),
+                      child: Text('投诉'),
                       onPressed: () async{
                         var res = await AccountsApi.reportUser(widget.account.id, widget.chooseStatuses, _controller.text, forward);
                         if (res != null) {

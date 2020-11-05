@@ -30,7 +30,7 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
 
   @override
   void initState() {
-    if (widget.foldConetent && StringUtil.removeAllHtmlTags(widget.content).length > 500 && !SettingsProvider().get('always_expand_tools')) {
+    if (widget.foldConetent && StringUtil.removeAllHtmlTags(widget.content).length > 300 && !SettingsProvider().get('always_expand_tools')) {
       expanded = false;
       needExpand = true;
     }
@@ -48,7 +48,7 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
         crossAxisAlignment: CrossAxisAlignment.start,
           children: [
         Html(
-          data: expanded? widget.content : widget.content.length > 500 ? widget.content.substring(0,500)+'...' : widget.content,
+          data: expanded? widget.content : widget.content.length > 300 ? widget.content.substring(0,300)+'...' : widget.content,
           onLinkTap: _onLinkTap,
           padding: EdgeInsets.all(0),
           blockSpacing: 0,
@@ -56,7 +56,7 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
           renderNewlines: true,
           useRichText: true//widget.emojis.isEmpty,
         ),
-        if (needExpand && widget.content.length > 500)
+        if (needExpand && widget.content.length > 300)
           OutlineButton(child: Text(expanded?'折叠内容':'显示更多',style: TextStyle(fontSize: 12),),onPressed: () {setState(() {
             expanded = !expanded;
           });},)

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/api/search_api.dart';
 import 'package:dudu/api/status_api.dart';
 import 'package:dudu/constant/icon_font.dart';
@@ -181,7 +182,7 @@ class StatusActionUtil {
         BottomSheetItem(
           icon: IconFont.volumeOff,
           text: (data.muted == null || !data.muted) ?  '隐藏该对话': '取消隐藏该对话',
-          subText: '隐藏后将不会从该对话中接收到通知',
+          subText: '隐藏后将不会从该对话中接收到消息',
           onTap: () {
             _onPressMuteConversation(data);
           },
@@ -222,7 +223,7 @@ class StatusActionUtil {
         if (sameInstance(context))
         BottomSheetItem(
           icon: IconFont.report,
-          text: '举报 ',
+          text: '投诉 ',
           onTap: () async{
             var accountLocal = await getAccountInLocal(modalContext,data.account);
             if (accountLocal == null) return;
@@ -258,6 +259,17 @@ class StatusActionUtil {
           icon: IconFont.block,
           text: '屏蔽 @' + data.account.username,
           subText: '屏蔽后该用户将无法看到你发的嘟文',
+        ),
+        if (data.account.acct.contains('@'))
+        BottomSheetItem(
+          icon: IconFont.www,
+          text: '隐藏该用户所在实例所有内容',
+          onTap: () => DialogUtils.showSimpleAlertDialog(
+              context: context,
+              text:
+              '你确定要屏蔽@${StringUtil.accountDomain(data.account)}实例吗？你将不会在任何公共时间轴或消息中看到该实例的内容，而且该实例的关注者也会被删除',
+              onConfirm: () { AccountsApi.blockDomain(StringUtil.accountDomain(data.account));},
+              popFirst: false),
         ),
         if (LoginedUser().isAdmin && data.account.url.contains(LoginedUser().host))
           BottomSheetItem(

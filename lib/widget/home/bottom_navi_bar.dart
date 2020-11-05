@@ -5,13 +5,15 @@ class BottomNaviBar extends StatelessWidget {
   final Icon icon;
   final Text title;
   final Function onTap;
+  final Function onDoubleTap;
   final bool showBadge;
 
-  BottomNaviBar({this.icon, this.title, this.onTap, this.showBadge = true});
+  BottomNaviBar({this.icon, this.title, this.onTap, this.onDoubleTap,this.showBadge = true});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onDoubleTap: onDoubleTap,
       onTap: onTap,
       child: Container(
         child: Column(

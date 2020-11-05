@@ -28,7 +28,7 @@ class _CommonFilterListState extends State<CommonFilterList> {
         title = '主页';
         break;
       case FilterType.notifications:
-        title = '通知';
+        title = '消息';
         break;
       case FilterType.public:
         title = '公共时间轴';

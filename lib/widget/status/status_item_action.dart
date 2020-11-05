@@ -270,7 +270,7 @@ class _StatusItemActionState extends State<StatusItemAction> {
               if (myAccount == widget.item.account)
                 PopupMenuItem<String>(value: 'remove', child: new Text('删除')),
               if (myAccount != widget.item.account)
-                PopupMenuItem<String>(value: 'report', child: new Text('举报'))
+                PopupMenuItem<String>(value: 'report', child: new Text('投诉'))
             ],
             onSelected: (String value) {
               switch (value) {

@@ -17,6 +17,7 @@ import 'package:dudu/widget/common/bottom_navigation_item.dart';
 import 'package:dudu/widget/home/bottom_navi_bar.dart';
 import 'package:dudu/widget/other/app_retain_widget.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -229,20 +230,41 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   title: getTabTitle(0, activeColor),
                   showBadge: provider.unread[TimelineApi.home] != 0,
                   onTap: () {
-                    setState(() {
-                      _tabIndex = 0;
-                    });
+                    if (_tabIndex == 0) {
+                      provider.homeProvider.scrollController.jumpTo(0);
+                    } else {
+                      setState(() {
+                        _tabIndex = 0;
+                      });
+                    }
+                  },
+                  onDoubleTap: () {
+                    provider.homeProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 100));
                   },
                 ),
                 BottomNaviBar(
                   icon: getTabIcon(1, activeColor),
                   title: getTabTitle(1, activeColor),
-                  showBadge: provider.unread[TimelineApi.local] != 0 ||
-                      provider.unread[TimelineApi.federated] != 0,
+                  showBadge: provider.unread[TimelineApi.local] != 0,
                   onTap: () {
-                    setState(() {
-                      _tabIndex = 1;
-                    });
+                    if (_tabIndex == 1) {
+                      if (RuntimeConfig.publicTimeline == 0) {
+                        provider.localProvider.scrollController.jumpTo(0);
+                      } else {
+                        provider.federatedProvider.scrollController.jumpTo(0);
+                      }
+                    } else {
+                      setState(() {
+                        _tabIndex = 1;
+                      });
+                    }
+                  },
+                  onDoubleTap: () {
+                    if (RuntimeConfig.publicTimeline == 0) {
+                      provider.localProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 100));
+                    } else {
+                      provider.federatedProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 100));
+                    }
                   },
                 ),
                 BottomNaviBar(
@@ -263,9 +285,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       provider.unread[TimelineApi.followRquest] != 0 ||
                       provider.unread[TimelineApi.mention] != 0,
                   onTap: () {
-                    setState(() {
-                      _tabIndex = 3;
-                    });
+                    if (_tabIndex == 0) {
+                      provider.notificationProvider.scrollController.jumpTo(0);
+                    } else {
+                      setState(() {
+                        _tabIndex = 3;
+                      });
+                    }
+                  },
+                  onDoubleTap: () {
+                    provider.notificationProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 100));
                   },
                 ),
                 BottomNaviBar(

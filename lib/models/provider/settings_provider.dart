@@ -118,6 +118,10 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   _loadUnread() async {
+    LoginedUser user = LoginedUser();
+    if (user.account == null) {
+      return;
+    }
     unread.clear();
     unread = {
       TimelineApi.home: await _getUnreadFromDb(TimelineApi.home),

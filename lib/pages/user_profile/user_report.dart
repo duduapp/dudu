@@ -35,7 +35,7 @@ class _UserReportState extends State<UserReport> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('举报@${widget.account.acct}的滥用行为',overflow: TextOverflow.fade,),
+        title: Text('投诉@${widget.account.acct}的滥用行为',overflow: TextOverflow.fade,),
       ),
       body: Column(
         children: <Widget>[

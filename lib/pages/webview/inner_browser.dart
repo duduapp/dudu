@@ -116,6 +116,7 @@ class _InnerBrowserState extends State<InnerBrowser> {
             javascriptMode: JavascriptMode.unrestricted,
             initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
             navigationDelegate: (action) {
+              if (!action.url.startsWith('http')) return NavigationDecision.prevent;
               setState(() {
                 url = action.url;
               });
@@ -146,6 +147,9 @@ class _InnerBrowserState extends State<InnerBrowser> {
 
             onWebViewCreated: (controller) {
               _controller = controller;
+              if (widget.appCredential != null)
+              _controller.clearCache();
+
             },
             onPageFinished: (str) async {
               _controller.getTitle().then((t) {

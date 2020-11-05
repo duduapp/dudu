@@ -10,4 +10,6 @@ class RuntimeConfig {
 
   static String defaultServer;
 
+  static int publicTimeline = 0;
+
 }

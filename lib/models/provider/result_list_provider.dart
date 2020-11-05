@@ -47,6 +47,7 @@ class ResultListProvider extends ChangeNotifier {
   bool _mounted = true;
 
   bool get mounted => _mounted;
+  DateTime latestRequestTime;
 
   RefreshController refreshController;
   ScrollController scrollController;
@@ -155,11 +156,13 @@ class ResultListProvider extends ChangeNotifier {
   }
 
   Future<bool> _startRequest(String url, {bool refresh = false}) async {
+    var now = DateTime.now();
     // 防止重复请求
-    if (url == lastRequestUrl && !refresh) {
+    if (url == lastRequestUrl && !refresh && now.difference(latestRequestTime).inSeconds < 11) {
       return false;
     } else {
       lastRequestUrl = url;
+      latestRequestTime = now;
     }
 
     HttpResponse response;

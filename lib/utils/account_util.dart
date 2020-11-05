@@ -52,5 +52,10 @@ class AccountUtil {
     return false;
   }
 
+  static updateAccount(OwnerAccount account) {
+    LoginedUser().account = account;
+    LocalStorageAccount.addOwnerAccount(account);
+  }
+
 
 }

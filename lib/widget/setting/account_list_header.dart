@@ -15,10 +15,10 @@ class AccountListHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Theme.of(context).primaryColor,
       constraints: BoxConstraints(maxHeight: 240),
       child: SingleChildScrollView(
         child: Container(
-          color: Theme.of(context).primaryColor,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [

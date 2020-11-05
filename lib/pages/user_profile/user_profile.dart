@@ -15,6 +15,7 @@ import 'package:dudu/pages/user_profile/user_follewers.dart';
 import 'package:dudu/pages/user_profile/user_follewing.dart';
 import 'package:dudu/pages/user_profile/user_report.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/utils/cache_manager.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
@@ -330,6 +331,14 @@ class _UserProfileState extends State<UserProfile>
                   indent: 60,
                   height: 0,
                 ),
+                if (relationShip != null)
+                  BottomSheetItem(
+                    icon: IconFont.report,
+                    text: '投诉',
+                    onTap: () => AppNavigate.push(UserReport(
+                      account: _account,
+                    )),
+                  ),
                 BottomSheetItem(
                   icon: IconFont.block,
                   text: relationShip == null || !relationShip.blocking
@@ -344,11 +353,11 @@ class _UserProfileState extends State<UserProfile>
                 ),
                 BottomSheetItem(
                   icon: IconFont.www,
-                  text: '隐藏该用户所在域名',
+                  text: '隐藏该用户所在实例所有内容',
                   onTap: () => DialogUtils.showSimpleAlertDialog(
                       context: context,
                       text:
-                          '你确定要屏蔽@${StringUtil.accountDomain(_account)}域名吗？你将不会在任何公共时间轴或通知中看到该域名的内容，而且该域名的关注者也会被删除',
+                          '你确定要屏蔽@${StringUtil.accountDomain(_account)}实例吗？你将不会在任何公共时间轴或消息中看到该实例的内容，而且该实例的关注者也会被删除',
                       onConfirm: _onPressBlockDomain,
                       popFirst: false),
                 ),
@@ -356,14 +365,7 @@ class _UserProfileState extends State<UserProfile>
                   indent: 60,
                   height: 0,
                 ),
-                if (relationShip != null)
-                  BottomSheetItem(
-                    icon: IconFont.report,
-                    text: '举报',
-                    onTap: () => AppNavigate.push(UserReport(
-                      account: _account,
-                    )),
-                  )
+
               ],
               Container(
                 height: 8,
@@ -776,6 +778,9 @@ class _UserProfileState extends State<UserProfile>
     var newAccount = await AccountsApi.getAccount(
         widget.account, hostUrl: widget.hostUrl,
         cancelToken: cancelToken);
+    if (newAccount != null && newAccount.id == LoginedUser().account.id && widget.hostUrl == null) {
+      AccountUtil.updateAccount(newAccount);
+    }
     var newRelationShip = await AccountsApi.getRelationShip(
         widget.account, hostUrl: widget.hostUrl,
         cancelToken: cancelToken);

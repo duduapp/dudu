@@ -6,6 +6,7 @@ import 'package:dudu/pages/setting/common_block_list.dart';
 import 'package:dudu/pages/setting/filter/common_filter_list.dart';
 import 'package:dudu/pages/setting/setting_notification.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/url_util.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/setting/setting_cell.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,7 @@ class _AccountSettingState extends State<AccountSetting> {
           ),
           SettingCell(
             leftIcon: Icon(IconFont.www),
-            title: '隐藏域名',
+            title: '被隐藏的实例',
             onPress: () =>
                 AppNavigate.push(CommonBlockList(BlockType.hideDomain)),
           ),
@@ -105,7 +106,7 @@ class _AccountSettingState extends State<AccountSetting> {
                 AppNavigate.push(CommonFilterList(FilterType.public)),
           ),
           SettingCell(
-            title: '通知',
+            title: '消息',
             onPress: () =>
                 AppNavigate.push(CommonFilterList(FilterType.notifications)),
           ),
@@ -117,6 +118,30 @@ class _AccountSettingState extends State<AccountSetting> {
             title: '对话',
             onPress: () =>
                 AppNavigate.push(CommonFilterList(FilterType.thread)),
+          ),
+          Container(
+            child: Text('账号操作（需打开浏览器）'),
+            padding: EdgeInsets.all(8),
+          ),
+          SettingCell(
+            title: '修改密码',
+            onPress: () =>
+                UrlUtil.openUrl(LoginedUser().host+'/auth/edit'),
+          ),
+          SettingCell(
+            title: '备份数据',
+            onPress: () =>
+                UrlUtil.openUrl(LoginedUser().host+'/settings/export'),
+          ),
+          SettingCell(
+            title: '导入数据',
+            onPress: () =>
+                UrlUtil.openUrl(LoginedUser().host+'/settings/import'),
+          ),
+          SettingCell(
+            title: '注销账号',
+            onPress: () =>
+                UrlUtil.openUrl(LoginedUser().host+'/settings/delete'),
           ),
           SizedBox(
             height: 30,

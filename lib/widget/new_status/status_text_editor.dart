@@ -45,18 +45,14 @@ class _StatusTextEditorState extends State<StatusTextEditor> {
         suggestionsCallback: (pattern) async{
           String firstChar;
           String query;
-          var arr = pattern.split(' ');
-          if (arr.length > 1) {
-            if (arr.last.isNotEmpty) {
-              firstChar = arr.last.substring(0,1);
-              query = arr.last.substring(1);
-            }
-          } else {
-            if (pattern.isNotEmpty) {
-              firstChar = pattern.substring(0,1);
-              query = pattern.substring(1);
-            }
+          var arr = pattern.split('\n');
+          arr = arr.last.split(' ');
+
+          if (arr.last.isNotEmpty ) {
+            firstChar = arr.last.substring(0,1);
+            query = arr.last.substring(1);
           }
+
           if (pattern.isEmpty || firstChar == null || query == null || query.isEmpty) return null;
           switch (firstChar) {
             case '@':

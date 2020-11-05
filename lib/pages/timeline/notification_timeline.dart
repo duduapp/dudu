@@ -36,6 +36,7 @@ import 'package:flutter/material.dart';
 import 'package:mk_drop_down_menu/mk_drop_down_menu.dart';
 import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../widget/other/search.dart' as customSearch;
 
 class NotificationTimeline extends StatefulWidget {
@@ -50,6 +51,8 @@ class _NotificationTimelineState extends State<NotificationTimeline>
   MKDropDownMenuController _menuController1;
   MKDropDownMenuController _menuController2;
   ResultListProvider provider;
+  ScrollController _scrollController = ScrollController();
+  RefreshController _refreshController = RefreshController();
 
   List displayType;
 
@@ -68,12 +71,17 @@ class _NotificationTimelineState extends State<NotificationTimeline>
         buildRow: ListViewUtil.notificationRowFunction(),
         tag: 'notifications');
     SettingsProvider().notificationProvider = provider;
+    provider.refreshController = _refreshController;
+    provider.scrollController = _scrollController;
+
     super.initState();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _refreshController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -182,7 +190,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                       case 'clear':
                         DialogUtils.showSimpleAlertDialog(
                             context: context,
-                            text: '你确定要永远删除通知列表吗',
+                            text: '你确定要永远删除消息列表吗',
                             onConfirm: _clearNotification);
                         break;
                       case 'choose_type':
@@ -204,7 +212,10 @@ class _NotificationTimelineState extends State<NotificationTimeline>
               ChangeNotifierProvider<ResultListProvider>.value(
                 value: provider,
                 builder: (context, snapshot) {
-                  return ProviderEasyRefreshListView();
+                  return ProviderEasyRefreshListView(
+                    refreshController: _refreshController,
+                    scrollController: _scrollController,
+                  );
                 },
               ),
               NotificationTypeList(),

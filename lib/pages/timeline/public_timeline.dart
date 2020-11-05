@@ -4,6 +4,7 @@ import 'package:dudu/constant/api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/models/runtime_config.dart';
 import 'package:dudu/pages/login/login.dart';
 import 'package:dudu/pages/search/search_page_delegate.dart';
 import 'package:dudu/pages/status/new_status.dart';
@@ -89,6 +90,7 @@ class _PublicTimelineState extends State<PublicTimeline>
                     color: Theme.of(context).appBarTheme.color,
                     tabBar: TabBar(
                       onTap: (idx) {
+                        RuntimeConfig.publicTimeline = idx;
                         OverlayUtil.hideAllOverlay();
                       },
                       indicator: UnderlineTabIndicator(
@@ -121,28 +123,24 @@ class _PublicTimelineState extends State<PublicTimeline>
                                   title: '本站',
                                 ),
                         ),
-                        Badge(
-                          position: BadgePosition.topEnd(top: 5,end: 18),
-                          showBadge: provider.unread[TimelineApi.federated] != 0,
-                          child: (_tabController.index == 1 && widget.url == null)
-                              ? MKDropDownMenu(
-                                  controller: _menuController2,
-                                  headerKey: _headerKey,
-                                  headerBuilder: (menuShowing) {
-                                    return DropDownTitle(
-                                      title: '跨站',
-                                      expand: menuShowing,
-                                      showIcon: true,
-                                    );
-                                  },
-                                  menuBuilder: () {
-                                    return AccountListHeader(_menuController2);
-                                  },
-                                )
-                              : DropDownTitle(
-                                  title: '跨站',
-                                ),
-                        ),
+                        (_tabController.index == 1 && widget.url == null)
+                            ? MKDropDownMenu(
+                                controller: _menuController2,
+                                headerKey: _headerKey,
+                                headerBuilder: (menuShowing) {
+                                  return DropDownTitle(
+                                    title: '跨站',
+                                    expand: menuShowing,
+                                    showIcon: true,
+                                  );
+                                },
+                                menuBuilder: () {
+                                  return AccountListHeader(_menuController2);
+                                },
+                              )
+                            : DropDownTitle(
+                                title: '跨站',
+                              ),
                       ],
                       controller: _tabController,
                     ),
