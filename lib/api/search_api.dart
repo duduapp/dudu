@@ -4,6 +4,7 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dudu/constant/api.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/request.dart';
 import 'package:dudu/widget/status/status_item.dart';
@@ -76,7 +77,7 @@ class SearchApi {
     Map res = await _search(url, type,
         resolve: true,
         showDialog: true,
-        handlingMessage: '',
+        handlingMessage: '你加使用'+LoginedUser().fullAddress+'执行此操作',
         successMessage: '',
         closeDialogDelay: 0);
     if (res != null) {

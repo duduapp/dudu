@@ -44,6 +44,8 @@ class SettingsProvider extends ChangeNotifier {
 
   LoginedUser currentUser;
 
+  int homeTabIndex = 2;
+
   Map<String, List<FilterItem>> filters = {
     'home': [],
     'notifications': [],
@@ -76,37 +78,44 @@ class SettingsProvider extends ChangeNotifier {
         'poll'
       ],
     };
-    await _loadFromStorage();
-    await _loadUnread();
+    LoginedUser user = LoginedUser();
+    if (user.account == null) {
+      homeTabIndex = 2;
+      notifyListeners();
+      return;
+    } else {
+      if (homeTabIndex == 2) {
+        homeTabIndex = 0;
+      }
+      await _loadFromStorage();
+      await _loadUnread();
+    }
   }
 
   _loadFromStorage() async {
-    LoginedUser user = LoginedUser();
-    if (user.account == null) {
-      return;
-    }
+
     currentUser = LoginedUser();
-    storageKey = StringUtil.accountFullAddress(user.account) + '.settings';
-    var keys = await Storage.getStringList(storageKey);
+    storageKey = StringUtil.accountFullAddress(currentUser.account) + '.settings';
+    var keys =  Storage.getStringList(storageKey);
     if (keys == null) {
       await Storage.saveStringList(storageKey, settings.keys.toList());
       return;
     }
     for (String key in keys) {
-      var type = await Storage.getString('$storageKey.$key.type');
+      var type =  Storage.getString('$storageKey.$key.type');
       var settingType = SettingType.values
           .firstWhere((e) => describeEnum(e) == type, orElse: () => null);
       if (settingType != null) {
         dynamic value;
         switch (settingType) {
           case SettingType.bool:
-            value = await Storage.getBool('$storageKey.$key.value');
+            value =  Storage.getBool('$storageKey.$key.value');
             break;
           case SettingType.string:
-            value = await Storage.getString('$storageKey.$key.value');
+            value =  Storage.getString('$storageKey.$key.value');
             break;
           case SettingType.string_list:
-            value = await Storage.getStringList('$storageKey.$key.value');
+            value =  Storage.getStringList('$storageKey.$key.value');
             break;
         }
         if (value != null) {
@@ -118,10 +127,6 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   _loadUnread() async {
-    LoginedUser user = LoginedUser();
-    if (user.account == null) {
-      return;
-    }
     unread.clear();
     unread = {
       TimelineApi.home: await _getUnreadFromDb(TimelineApi.home),
@@ -143,6 +148,11 @@ class SettingsProvider extends ChangeNotifier {
         latestIds[key] = res;
       }
     }
+  }
+
+  setHomeTabIndex(int idx) {
+    homeTabIndex = idx;
+    notifyListeners();
   }
 
   updateUnread(String key, int value) {

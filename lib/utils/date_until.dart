@@ -46,9 +46,9 @@ class DateUntil {
     var now = DateTime.now();
 
     if (now.difference(updateTime).inDays >= 1 || now.day != updateTime.day) {
-      return true;
+      return false;
     }
-    return false;
+    return true;
   }
 
   // deprecated in next version

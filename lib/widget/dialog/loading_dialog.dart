@@ -23,7 +23,8 @@ class LoadingDialog extends StatelessWidget {
       borderRadius: BorderRadius.circular(10),
       child: Container(
         padding: EdgeInsets.all(20),
-        width: 140,
+        constraints: BoxConstraints(minWidth: 140),
+     //   width: 140,
         color: Color.fromRGBO(54, 54, 54, 1),
         child: Column(
           mainAxisSize: MainAxisSize.min,

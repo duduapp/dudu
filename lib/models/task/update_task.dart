@@ -25,6 +25,7 @@ class UpdateTask {
   static String key = "gityp34dkg" +
       TimelineType.federated.toString().split(".")[1].substring(0, 5);
   static Future<bool> check({ProgressDialog dialog}) async {
+    debugPrint('checking update');
     if (RuntimeConfig.updateWindowDisplayed) return false;
     var rnd = StringUtil.getRandomString(20);
     try {
@@ -95,6 +96,7 @@ class UpdateTask {
   }
 
   static checkUpdateIfNeed() async {
+
     if (!DateUntil.hasMarkedTimeDaily(StorageKey.lastCheckUpdateTime) &&
         !(await DateUntil.hasMarkedTimeToday('', DbKey.lastCheckUpdateTime)))
       check();

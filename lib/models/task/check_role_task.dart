@@ -6,9 +6,9 @@ import 'package:dudu/public.dart';
 class CheckRoleTask {
 
   static checkUserRole() async{
-    if (await DateUntil.hasMarkedTimeToday(LoginedUser().fullAddress,DbKey.lastCheckRoleTime)) {
+   if (!await DateUntil.hasMarkedTimeToday(LoginedUser().fullAddress,DbKey.lastCheckRoleTime)) {
       _checkRole();
-    }
+   }
   }
 
   static _checkRole() async{

@@ -96,8 +96,7 @@ class Storage {
   }
 
   static String _accountPrefix() {
-    LoginedUser myAccount = LoginedUser();
-    return StringUtil.accountFullAddress(myAccount.account);
+    return LoginedUser().fullAddress;
   }
 
   static  getIntWithAccount(String key) {

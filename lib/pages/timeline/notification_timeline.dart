@@ -9,6 +9,7 @@ import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/notification/NotificationType.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/models/runtime_config.dart';
 import 'package:dudu/pages/login/login.dart';
 import 'package:dudu/pages/search/search_page_delegate.dart';
 import 'package:dudu/pages/status/new_status.dart';
@@ -58,7 +59,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(initialIndex: RuntimeConfig.notificationTimeline ?? 0 ,length: 2, vsync: this);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -66,13 +67,6 @@ class _NotificationTimelineState extends State<NotificationTimeline>
     _menuController1 = MKDropDownMenuController();
     _menuController2 = MKDropDownMenuController();
 
-    provider = ResultListProvider(
-        requestUrl: TimelineApi.notification,
-        buildRow: ListViewUtil.notificationRowFunction(),
-        tag: 'notifications');
-    SettingsProvider().notificationProvider = provider;
-    provider.refreshController = _refreshController;
-    provider.scrollController = _scrollController;
 
     super.initState();
   }
@@ -111,6 +105,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                     color: Theme.of(context).appBarTheme.color,
                     tabBar: TabBar(
                       onTap: (idx) {
+                        RuntimeConfig.notificationTimeline = idx;
                         OverlayUtil.hideAllOverlay();
                       },
                       indicator: UnderlineTabIndicator(
@@ -209,14 +204,10 @@ class _NotificationTimelineState extends State<NotificationTimeline>
               child: TabBarView(
             controller: _tabController,
             children: [
-              ChangeNotifierProvider<ResultListProvider>.value(
-                value: provider,
-                builder: (context, snapshot) {
-                  return ProviderEasyRefreshListView(
-                    refreshController: _refreshController,
-                    scrollController: _scrollController,
-                  );
-                },
+              TimelineContent(
+                url: TimelineApi.notification,
+                rowBuilder: ListViewUtil.notificationRowFunction(),
+                tag: 'notifications',
               ),
               NotificationTypeList(),
             ],
@@ -252,6 +243,7 @@ class NotificationTypeList extends StatelessWidget {
             position: BadgePosition.topEnd(top: 20, end: 20),
             showBadge: provider.unread[TimelineApi.conversations] != 0,
             child: SettingCell(
+              leftIcon: Icon(IconFont.message),
                 title: "私信",
                 onPress: () => AppNavigate.push(ConversationTimeline()),
                 tail: provider.unread[TimelineApi.conversations] != 0
@@ -262,9 +254,10 @@ class NotificationTypeList extends StatelessWidget {
             position: BadgePosition.topEnd(top: 20, end: 20),
             showBadge: provider.unread[TimelineApi.followRquest] != 0,
             child: SettingCell(
+                leftIcon: Icon(IconFont.follow),
                 title: "关注请求",
                 onPress: () => AppNavigate.push(
-                    NotificationTypeTimeline(NotificationType.followRequest)),
+                    NotificationTypeTimeline(TimelineApi.followRquest,'关注请求')),
                 tail: provider.unread[TimelineApi.followRquest] != 0
                     ? Container()
                     : null),
@@ -273,33 +266,20 @@ class NotificationTypeList extends StatelessWidget {
             position: BadgePosition.topEnd(top: 20, end: 20),
             showBadge: provider.unread[TimelineApi.mention] != 0,
             child: SettingCell(
+                leftIcon: Icon(IconFont.at),
                 title: "@我的",
                 onPress: () => AppNavigate.push(
-                    NotificationTypeTimeline(NotificationType.mention)),
+                    NotificationTypeTimeline(TimelineApi.mention,'@我的')),
                 tail: provider.unread[TimelineApi.mention] != 0
                     ? Container()
                     : null),
           ),
           SettingCell(
-            title: '转嘟',
+            title: '其它消息',
             onPress: () => AppNavigate.push(
-                NotificationTypeTimeline(NotificationType.reblog)),
+                NotificationTypeTimeline(TimelineApi.otherNotification,'其它消息')),
           ),
-          SettingCell(
-            title: '关注我的',
-            onPress: () => AppNavigate.push(
-                NotificationTypeTimeline(NotificationType.follow)),
-          ),
-          SettingCell(
-            title: '收藏我的',
-            onPress: () => AppNavigate.push(
-                NotificationTypeTimeline(NotificationType.favourite)),
-          ),
-          SettingCell(
-            title: '投票',
-            onPress: () => AppNavigate.push(
-                NotificationTypeTimeline(NotificationType.poll)),
-          )
+
         ],
       ),
     );

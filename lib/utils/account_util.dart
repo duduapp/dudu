@@ -8,6 +8,7 @@ import 'package:dudu/pages/home_page.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/app_navigate.dart';
 import 'package:dudu/utils/cache_manager.dart';
+import 'package:flutter/foundation.dart';
 import 'package:nav_router/nav_router.dart';
 
 class AccountUtil {
@@ -55,6 +56,22 @@ class AccountUtil {
   static updateAccount(OwnerAccount account) {
     LoginedUser().account = account;
     LocalStorageAccount.addOwnerAccount(account);
+  }
+
+  static saveState() async{
+    debugPrint('start save state');
+    await SettingsProvider().homeProvider?.saveDataToCache();
+    await SettingsProvider().localProvider?.saveDataToCache();
+    await SettingsProvider().federatedProvider?.saveDataToCache();
+    await SettingsProvider().notificationProvider?.saveDataToCache();
+  }
+
+  static restoreState() {
+    debugPrint('remove state');
+    SettingsProvider().homeProvider?.removeCache();
+    SettingsProvider().localProvider?.removeCache();
+    SettingsProvider().federatedProvider?.removeCache();
+    SettingsProvider().notificationProvider?.removeCache();
   }
 
 

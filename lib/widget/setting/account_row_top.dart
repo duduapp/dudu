@@ -15,9 +15,10 @@ class AccountRowTop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
+      onTap: () async{
         if (!account.active) {
           controller?.hideMenu();
+          await AccountUtil.saveState();
           AccountUtil.switchToAccount(account);
         }
       },

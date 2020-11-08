@@ -42,7 +42,7 @@ class _PublicTimelineState extends State<PublicTimeline>
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(initialIndex:RuntimeConfig.publicTimeline?? 0,length: 2, vsync: this);
     _tabController.addListener(() {
       setState(() {});
     });

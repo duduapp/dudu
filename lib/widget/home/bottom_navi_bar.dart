@@ -28,6 +28,7 @@ class BottomNaviBar extends StatelessWidget {
               position: BadgePosition.topEnd(top: -1, end: -5),
             ),
             title,
+            SizedBox(height: 5,)
           ],
         ),
       ),

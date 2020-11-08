@@ -23,18 +23,22 @@ class TimelineApi {
         notificationUrl, {'exclude_types': notificationTypes});
   }
 
-  static _exclude_types(String retain) {
+  static _include_types(List retain) {
     var notificationTypes = ['follow', 'favourite', 'reblog', 'mention', 'poll', 'follow_request'];
-     notificationTypes.remove(retain);
+     notificationTypes.removeWhere((element) => retain.contains(element));
     return {'exclude_types':notificationTypes};
   }
 
   static String get followRquest {
-   return Request.buildGetUrl(notificationUrl, _exclude_types('follow_request'));
+   return Request.buildGetUrl(notificationUrl, _include_types(['follow_request']));
   }
 
   static String get mention {
-    return Request.buildGetUrl(notificationUrl, _exclude_types('mention'));
+    return Request.buildGetUrl(notificationUrl, _include_types(['mention']));
+  }
+
+  static String get otherNotification {
+    return Request.buildGetUrl(notificationUrl, _include_types(['follow', 'favourite', 'reblog', 'poll']));
   }
 
 

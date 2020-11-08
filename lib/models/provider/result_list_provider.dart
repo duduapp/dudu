@@ -283,12 +283,14 @@ class ResultListProvider extends ChangeNotifier {
     }
   }
 
-  saveDataToCache() {
-    TbCacheHelper.setCache(TbCache(
+  saveDataToCache() async{
+    if (list.isEmpty) return; // when request is not completed,this can be empty
+    await TbCacheHelper.setCache(TbCache(
         account: LoginedUser().fullAddress,
         tag: tag,
         content: json.encode(list),));
-    TbCacheHelper.setCache(TbCache(
+    if (scrollController.hasClients)
+    await TbCacheHelper.setCache(TbCache(
       account: LoginedUser().fullAddress,
       tag: tag+'/sp',
       content: scrollController.position.pixels.toString()

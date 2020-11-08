@@ -60,46 +60,70 @@ class _AccountActionDialogState extends State<AccountActionDialog> {
             Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                Radio(
-                  value: 0,
-                  groupValue: groupValue,
-                  onChanged: (value) {
-                    setState(() {
-                      groupValue = value;
-                    });
-                  },
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Radio(
+                      value: 0,
+                      groupValue: groupValue,
+                      onChanged: (value) {
+                        setState(() {
+                          groupValue = value;
+                        });
+                      },
+                    ),
+                    Text('警告'),
+                  ],
                 ),
-                Text('警告'),
-                Radio(
-                  value: 1,
-                  groupValue: groupValue,
-                  onChanged: (value) {
-                    setState(() {
-                      groupValue = value;
-                    });
-                  },
+
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Radio(
+                      value: 1,
+                      groupValue: groupValue,
+                      onChanged: (value) {
+                        setState(() {
+                          groupValue = value;
+                        });
+                      },
+                    ),
+                    Text('停用'),
+                  ],
                 ),
-                Text('停用'),
-                Radio(
-                  value: 2,
-                  groupValue: groupValue,
-                  onChanged: (value) {
-                    setState(() {
-                      groupValue = value;
-                    });
-                  },
+
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Radio(
+                      value: 2,
+                      groupValue: groupValue,
+                      onChanged: (value) {
+                        setState(() {
+                          groupValue = value;
+                        });
+                      },
+                    ),
+                    Text('隐藏'),
+                  ],
                 ),
-                Text('隐藏'),
-                Radio(
-                  value: 3,
-                  groupValue: groupValue,
-                  onChanged: (value) {
-                    setState(() {
-                      groupValue = value;
-                    });
-                  },
+
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Radio(
+                      value: 3,
+                      groupValue: groupValue,
+                      onChanged: (value) {
+                        setState(() {
+                          groupValue = value;
+                        });
+                      },
+                    ),
+                    Text('封禁')
+                  ],
                 ),
-                Text('封禁')
+
               ],
             ),
             Container(

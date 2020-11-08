@@ -1,4 +1,6 @@
 import 'package:dudu/models/local_account.dart';
+import 'package:dudu/models/logined_user.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/login/login.dart';
 import 'package:dudu/utils/app_navigate.dart';
 import 'package:dudu/widget/setting/account_row_top.dart';
@@ -24,15 +26,15 @@ class AccountListHeader extends StatelessWidget {
             children: [
               for (var acc in LocalStorageAccount.accounts)
                 ...[AccountRowTop(acc,controller),Divider(height: 0,)],
-
               InkWell(
                 onTap: () {
                   controller.hideMenu();
-                  AppNavigate.push(
-                      Login(
-                        showBackButton: true,
-                      ),
-                      routeType: RouterType.material);
+                  SettingsProvider().setHomeTabIndex(2);
+                  // AppNavigate.push(
+                  //     Login(
+                  //       showBackButton: true,
+                  //     ),
+                  //     routeType: RouterType.material);
                 },
                 child: Container(
                   height: 50,

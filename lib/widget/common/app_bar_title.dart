@@ -11,7 +11,7 @@ class DropDownTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(5, 5, 5, 3),
+      padding: const EdgeInsets.fromLTRB(10, 5, 5, 3),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,

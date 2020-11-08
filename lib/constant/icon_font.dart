@@ -102,4 +102,12 @@ class IconFont {
   static const IconData video = IconData(0xe6a0,fontFamily: 'IconFont');
 
   static const IconData audio = IconData(0xed23,fontFamily: 'IconFont');
+
+  static const IconData discovery = IconData(0xe612,fontFamily: 'IconFont');
+
+  static const IconData square = IconData(0xe615,fontFamily: 'IconFont');
+
+  static const IconData display = IconData(0xe600,fontFamily: 'IconFont');
+
+
 }

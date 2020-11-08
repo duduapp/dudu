@@ -93,6 +93,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
             type: SettingType.string,
           ),
           SettingCell(
+            leftIcon: Icon(IconFont.display),
             title: '显示设置',
             onPress: () => AppNavigate.push(SettingContent()),
           ),

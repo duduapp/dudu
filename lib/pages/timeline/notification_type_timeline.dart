@@ -8,23 +8,21 @@ import 'package:dudu/widget/timeline/timeline_content.dart';
 import 'package:flutter/material.dart';
 
 class NotificationTypeTimeline extends StatelessWidget {
-  final String type;
+  final String title;
+  final String url;
 
-  NotificationTypeTimeline(this.type);
+  NotificationTypeTimeline(this.url,this.title);
 
   @override
   Widget build(BuildContext context) {
-    var notificationTypes = ['follow', 'favourite', 'reblog', 'mention', 'poll', 'follow_request'];
-    notificationTypes.remove(type);
 
-    var url = Request.buildGetUrl(TimelineApi.notificationUrl, {'exclude_types':notificationTypes});
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text(NotificationType.notificationDescription[type]),
+        title: Text(title),
       ),
       body: TimelineContent(
         url: url,
-        tag: type,
+        tag: 'none',
         rowBuilder: ListViewUtil.notificationRowFunction(),
         prefixId: false,
       ),

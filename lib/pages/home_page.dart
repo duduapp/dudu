@@ -12,6 +12,7 @@ import 'package:dudu/pages/timeline/local_timeline.dart';
 import 'package:dudu/pages/timeline/notification_timeline.dart';
 import 'package:dudu/pages/timeline/public_timeline.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/utils/filter_util.dart';
 import 'package:dudu/widget/common/bottom_navigation_item.dart';
 import 'package:dudu/widget/home/bottom_navi_bar.dart';
@@ -48,32 +49,26 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   saveState() {
-    debugPrint('start save state');
-    SettingsProvider().homeProvider?.saveDataToCache();
-    SettingsProvider().localProvider?.saveDataToCache();
-    SettingsProvider().federatedProvider?.saveDataToCache();
+    AccountUtil.saveState();
   }
 
   removeState() {
-    debugPrint('remove state');
-    SettingsProvider().homeProvider?.removeCache();
-    SettingsProvider().localProvider?.removeCache();
-    SettingsProvider().federatedProvider?.removeCache();
+    AccountUtil.restoreState();
   }
-
-  int _tabIndex;
 
   @override
   void initState() {
     super.initState();
-    _tabIndex = RuntimeConfig.tabIndex ?? 0;
-
     UpdateTask.checkUpdateIfNeed();
-    FilterUtil.getFiltersAndApply();
 
-    NotificationTask.enable();
+    var loginedUser = LoginedUser();
+    if (loginedUser.account != null) {
+      FilterUtil.getFiltersAndApply();
 
-    WidgetsBinding.instance.addObserver(this);
+      NotificationTask.enable();
+
+      WidgetsBinding.instance.addObserver(this);
+    }
   }
 
   @override
@@ -85,16 +80,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   List<IconData> _tabIcons = [
     IconFont.home,
-    IconFont.local,
-    IconFont.earthSmall,
+    IconFont.square,
+    IconFont.discovery,
     IconFont.notification,
     IconFont.mine
   ];
 
-  List<String> _tabTitles = ['首页', '本站', '跨站', '消息', '我'];
+  List<String> _tabTitles = ['首页', '广场', '发现', '消息', '我'];
 
-  Icon getTabIcon(int index, Color activeColor) {
-    if (index == _tabIndex) {
+  Icon getTabIcon(int index, Color activeColor,bool logined) {
+    if (index == SettingsProvider().homeTabIndex) {
       return Icon(
         _tabIcons[index],
         color: activeColor,
@@ -103,14 +98,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     } else {
       return Icon(
         _tabIcons[index],
-        color: Theme.of(context).textTheme.bodyText2.color,
+        color: logined ? Theme.of(context).textTheme.bodyText2.color : Colors.grey,
         size: 28,
       ); //_tabImages[index];
     }
   }
 
-  Text getTabTitle(int index, Color activeColor) {
-    if (index == _tabIndex) {
+  Text getTabTitle(int index, Color activeColor,bool logined) {
+    if (index == SettingsProvider().homeTabIndex) {
       return Text(
         _tabTitles[index],
         style: TextStyle(
@@ -120,7 +115,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       return Text(
         _tabTitles[index],
         style: TextStyle(
-            color: Theme.of(context).textTheme.bodyText2.color, fontSize: 10),
+            color: logined ? Theme.of(context).textTheme.bodyText2.color : Colors.grey, fontSize: 10),
       );
     }
   }
@@ -132,19 +127,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    var homeTabIndex = Provider.of<SettingsProvider>(context).homeTabIndex;
+    bool logined = LoginedUser().account != null;
     return AppRetainWidget(
       child: Scaffold(
           body: IndexedStack(
             children: <Widget>[
-              HomeTimeline(),
-              PublicTimeline(),
+              logined ? HomeTimeline() :Container(),
+              logined ? PublicTimeline() : Container(),
               InstanceList(),
-              NotificationTimeline(),
-              Setting()
+              logined ? NotificationTimeline() : Container(),
+              logined ? Setting() : Container()
             ],
-            index: _tabIndex,
+            index: homeTabIndex,
           ),
-          bottomNavigationBar: _bottomMenu()
+          bottomNavigationBar: _bottomMenu(homeTabIndex,logined)
           // Column(
           //   mainAxisSize: MainAxisSize.min,
           //   children: [
@@ -209,9 +206,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
-  _bottomMenu() {
+  _bottomMenu(int _tabIndex,bool logined) {
     SettingsProvider provider = Provider.of<SettingsProvider>(context);
     Color activeColor = Theme.of(context).toggleableActiveColor;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -226,27 +224,27 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 BottomNaviBar(
-                  icon: getTabIcon(0, activeColor),
-                  title: getTabTitle(0, activeColor),
-                  showBadge: provider.unread[TimelineApi.home] != 0,
-                  onTap: () {
+                  icon: getTabIcon(0, activeColor,logined),
+                  title: getTabTitle(0, activeColor,logined),
+                  showBadge: logined && provider.unread[TimelineApi.home] != 0,
+                  onTap: logined ?() {
                     if (_tabIndex == 0) {
                       provider.homeProvider.scrollController.jumpTo(0);
                     } else {
                       setState(() {
-                        _tabIndex = 0;
+                        SettingsProvider().setHomeTabIndex(0);
                       });
                     }
-                  },
-                  onDoubleTap: () {
+                  } : null,
+                  onDoubleTap: logined ? () {
                     provider.homeProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 100));
-                  },
+                  }: null,
                 ),
                 BottomNaviBar(
-                  icon: getTabIcon(1, activeColor),
-                  title: getTabTitle(1, activeColor),
-                  showBadge: provider.unread[TimelineApi.local] != 0,
-                  onTap: () {
+                  icon: getTabIcon(1, activeColor,logined),
+                  title: getTabTitle(1, activeColor,logined),
+                  showBadge: logined && provider.unread[TimelineApi.local] != 0,
+                  onTap: logined ?() {
                     if (_tabIndex == 1) {
                       if (RuntimeConfig.publicTimeline == 0) {
                         provider.localProvider.scrollController.jumpTo(0);
@@ -254,58 +252,50 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         provider.federatedProvider.scrollController.jumpTo(0);
                       }
                     } else {
-                      setState(() {
-                        _tabIndex = 1;
-                      });
+                      SettingsProvider().setHomeTabIndex(1);
                     }
-                  },
-                  onDoubleTap: () {
+                  } : null,
+                  onDoubleTap: logined ?() {
                     if (RuntimeConfig.publicTimeline == 0) {
                       provider.localProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 100));
                     } else {
                       provider.federatedProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 100));
                     }
-                  },
+                  } : null,
                 ),
                 BottomNaviBar(
                   showBadge: false,
-                  icon: getTabIcon(2, activeColor),
-                  title: getTabTitle(2, activeColor),
+                  icon: getTabIcon(2, activeColor,logined),
+                  title: getTabTitle(2, activeColor,logined),
                   onTap: () {
-                    setState(() {
-                      _tabIndex = 2;
-                    });
+                    SettingsProvider().setHomeTabIndex(2);
                   },
                 ),
                 BottomNaviBar(
-                  icon: getTabIcon(3, activeColor),
-                  title: getTabTitle(3, activeColor),
-                  showBadge: provider.unread[TimelineApi.notification] != 0 ||
+                  icon: getTabIcon(3, activeColor,logined),
+                  title: getTabTitle(3, activeColor,logined),
+                  showBadge: logined && (provider.unread[TimelineApi.notification] != 0 ||
                       provider.unread[TimelineApi.conversations] != 0 ||
                       provider.unread[TimelineApi.followRquest] != 0 ||
-                      provider.unread[TimelineApi.mention] != 0,
-                  onTap: () {
-                    if (_tabIndex == 0) {
+                      provider.unread[TimelineApi.mention] != 0),
+                  onTap: logined ? () {
+                    if (_tabIndex == 3) {
                       provider.notificationProvider.scrollController.jumpTo(0);
                     } else {
-                      setState(() {
-                        _tabIndex = 3;
-                      });
+                      SettingsProvider().setHomeTabIndex(3);
                     }
-                  },
-                  onDoubleTap: () {
+                  } : null,
+                  onDoubleTap: logined ?() {
                     provider.notificationProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 100));
-                  },
+                  } : null,
                 ),
                 BottomNaviBar(
                   showBadge: false,
-                  icon: getTabIcon(4, activeColor),
-                  title: getTabTitle(4, activeColor),
-                  onTap: () {
-                    setState(() {
-                      _tabIndex = 4;
-                    });
-                  },
+                  icon: getTabIcon(4, activeColor,logined),
+                  title: getTabTitle(4, activeColor,logined),
+                  onTap: logined ?() {
+                    SettingsProvider().setHomeTabIndex(4);
+                  } : null,
                 ),
               ],
             ),

@@ -1,12 +1,14 @@
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/api/status_api.dart';
 import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/models/http/request_manager.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/notificate_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/view/status_action_util.dart';
 import 'package:dudu/widget/common/list_row.dart';
@@ -77,8 +79,10 @@ class ListViewUtil {
 
   static ResultListDataHandler dataHandlerPrefixIdFunction(String prefix) {
     return (data) {
-      data.forEach((e) =>
-          e['media_attachments'].forEach((e) => e['id'] = prefix + e['id']));
+      data.forEach((e) {
+        if (e.containsKey('media_attachments'))
+          e['media_attachments'].forEach((e) => e['id'] = prefix + e['id']);
+      });
       return data;
     };
   }
@@ -251,9 +255,11 @@ class ListViewUtil {
     }
   }
 
-  static bool loginnedAndPrompt() {
+  static bool loginnedAndPrompt(BuildContext context) {
     if (LoginedUser().account == null) {
-      DialogUtils.showSimpleAlertDialog(text: '你需要登录才能执行该操作',confirmText: '去登录',onConfirm: () {});
+      DialogUtils.showSimpleAlertDialog(text: '你需要登录才能执行该操作',confirmText: '去登录',onConfirm: () {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      });
       return false;
     }
     return true;

@@ -31,6 +31,8 @@ class LoginedUser {
     host = localAccount.hostUrl;
     token = localAccount.token;
     account = localAccount.account;
+    _fullAddress = StringUtil.accountFullAddress(localAccount.account);
+    _isAdmin = Storage.getBoolWithAccount(StorageKey.isAdmin) ?? false;
   }
 
   String get fullAddress {

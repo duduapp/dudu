@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
@@ -44,13 +46,18 @@ class _TimelineContentState extends State<TimelineContent> {
         case 'federated':
           SettingsProvider().federatedProvider = provider;
           break;
+        case 'notifications':
+          SettingsProvider().notificationProvider = provider;
       }
       provider.refreshController = _refreshController;
       provider.scrollController = _scrollController;
       provider.loadCacheDataOrRefresh();
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        provider.checkCachePosition();
+        Timer(Duration(milliseconds: 300),(){
+          provider.checkCachePosition();
+        });
+
       });
     }
 

@@ -61,8 +61,7 @@ class MyApp extends StatelessWidget {
               navigatorKey: navGK,
               home: ThemeConsumer(
                 child: Scaffold(
-                    body: Builder(
-                        builder: (context) => logined ? HomePage() : Login())),
+                    body: HomePage()),
               ),
             ),
           )),

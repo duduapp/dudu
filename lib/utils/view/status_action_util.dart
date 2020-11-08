@@ -381,6 +381,10 @@ class StatusActionUtil {
 
   static onPressBookmark(BuildContext context, StatusItemData data) async {
     data = await getStatusInLocal(context, data);
+    if (data == null) {
+      //DialogUtils.toastFinishedInfo('添加书签失败');
+      return;
+    }
     if (!data.bookmarked) {
       StatusApi.bookmark(data.id);
       DialogUtils.toastFinishedInfo('已添加书签');
@@ -489,6 +493,7 @@ class StatusActionUtil {
     } catch (e) {
       return false;
     }
+
     if (provider.requestUrl.startsWith('https://')) {
       return false;
     }
@@ -498,7 +503,7 @@ class StatusActionUtil {
   static Future<StatusItemData> getStatusInLocal(
       BuildContext context, StatusItemData status) async {
     if (!sameInstance(context)) {
-      if (!ListViewUtil.loginnedAndPrompt()) return null;
+      if (!ListViewUtil.loginnedAndPrompt(context)) return null;
       var statusLocal = await SearchApi.resolveStatus(status.url);
       if (statusLocal == null) {
         DialogUtils.toastErrorInfo('出现错误');
@@ -514,7 +519,7 @@ class StatusActionUtil {
       BuildContext context, OwnerAccount account) async {
     if (context != null && !sameInstance(context) ||
         !AccountUtil.sameInstance(account.url)) {
-      if (!ListViewUtil.loginnedAndPrompt()) return null;
+      if (!ListViewUtil.loginnedAndPrompt(context)) return null;
       var statusLocal = await SearchApi.resolveAccount(account.url);
       if (statusLocal == null) {
         DialogUtils.toastErrorInfo('出现错误');
