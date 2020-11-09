@@ -36,6 +36,7 @@ class LoginedUser {
   }
 
   String get fullAddress {
+    if (account == null) return null;
     if (_fullAddress == null)
       _fullAddress = StringUtil.accountFullAddress(account);
     return _fullAddress;

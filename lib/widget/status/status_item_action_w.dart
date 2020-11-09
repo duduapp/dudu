@@ -18,17 +18,22 @@ class StatusItemActionW extends StatelessWidget {
   final StatusItemData status;
   final bool subStatus;
   final bool showNum;
+  static const String zan = '赞';
+  static const String shoucang = '收藏';
 
   const StatusItemActionW({Key key, this.status, this.subStatus, this.showNum = true})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var settings = Provider.of<SettingsProvider>(context);
-    var textScale = settings.get('text_scale');
-    var zan_or_shoucang = settings.get('zan_or_shoucang');
+
+    String  textScale =
+    context.select<SettingsProvider, String>((m) => m.get('text_scale'));
+    String  zan_or_shoucang =
+    context.select<SettingsProvider, String>((m) => m.get('zan_or_shoucang'));
+
     var zan_icon = zan_or_shoucang == '0' ? IconFont.thumbUp : IconFont.favorite;
-    var zan_text = zan_or_shoucang == '0' ? '赞' : '收藏';
+    var zan_text = zan_or_shoucang == '0' ? zan : shoucang;
 
     Color color = Theme.of(context).accentColor;
     double fontSize = 12 ;

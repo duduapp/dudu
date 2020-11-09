@@ -86,7 +86,7 @@ class UpdateTask {
           RuntimeConfig.updateWindowDisplayed = false;
           return false;
         } else {
-          DateUntil.markTime(null, DbKey.lastCheckUpdateTime);
+          DateUntil.markTime('', DbKey.lastCheckUpdateTime);
         }
       }
       return true;

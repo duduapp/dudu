@@ -1,5 +1,6 @@
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/local_account.dart';
+import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/login/login.dart';
 import 'package:dudu/pages/setting/about_app.dart';
@@ -11,7 +12,6 @@ import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/setting/setting_cell.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
-import 'package:theme_provider/theme_provider.dart';
 
 class GeneralSetting extends StatefulWidget {
   @override
@@ -66,7 +66,10 @@ class _GeneralSettingState extends State<GeneralSetting> {
   _onConfirmExit() async{
     await LocalStorageAccount.logout();
     Request.closeHttpClient();
-    AppNavigate.pushAndRemoveUntil(Login(),routeType: RouterType.fade);
+    SettingsProvider().setHomeTabIndex(2);
+    SettingsProvider().setCurrentUser(null);
+    LoginedUser().account = null;
+    AppNavigate.popToRoot();
   }
 
   @override
@@ -77,12 +80,13 @@ class _GeneralSettingState extends State<GeneralSetting> {
       ),
       body: ListView(
         children: <Widget>[
-          SettingCell(
+          ProviderSettingCell(
+            providerKey: 'theme',
             leftIcon: Icon(IconFont.theme),
             title: '应用主题',
-            onPress: () => showDialog(
-                context: context,
-                builder: (_) => ThemeConsumer(child: ThemeDialog(title: Text('选择主题'),hasDescription: false,selectedOverlayColor: Theme.of(context).buttonColor,))),
+            options: ['0','1','2'],
+            displayOptions: ['普通模式','暗色模式','深色模式'],
+            type: SettingType.string,
           ),
           ProviderSettingCell(
             providerKey: 'text_scale',

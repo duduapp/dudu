@@ -104,6 +104,13 @@ class InstanceSummary extends StatelessWidget {
                                   width: headerHeight,
                                 );
                               },
+                              errorWidget:(context,url,error) {
+                                return Container(
+                                  color: Theme.of(context).backgroundColor,
+                                  height: headerHeight,
+                                  width: headerHeight,
+                                );
+                              } ,
                             ),
                           ),
                         ),

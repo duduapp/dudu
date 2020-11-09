@@ -11,15 +11,17 @@ import '../json_serializable/notificate_item.dart';
 
 class NotificationTask {
   static StreamSubscription userNotificationEvents;
+  static EventSource events;
 
   static enable() async {
     userNotificationEvents?.cancel();
+    events?.close();
     var settings = SettingsProvider().settings;
     if (!settings['show_notifications']) return;
     //NotificationUtil.init();
 
     LoginedUser user = LoginedUser();
-    final events = EventSource(
+    events = EventSource(
         Uri.parse(user.getHost() + '/api/v1/streaming/user'),
         headers: {'Authorization': user.getToken()});
     userNotificationEvents = events.events.listen((MessageEvent message) {
@@ -37,7 +39,7 @@ class NotificationTask {
               body = StringUtil.removeAllHtmlTags(item.status.content);
               break;
             case 'favourite':
-              title = '${StringUtil.displayName(item.account)}收藏了你的嘟嘟';
+              title = '${StringUtil.displayName(item.account)}${StringUtil.getZanString()}了你的嘟嘟';
               body = StringUtil.removeAllHtmlTags(item.status.content);
               break;
             case 'follow':

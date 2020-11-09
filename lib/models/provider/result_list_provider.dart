@@ -30,7 +30,7 @@ class ResultListProvider extends ChangeNotifier {
   final bool reverseData;
   bool finishRefresh = false;
   bool finishLoad = false;
-  bool noResults = true;
+  bool noResults = false;
   bool isLoading = false;
   bool enableCache;
   Exception error;
@@ -275,12 +275,13 @@ class ResultListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> checkCachePosition() async {
+  Future<double> getCachePosition() async {
     var scrollPositionCache = await TbCacheHelper.getCache(LoginedUser().fullAddress,tag+'/sp');
     TbCacheHelper.removeCache(LoginedUser().fullAddress,tag+'/sp');
     if (scrollPositionCache != null) {
-      scrollController.jumpTo(double.parse(scrollPositionCache.content));
+      return double.parse(scrollPositionCache.content);
     }
+    return 0;
   }
 
   saveDataToCache() async{

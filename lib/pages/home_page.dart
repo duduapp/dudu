@@ -5,6 +5,7 @@ import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/models/runtime_config.dart';
 import 'package:dudu/models/task/check_role_task.dart';
+import 'package:dudu/models/task/get_emoji_task.dart';
 import 'package:dudu/models/task/notification_task.dart';
 import 'package:dudu/models/task/update_task.dart';
 import 'package:dudu/pages/discovery/instance_list.dart';
@@ -40,9 +41,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       UpdateTask.checkUpdateIfNeed();
-      CheckRoleTask.checkUserRole();
-
-      removeState();
+      if (LoginedUser().account != null) {
+        CheckRoleTask.checkUserRole();
+        GetEmojiTask.get();
+        removeState();
+      }
     } else if (state == AppLifecycleState.paused) {
       saveState();
     }
@@ -61,11 +64,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     super.initState();
     UpdateTask.checkUpdateIfNeed();
 
-    var loginedUser = LoginedUser();
-    if (loginedUser.account != null) {
+    if (LoginedUser().account != null) {
+      CheckRoleTask.checkUserRole();
       FilterUtil.getFiltersAndApply();
 
       NotificationTask.enable();
+      GetEmojiTask.get();
 
       WidgetsBinding.instance.addObserver(this);
     }
@@ -127,8 +131,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    var homeTabIndex = Provider.of<SettingsProvider>(context).homeTabIndex;
-    bool logined = LoginedUser().account != null;
+    var provider = Provider.of<SettingsProvider>(context);
+    var homeTabIndex = provider.homeTabIndex;
+    bool logined = provider.currentUser != null;
     return AppRetainWidget(
       child: Scaffold(
           body: IndexedStack(
@@ -274,7 +279,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 BottomNaviBar(
                   icon: getTabIcon(3, activeColor,logined),
                   title: getTabTitle(3, activeColor,logined),
-                  showBadge: logined && (provider.unread[TimelineApi.notification] != 0 ||
+                  showBadge: logined && ( //provider.unread[TimelineApi.notification] != 0 ||
                       provider.unread[TimelineApi.conversations] != 0 ||
                       provider.unread[TimelineApi.followRquest] != 0 ||
                       provider.unread[TimelineApi.mention] != 0),

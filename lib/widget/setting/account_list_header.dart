@@ -24,6 +24,7 @@ class AccountListHeader extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
+              if (LoginedUser().account != null)
               for (var acc in LocalStorageAccount.accounts)
                 ...[AccountRowTop(acc,controller),Divider(height: 0,)],
               InkWell(

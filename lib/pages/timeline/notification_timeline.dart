@@ -67,6 +67,11 @@ class _NotificationTimelineState extends State<NotificationTimeline>
     _menuController1 = MKDropDownMenuController();
     _menuController2 = MKDropDownMenuController();
 
+    provider = ResultListProvider(
+        firstRefresh: false,
+        requestUrl: TimelineApi.notification,
+        buildRow: ListViewUtil.notificationRowFunction(),
+        tag: 'notifications');
 
     super.initState();
   }
@@ -118,8 +123,8 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                       tabs: [
                         Badge(
                           position: BadgePosition.topEnd(top: 5, end: 18),
-                          showBadge:
-                              settings.unread[TimelineApi.notification] != 0,
+                          showBadge: false,
+                         //     settings.unread[TimelineApi.notification] != 0,
                           child: _tabController.index == 0
                               ? MKDropDownMenu(
                                   controller: _menuController1,
@@ -208,6 +213,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                 url: TimelineApi.notification,
                 rowBuilder: ListViewUtil.notificationRowFunction(),
                 tag: 'notifications',
+                provider: provider,
               ),
               NotificationTypeList(),
             ],

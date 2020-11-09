@@ -19,6 +19,7 @@ class StatusItemContent extends StatelessWidget {
       StatusItemMedia(data),
       if (data.poll != null)
       StatusItemPoll(data),
+      if (primary)
       StatusItemCard(data),
     ],);
   }

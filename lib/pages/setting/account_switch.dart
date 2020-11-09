@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dudu/models/local_account.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/login/login.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/account_util.dart';
@@ -122,11 +123,10 @@ class _AccountSwitchState extends State<AccountSwitch> {
                       //SizedBox(height: 10,),
                       if (!manageMode)
                         InkWell(
-                          onTap: () => AppNavigate.push(
-                              Login(
-                                showBackButton: true,
-                              ),
-                              routeType: RouterType.material),
+                          onTap: () {
+                            SettingsProvider().setHomeTabIndex(2);
+                            AppNavigate.popToRoot();
+                          },
                           child: Ink(
                             padding: EdgeInsets.all(25),
                             color: primaryColor,

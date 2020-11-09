@@ -8,6 +8,8 @@ import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/instance/instance_manager.dart';
 import 'package:dudu/models/instance/server_instance.dart';
 import 'package:dudu/models/json_serializable/instance_item.dart';
+import 'package:dudu/models/logined_user.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/discovery/add_instance.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
@@ -18,6 +20,7 @@ import 'package:dudu/widget/discovery/instance_summary.dart';
 import 'package:dudu/widget/setting/account_list_header.dart';
 import 'package:flutter/material.dart';
 import 'package:mk_drop_down_menu/mk_drop_down_menu.dart';
+import 'package:provider/provider.dart';
 
 class InstanceList extends StatefulWidget {
   @override
@@ -43,7 +46,12 @@ class _InstanceListState extends State<InstanceList> {
   getInstances() async {
     instances = await InstanceManager.getList();
     loading = false;
-    setState(() {});
+    if (mounted)
+      setState(() {});
+    else
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {});
+      });
   }
 
   Widget rowBuilder(BuildContext context, int idx) {
@@ -57,25 +65,30 @@ class _InstanceListState extends State<InstanceList> {
 
   @override
   Widget build(BuildContext context) {
+    var currentUser =
+        context.select<SettingsProvider, LoginedUser>((m) => m.currentUser);
+
     return Scaffold(
       appBar: CustomAppBar(
         centerTitle: true,
         automaticallyImplyLeading: false,
         key: _headerKey,
-        title: MKDropDownMenu(
-          controller: _downMenuController,
-          headerBuilder: (menuShowing) {
-            return DropDownTitle(
-              title: '发现',
-              expand: menuShowing,
-              showIcon: true,
-            );
-          },
-          headerKey: _headerKey,
-          menuBuilder: () {
-            return AccountListHeader(_downMenuController);
-          },
-        ),
+        title: currentUser == null
+            ? Text('发现')
+            : MKDropDownMenu(
+                controller: _downMenuController,
+                headerBuilder: (menuShowing) {
+                  return DropDownTitle(
+                    title: '发现',
+                    expand: menuShowing,
+                    showIcon: true,
+                  );
+                },
+                headerKey: _headerKey,
+                menuBuilder: () {
+                  return AccountListHeader(_downMenuController);
+                },
+              ),
         actions: [
           IconButton(
               icon: Icon(IconFont.follow),
@@ -84,13 +97,12 @@ class _InstanceListState extends State<InstanceList> {
                     context: context, content: AddInstance());
                 if (res != null) {
                   setState(() {});
-                  Timer(Duration(milliseconds: 200),(){
+                  Timer(Duration(milliseconds: 200), () {
                     _scrollController.animateTo(
                         _scrollController.position.maxScrollExtent,
                         duration: Duration(milliseconds: 200),
                         curve: Curves.fastOutSlowIn);
                   });
-
                 }
               })
         ],

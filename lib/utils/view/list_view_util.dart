@@ -48,8 +48,8 @@ class ListViewUtil {
       } else if (item.type == 'favourite') {
         return StatusItem(
           item: item.status,
-          refIcon: IconFont.thumbUp,
-          refString: '${StringUtil.displayName(item.account)} 收藏了你的嘟文',
+          refIcon: SettingsProvider().get('zan_or_shoucang') == '0' ? IconFont.thumbUp : IconFont.favorite,
+          refString: '${StringUtil.displayName(item.account)} ${SettingsProvider().get('zan_or_shoucang') == '0' ? '赞' : '收藏'}了你的嘟文',
           refAccount: item.account,);
       } else if (item.type == 'mention') {
         return StatusItem(
@@ -248,7 +248,7 @@ class ListViewUtil {
       SettingsProvider().federatedProvider,
       SettingsProvider().notificationProvider
     ]) {
-      provider.removeWhere((e) =>
+      provider?.removeWhere((e) =>
       (e.containsKey('reblog') && e['reblog'] != null && e['reblog'].containsKey('id') &&
           e['reblog']['id'] == statusId) ||
           e['id'] == statusId || (e.containsKey('status') && e['status'] != null && e['status']['id'] == statusId));
@@ -258,7 +258,7 @@ class ListViewUtil {
   static bool loginnedAndPrompt(BuildContext context) {
     if (LoginedUser().account == null) {
       DialogUtils.showSimpleAlertDialog(text: '你需要登录才能执行该操作',confirmText: '去登录',onConfirm: () {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+       AppNavigate.popToRoot();
       });
       return false;
     }

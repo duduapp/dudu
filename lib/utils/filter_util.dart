@@ -38,7 +38,7 @@ class FilterUtil {
       }
     }
     for (ResultListProvider provider in ListViewUtil.getRootProviders()) {
-      provider.reConstructFilterList();
+      provider?.reConstructFilterList();
     }
     SettingsProvider().notificationProvider.reConstructFilterList();
   }

@@ -17,7 +17,7 @@ class RequestManager {
         url: url,
         returnAll: true,
         enableCache: enableCache);
-    if (response == null) return null;
+    if (response == null || response.body == null) return null;
     if (provider.unread.containsKey(url)) {
       _updateUnread(provider, url, 0);
       if (response.body.isNotEmpty && response.body is List) {

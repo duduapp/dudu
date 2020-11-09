@@ -84,7 +84,7 @@ class _TimelineState extends State<Timeline> {
 
     WidgetsBinding.instance
         .addPostFrameCallback((_){
-      provider.checkCachePosition();
+     // provider.checkCachePosition();
     });
   }
 

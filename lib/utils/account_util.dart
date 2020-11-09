@@ -64,6 +64,7 @@ class AccountUtil {
     await SettingsProvider().localProvider?.saveDataToCache();
     await SettingsProvider().federatedProvider?.saveDataToCache();
     await SettingsProvider().notificationProvider?.saveDataToCache();
+
   }
 
   static restoreState() {

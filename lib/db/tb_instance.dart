@@ -12,7 +12,7 @@ class InstanceColumn {
 class TbInstanceHelper {
   static addInstance(String url) async{
     var db = await DBProvider().getDatabase();
-    db.insert(InstanceColumn.table, {InstanceColumn.instance:url,InstanceColumn.account:LoginedUser().fullAddress});
+    db.insert(InstanceColumn.table, {InstanceColumn.instance:url,InstanceColumn.account:LoginedUser().fullAddress ?? ''});
   }
 
   static removeInstance(String url) async{

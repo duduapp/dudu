@@ -6,13 +6,12 @@ import 'package:flutter/material.dart';
 import '../other/avatar.dart';
 
 class StatusReplyInfo extends StatelessWidget {
-  StatusItemData item;
+  final StatusItemData item;
 
   StatusReplyInfo(this.item);
 
   @override
   Widget build(BuildContext context) {
-    var primaryColor = Theme.of(context).primaryColor;
     Widget image;
 
     if (item.mediaAttachments.length > 0 && item.mediaAttachments[0]['type'] == 'image') {
@@ -21,7 +20,7 @@ class StatusReplyInfo extends StatelessWidget {
       image = Avatar(account: item.account,width: 55,height: 55,);
     }
     return Container(
-      margin: EdgeInsets.only(top:30),
+      margin: EdgeInsets.only(top:30,left: 15),
       width: ScreenUtil.width(context) - 30,
       padding: EdgeInsets.only(top: 3,bottom: 3),
       color: Theme.of(context).backgroundColor,

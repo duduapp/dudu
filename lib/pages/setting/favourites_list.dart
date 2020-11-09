@@ -26,7 +26,7 @@ class _FavouritesListState extends State<FavouritesList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('我的收藏'),
+        title: Text('我的${StringUtil.getZanString()}'),
       ),
       body: ChangeNotifierProvider<ResultListProvider>(
           create: (context) => ResultListProvider(

@@ -1,8 +1,9 @@
 import 'package:dudu/api/search_api.dart';
 import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/search/search_result.dart';
+import 'package:dudu/utils/themes.dart';
 import 'package:flutter/material.dart';
-import 'package:theme_provider/theme_provider.dart';
 
 import '../../widget/other/search.dart' as customSearch;
 
@@ -11,8 +12,13 @@ class SearchPageDelegate extends customSearch.SearchDelegate  {
 
   @override
   ThemeData appBarTheme(BuildContext context) {
+
     assert(context != null);
-    final ThemeData theme = ThemeProvider.themeOf(context).data;
+    int chooseTheme = 0;
+    try {
+      chooseTheme = int.parse(SettingsProvider().get('theme'));
+    } catch(e) {}
+    final ThemeData theme = ThemeUtil.themes[chooseTheme];
     assert(theme != null);
 
     return theme;

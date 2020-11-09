@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/pages/login/model/app_credential.dart';
 import 'package:dudu/utils/app_navigate.dart';
@@ -23,7 +25,6 @@ class InnerBrowser extends StatefulWidget {
 
 class _InnerBrowserState extends State<InnerBrowser> {
   int progress = 0;
-  double opacity = 0;
   String title = '网页';
   String url;
 
@@ -36,6 +37,7 @@ class _InnerBrowserState extends State<InnerBrowser> {
     if (widget.appCredential != null) {
       url = '$url/oauth/authorize?scope=read+write+follow+push+admin%3Awrite%3Aaccounts&response_type=code&redirect_uri=${widget.appCredential.redirectUri}&client_id=${widget.appCredential.clientId}';
     }
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
     super.initState();
   }
@@ -109,59 +111,50 @@ class _InnerBrowserState extends State<InnerBrowser> {
             preferredSize: Size(double.infinity, 3.0),
           ),
         ),
-        body: Opacity(
-          opacity: opacity,
-          child: WebView(
-            initialUrl: url,
-            javascriptMode: JavascriptMode.unrestricted,
-            initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
-            navigationDelegate: (action) {
-              if (!action.url.startsWith('http')) return NavigationDecision.prevent;
-              setState(() {
-                url = action.url;
-              });
-              if (widget.appCredential != null) {
-                List<String> urlList = url.split("?");
-                if (urlList[0].contains(widget.appCredential.redirectUri) && urlList[1].length != 0) {
-                  List<String> codeList = url.split("=");
-                  AppNavigate.pop(param: codeList[1]);
-                }
+        body: WebView(
+          initialUrl: url,
+          javascriptMode: JavascriptMode.unrestricted,
+          initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
+          navigationDelegate: (action) {
+            if (!action.url.startsWith('http')) return NavigationDecision.prevent;
+            setState(() {
+              url = action.url;
+            });
+            if (widget.appCredential != null) {
+              List<String> urlList = url.split("?");
+              if (urlList[0].contains(widget.appCredential.redirectUri) && urlList[1].length != 0) {
+                List<String> codeList = url.split("=");
+                AppNavigate.pop(param: codeList[1]);
               }
+            }
 
-              return NavigationDecision.navigate;
-            },
-            gestureNavigationEnabled: true,
-            debuggingEnabled: true,
-            onProgress: (p) async {
-              if (mounted)
+
+
+            return NavigationDecision.navigate;
+          },
+          gestureNavigationEnabled: true,
+          debuggingEnabled: true,
+          onProgress: (p) async {
+            if (mounted)
+            setState(() {
+              progress = p;
+            });
+          },
+
+          onWebViewCreated: (controller) {
+            _controller = controller;
+            if (widget.appCredential != null)
+            _controller.clearCache();
+
+          },
+          onPageFinished: (str) async {
+            if (mounted)
+            _controller.getTitle().then((t) {
               setState(() {
-                progress = p;
-                //ToDo solve first open webview black,not perfectly
-                if (progress > 30 && opacity != 1) {
-                  setState(() {
-                    opacity = 1;
-                  });
-                }
+                title = t;
               });
-            },
-
-            onWebViewCreated: (controller) {
-              _controller = controller;
-              if (widget.appCredential != null)
-              _controller.clearCache();
-
-            },
-            onPageFinished: (str) async {
-              _controller.getTitle().then((t) {
-                setState(() {
-                  title = t;
-                });
-              });
-              setState(() {
-                opacity = 1;
-              });
-            },
-          ),
+            });
+          },
         ),
       ),
     );

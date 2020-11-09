@@ -1,5 +1,6 @@
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/logined_user.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/setting/account_setting.dart';
 import 'package:dudu/pages/setting/bookmarks_list.dart';
 import 'package:dudu/pages/setting/edit_user_profile.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import '../../widget/setting/setting_cell.dart';
 import 'favourites_list.dart';
 import 'setting_head.dart';
+import 'package:provider/provider.dart';
 
 class Setting extends StatefulWidget {
   @override
@@ -44,6 +46,12 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
+    String  zan_or_shoucang =
+    context.select<SettingsProvider, String>((m) => m.get('zan_or_shoucang'));
+
+    var zan_icon = zan_or_shoucang == '0' ? IconFont.thumbUp : IconFont.favorite;
+    var zan_text = zan_or_shoucang == '0' ? '赞' : '收藏';
+
     return ListView(
       padding: EdgeInsets.only(top: 0),
       controller: _scrollController,
@@ -63,8 +71,8 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
           onPress: () => AppNavigate.push(ConversationTimeline()),
         ),
         SettingCell(
-          title: '收藏',
-          leftIcon: Icon(IconFont.favorite),
+          title: zan_text,
+          leftIcon: Icon(zan_icon),
           onPress: () => AppNavigate.push(FavouritesList()),
         ),
         SettingCell(

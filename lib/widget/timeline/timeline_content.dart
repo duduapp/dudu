@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
+import 'package:dudu/widget/common/loading_view.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,29 +13,35 @@ class TimelineContent extends StatefulWidget {
   final String url;
   final String tag;
   final RowBuilder rowBuilder;
-  final bool prefixId; // solve hero problem
+  final bool prefixId;// solve hero problem
+  final ResultListProvider provider;
 
-  TimelineContent({this.url, this.tag,this.rowBuilder,this.prefixId = true});
+  TimelineContent({this.url, this.tag,this.rowBuilder,this.prefixId = true,this.provider});
   @override
   _TimelineContentState createState() => _TimelineContentState();
 }
 
 class _TimelineContentState extends State<TimelineContent> {
-  ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController;
   RefreshController _refreshController = RefreshController();
   ResultListProvider provider;
 
   @override
   void initState() {
+    getProvider();
+    super.initState();
+  }
+
+  getProvider() async{
     bool sameInstance = !widget.url.startsWith('https://');
-    provider = ResultListProvider(
+    provider = widget.provider ?? ResultListProvider(
         firstRefresh: sameInstance ?false :true,
         requestUrl: widget.url,
         tag: widget.tag,
         buildRow: widget.rowBuilder ?? ListViewUtil.statusRowFunction(),
         listenBlockEvent: false,
         dataHandler:
-             widget.prefixId ? ListViewUtil.dataHandlerPrefixIdFunction(widget.tag + "##"): null) ;
+        widget.prefixId ? ListViewUtil.dataHandlerPrefixIdFunction(widget.tag + "##"): null) ;
     if (sameInstance) {
       switch (widget.tag) {
         case 'home':
@@ -49,21 +56,17 @@ class _TimelineContentState extends State<TimelineContent> {
         case 'notifications':
           SettingsProvider().notificationProvider = provider;
       }
+      _scrollController = ScrollController(initialScrollOffset: await provider.getCachePosition());
       provider.refreshController = _refreshController;
       provider.scrollController = _scrollController;
-      provider.loadCacheDataOrRefresh();
-
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Timer(Duration(milliseconds: 300),(){
-          provider.checkCachePosition();
-        });
-
-      });
+      await provider.loadCacheDataOrRefresh();
+    } else {
+      _scrollController = ScrollController();
+      provider.scrollController = _scrollController;
     }
-
-
-
-    super.initState();
+    if (mounted)
+    setState(() {
+    });
   }
 
   @override
@@ -75,13 +78,14 @@ class _TimelineContentState extends State<TimelineContent> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ResultListProvider>.value(
+  return provider == null ? Container() :ChangeNotifierProvider<ResultListProvider>.value(
         value: provider,
-        builder: (context, snapshot) {
+        builder: (context, snap) {
           return ProviderEasyRefreshListView(
             scrollController: _scrollController,
             refreshController: _refreshController,
           );
         });
+
   }
 }

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:badges/badges.dart';
+import 'package:dudu/public.dart';
 import 'package:flutter/material.dart';
 
 class BottomNaviBar extends StatelessWidget {
@@ -13,9 +16,11 @@ class BottomNaviBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onDoubleTap: onDoubleTap,
+   //   onDoubleTap: onDoubleTap,
       onTap: onTap,
       child: Container(
+        width: ScreenUtil.width(context)/5,
+        padding: EdgeInsets.only(top: 5,bottom: Platform.isAndroid ? 5 :0,),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

@@ -109,7 +109,7 @@ class _StatusDetailState extends State<StatusDetail>
 
     providers.addAll([
       ResultListProvider(
-          requestUrl: status.url,
+          requestUrl: widget.hostUrl ?? '',
           enableRefresh: false,
           enableLoad: false,
           firstRefresh: false,

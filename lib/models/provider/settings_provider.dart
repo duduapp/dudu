@@ -1,4 +1,5 @@
 import 'package:dudu/api/timeline_api.dart';
+import 'package:dudu/constant/db_key.dart';
 import 'package:dudu/db/db_constant.dart';
 import 'package:dudu/db/tb_cache.dart';
 import 'package:dudu/models/http/request_manager.dart';
@@ -45,6 +46,7 @@ class SettingsProvider extends ChangeNotifier {
   LoginedUser currentUser;
 
   int homeTabIndex = 2;
+  int publicTabIndex = 0;
 
   Map<String, List<FilterItem>> filters = {
     'home': [],
@@ -55,6 +57,7 @@ class SettingsProvider extends ChangeNotifier {
 
   load() async {
     settings = {
+      'theme' : '0',
       'show_thumbnails': true,
       'always_show_sensitive': false,
       'always_expand_tools': false,
@@ -89,6 +92,7 @@ class SettingsProvider extends ChangeNotifier {
       }
       await _loadFromStorage();
       await _loadUnread();
+      await _loadTabIndex();
     }
   }
 
@@ -132,8 +136,8 @@ class SettingsProvider extends ChangeNotifier {
       TimelineApi.home: await _getUnreadFromDb(TimelineApi.home),
       TimelineApi.local: await _getUnreadFromDb(TimelineApi.local),
   //    TimelineApi.federated: await _getUnreadFromDb(TimelineApi.federated),
-      TimelineApi.notification:
-          await _getUnreadFromDb(TimelineApi.notification),
+  //     TimelineApi.notification:
+  //     await _getUnreadFromDb(TimelineApi.notification),
       TimelineApi.conversations:
           await _getUnreadFromDb(TimelineApi.conversations),
       TimelineApi.followRquest:
@@ -150,9 +154,39 @@ class SettingsProvider extends ChangeNotifier {
     }
   }
 
+  _loadTabIndex() async {
+    var cache = await TbCacheHelper.getCache(currentUser.fullAddress, DbKey.homeTabIndex);
+    if (cache != null) {
+      try {
+        homeTabIndex = int.parse(cache.content);
+      } catch (e) {}
+    }
+    var cachePublic = await TbCacheHelper.getCache(currentUser.fullAddress, DbKey.publicTabIndex);
+    if (cachePublic != null) {
+      try {
+        publicTabIndex = int.parse(cachePublic.content);
+      } catch (e) {}
+    }
+    notifyListeners();
+  }
+
+  setCurrentUser(LoginedUser user) {
+    currentUser = user;
+    notifyListeners();
+  }
+
   setHomeTabIndex(int idx) {
     homeTabIndex = idx;
+    if (currentUser != null)
+    TbCacheHelper.setCache(TbCache(account: LoginedUser().fullAddress,tag: DbKey.homeTabIndex,content: homeTabIndex.toString()));
     notifyListeners();
+  }
+
+  setPublicTabIndex(int idx) {
+    publicTabIndex = idx;
+    if (currentUser != null)
+      TbCacheHelper.setCache(TbCache(account: LoginedUser().fullAddress,tag: DbKey.publicTabIndex,content: publicTabIndex.toString()));
+    //notifyListeners();
   }
 
   updateUnread(String key, int value) {

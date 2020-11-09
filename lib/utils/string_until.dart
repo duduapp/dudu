@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/logined_user.dart';
+import 'package:dudu/models/provider/settings_provider.dart';
 
 class StringUtil {
   static String displayName(OwnerAccount item) {
@@ -49,4 +50,10 @@ class StringUtil {
 
   static String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+
+  static String getZanString() {
+    var zan = SettingsProvider().get('zan_or_shoucang');
+    if (zan == '0') return '赞';
+    else return '收藏';
+  }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ThemeUtil {
-  static ThemeData lightTheme(BuildContext context) {
+  static ThemeData lightTheme() {
     return ThemeData(
       primaryColor: Colors.white,
       toggleableActiveColor: Colors.blue,
@@ -30,7 +30,7 @@ class ThemeUtil {
     );
   }
 
-  static ThemeData darkTheme(BuildContext context) {
+  static ThemeData darkTheme() {
     return ThemeData.dark().copyWith(
         primaryColor: Color.fromRGBO(30, 30, 30, 1),
         accentColor: Colors.grey[600],
@@ -48,7 +48,7 @@ class ThemeUtil {
         );
   }
 
-  static ThemeData lightDartTheme(BuildContext context) {
+  static ThemeData lightDartTheme() {
     return ThemeData.dark().copyWith(
         primaryColor: Color.fromRGBO(49,52,67, 1),
         accentColor: Color.fromRGBO(154, 174, 199, 1),
@@ -68,13 +68,10 @@ class ThemeUtil {
         dialogTheme: DialogTheme(backgroundColor: Color.fromRGBO(49,52,67, 1)),
       bottomSheetTheme: BottomSheetThemeData(backgroundColor: Color.fromRGBO(49,52,67, 1)),
       cardColor: Color.fromRGBO(40,44,55, 1),
-      tabBarTheme: TabBarTheme(indicator: BoxDecoration(border: Border(
-        bottom: BorderSide(color: Colors.blue)
-      ))),
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(textStyle: TextStyle(fontSize: 12),padding: EdgeInsets.all(0),tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-
-      )
     );
+  }
+
+  static get themes {
+    return [lightTheme(),lightDartTheme(),darkTheme()];
   }
 }

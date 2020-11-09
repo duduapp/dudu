@@ -29,26 +29,23 @@ void main() async {
   }
 
 
-  // FlutterError.onError = (detail) {
-  //   debugPrint(detail.toString());
-  //
-  //   Future.delayed(Duration(seconds: 1), () {
-  //     DialogUtils.showSimpleAlertDialog(
-  //         text: 'oops, 出现了错误，您可以返回或重启应用程序',
-  //         cancelText: '关闭程序',
-  //         confirmText: '返回',
-  //         onCancel: () => exit(0),
-  //         onConfirm: () => Future.delayed(Duration.zero, () {
-  //               AppNavigate.pop();
-  //             }));
-  //   });
-  // };
+
+  ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+      return Container(
+      child: Center(
+        child: Text(
+          "出现错误",
+        ),
+      ),
+    );
+  };
+
 
   await SettingsProvider().init();
   CheckNewTask.start();
   LocalStorageAccount.load();
   if (kReleaseMode) {
-    debugPrint = (String message, {int wrapWidth}) {};
+   // debugPrint = (String message, {int wrapWidth}) {};
   }
   runApp(MyApp(
     logined: account != null,
