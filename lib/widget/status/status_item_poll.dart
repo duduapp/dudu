@@ -35,7 +35,7 @@ class _StatusItemPollState extends State<StatusItemPoll> {
         data: MediaQuery.of(context).copyWith(textScaleFactor: ScreenUtil.scaleFromSetting(SettingsProvider().get('text_scale'))),
         child: Container(
           padding: EdgeInsets.only(bottom: 6),
-          child: widget.status.poll.voted || widget.status.poll.expired ? resultPoll() : votablePoll(),
+          child: (widget.status.poll.voted ?? true)  || widget.status.poll.expired ? resultPoll() : votablePoll(),
         ),
       );
     }

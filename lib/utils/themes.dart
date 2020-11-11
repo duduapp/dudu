@@ -68,6 +68,7 @@ class ThemeUtil {
         dialogTheme: DialogTheme(backgroundColor: Color.fromRGBO(49,52,67, 1)),
       bottomSheetTheme: BottomSheetThemeData(backgroundColor: Color.fromRGBO(49,52,67, 1)),
       cardColor: Color.fromRGBO(40,44,55, 1),
+      dividerColor: Color.fromRGBO(40,44,55, 1)
     );
   }
 

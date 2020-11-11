@@ -366,6 +366,9 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
                   height: height,
                 );
               },
+              errorWidget: (context,url,error) {
+                return Container();
+              },
             ),
 //            child: Image(
 //              width: width,
@@ -420,7 +423,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
                     ? BlurHash(
                         hash: image.blurhash,
                       )
-                    : Container(),
+                    : Container(color: Theme.of(context).scaffoldBackgroundColor,),
                 borderRadius: BorderRadius.circular(8.0)),
           ),
         if ((image.type == 'video' || image.type == 'gifv') &&

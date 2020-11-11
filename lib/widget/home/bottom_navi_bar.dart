@@ -24,16 +24,12 @@ class BottomNaviBar extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-              height: 5,
-            ),
             Badge(
               child: icon,
               showBadge: showBadge,
               position: BadgePosition.topEnd(top: -1, end: -5),
             ),
             title,
-            SizedBox(height: 5,)
           ],
         ),
       ),

@@ -13,6 +13,7 @@ import 'package:dudu/models/json_serializable/instance_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/models/task/check_role_task.dart';
 import 'package:dudu/pages/home_page.dart';
 import 'package:dudu/pages/login/model/app_credential.dart';
 import 'package:dudu/pages/login/model/token.dart';
@@ -166,6 +167,7 @@ class InstanceManager {
 
         AccountUtil.cacheEmoji();
         AccountUtil.requestPreference();
+        CheckRoleTask.checkRole();
 
         pd.hide();
         pushAndRemoveUntil(HomePage());

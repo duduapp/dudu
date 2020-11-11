@@ -8,11 +8,11 @@ class CheckRoleTask {
 
   static checkUserRole() async{
    if (!await DateUntil.hasMarkedTimeToday(LoginedUser().fullAddress,DbKey.lastCheckRoleTime)) {
-      _checkRole();
+      checkRole();
    }
   }
 
-  static _checkRole() async{
+  static checkRole() async{
     bool isAdmin;
     try {
       isAdmin = await AdminApi.warnUser(LoginedUser().account.id);

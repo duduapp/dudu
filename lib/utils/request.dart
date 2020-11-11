@@ -28,6 +28,8 @@ class Request {
   static Dio dioCacheClientWithBaseUrl;
   static Dio dioCacheClient;
   static HttpClient httpClient;
+  
+  static const int requestTimeout = 20;
 
   static Future<CacheResponse> cacheGet({String url,Duration duration = const Duration(days: 1)}) async{
     var cache = await TbCacheHelper.getCache('', url);
@@ -208,13 +210,13 @@ class Request {
               response = await getDioCacheWithBaseUrl().get(url,
                   queryParameters: params,
                   cancelToken: cancelToken,
-                  options: cacheOptions
+                  options: cacheOptions ?? buildCacheOptions(Duration(days: 7))
                       );
             else
               response = await getDioCache().get(url,
                   queryParameters: params,
                   cancelToken: cancelToken,
-                  options: cacheOptions);
+                  options: cacheOptions ?? buildCacheOptions(Duration(days: 7)));
             if (returnAll) {
               dialog?.hide();
               return HttpResponse(
@@ -229,13 +231,13 @@ class Request {
                 .get(
                   buildGetUrl(_realUrl(url), params),
                 )
-                .timeout(Duration(seconds: 10));
+                .timeout(Duration(seconds: requestTimeout));
           else
             response = await http
                 .get(
                   buildGetUrl(_realUrl(url), params),
                 )
-                .timeout(Duration(seconds: 10));
+                .timeout(Duration(seconds: requestTimeout));
 
           //
           break;
@@ -245,16 +247,16 @@ class Request {
               .post(_realUrl(url),
                   headers: {'Content-Type': 'application/json'},
                   body: json.encode(params))
-              .timeout(Duration(seconds: 10));
+              .timeout(Duration(seconds: requestTimeout));
           break;
         case RequestType.put:
-          response = await client.put(_realUrl(url), body: params);
+          response = await client.put(_realUrl(url), body: params).timeout(Duration(seconds: requestTimeout));
           break;
         case RequestType.delete:
-          response = await client.delete(buildGetUrl(_realUrl(url), params));
+          response = await client.delete(buildGetUrl(_realUrl(url), params)).timeout(Duration(seconds: requestTimeout));
           break;
         case RequestType.patch:
-          response = await client.patch(url, body: params);
+          response = await client.patch(url, body: params).timeout(Duration(seconds: requestTimeout));
           break;
       }
       if (closeDialogDelay != 0)

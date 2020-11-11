@@ -77,7 +77,7 @@ class SearchApi {
     Map res = await _search(url, type,
         resolve: true,
         showDialog: true,
-        handlingMessage: '你加使用'+LoginedUser().fullAddress+'执行此操作',
+        handlingMessage: '你将使用'+LoginedUser().fullAddress+'执行此操作',
         successMessage: '',
         closeDialogDelay: 0);
     if (res != null) {

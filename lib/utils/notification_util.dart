@@ -31,7 +31,7 @@ class NotificationUtil {
   static Future selectNotification(String payload) async {
     if (payload != null) {
       NotificationItem item = NotificationItem.fromJson(json.decode(payload));
-      if (item.type == 'mention' || item.type == 'poll') {
+      if (item.type == 'mention' || item.type == 'poll' || item.type == 'favourite') {
         AppNavigate.push(StatusDetail(data:item.status));
       }
     }

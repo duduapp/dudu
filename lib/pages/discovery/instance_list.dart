@@ -93,6 +93,7 @@ class _InstanceListState extends State<InstanceList> {
           IconButton(
               icon: Icon(IconFont.follow),
               onPressed: () async {
+                OverlayUtil.hideAllOverlay();
                 var res = await DialogUtils.showRoundedDialog(
                     context: context, content: AddInstance());
                 if (res != null) {

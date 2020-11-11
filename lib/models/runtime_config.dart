@@ -10,6 +10,6 @@ class RuntimeConfig {
 
   static String defaultServer;
 
-  static int publicTimeline = 0;
+
   static int notificationTimeline = 0;
 }

@@ -67,6 +67,7 @@ class _HomeTimelineState extends State<HomeTimeline> {
               size: 26,
             ),
             onPressed: () {
+              OverlayUtil.hideAllOverlay();
               customSearch.showSearch(
                   context: context, delegate: SearchPageDelegate());
             },
@@ -77,8 +78,11 @@ class _HomeTimelineState extends State<HomeTimeline> {
             //  color: Theme.of(context).buttonColor,
               size: 26,
             ),
-            onPressed: () => AppNavigate.push(NewStatus(),
-                routeType: RouterType.material),
+            onPressed: () {
+              OverlayUtil.hideAllOverlay();
+              AppNavigate.push(NewStatus(),
+                  routeType: RouterType.material);
+    }
           )
         ],
       ),

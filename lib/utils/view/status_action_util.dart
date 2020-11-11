@@ -214,7 +214,7 @@ class StatusActionUtil {
           },
         )
       ],
-      if (myAccount.id != data.account.id) ...[
+      if (myAccount != null && myAccount.id != data.account.id) ...[
         if (sameInstance(context) &&
             provider != null &&
             provider.tag == 'federated') ...[
@@ -310,7 +310,9 @@ class StatusActionUtil {
             icon: IconFont.block,
             text: '管理员: 对账号进行操作',
           ),
-      ] else ...[
+      ],
+      if (myAccount != null && myAccount.id == data.account.id)
+      ...[
         if (data.visibility == 'public' || data.visibility == 'unlisted')
           BottomSheetItem(
             icon: Icons.vertical_align_top,

@@ -42,9 +42,18 @@ class _StatusDetailState extends State<StatusDetail>
   bool _getSliverExpandHeight = false;
   bool _originExpandOption = false;
   CancelToken _cancelToken;
+  String errorMsg;
+
 
   _fetchData() async {
     var data = await StatusApi.getContext(data:widget.data,hostUrl:widget.hostUrl,cancelToken: _cancelToken);
+    if (data.containsKey('error')) {
+      errorMsg = data['error'];
+      setState(() {
+
+      });
+      return;
+    }
     if (!mounted) {
       return;
     }
@@ -256,7 +265,7 @@ class _StatusDetailState extends State<StatusDetail>
             value: providers[2],
             child: ProviderEasyRefreshListView(
               firstRefresh: true,
-              emptyView: EmptyViewWithHeight(text: '还没有收藏',),
+              emptyView: EmptyViewWithHeight(text: '还没有${StringUtil.getZanString()}',),
               loadingView: LoadingView(height: 200,),
             ),
           ),
@@ -272,7 +281,7 @@ class _StatusDetailState extends State<StatusDetail>
         title: Text('嘟文信息'),
         toolbarHeight: 45,
       ),
-      body: Column(
+      body: errorMsg != null ? Center(child: Text(errorMsg == 'Record not found' ? '没找到嘟文' : errorMsg)):Column(
         //  alignment: AlignmentDirectional.bottomEnd,
         children: [
           Expanded(
@@ -347,7 +356,7 @@ class _StatusDetailState extends State<StatusDetail>
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        '收藏 ' +
+                                        '${StringUtil.getZanString()} ' +
                                             widget.data.favouritesCount
                                                 .toString(),
                                       ),

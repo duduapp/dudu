@@ -22,10 +22,10 @@ void main() async {
   await Storage.loadSharedPrefrences();
   LocalAccount account = await LocalStorageAccount.getActiveAccount();
   // UpdateTask.checkUpdateIfNeed();
-  if (account != null) {
+  if (account != null && account.account.acct != null) {
     LoginedUser().loadFromLocalAccount(account);
   } else {
-    await DefaultServerTask.getServer();
+    //await DefaultServerTask.getServer();
   }
 
 
@@ -45,7 +45,7 @@ void main() async {
   CheckNewTask.start();
   LocalStorageAccount.load();
   if (kReleaseMode) {
-   // debugPrint = (String message, {int wrapWidth}) {};
+    debugPrint = (String message, {int wrapWidth}) {};
   }
   runApp(MyApp(
     logined: account != null,

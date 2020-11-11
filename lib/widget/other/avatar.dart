@@ -51,6 +51,15 @@ class Avatar extends StatelessWidget {
             width: width,
             height: height,
             fit: BoxFit.cover,
+          errorWidget: (context,url,error) {
+            return Image(
+              width: width,
+              height: height,
+              image: AssetImage(
+                  'assets/images/missing.png'
+              ),
+            );
+          },
         ),
         borderRadius: BorderRadius.circular(10.0),
       ),

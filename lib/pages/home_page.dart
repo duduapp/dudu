@@ -251,7 +251,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   showBadge: logined && provider.unread[TimelineApi.local] != 0,
                   onTap: logined ?() {
                     if (_tabIndex == 1) {
-                      if (RuntimeConfig.publicTimeline == 0) {
+                      if (SettingsProvider().publicTabIndex == 0) {
                         provider.localProvider.scrollController.jumpTo(0);
                       } else {
                         provider.federatedProvider.scrollController.jumpTo(0);
@@ -261,7 +261,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     }
                   } : null,
                   onDoubleTap: logined ?() {
-                    if (RuntimeConfig.publicTimeline == 0) {
+                    if (SettingsProvider().publicTabIndex == 0) {
                       provider.localProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 100));
                     } else {
                       provider.federatedProvider.refreshController.requestRefresh(duration: Duration(milliseconds: 100));

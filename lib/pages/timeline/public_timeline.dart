@@ -44,6 +44,9 @@ class _PublicTimelineState extends State<PublicTimeline>
   void initState() {
     _tabController = TabController(initialIndex:widget.url == null ? SettingsProvider().publicTabIndex ?? 0 : 0,length: 2, vsync: this);
     _tabController.addListener(() {
+      if (widget.url == null) {
+        SettingsProvider().setPublicTabIndex(_tabController.index);
+      }
       setState(() {});
     });
     _headerKey = GlobalKey();
@@ -101,10 +104,6 @@ class _PublicTimelineState extends State<PublicTimeline>
                     color: Theme.of(context).appBarTheme.color,
                     tabBar: TabBar(
                       onTap: (idx) {
-                        if (widget.url == null) {
-                          SettingsProvider().setPublicTabIndex(idx);
-                        }
-                        RuntimeConfig.publicTimeline = idx;
                         OverlayUtil.hideAllOverlay();
                       },
                       indicator: UnderlineTabIndicator(

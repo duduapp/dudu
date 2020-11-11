@@ -220,6 +220,10 @@ class ResultListProvider extends ChangeNotifier {
           nextUrl = null;
         } else {
           nextUrl = link[0].substring(1, link[0].indexOf('>'));
+          // 清除http, 使请求携带token
+          if (!requestUrl.startsWith('https://')) {
+            nextUrl = nextUrl.replaceFirst(LoginedUser().host, '');
+          }
         }
       } else {
         finishLoad = true;

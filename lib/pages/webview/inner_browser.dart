@@ -143,8 +143,12 @@ class _InnerBrowserState extends State<InnerBrowser> {
 
           onWebViewCreated: (controller) {
             _controller = controller;
-            if (widget.appCredential != null)
-            _controller.clearCache();
+            if (widget.appCredential != null) {
+         //     _controller.clearCache();
+              final cookieManager = CookieManager();
+              cookieManager.clearCookies();
+            }
+
 
           },
           onPageFinished: (str) async {
