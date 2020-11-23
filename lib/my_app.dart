@@ -46,7 +46,7 @@ class App extends StatelessWidget {
       title: '嘟嘟',
       debugShowCheckedModeBanner: false,
       navigatorKey: navGK,
-      home: Scaffold(body: HomePage()),
+      home: Scaffold(body: HomePage(logined: LoginedUser().account != null,)),
     );
   }
 }

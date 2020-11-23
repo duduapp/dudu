@@ -7,11 +7,11 @@ import 'package:uuid/uuid.dart';
 
 class DeviceUtil {
 
-  static getAppId() async{
-    String appId = await Storage.getString('app_id');
+  static String getAppId() {
+    String appId = Storage.getString('app_id');
     if (appId == null) {
       appId = generateAppId();
-      await Storage.saveString('app_id', appId);
+      Storage.saveString('app_id', appId);
     }
     return appId;
   }

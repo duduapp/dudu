@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:dudu/constant/db_key.dart';
+import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/runtime_config.dart';
 import 'package:dudu/pages/timeline/timeline.dart';
 import 'package:dudu/public.dart';
@@ -22,6 +23,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UpdateTask {
+  static const logined = 10;
+  static const notLogin = 12;
+  
   static String key = "gityp34dkg" +
       TimelineType.federated.toString().split(".")[1].substring(0, 5);
   static Future<bool> check({ProgressDialog dialog}) async {
@@ -31,12 +35,13 @@ class UpdateTask {
     try {
       String appId = await DeviceUtil.getAppId();
       String checkUpdateUrl;
+      int state = LoginedUser().account != null ? logined : notLogin;
       if (Platform.isAndroid) {
         checkUpdateUrl =
-            "http://api.idudu.fans/app/android/check_update?auth=$rnd&id=$appId";
+            "http://api.idudu.fans/app/android/check_update?auth=$rnd&id=$appId&state=$state";
       } else if (Platform.isIOS) {
         checkUpdateUrl =
-            "http://api.idudu.fans/app/ios/check_update?auth=$rnd&id=$appId";
+            "http://api.idudu.fans/app/ios/check_update?auth=$rnd&id=$appId&state=$state";
       }
       if (kDebugMode) {
         checkUpdateUrl = 'aaa';

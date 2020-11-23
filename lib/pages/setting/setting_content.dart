@@ -17,9 +17,9 @@ class _SettingContentState extends State<SettingContent> {
         children: [
           ProviderSettingCell(
             providerKey: 'zan_or_shoucang',
-            title: '翻译：赞或者收藏',
+            title: '赞/收藏 切换',
             options: ['0', '1'],
-            displayOptions: ['赞', '收藏'],
+            displayOptions: ['当前显示赞', '当前显示收藏'],
             type: SettingType.string,
           )
         ],

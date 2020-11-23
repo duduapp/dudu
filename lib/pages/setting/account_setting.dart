@@ -120,7 +120,7 @@ class _AccountSettingState extends State<AccountSetting> {
                 AppNavigate.push(CommonFilterList(FilterType.thread)),
           ),
           Container(
-            child: Text('账号操作（需打开浏览器）'),
+            child: Text('账号操作（需在系统默认的浏览器中完成操作）'),
             padding: EdgeInsets.all(8),
           ),
           SettingCell(

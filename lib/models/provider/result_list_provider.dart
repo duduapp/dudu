@@ -8,6 +8,7 @@ import 'package:dudu/models/http/request_manager.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/models/runtime_config.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/compute_util.dart';
 import 'package:dudu/utils/filter_util.dart';
 import 'package:dudu/utils/request.dart';
 import 'package:flutter/foundation.dart';
@@ -18,6 +19,7 @@ import '../logined_user.dart';
 
 typedef ResultListDataHandler = Function(dynamic data);
 typedef RowBuilder = Function(int idx, List data, ResultListProvider provider);
+
 
 class ResultListProvider extends ChangeNotifier {
   String requestUrl;
@@ -51,6 +53,7 @@ class ResultListProvider extends ChangeNotifier {
 
   RefreshController refreshController;
   ScrollController scrollController;
+
 
   /// map key 的优先级高于 data handler
   ResultListProvider(
@@ -272,7 +275,8 @@ class ResultListProvider extends ChangeNotifier {
     if (cache == null) {
       await refresh(showLoading: true);
     } else {
-      addData(json.decode(cache.content), true);
+      var jsonResult = await compute(parseJsonString,cache.content);
+      addData(jsonResult, true);
     }
 
     isLoading = false;

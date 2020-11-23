@@ -24,8 +24,9 @@ import '../../widget/other/search.dart' as customSearch;
 
 class PublicTimeline extends StatefulWidget {
   final String url;
+  final bool enableFederated;
 
-  PublicTimeline({this.url});
+  PublicTimeline({this.url,this.enableFederated = true});
 
   @override
   _PublicTimelineState createState() => _PublicTimelineState();
@@ -45,7 +46,11 @@ class _PublicTimelineState extends State<PublicTimeline>
     _tabController = TabController(initialIndex:widget.url == null ? SettingsProvider().publicTabIndex ?? 0 : 0,length: 2, vsync: this);
     _tabController.addListener(() {
       if (widget.url == null) {
-        SettingsProvider().setPublicTabIndex(_tabController.index);
+          SettingsProvider().setPublicTabIndex(_tabController.index);
+      } else {
+        if (!widget.enableFederated) {
+          _tabController.index = 0;
+        }
       }
       setState(() {});
     });
@@ -96,7 +101,6 @@ class _PublicTimelineState extends State<PublicTimeline>
                   IconButton(
                       icon: Icon(IconFont.back),
                       onPressed: () => AppNavigate.pop()),
-                    Expanded(child: Text(widget.url,overflow: TextOverflow.ellipsis,)),
                 ],
                 Expanded(
                   child: ColoredTabBar(
@@ -153,6 +157,7 @@ class _PublicTimelineState extends State<PublicTimeline>
                               )
                             : DropDownTitle(
                                 title: '跨站',
+                                fontColor: widget.enableFederated ? null : Colors.grey,
                               ),
                       ],
                       controller: _tabController,
@@ -179,7 +184,8 @@ class _PublicTimelineState extends State<PublicTimeline>
                     onPressed: () => AppNavigate.push(NewStatus(),
                         routeType: RouterType.material),
                   )
-                ],
+                ] else
+                  SizedBox(width: 20,),
               ],
             ),
           ),
@@ -189,6 +195,7 @@ class _PublicTimelineState extends State<PublicTimeline>
           ),
           Expanded(
               child: TabBarView(
+                physics: widget.enableFederated ? null : NeverScrollableScrollPhysics(),
             controller: _tabController,
             children: [
               TimelineContent(

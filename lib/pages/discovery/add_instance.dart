@@ -26,8 +26,6 @@ class _AddInstanceState extends State<AddInstance> {
   Map<String, InstanceItem> requests = {};
   bool loading = false;
 
-
-
   @override
   void initState() {
     _controller = TextEditingController(text: widget.url);
@@ -105,7 +103,10 @@ class _AddInstanceState extends State<AddInstance> {
           children: [
             //        Text('增加实例',style: TextStyle(fontSize: 16),),
             if (InstanceManager.instanceExist(_controller.text))
-              Text('实例已经存在', style: TextStyle(color: Colors.red),),
+              Text(
+                '实例已经存在',
+                style: TextStyle(color: Colors.red),
+              ),
             if (loading)
               Center(
                   child: SizedBox(
@@ -115,9 +116,14 @@ class _AddInstanceState extends State<AddInstance> {
                 width: 50,
                 height: 50,
               )),
-            if (requests.containsKey(_controller.text) && requests[_controller.text] == null)
-              Text('无法连接到服务器', style: TextStyle(color: Colors.red),),
-            if (requests.containsKey(_controller.text) && requests[_controller.text] != null)
+            if (requests.containsKey(_controller.text) &&
+                requests[_controller.text] == null)
+              Text(
+                '无法连接到服务器',
+                style: TextStyle(color: Colors.red),
+              ),
+            if (requests.containsKey(_controller.text) &&
+                requests[_controller.text] != null)
               InstanceSummary(
                 ServerInstance(
                     detail: requests[_controller.text],
@@ -128,10 +134,17 @@ class _AddInstanceState extends State<AddInstance> {
             TextField(
                 controller: _controller,
                 decoration: InputDecoration(
-                    hintText: '实例url',
+                    hintText: '实例网址',
                     focusedBorder: UnderlineInputBorder(
                         borderSide:
                             BorderSide(color: Theme.of(context).buttonColor)))),
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 5),
+              child: Text(
+                '请输入你期望注册和登录的长毛象实例网站网址。如果该网址可访问，将在“发现”的页面中显示该实例的卡片，你可以在那里注册、登录。',
+                style: TextStyle(color: Theme.of(context).accentColor,fontSize: 13),
+              ),
+            ),
             Row(
               children: [
                 Spacer(),
@@ -141,7 +154,8 @@ class _AddInstanceState extends State<AddInstance> {
                 ),
                 NormalFlatButton(
                   text: '确定',
-                  onPressed: requests.containsKey(_controller.text) && requests[_controller.text] != null
+                  onPressed: requests.containsKey(_controller.text) &&
+                          requests[_controller.text] != null
                       ? () {
                           InstanceManager.addInstance(
                               requests[_controller.text]);

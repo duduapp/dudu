@@ -87,13 +87,21 @@ class SettingsProvider extends ChangeNotifier {
       notifyListeners();
       return;
     } else {
-      if (homeTabIndex == 2) {
-        homeTabIndex = 0;
-      }
+      // if (homeTabIndex == 2) {
+      //   homeTabIndex = 0;
+      // }
       await _loadFromStorage();
       await _loadUnread();
       await _loadTabIndex();
+      _clearRootProviders();
     }
+  }
+
+  _clearRootProviders() {
+    homeProvider = null;
+    localProvider = null;
+    notificationProvider = null;
+    federatedProvider = null;
   }
 
   _loadFromStorage() async {
@@ -143,7 +151,11 @@ class SettingsProvider extends ChangeNotifier {
       TimelineApi.followRquest:
           await _getUnreadFromDb(TimelineApi.followRquest),
       TimelineApi.mention:
-          await _getUnreadFromDb(TimelineApi.mention)
+          await _getUnreadFromDb(TimelineApi.mention),
+      TimelineApi.reblogNotification:
+          await _getUnreadFromDb(TimelineApi.reblogNotification),
+      TimelineApi.favoriteNotification:
+          await _getUnreadFromDb(TimelineApi.favoriteNotification)
     };
 
     for (var key in unread.keys) {

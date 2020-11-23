@@ -40,7 +40,7 @@ class FilterUtil {
     for (ResultListProvider provider in ListViewUtil.getRootProviders()) {
       provider?.reConstructFilterList();
     }
-    SettingsProvider().notificationProvider.reConstructFilterList();
+    SettingsProvider().notificationProvider?.reConstructFilterList();
   }
 
   static getFiltersAndApply() async {

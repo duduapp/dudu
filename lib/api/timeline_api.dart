@@ -37,6 +37,18 @@ class TimelineApi {
     return Request.buildGetUrl(notificationUrl, _include_types(['mention']));
   }
 
+  static String get reblogNotification {
+    return Request.buildGetUrl(notificationUrl, _include_types(['reblog']));
+  }
+
+  static String get favoriteNotification {
+    return Request.buildGetUrl(notificationUrl, _include_types(['favourite']));
+  }
+
+  static String get pollNotification {
+    return Request.buildGetUrl(notificationUrl, _include_types(['poll']));
+  }
+
   static String get otherNotification {
     return Request.buildGetUrl(notificationUrl, _include_types(['follow', 'favourite', 'reblog', 'poll']));
   }

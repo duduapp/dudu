@@ -18,6 +18,7 @@ class RequestManager {
         returnAll: true,
         enableCache: enableCache);
     if (response == null || response.body == null) return null;
+    url = url.replaceFirst('?limit=1', '').replaceFirst('&limit=1', '');
     if (provider.unread.containsKey(url)) {
       _updateUnread(provider, url, 0);
       if (response.body.isNotEmpty && response.body is List) {
@@ -61,7 +62,7 @@ class RequestManager {
       if (value == 0) {
         try {
           HttpResponse response = await Request.get(
-              url: key,
+              url: key.contains('?') ? key+'&limit=1' : key+'?limit=1',
               returnAll: true);
           if (response.body.isNotEmpty && response.body is List) {
             var newLatestId = response.body[0]['id'];

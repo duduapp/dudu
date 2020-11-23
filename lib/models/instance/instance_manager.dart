@@ -46,7 +46,7 @@ class InstanceManager {
     }
     for (var item in list) {
       var detail = await getInstanceDetail(item, true);
-      if (detail != null)
+      if (detail != null && detail.url != null)
         instances.add(detail);
     }
 
@@ -58,7 +58,7 @@ class InstanceManager {
         instances.add(detail);
     }
 
-    return instances ?? {};
+    return instances ?? [];
   }
 
 
@@ -66,11 +66,14 @@ class InstanceManager {
       String url, bool fromServer) async {
     var cache = await Request.cacheGet(url: InstanceApi.getUrl(url));
     if (cache.content != null) {
-      return ServerInstance(
+      var item = InstanceItem.fromJson(json.decode(cache.content));
+      if (item.uri == null) return null;
+      return  ServerInstance(
           url: url,
-          detail: InstanceItem.fromJson(json.decode(cache.content)),
+          detail: item,
           fromServer: fromServer,
           fromStale: cache.type == CacheResponseType.stale);
+
     }
     return null;
   }
@@ -130,6 +133,7 @@ class InstanceManager {
     final result = await AppNavigate.push(InnerBrowser(hostUrl, appCredential: model,),);
 
     if (result == null) {
+      pd.hide();
       return;
     }
 
@@ -164,6 +168,8 @@ class InstanceManager {
         user.loadFromLocalAccount(localAccount);
 
         await SettingsProvider().load(); // load new settings
+        SettingsProvider().setHomeTabIndex(1);
+        SettingsProvider().setPublicTabIndex(0);
 
         AccountUtil.cacheEmoji();
         AccountUtil.requestPreference();

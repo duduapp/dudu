@@ -11,7 +11,7 @@ class StatusItemContent extends StatelessWidget {
   final bool primary;
   final bool subStatus;
 
-  StatusItemContent(this.data,{this.primary = false,this.subStatus = false});
+  const StatusItemContent(this.data,{this.primary = false,this.subStatus = false});
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
@@ -24,3 +24,4 @@ class StatusItemContent extends StatelessWidget {
     ],);
   }
 }
+ 

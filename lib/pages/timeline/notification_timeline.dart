@@ -130,7 +130,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                                   controller: _menuController1,
                                   headerBuilder: (menuShowing) {
                                     return DropDownTitle(
-                                      title: '全部',
+                                      title: '分类',
                                       expand: menuShowing,
                                       showIcon: true,
                                     );
@@ -141,7 +141,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                                   },
                                 )
                               : DropDownTitle(
-                                  title: '全部',
+                                  title: '分类',
                                 ),
                         ),
                         Badge(
@@ -157,7 +157,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                                   headerKey: _headerKey,
                                   headerBuilder: (menuShowing) {
                                     return DropDownTitle(
-                                      title: '分类',
+                                      title: '全部',
                                       expand: menuShowing,
                                       showIcon: true,
                                     );
@@ -167,7 +167,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                                   },
                                 )
                               : DropDownTitle(
-                                  title: '分类',
+                                  title: '全部',
                                 ),
                         ),
                       ],
@@ -182,8 +182,8 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                       <PopupMenuEntry<String>>[
                     PopupMenuItem<String>(
                         value: 'clear', child: new Text('清空')),
-                    PopupMenuItem<String>(
-                        value: 'choose_type', child: new Text('分类'))
+                    // PopupMenuItem<String>(
+                    //     value: 'choose_type', child: new Text('分类'))
                   ],
                   onSelected: (String value) {
                     switch (value) {
@@ -209,13 +209,14 @@ class _NotificationTimelineState extends State<NotificationTimeline>
               child: TabBarView(
             controller: _tabController,
             children: [
+              NotificationTypeList(),
               TimelineContent(
                 url: TimelineApi.notification,
                 rowBuilder: ListViewUtil.notificationRowFunction(),
                 tag: 'notifications',
                 provider: provider,
               ),
-              NotificationTypeList(),
+
             ],
           ))
         ],
@@ -242,6 +243,9 @@ class NotificationTypeList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<SettingsProvider>(context);
+    String  zan_or_shoucang = provider.get('zan_or_shoucang');
+
+    var zan_icon = zan_or_shoucang == '0' ? IconFont.thumbUp : IconFont.favorite;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -280,12 +284,39 @@ class NotificationTypeList extends StatelessWidget {
                     ? Container()
                     : null),
           ),
-          SettingCell(
-            title: '其它消息',
-            onPress: () => AppNavigate.push(
-                NotificationTypeTimeline(TimelineApi.otherNotification,'其它消息')),
+          Badge(
+            position: BadgePosition.topEnd(top: 20, end: 20),
+            showBadge: provider.unread[TimelineApi.reblogNotification] != 0,
+            child: SettingCell(
+                leftIcon: Icon(IconFont.reblog),
+                title: "转嘟我的",
+                onPress: () => AppNavigate.push(
+                    NotificationTypeTimeline(TimelineApi.reblogNotification,'转嘟我的')),
+                tail: provider.unread[TimelineApi.mention] != 0
+                    ? Container()
+                    : null),
           ),
-
+          Badge(
+            position: BadgePosition.topEnd(top: 20, end: 20),
+            showBadge: provider.unread[TimelineApi.favoriteNotification] != 0,
+            child: SettingCell(
+                leftIcon: Icon(zan_icon),
+                title: StringUtil.getZanString()+'我的',
+                onPress: () => AppNavigate.push(
+                    NotificationTypeTimeline(TimelineApi.favoriteNotification,StringUtil.getZanString()+'我的')),
+                tail: provider.unread[TimelineApi.favoriteNotification] != 0
+                    ? Container()
+                    : null),
+          ),
+          Badge(
+            position: BadgePosition.topEnd(top: 20, end: 20),
+            showBadge: false,
+            child: SettingCell(
+                leftIcon: Icon(IconFont.vote),
+                title: '投票',
+                onPress: () => AppNavigate.push(
+                    NotificationTypeTimeline(TimelineApi.pollNotification,'投票')),),
+          ),
         ],
       ),
     );

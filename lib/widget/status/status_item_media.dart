@@ -1,3 +1,4 @@
+
 import 'dart:io';
 import 'dart:ui';
 
@@ -120,12 +121,8 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   }
 
   Widget singleImage() {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        return image(
-            widget.images[0], 0, constraints.maxWidth, 220, BoxFit.cover);
-      },
-    );
+    return image(
+        widget.images[0], 0, ScreenUtil.width(context)-30, 220, BoxFit.cover);
   }
 
   Widget audio() {
@@ -179,84 +176,77 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
   }
 
   Widget twoImages() {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        return Container(
-          child: Row(
-            children: <Widget>[
-              image(widget.images[0], 0, constraints.maxWidth * 0.494, 220,
-                  BoxFit.cover),
-              SizedBox(
-                width: constraints.maxWidth * 0.012,
-              ),
-              image(widget.images[1], 1, constraints.maxWidth * 0.494, 220,
-                  BoxFit.cover)
-            ],
+     var imageWidth = (ScreenUtil.width(context) - 30) * 0.494;
+     return Container(
+      child: Row(
+        children: <Widget>[
+          image(widget.images[0], 0, imageWidth, 220,
+              BoxFit.cover),
+          SizedBox(
+            width: (ScreenUtil.width(context) - 30) * 0.012,
           ),
-        );
-      },
+          image(widget.images[1], 1, imageWidth, 220,
+              BoxFit.cover)
+        ],
+      ),
     );
   }
 
   Widget threeImages() {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        return Column(
+    var imageWidth = (ScreenUtil.width(context) - 30) * 0.494;
+    var dividerWidth = (ScreenUtil.width(context) - 30) * 0.012;
+    return Column(
+      children: <Widget>[
+        Row(
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                image(widget.images[0], 0, constraints.maxWidth * 0.494, 110,
-                    BoxFit.cover),
-                SizedBox(
-                  width: constraints.maxWidth * 0.012,
-                ),
-                image(widget.images[1], 1, constraints.maxWidth * 0.494, 110,
-                    BoxFit.cover)
-              ],
-            ),
+            image(widget.images[0], 0, imageWidth, 110,
+                BoxFit.cover),
             SizedBox(
-              height: constraints.maxWidth * 0.012,
+              width: dividerWidth,
             ),
-            image(widget.images[2], 2, constraints.maxWidth, 110, BoxFit.cover),
+            image(widget.images[1], 1, imageWidth, 110,
+                BoxFit.cover)
           ],
-        );
-      },
+        ),
+        SizedBox(
+          height: dividerWidth,
+        ),
+        image(widget.images[2], 2, (ScreenUtil.width(context) - 30), 110, BoxFit.cover),
+      ],
     );
   }
 
   Widget fourImages() {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        return Column(
+    var imageWidth = (ScreenUtil.width(context) - 30) * 0.494;
+    var dividerWidth = (ScreenUtil.width(context) - 30) * 0.012;
+    return Column(
+      children: <Widget>[
+        Row(
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                image(widget.images[0], 0, constraints.maxWidth * 0.494, 110,
-                    BoxFit.cover),
-                SizedBox(
-                  width: constraints.maxWidth * 0.012,
-                ),
-                image(widget.images[1], 1, constraints.maxWidth * 0.494, 110,
-                    BoxFit.cover)
-              ],
-            ),
+            image(widget.images[0], 0, imageWidth, 110,
+                BoxFit.cover),
             SizedBox(
-              height: constraints.maxWidth * 0.012,
+              width: dividerWidth,
             ),
-            Row(
-              children: <Widget>[
-                image(widget.images[2], 2, constraints.maxWidth * 0.494, 110,
-                    BoxFit.cover),
-                SizedBox(
-                  width: constraints.maxWidth * 0.012,
-                ),
-                image(widget.images[3], 3, constraints.maxWidth * 0.494, 110,
-                    BoxFit.cover)
-              ],
-            )
+            image(widget.images[1], 1, imageWidth, 110,
+                BoxFit.cover)
           ],
-        );
-      },
+        ),
+        SizedBox(
+          height: dividerWidth,
+        ),
+        Row(
+          children: <Widget>[
+            image(widget.images[2], 2, imageWidth, 110,
+                BoxFit.cover),
+            SizedBox(
+              width: dividerWidth,
+            ),
+            image(widget.images[3], 3, imageWidth, 110,
+                BoxFit.cover)
+          ],
+        )
+      ],
     );
   }
 
@@ -369,6 +359,8 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
               errorWidget: (context,url,error) {
                 return Container();
               },
+    //          memCacheWidth: width.toInt(),
+      //        memCacheHeight: height.toInt() * 2,
             ),
 //            child: Image(
 //              width: width,

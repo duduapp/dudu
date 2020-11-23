@@ -65,11 +65,7 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
             )
         ),
         SizedBox(height: 10),
-        SettingCell(
-          title: '私信',
-          leftIcon: Icon(IconFont.message),
-          onPress: () => AppNavigate.push(ConversationTimeline()),
-        ),
+
         SettingCell(
           title: zan_text,
           leftIcon: Icon(zan_icon),

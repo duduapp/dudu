@@ -215,19 +215,7 @@ class StatusActionUtil {
         )
       ],
       if (myAccount != null && myAccount.id != data.account.id) ...[
-        if (sameInstance(context) &&
-            provider != null &&
-            provider.tag == 'federated') ...[
-          Divider(indent: 60, height: 0),
-          BottomSheetItem(
-            icon: IconFont.follow,
-            text: '关注' + data.account.acct,
-            onTap: () async {
-              var res = await AccountsApi.follow(data.account.id);
-              if (res != null) DialogUtils.toastFinishedInfo('已关注或发送关注请求');
-            },
-          )
-        ],
+
         if (sameInstance(context)) ...[
           Divider(indent: 60, height: 0),
           BottomSheetItem(
@@ -241,6 +229,15 @@ class StatusActionUtil {
                 account: accountLocal,
                 fromStatusId: data.id,
               ));
+            },
+          ),
+          Divider(indent: 60, height: 0),
+          BottomSheetItem(
+            icon: IconFont.follow,
+            text: '关注' + data.account.acct,
+            onTap: () async {
+              var res = await AccountsApi.follow(data.account.id);
+              if (res != null) DialogUtils.toastFinishedInfo('已关注或发送关注请求');
             },
           )
         ],
@@ -273,8 +270,23 @@ class StatusActionUtil {
         ),
         if (data.account.acct.contains('@')) ...[
           BottomSheetItem(
+            icon: IconFont.www,
+            text: '隐藏实例'+StringUtil.accountDomain(data.account),
+            subText: '隐藏后该实例的所有嘟文将不会显示在你的时间轴中',
+            onTap: () => DialogUtils.showSimpleAlertDialog(
+                context: context,
+                text:
+                '你确定要屏蔽@${StringUtil.accountDomain(data.account)}实例吗？你将不会在任何公共时间轴或消息中看到该实例的内容，而且该实例的关注者也会被删除',
+                onConfirm: () {
+                  AccountsApi.blockDomain(
+                      StringUtil.accountDomain(data.account));
+                },
+                popFirst: false),
+          ),
+          BottomSheetItem(
             icon: IconFont.favorite,
-            text: '收藏实例',
+            text: '收藏实例' + StringUtil.accountDomain(data.account),
+            subText: '该实例将被收藏在你的“发现”菜单中',
             onTap: () async{
               var res = await DialogUtils.showRoundedDialog(
                   context: context, content: AddInstance(StringUtil.accountDomain(data.account)));
@@ -286,20 +298,8 @@ class StatusActionUtil {
           Divider(
             indent: 60,
             height: 0,
-          ),
-          BottomSheetItem(
-            icon: IconFont.www,
-            text: '隐藏该用户所在实例所有内容',
-            onTap: () => DialogUtils.showSimpleAlertDialog(
-                context: context,
-                text:
-                    '你确定要屏蔽@${StringUtil.accountDomain(data.account)}实例吗？你将不会在任何公共时间轴或消息中看到该实例的内容，而且该实例的关注者也会被删除',
-                onConfirm: () {
-                  AccountsApi.blockDomain(
-                      StringUtil.accountDomain(data.account));
-                },
-                popFirst: false),
           )
+
         ],
         if (LoginedUser().isAdmin &&
             data.account.url.contains(LoginedUser().host))

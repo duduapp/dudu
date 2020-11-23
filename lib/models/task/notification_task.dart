@@ -5,7 +5,9 @@ import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/plugin/event_source.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/compute_util.dart';
 import 'package:dudu/utils/notification_util.dart';
+import 'package:flutter/foundation.dart';
 
 import '../json_serializable/notificate_item.dart';
 
@@ -24,10 +26,10 @@ class NotificationTask {
     events = EventSource(
         Uri.parse(user.getHost() + '/api/v1/streaming/user'),
         headers: {'Authorization': user.getToken()});
-    userNotificationEvents = events.events.listen((MessageEvent message) {
+    userNotificationEvents = events.events.listen((MessageEvent message) async{
       if (message.name == 'notification') {
         NotificationItem item =
-            NotificationItem.fromJson(json.decode(message.data));
+            NotificationItem.fromJson((await compute(parseJsonString,message.data)) as Map);
 
 
         if (settings['show_notifications'] == true && settings['show_notifications.${item.type}'] == true) {

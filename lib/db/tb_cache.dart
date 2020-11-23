@@ -38,7 +38,7 @@ class TbCacheHelper {
 
   static setCache(TbCache cache) async {
     var db = await DBProvider().getDatabase();
-    db.insert(CacheColumn.table, cache.toMap(),
+    await db.insert(CacheColumn.table, cache.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 

@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import '../other/avatar.dart';
 
 class StatusItem extends StatelessWidget {
-  StatusItem(
+  const StatusItem(
       {Key key,
       @required this.item,
       this.refIcon,

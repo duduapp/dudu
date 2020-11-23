@@ -19,7 +19,7 @@ class AccountRowTop extends StatelessWidget {
         if (!account.active) {
           controller?.hideMenu();
           await AccountUtil.saveState();
-          AccountUtil.switchToAccount(account);
+          await AccountUtil.switchToAccount(account);
         }
       },
       child: Container(

@@ -47,17 +47,18 @@ class _StatusDetailState extends State<StatusDetail>
 
   _fetchData() async {
     var data = await StatusApi.getContext(data:widget.data,hostUrl:widget.hostUrl,cancelToken: _cancelToken);
-    if (data.containsKey('error')) {
-      errorMsg = data['error'];
-      setState(() {
 
-      });
-      return;
-    }
     if (!mounted) {
       return;
     }
     if (data != null) {
+      if (data.containsKey('error')) {
+        errorMsg = data['error'];
+        setState(() {
+
+        });
+        return;
+      }
       parentWidgets.clear();
       for (var d in data['ancestors']) {
         d['__sub'] = true;

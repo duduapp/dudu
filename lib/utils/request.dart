@@ -21,6 +21,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nav_router/nav_router.dart';
 import 'package:http/http.dart' as http;
 
+import 'compute_util.dart';
+
 enum RequestType { get, post, put, delete, patch }
 
 class Request {
@@ -28,23 +30,26 @@ class Request {
   static Dio dioCacheClientWithBaseUrl;
   static Dio dioCacheClient;
   static HttpClient httpClient;
-  
+
   static const int requestTimeout = 20;
 
-  static Future<CacheResponse> cacheGet({String url,Duration duration = const Duration(days: 1)}) async{
+  static Future<CacheResponse> cacheGet(
+      {String url, Duration duration = const Duration(days: 1)}) async {
+    // var res =  await Request.get(url: url,enableCache: true,decodeJson:false,cacheOption: buildCacheOptions(duration,maxStale: Duration(days: 7)));
+    // return CacheResponse(res, CacheResponseType.cache,);
     var cache = await TbCacheHelper.getCache('', url);
     if (cache == null) {
-      var res = await Request.get(url: url,decodeJson: false);
+      var res = await Request.get(url: url, decodeJson: false,showDialog: false);
       if (res == null) return CacheResponse(null, CacheResponseType.stale);
-      TbCacheHelper.setCache(TbCache(account: '',tag: url,content: res));
+      TbCacheHelper.setCache(TbCache(account: '', tag: url, content: res));
       return CacheResponse(res, CacheResponseType.net);
     } else {
       if (DateTime.now().difference(cache.time).compareTo(duration) <= 0) {
         return CacheResponse(cache.content, CacheResponseType.cache);
       } else {
-        var res = await Request.get(url: url,decodeJson: false);
+        var res = await Request.get(url: url, decodeJson: false);
         if (res == null) return CacheResponse(null, CacheResponseType.stale);
-        TbCacheHelper.setCache(TbCache(account: '',tag: url,content: res));
+        TbCacheHelper.setCache(TbCache(account: '', tag: url, content: res));
         return CacheResponse(res, CacheResponseType.net);
       }
     }
@@ -90,7 +95,8 @@ class Request {
       String dialogMessage,
       String successMessage,
       bool returnAll = false,
-      int closeDilogDelay}) async {
+      int closeDilogDelay,
+      Map header}) async {
     return await _request(
         requestType: RequestType.post,
         url: url,
@@ -100,7 +106,8 @@ class Request {
         handlingMessage: dialogMessage,
         successMessage: successMessage,
         closeDialogDelay: closeDilogDelay,
-        returnAll: returnAll);
+        returnAll: returnAll,
+        header: header);
   }
 
   static Future put(
@@ -188,7 +195,7 @@ class Request {
       Map header,
       CancelToken cancelToken,
       bool enableCache = false,
-        Options cacheOptions,
+      Options cacheOptions,
       bool withToken = true,
       bool decodeJson = true}) async {
     //some request do not need token
@@ -210,13 +217,14 @@ class Request {
               response = await getDioCacheWithBaseUrl().get(url,
                   queryParameters: params,
                   cancelToken: cancelToken,
-                  options: cacheOptions ?? buildCacheOptions(Duration(days: 7))
-                      );
+                  options:
+                      cacheOptions ?? buildCacheOptions(Duration(days: 7)));
             else
               response = await getDioCache().get(url,
                   queryParameters: params,
                   cancelToken: cancelToken,
-                  options: cacheOptions ?? buildCacheOptions(Duration(days: 7)));
+                  options:
+                      cacheOptions ?? buildCacheOptions(Duration(days: 7)));
             if (returnAll) {
               dialog?.hide();
               return HttpResponse(
@@ -243,20 +251,31 @@ class Request {
           break;
         case RequestType.post:
           //response = await dio.post(url, data: params,cancelToken: cancelToken);
-          response = await getGetClient()
-              .post(_realUrl(url),
-                  headers: {'Content-Type': 'application/json'},
-                  body: json.encode(params))
-              .timeout(Duration(seconds: requestTimeout));
+          if (withToken && !url.startsWith('http'))
+            response = await getGetClient()
+                .post(_realUrl(url),
+                    headers: {'Content-Type': 'application/json'},
+                    body: json.encode(params))
+                .timeout(Duration(seconds: requestTimeout));
+          else
+            response = await http
+                .post(url, body: params,headers: header as Map<String,String>)
+                .timeout(Duration(seconds: requestTimeout));
           break;
         case RequestType.put:
-          response = await client.put(_realUrl(url), body: params).timeout(Duration(seconds: requestTimeout));
+          response = await client
+              .put(_realUrl(url), body: params)
+              .timeout(Duration(seconds: requestTimeout));
           break;
         case RequestType.delete:
-          response = await client.delete(buildGetUrl(_realUrl(url), params)).timeout(Duration(seconds: requestTimeout));
+          response = await client
+              .delete(buildGetUrl(_realUrl(url), params))
+              .timeout(Duration(seconds: requestTimeout));
           break;
         case RequestType.patch:
-          response = await client.patch(url, body: params).timeout(Duration(seconds: requestTimeout));
+          response = await client
+              .patch(url, body: params)
+              .timeout(Duration(seconds: requestTimeout));
           break;
       }
       if (closeDialogDelay != 0)
@@ -280,8 +299,8 @@ class Request {
       });
     }
     if (returnAll) {
-      return HttpResponse(
-          json.decode(response.body), response.headers, response.statusCode);
+      return HttpResponse(await compute(parseJsonString, response.body),
+          response.headers, response.statusCode);
     }
     if (response.statusCode == 401) {
       // if (!RuntimeConfig.dialogOpened) {
@@ -297,7 +316,9 @@ class Request {
     }
     // debugPrint(response.body);
 
-    return (decodeJson == null || decodeJson) ? json.decode(response.body) : response.body;
+    return (decodeJson == null || decodeJson)
+        ? json.decode(response.body)
+        : response.body;
   }
 
   static _realUrl(String url) {

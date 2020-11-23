@@ -60,6 +60,7 @@ class _InstanceListState extends State<InstanceList> {
       onDelete: () {
         setState(() {});
       },
+      restrictedMode: instances[idx].url.startsWith('help.dudu.today') ? true : false,
     );
   }
 

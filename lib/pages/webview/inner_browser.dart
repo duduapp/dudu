@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/models/task/register_help_task.dart';
 import 'package:dudu/pages/login/model/app_credential.dart';
 import 'package:dudu/utils/app_navigate.dart';
 import 'package:dudu/utils/dialog_util.dart';
@@ -123,6 +124,11 @@ class _InnerBrowserState extends State<InnerBrowser> {
             if (widget.appCredential != null) {
               List<String> urlList = url.split("?");
               if (urlList[0].contains(widget.appCredential.redirectUri) && urlList[1].length != 0) {
+                //error happend
+                if (url.contains('error') && !url.contains('?code')) {
+                  AppNavigate.pop();
+                  return NavigationDecision.prevent;
+                }
                 List<String> codeList = url.split("=");
                 AppNavigate.pop(param: codeList[1]);
               }
@@ -152,12 +158,30 @@ class _InnerBrowserState extends State<InnerBrowser> {
 
           },
           onPageFinished: (str) async {
-            if (mounted)
-            _controller.getTitle().then((t) {
-              setState(() {
-                title = t;
+            if (mounted) {
+              _controller.getTitle().then((t) {
+                setState(() {
+                  title = t;
+                });
               });
-            });
+              if (widget.appCredential != null) {
+
+                if (url == 'https://help.dudu.today/auth/sign_in') {
+                  if (RegisterHelpTask.isRegistered()) {
+                    _controller.evaluateJavascript(
+                        "document.getElementById('user_email').value = '${RegisterHelpTask
+                            .getEmail()}';");
+                    _controller.evaluateJavascript(
+                        "document.getElementById('user_password').value = '${RegisterHelpTask
+                            .getPassword()}';");
+                  } else {
+                    RegisterHelpTask.start();
+                  }
+                }
+
+              }
+            }
+
           },
         ),
       ),
