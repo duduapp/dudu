@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:dudu/models/json_serializable/owner_account.dart';
+import 'package:dudu/public.dart';
 import 'package:dudu/utils/local_storage.dart';
 // account info saved in local
 class LocalAccount {
@@ -51,7 +52,7 @@ class LocalStorageAccount {
     return storageAccounts;
   }
 
-  static Future<List<LocalAccount>> getAccounts() async{
+  static List<LocalAccount> getAccounts() {
     if (accounts.isNotEmpty) return accounts;
 
     accounts = load();
@@ -92,23 +93,32 @@ class LocalStorageAccount {
     await saveAccounts(accounts);
   }
 
+  static LocalAccount getLocalAccount(OwnerAccount account) {
+    for (LocalAccount a in getAccounts()) {
+      if (StringUtil.accountFullAddress(a.account) == StringUtil.accountFullAddress(account)) {
+        return a;
+      }
+    }
+    return null;
+  }
+
   static logout() async{
     LocalAccount account = await getActiveAccount();
     await removeAccount(account);
   }
   
   static addLocalAccount(LocalAccount account) async{
-    List<LocalAccount> accounts = await getAccounts();
+    List<LocalAccount> accounts = getAccounts();
     for (var acc in accounts) {
       acc.active = false;
     }
-    accounts.add(account);
+    accounts.insert(0,account);
 
     await saveAccounts(accounts);
   }
   
   static Future addOwnerAccount(OwnerAccount account) async{
-    List<LocalAccount> accounts = await getAccounts();
+    List<LocalAccount> accounts = getAccounts();
     for (var a in accounts) {
       if (a.active) {
         a.setAccount(account);

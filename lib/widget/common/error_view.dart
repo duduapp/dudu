@@ -21,7 +21,7 @@ class ErrorView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             SizedBox(height:200,child: Image(image: AssetImage('assets/images/error.png'),)),
-            Text(getErrorString(),style: TextStyle(fontSize: 16),),
+            Text(getErrorString(),style: TextStyle(fontSize: 14),),
             SizedBox(height: 10,),
             OutlineButton(child: Text('重试',style: TextStyle(fontWeight: FontWeight.normal,color: Theme.of(context).buttonColor),),onPressed:onClickRetry,)
           ],

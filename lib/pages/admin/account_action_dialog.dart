@@ -16,7 +16,7 @@ class AccountActionDialog extends StatefulWidget {
 
 class _AccountActionDialogState extends State<AccountActionDialog> {
   int groupValue = 0;
-  bool sendEmail = true;
+  bool sendEmail = false;
   TextEditingController _textEditingController = TextEditingController();
 
   static Map<int, String> descriptions = {

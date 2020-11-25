@@ -96,7 +96,7 @@ class _AddInstanceState extends State<AddInstance> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.fromLTRB(20,15,20,10),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,6 +133,7 @@ class _AddInstanceState extends State<AddInstance> {
               ),
             TextField(
                 controller: _controller,
+                autofocus: true,
                 decoration: InputDecoration(
                     hintText: '实例网址',
                     focusedBorder: UnderlineInputBorder(

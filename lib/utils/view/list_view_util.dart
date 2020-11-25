@@ -258,8 +258,8 @@ class ListViewUtil {
   }
 
   static bool loginnedAndPrompt(BuildContext context) {
-    if (LoginedUser().account == null) {
-      DialogUtils.showSimpleAlertDialog(text: '你需要登录才能执行该操作',confirmText: '去登录',onConfirm: () {
+    if (LoginedUser().account == null || LoginedUser().host.startsWith('https://help.dudu.today')) {
+      DialogUtils.showSimpleAlertDialog(text: '你需要登录实例才能执行该操作。',confirmText: '去登录',onConfirm: () {
        AppNavigate.popToRoot();
       });
       return false;

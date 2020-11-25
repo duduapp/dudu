@@ -27,6 +27,14 @@ class LoginedUser {
     return _instance;
   }
 
+  logout() {
+    host = null;
+    token = null;
+    account = null;
+    _fullAddress = null;
+    _isAdmin = null;
+  }
+
   loadFromLocalAccount(LocalAccount localAccount) {
     host = localAccount.hostUrl;
     token = localAccount.token;

@@ -17,12 +17,12 @@ class TbInstanceHelper {
 
   static removeInstance(String url) async{
      var db = await DBProvider().getDatabase();
-     db.delete(InstanceColumn.table,where: '${InstanceColumn.instance} = ?',whereArgs: [url]);
+     db.delete(InstanceColumn.table,where: '${InstanceColumn.account} = ? and ${InstanceColumn.instance} = ?',whereArgs: [LoginedUser().fullAddress ?? '',url]);
   }
 
   static Future<List> getInstanceList() async{
     var db = await DBProvider().getDatabase();
-    List<Map> insList = await db.query(InstanceColumn.table);
+    List<Map> insList = await db.query(InstanceColumn.table,where: '${InstanceColumn.account} = ?',whereArgs: [LoginedUser().fullAddress ?? '']);
     var list = [];
     for (Map map in insList) {
       String instance = map[InstanceColumn.instance];

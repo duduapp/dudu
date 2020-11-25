@@ -153,6 +153,7 @@ class _InnerBrowserState extends State<InnerBrowser> {
          //     _controller.clearCache();
               final cookieManager = CookieManager();
               cookieManager.clearCookies();
+              _controller.clearCache();
             }
 
 

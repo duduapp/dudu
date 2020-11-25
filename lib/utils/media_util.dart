@@ -19,11 +19,12 @@ import 'package:share_extend/share_extend.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class MediaUtil {
-  static Future<File> pickAndCompressImage() async {
+  static Future<File> pickAndCompressImage(BuildContext context) async {
     final List<AssetEntity> assets = await AssetPicker.pickAssets(
-        navGK.currentContext,
+        context,
         maxAssets: 1,
         themeColor: Colors.blue,
+        previewThumbSize: const <int>[1200, 1200],
         requestType: RequestType.image);
 
     if (assets == null || assets.isEmpty) {

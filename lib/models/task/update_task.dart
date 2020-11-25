@@ -43,7 +43,7 @@ class UpdateTask {
         checkUpdateUrl =
             "http://api.idudu.fans/app/ios/check_update?auth=$rnd&id=$appId&state=$state";
       }
-      if (kDebugMode) {
+      if (!kReleaseMode) {
         checkUpdateUrl = 'aaa';
       }
       debugPrint(checkUpdateUrl);

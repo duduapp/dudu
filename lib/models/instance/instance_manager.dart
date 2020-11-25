@@ -36,8 +36,7 @@ class InstanceManager {
     if (instances != null) return instances;
     instances = [];
     var list = [];
-    var resCache = await Request.cacheGet(
-        url: AppConfig.instancesUrl);
+    var resCache = await Request.cacheGet(url: AppConfig.instancesUrl);
     if (resCache.content != null) {
       List<String> ins = resCache.content.split('\n');
       ins.forEach((element) => element.trim());
@@ -46,34 +45,42 @@ class InstanceManager {
     }
     for (var item in list) {
       var detail = await getInstanceDetail(item, true);
-      if (detail != null && detail.url != null)
-        instances.add(detail);
+      if (detail != null && detail.url != null) instances.add(detail);
     }
 
     list.clear();
     list.addAll(await TbInstanceHelper.getInstanceList());
     for (var item in list) {
       var detail = await getInstanceDetail(item, false);
-      if (detail != null)
-        instances.add(detail);
+      if (detail != null) instances.add(detail);
     }
 
     return instances ?? [];
   }
 
+  static removeAll() {
+    instances = null;
+  }
 
   static Future<ServerInstance> getInstanceDetail(
       String url, bool fromServer) async {
-    var cache = await Request.cacheGet(url: InstanceApi.getUrl(url));
+    if (url.startsWith('help.dudu.today')) {}
+    var cache = await Request.cacheGet(
+        url: InstanceApi.getUrl(url),
+        headers: url.startsWith('help.dudu.today')
+            ? {
+                'Authorization':
+                    'Bearer s5Ey1Iw7VDipInrx-g8cyobMK3WDQN1NOVaGwmnmK4A'
+              }
+            : null);
     if (cache.content != null) {
       var item = InstanceItem.fromJson(json.decode(cache.content));
       if (item.uri == null) return null;
-      return  ServerInstance(
+      return ServerInstance(
           url: url,
           detail: item,
           fromServer: fromServer,
           fromStale: cache.type == CacheResponseType.stale);
-
     }
     return null;
   }
@@ -92,7 +99,11 @@ class InstanceManager {
     if (instanceExist(instance.uri)) return;
     TbInstanceHelper.addInstance(instance.uri);
     Request.cacheGet(url: InstanceApi.getUrl(instance.uri));
-    instances.add(ServerInstance(url: instance.uri,detail: instance,fromServer: false,fromStale: false));
+    instances.add(ServerInstance(
+        url: instance.uri,
+        detail: instance,
+        fromServer: false,
+        fromStale: false));
   }
 
   static removeInstance(InstanceItem instance) {
@@ -100,8 +111,8 @@ class InstanceManager {
     instances.removeWhere((element) => element.url == instance.uri);
   }
 
-  static login(InstanceItem instance) async{
-    var hostUrl = 'https://'+instance.uri;
+  static login(InstanceItem instance) async {
+    var hostUrl = 'https://' + instance.uri;
 
     var pd = await DialogUtils.showProgressDialog('');
     Map paramsMap = Map();
@@ -113,24 +124,31 @@ class InstanceManager {
     var response;
 
     try {
-      response = await http.post(hostUrl + Api.Apps, body: paramsMap).timeout(Duration(seconds: 10));
+      response = await http
+          .post(hostUrl + Api.Apps, body: paramsMap)
+          .timeout(Duration(seconds: 10));
       pd.hide();
     } catch (e) {
       pd.hide();
-      DialogUtils.showInfoDialog(navGK.currentState.overlay.context,'无法连接到服务器');
+      DialogUtils.showInfoDialog(
+          navGK.currentState.overlay.context, '无法连接到服务器');
       return;
     } finally {
       pd.hide();
     }
 
-
     AppCredential model = AppCredential.fromJson(json.decode(response.body));
-    if (model.clientId == null) {
+      if (model.clientId == null) {
       DialogUtils.toastErrorInfo('出现错误');
       return;
     }
 
-    final result = await AppNavigate.push(InnerBrowser(hostUrl, appCredential: model,),);
+    final result = await AppNavigate.push(
+      InnerBrowser(
+        hostUrl,
+        appCredential: model,
+      ),
+    );
 
     if (result == null) {
       pd.hide();
@@ -146,46 +164,56 @@ class InstanceManager {
     paramsMap['code'] = result;
     paramsMap['redirect_uri'] = model.redirectUri;
     try {
-        var data = await http.post('$hostUrl' + Api.Token, body: paramsMap).timeout(Duration(seconds: 10));
-        Token getToken = Token.fromJson(json.decode(data.body));
-        String token = '${getToken.tokenType} ${getToken.accessToken}';
+      var data = await http
+          .post('$hostUrl' + Api.Token, body: paramsMap)
+          .timeout(Duration(seconds: 10));
+      Token getToken = Token.fromJson(json.decode(data.body));
+      String token = '${getToken.tokenType} ${getToken.accessToken}';
 
-        Request.closeHttpClient();
+      Request.closeHttpClient();
 
-        LoginedUser user = new LoginedUser();
-        user.token = token;
-        user.host = hostUrl;
-        OwnerAccount account = await AccountsApi.getMyAccount();
-        if (account == null) {
-          DialogUtils.toastErrorInfo('出现错误，可以稍后试试');
-        }
-
-        LocalAccount localAccount = LocalAccount(hostUrl: hostUrl,token: token,active: true,account: account);
-        await LocalStorageAccount.addLocalAccount(localAccount);
-
-
-        user = new LoginedUser();
-        user.loadFromLocalAccount(localAccount);
-
-        await SettingsProvider().load(); // load new settings
+      LoginedUser user = new LoginedUser();
+      user.token = token;
+      user.host = hostUrl;
+      OwnerAccount account = await AccountsApi.getMyAccount();
+      if (account == null) {
+        DialogUtils.toastErrorInfo('出现错误，可以稍后试试');
+      }
+      var localA = LocalStorageAccount.getLocalAccount(account);
+      if (localA != null) {
         SettingsProvider().setHomeTabIndex(1);
         SettingsProvider().setPublicTabIndex(0);
+        AccountUtil.switchToAccount(localA);
+        return;
+      }
 
-        AccountUtil.cacheEmoji();
-        AccountUtil.requestPreference();
-        CheckRoleTask.checkRole();
+      LocalAccount localAccount = LocalAccount(
+          hostUrl: hostUrl, token: token, active: true, account: account);
+      await LocalStorageAccount.addLocalAccount(localAccount);
 
-        pd.hide();
-        pushAndRemoveUntil(HomePage());
+      user = new LoginedUser();
+      user.loadFromLocalAccount(localAccount);
 
-        // eventBus.emit(EventBusKey.HidePresentWidegt);
+      await SettingsProvider().load(); // load new settings
+      SettingsProvider().setHomeTabIndex(1);
+      SettingsProvider().setPublicTabIndex(0);
+
+      AccountUtil.cacheEmoji();
+      AccountUtil.requestPreference();
+      CheckRoleTask.checkRole();
+      removeAll();
+
+      pd.hide();
+      pushAndRemoveUntil(HomePage());
+
+      // eventBus.emit(EventBusKey.HidePresentWidegt);
 
     } catch (e) {
       pd.hide();
       print(e);
       debugPrint(e.toString());
       DialogUtils.toastErrorInfo('出现错误，可以稍后试试');
-    } finally{
+    } finally {
       pd.hide();
     }
   }

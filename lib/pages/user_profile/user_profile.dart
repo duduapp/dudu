@@ -353,7 +353,8 @@ class _UserProfileState extends State<UserProfile>
                 ),
                 BottomSheetItem(
                   icon: IconFont.www,
-                  text: '隐藏该用户所在实例所有内容',
+                  text: '隐藏实例'+StringUtil.accountDomain(_account),
+                  subText: '隐藏后该实例的所有嘟文将不会显示在你的时间轴中',
                   onTap: () => DialogUtils.showSimpleAlertDialog(
                       context: context,
                       text:

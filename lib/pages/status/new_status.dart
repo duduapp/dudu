@@ -379,6 +379,9 @@ class _NewStatusState extends State<NewStatus> {
               successMessage: '嘟文已发送')
           .then((data) {
         if (data != null) {
+          if (StatusItemData.fromJson(data).id == null) {
+            throw Exception('push status failed');
+          }
           _clearDraft();
           AppNavigate.pop();
           if (!data.containsKey('scheduled_at')) {
@@ -439,14 +442,14 @@ class _NewStatusState extends State<NewStatus> {
     }
   }
 
-  Future chooseImage() async {
-    var image = await MediaUtil.pickAndCompressImage();
-
-    if (image == null) {
-      return;
-    }
-    if (images.length < 4) addImage(image);
-  }
+  // Future chooseImage() async {
+  //   var image = await MediaUtil.pickAndCompressImage();
+  //
+  //   if (image == null) {
+  //     return;
+  //   }
+  //   if (images.length < 4) addImage(image);
+  // }
 
   pickMedia(picker.RequestType type, int maxSize) async {
     final List<picker.AssetEntity> assets = await picker.AssetPicker.pickAssets(
@@ -497,6 +500,14 @@ class _NewStatusState extends State<NewStatus> {
           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
           child: TextField(
             controller: _warningController,
+            onChanged: (value){
+              setState(() {
+                textEdited = true;
+                counter = _controller.text.length + value.length > 500
+                    ? 500
+                    : _controller.text.length + value.length; //当500时可能值会变成501
+              });
+            },
             decoration: InputDecoration(
                 hintText: '折叠部分的警告消息',
                 disabledBorder: InputBorder.none,
@@ -789,9 +800,9 @@ class _NewStatusState extends State<NewStatus> {
                             }
                             setState(() {
                               textEdited = true;
-                              counter = value.length > 500
+                              counter = value.length + _warningController.text.length > 500
                                   ? 500
-                                  : value.length; //当500时可能值会变成501
+                                  : value.length + _warningController.text.length; //当500时可能值会变成501
                             });
                           },
                         ),
@@ -949,7 +960,7 @@ class _NewStatusState extends State<NewStatus> {
                             cursorPositionWhenUnfocus,
                             emoji);
                         cursorPositionWhenUnfocus += emoji.length;
-                        counter = _controller.text.length;
+                        counter = _controller.text.length + _warningController.text.length;
                       });
                     }),
                   ),

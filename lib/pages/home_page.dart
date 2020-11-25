@@ -146,7 +146,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           body: IndexedStack(
             children: <Widget>[
               widget.logined ? HomeTimeline() : Container(),
-              widget.logined ? PublicTimeline() : Container(),
+              widget.logined ? PublicTimeline(enableFederated: !LoginedUser().host.startsWith('https://help.dudu.today'),) : Container(),
               InstanceList(),
               widget.logined ? NotificationTimeline() : Container(),
               widget.logined ? Setting() : Container()

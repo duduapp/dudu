@@ -130,7 +130,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                                   controller: _menuController1,
                                   headerBuilder: (menuShowing) {
                                     return DropDownTitle(
-                                      title: '分类',
+                                      title: '全部',
                                       expand: menuShowing,
                                       showIcon: true,
                                     );
@@ -141,7 +141,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                                   },
                                 )
                               : DropDownTitle(
-                                  title: '分类',
+                                  title: '全部',
                                 ),
                         ),
                         Badge(
@@ -157,7 +157,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                                   headerKey: _headerKey,
                                   headerBuilder: (menuShowing) {
                                     return DropDownTitle(
-                                      title: '全部',
+                                      title: '分类',
                                       expand: menuShowing,
                                       showIcon: true,
                                     );
@@ -167,7 +167,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                                   },
                                 )
                               : DropDownTitle(
-                                  title: '全部',
+                                  title: '分类',
                                 ),
                         ),
                       ],
@@ -209,14 +209,13 @@ class _NotificationTimelineState extends State<NotificationTimeline>
               child: TabBarView(
             controller: _tabController,
             children: [
-              NotificationTypeList(),
               TimelineContent(
                 url: TimelineApi.notification,
                 rowBuilder: ListViewUtil.notificationRowFunction(),
                 tag: 'notifications',
                 provider: provider,
               ),
-
+              NotificationTypeList()
             ],
           ))
         ],

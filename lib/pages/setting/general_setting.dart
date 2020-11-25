@@ -1,12 +1,15 @@
 import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/models/instance/instance_manager.dart';
 import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/pages/home_page.dart';
 import 'package:dudu/pages/login/login.dart';
 import 'package:dudu/pages/setting/about_app.dart';
 import 'package:dudu/pages/setting/account_switch.dart';
 import 'package:dudu/pages/setting/setting_content.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/setting/setting_cell.dart';
@@ -66,10 +69,15 @@ class _GeneralSettingState extends State<GeneralSetting> {
   _onConfirmExit() async{
     await LocalStorageAccount.logout();
     Request.closeHttpClient();
-    SettingsProvider().setHomeTabIndex(2);
-    SettingsProvider().setCurrentUser(null);
-    LoginedUser().account = null;
-    AppNavigate.popToRoot();
+    LoginedUser().logout();
+    InstanceManager.removeAll();
+    if (LocalStorageAccount.accounts.isNotEmpty) {
+      AccountUtil.switchToAccount(LocalStorageAccount.accounts[0]);
+    } else {
+      SettingsProvider().setHomeTabIndex(2);
+      SettingsProvider().setCurrentUser(null);
+      AppNavigate.pushAndRemoveUntil(HomePage(logined: false,));
+    }
   }
 
   @override

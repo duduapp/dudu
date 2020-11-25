@@ -26,10 +26,8 @@ class _AccountSwitchState extends State<AccountSwitch> {
   }
 
   _getLocalAccounts() {
-    LocalStorageAccount.getAccounts().then((value) {
-      setState(() {
-        accounts = value;
-      });
+    setState(() {
+      accounts = LocalStorageAccount.getAccounts();
     });
   }
 

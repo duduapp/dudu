@@ -1,4 +1,5 @@
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:dudu/models/instance/instance_manager.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/logined_user.dart';
@@ -17,6 +18,7 @@ class AccountUtil {
     LoginedUser().loadFromLocalAccount(account);
     await SettingsProvider().load();
     Request.closeHttpClient();
+    InstanceManager.removeAll();
     AppNavigate.pushAndRemoveUntil(HomePage(),
         routeType: RouterType.scale);
   }

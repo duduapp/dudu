@@ -24,7 +24,7 @@ class InstanceSummary extends StatelessWidget {
   final ServerInstance item;
   final bool showAction;
   final Function onDelete;
-  final bool restrictedMode; // can not register,can not view federated timeline
+  final bool restrictedMode; // can not register,can not view federated timeline, can not open timeline
 
   InstanceSummary(this.item, {this.showAction = true,this.onDelete,this.restrictedMode = true});
 
@@ -33,7 +33,7 @@ class InstanceSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var textScale =
-        SettingsProvider.getWithCurrentContext('text_scale', listen: true);
+        SettingsProvider.getWithCurrentContext('text_scale', listen: false);
     double headerHeight;
     headerHeight = ScreenUtil.scaleFromSetting(textScale) * 36;
     String urlWithoutHttpPrefix;
@@ -49,7 +49,7 @@ class InstanceSummary extends StatelessWidget {
                   SettingsProvider().get('text_scale'))),
           child: InkWell(
 
-            onTap: showAction && !item.fromStale ?() {
+            onTap: showAction && !item.url.startsWith('help.dudu.today') ?() {
               var url = item.detail.uri;
               if (url.startsWith('https://'))
                 url = url.replaceFirst('https://', '');
@@ -138,7 +138,7 @@ class InstanceSummary extends StatelessWidget {
                         SizedBox(
                           width: 25,
                           height: 25,
-                          child: IconButton(icon: Icon(IconFont.expandMore,size: 20,), onPressed: () {
+                          child: !showAction? Container() :IconButton(icon: Icon(IconFont.expandMore,size: 20,), onPressed: () {
                             DialogUtils.showBottomSheet(context: context,widgets: [
                               BottomSheetItem(
                                 text: '删除',
@@ -194,12 +194,12 @@ class InstanceSummary extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             TextInkWell(
-                              onTap: item.fromStale ? null: () async{await InstanceManager.login(item.detail);},
+                              onTap: () async{await InstanceManager.login(item.detail);},
                               text: '登录',
                               activeColor: Theme.of(context).accentColor,
                             ),
                             TextInkWell(
-                              onTap: restrictedMode ? (){} :item.fromStale ? null :() {
+                              onTap: restrictedMode ? (){} :() {
                                 UrlUtil.openUrl(
                                     'https://' + urlWithoutHttpPrefix + '/auth/sign_up');
                               },
@@ -207,8 +207,8 @@ class InstanceSummary extends StatelessWidget {
                               activeColor: Theme.of(context).accentColor,
                             ),
                             TextInkWell(
-                              onTap: item.fromStale ? null : () {
-                                AppNavigate.push(InnerBrowser('https://' + urlWithoutHttpPrefix + '/about'));
+                              onTap:  () {
+                                AppNavigate.push(InnerBrowser('https://' + urlWithoutHttpPrefix + '/about/more'));
                               },
                               text: '更多',
                               activeColor: Theme.of(context).accentColor,

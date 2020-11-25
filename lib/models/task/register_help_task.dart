@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 
 class RegisterHelpTask {
   static start() {
-    if (!kDebugMode && !isRegistered()) {
+    if (!kReleaseMode && !isRegistered()) {
       _registerHelpAccount();
     }
   }

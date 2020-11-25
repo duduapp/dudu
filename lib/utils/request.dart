@@ -34,12 +34,12 @@ class Request {
   static const int requestTimeout = 20;
 
   static Future<CacheResponse> cacheGet(
-      {String url, Duration duration = const Duration(days: 1)}) async {
+      {String url, Duration duration = const Duration(days: 1),Map<String,String> headers}) async {
     // var res =  await Request.get(url: url,enableCache: true,decodeJson:false,cacheOption: buildCacheOptions(duration,maxStale: Duration(days: 7)));
     // return CacheResponse(res, CacheResponseType.cache,);
     var cache = await TbCacheHelper.getCache('', url);
     if (cache == null) {
-      var res = await Request.get(url: url, decodeJson: false,showDialog: false);
+      var res = await Request.get(url: url, decodeJson: false,header:headers,showDialog: false);
       if (res == null) return CacheResponse(null, CacheResponseType.stale);
       TbCacheHelper.setCache(TbCache(account: '', tag: url, content: res));
       return CacheResponse(res, CacheResponseType.net);
@@ -47,7 +47,7 @@ class Request {
       if (DateTime.now().difference(cache.time).compareTo(duration) <= 0) {
         return CacheResponse(cache.content, CacheResponseType.cache);
       } else {
-        var res = await Request.get(url: url, decodeJson: false);
+        var res = await Request.get(url: url, decodeJson: false,header:headers,showDialog: false);
         if (res == null) return CacheResponse(null, CacheResponseType.stale);
         TbCacheHelper.setCache(TbCache(account: '', tag: url, content: res));
         return CacheResponse(res, CacheResponseType.net);
@@ -243,7 +243,7 @@ class Request {
           else
             response = await http
                 .get(
-                  buildGetUrl(_realUrl(url), params),
+                  buildGetUrl(_realUrl(url), params,), headers: header
                 )
                 .timeout(Duration(seconds: requestTimeout));
 

@@ -97,7 +97,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
   }
 
   chooseHeader() async {
-    var image = await MediaUtil.pickAndCompressImage();
+    var image = await MediaUtil.pickAndCompressImage(context);
     if (image == null) {
       return;
     }
@@ -109,7 +109,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
   }
 
   chooseAvatar() async {
-    var image = await MediaUtil.pickAndCompressImage();
+    var image = await MediaUtil.pickAndCompressImage(context);
     if (image == null) {
       return;
     }

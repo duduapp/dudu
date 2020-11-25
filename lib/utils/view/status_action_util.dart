@@ -234,7 +234,7 @@ class StatusActionUtil {
           Divider(indent: 60, height: 0),
           BottomSheetItem(
             icon: IconFont.follow,
-            text: '关注' + data.account.acct,
+            text: '关注 @' + data.account.acct,
             onTap: () async {
               var res = await AccountsApi.follow(data.account.id);
               if (res != null) DialogUtils.toastFinishedInfo('已关注或发送关注请求');

@@ -55,12 +55,60 @@ class _InstanceListState extends State<InstanceList> {
   }
 
   Widget rowBuilder(BuildContext context, int idx) {
+    if (idx == 0) {
+      return Column(
+        children: [
+          SizedBox(height: 10,),
+          MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+          textScaleFactor: ScreenUtil.scaleFromSetting(
+          SettingsProvider().get('text_scale'))),
+            child: InkWell(
+              onTap: () async{
+                OverlayUtil.hideAllOverlay();
+                var res = await DialogUtils.showRoundedDialog(
+                    context: context, content: AddInstance());
+                if (res != null) {
+                  setState(() {});
+                  Timer(Duration(milliseconds: 200), () {
+                    _scrollController.animateTo(
+                        _scrollController.position.maxScrollExtent,
+                        duration: Duration(milliseconds: 200),
+                        curve: Curves.fastOutSlowIn);
+                  });
+                }
+              },
+              child: Ink(
+                color: Theme.of(context).primaryColor,
+                child: SizedBox(
+                  height: 120,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(IconFont.follow,size: 18,),
+                          SizedBox(width: 3,),
+                          Text('添加网站实例',style: TextStyle(fontSize: 13.5,color: Theme.of(context).accentColor),),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 10,)
+        ],
+      );
+    }
     return InstanceSummary(
-      instances[idx],
+      instances[idx - 1],
       onDelete: () {
         setState(() {});
       },
-      restrictedMode: instances[idx].url.startsWith('help.dudu.today') ? true : false,
+      restrictedMode: instances[idx-1].url.startsWith('help.dudu.today') ? true : false,
     );
   }
 
@@ -114,7 +162,7 @@ class _InstanceListState extends State<InstanceList> {
           : ListView.builder(
               controller: _scrollController,
               itemBuilder: rowBuilder,
-              itemCount: instances.length,
+              itemCount: instances.length+1,
             ),
     );
   }
