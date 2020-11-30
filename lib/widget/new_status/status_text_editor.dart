@@ -14,8 +14,9 @@ class StatusTextEditor extends StatefulWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
   final ValueChanged onChanged;
+  final int maxLength;
 
-  const StatusTextEditor({this.controller, this.focusNode,this.onChanged});
+  const StatusTextEditor({this.controller, this.focusNode,this.onChanged,this.maxLength});
 
   @override
   _StatusTextEditorState createState() => _StatusTextEditorState();
@@ -130,7 +131,7 @@ class _StatusTextEditorState extends State<StatusTextEditor> {
           style: TextStyle(fontSize: 14 * ScreenUtil.scaleFromSetting(textScale)),
 
           autofocus: true,
-          maxLength: 500,
+          maxLength: widget.maxLength,
           maxLines: null,
           keyboardType: TextInputType.multiline,
           decoration: InputDecoration(

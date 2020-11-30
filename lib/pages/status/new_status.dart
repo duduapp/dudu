@@ -400,7 +400,7 @@ class _NewStatusState extends State<NewStatus> {
           }
         }
       });
-    } on DioError catch (e) {
+    } on Exception catch (e) {
       DialogUtils.toastErrorInfo('发送嘟嘟失败！');
     }
   }
@@ -462,7 +462,7 @@ class _NewStatusState extends State<NewStatus> {
     for (picker.AssetEntity entity in assets) {
       if (entity.type == picker.AssetType.video || entity.type == picker.AssetType.audio) {
         // file length will return 0
-        var file = await entity.file;
+        var file = Platform.isIOS ? await entity.originFile : await entity.file;
         var fileLength = file.lengthSync();
         print(fileLength);
         if (fileLength > 40*1024*1024) {
@@ -500,6 +500,7 @@ class _NewStatusState extends State<NewStatus> {
           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
           child: TextField(
             controller: _warningController,
+            maxLength: 500 - _controller.text.length,
             onChanged: (value){
               setState(() {
                 textEdited = true;
@@ -510,6 +511,7 @@ class _NewStatusState extends State<NewStatus> {
             },
             decoration: InputDecoration(
                 hintText: '折叠部分的警告消息',
+                counterText: '',
                 disabledBorder: InputBorder.none,
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
@@ -653,11 +655,14 @@ class _NewStatusState extends State<NewStatus> {
                 Divider(
                   height: 0,
                 ),
+                if (Platform.isAndroid)
+                  ...[
                 BottomSheetItem(
                   text: "选择音频",
                   onTap: () async =>
                       await pickMedia(picker.RequestType.audio, 1),
                 ),
+              ],
                 Container(
                   height: 8,
                   color: Theme.of(context).backgroundColor,
@@ -792,6 +797,7 @@ class _NewStatusState extends State<NewStatus> {
                       children: <Widget>[
                         warningWidget(),
                         StatusTextEditor(
+                          maxLength: 500 - _warningController.text.length,
                           controller: _controller,
                           focusNode: focusNode,
                           onChanged: (value) {

@@ -120,6 +120,8 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                       isScrollable: true,
                       labelPadding: EdgeInsets.all(0),
                       indicatorSize: TabBarIndicatorSize.label,
+                      labelStyle: TextStyle(fontWeight: FontWeight.normal),
+                      unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
                       tabs: [
                         Badge(
                           position: BadgePosition.topEnd(top: 5, end: 18),

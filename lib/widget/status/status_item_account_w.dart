@@ -49,7 +49,7 @@ class StatusItemAccountW extends StatelessWidget {
                           emojis: status.account.emojis,
                           style: TextStyle(
                               fontSize: 13.5,
-                              height: 1,
+                              height: 1.1,
                               color:
                                   Theme.of(context).textTheme.bodyText1.color)),
                       TextSpan(text: " ",style: TextStyle(height: 1)),
