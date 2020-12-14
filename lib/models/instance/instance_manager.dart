@@ -74,7 +74,12 @@ class InstanceManager {
               }
             : null);
     if (cache.content != null) {
-      var item = InstanceItem.fromJson(json.decode(cache.content));
+      var item;
+      try {
+        item = InstanceItem.fromJson(json.decode(cache.content));
+      } catch (e) {
+        return null;
+      }
       if (item.uri == null) return null;
       return ServerInstance(
           url: url,

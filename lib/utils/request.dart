@@ -39,18 +39,18 @@ class Request {
     // return CacheResponse(res, CacheResponseType.cache,);
     var cache = await TbCacheHelper.getCache('', url);
     if (cache == null) {
-      var res = await Request.get(url: url, decodeJson: false,header:headers,showDialog: false);
-      if (res == null) return CacheResponse(null, CacheResponseType.stale);
-      TbCacheHelper.setCache(TbCache(account: '', tag: url, content: res));
-      return CacheResponse(res, CacheResponseType.net);
+      HttpResponse res = await Request.get(url: url, decodeJson: false,header:headers,showDialog: false,returnAll: true);
+      if (res == null || res.statusCode != 200) return CacheResponse(null, CacheResponseType.stale);
+      TbCacheHelper.setCache(TbCache(account: '', tag: url, content: res.body));
+      return CacheResponse(res.body, CacheResponseType.net);
     } else {
       if (DateTime.now().difference(cache.time).compareTo(duration) <= 0) {
         return CacheResponse(cache.content, CacheResponseType.cache);
       } else {
-        var res = await Request.get(url: url, decodeJson: false,header:headers,showDialog: false);
-        if (res == null) return CacheResponse(null, CacheResponseType.stale);
-        TbCacheHelper.setCache(TbCache(account: '', tag: url, content: res));
-        return CacheResponse(res, CacheResponseType.net);
+        HttpResponse res = await Request.get(url: url, decodeJson: false,header:headers,showDialog: false,returnAll: true);
+        if (res == null || res.statusCode != 200) return CacheResponse(null, CacheResponseType.stale);
+        TbCacheHelper.setCache(TbCache(account: '', tag: url, content: res.body));
+        return CacheResponse(res.body, CacheResponseType.net);
       }
     }
   }
@@ -69,7 +69,7 @@ class Request {
       String handlingMessage,
       String successMessage,
       int closeDialogDelay,
-      bool decodeJson}) async {
+      bool decodeJson = true}) async {
     return await _request(
         requestType: RequestType.get,
         url: url,
@@ -299,7 +299,7 @@ class Request {
       });
     }
     if (returnAll) {
-      return HttpResponse(await compute(parseJsonString, response.body),
+      return HttpResponse((decodeJson == null || decodeJson) ? await compute(parseJsonString, response.body) : response.body,
           response.headers, response.statusCode);
     }
     if (response.statusCode == 401) {
