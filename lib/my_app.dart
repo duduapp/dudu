@@ -7,7 +7,8 @@ import 'package:provider/provider.dart';
 
 import 'models/logined_user.dart';
 import 'pages/home_page.dart';
-import 'pages/login/login.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 LoginedUser user = new LoginedUser();
 
@@ -42,8 +43,21 @@ class App extends StatelessWidget {
           context.select<SettingsProvider, String>((m) => m.get('theme')));
     } catch (e) {}
     return MaterialApp(
+      localizationsDelegates: [
+        // ... app-specific localization delegate[s] here
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+
+      ],
+      supportedLocales: [
+        const Locale('en', ''), // English, no country code
+        const Locale('zh', ''), // Chinese *See Advanced Locales below*
+        // ... other locales the app supports
+      ],
       theme: ThemeUtil.themes[chooseTheme],
-      title: '嘟嘟',
+      title:  '嘟嘟',
       debugShowCheckedModeBanner: false,
       navigatorKey: navGK,
       home: Scaffold(body: HomePage(logined: LoginedUser().account != null,)),
