@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:convert';
 
 import 'package:dio_http_cache/dio_http_cache.dart';
@@ -8,6 +9,7 @@ import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/request.dart';
 import 'package:dudu/widget/status/status_item.dart';
+import 'package:nav_router/nav_router.dart';
 
 enum SearchType { accounts, hashtags, statuses }
 
@@ -77,7 +79,7 @@ class SearchApi {
     Map res = await _search(url, type,
         resolve: true,
         showDialog: true,
-        handlingMessage: '你将使用'+LoginedUser().fullAddress+'执行此操作',
+        handlingMessage: S.of(navGK.currentState.overlay.context).operate_with_account(LoginedUser().fullAddress),
         successMessage: '',
         closeDialogDelay: 0);
     if (res != null) {

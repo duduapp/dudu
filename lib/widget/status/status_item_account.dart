@@ -76,7 +76,7 @@ class StatusItemAccount extends StatelessWidget {
                       ),
                       if (createdAt != null)
                         Flexible(
-                          child: Text(DateUntil.dateTime(createdAt),
+                          child: Text(DateUntil.dateTime(createdAt,context),
                               style: TextStyle(
                                   fontSize: 13, color: Theme.of(context).accentColor),
                               overflow: TextOverflow.ellipsis),
@@ -142,7 +142,7 @@ class SubStatusItemHeader extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           )),
 
-          Text(DateUntil.dateTime(data.createdAt),
+          Text(DateUntil.dateTime(data.createdAt,context),
               style: TextStyle(fontSize: 13, color: Theme.of(context).accentColor),
               overflow: TextOverflow.ellipsis)
         ],

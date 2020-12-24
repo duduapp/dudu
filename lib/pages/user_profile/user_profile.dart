@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dudu/api/accounts_api.dart';
@@ -222,7 +223,7 @@ class _UserProfileState extends State<UserProfile>
     } else {
       DialogUtils.showSimpleAlertDialog(
           context: context,
-          text: '确定要屏蔽@${_account.acct}吗',
+          text: S.of(context).are_you_sure_to_block_users(_account.acct),
           onConfirm: _blockUser);
     }
   }
@@ -231,7 +232,7 @@ class _UserProfileState extends State<UserProfile>
     if (relationShip == null || !relationShip.muting) {
       DialogUtils.showSimpleAlertDialog(
         context: context,
-        text: '确定要隐藏@${_account.acct}吗',
+        text: S.of(context).are_you_sure_to_hide_users(_account.acct),
         onConfirm: _muteUser,
       );
     } else {
@@ -272,7 +273,7 @@ class _UserProfileState extends State<UserProfile>
   _showUnfollowConfrimDialog() {
     DialogUtils.showSimpleAlertDialog(
         context: context,
-        text: '不再关注此用户',
+        text: S.of(context).no_longer_follow_this_user,
         onConfirm: () {
           _unfollowByid();
         });
@@ -290,7 +291,7 @@ class _UserProfileState extends State<UserProfile>
             children: <Widget>[
               if (_account != null) ...[
                 BottomSheetItem(
-                    text: '提及',
+                    text: S.of(context).mention,
                     icon: IconFont.at,
                     onTap: () {
                       AppNavigate.push(
@@ -310,8 +311,8 @@ class _UserProfileState extends State<UserProfile>
                   BottomSheetItem(
                     icon: IconFont.follow,
                     text: relationShip == null || !relationShip.following
-                        ? '关注'
-                        : '取消关注',
+                        ? S.of(context).attention
+                        : S.of(context).unsubscribe,
                     onTap: _onPressButton,
                   ),
                   Divider(
@@ -322,9 +323,9 @@ class _UserProfileState extends State<UserProfile>
                 BottomSheetItem(
                   icon: IconFont.volumeOff,
                   text: relationShip == null || !relationShip.muting
-                      ? '隐藏'
-                      : '取消隐藏',
-                  subText: '隐藏后该用户的嘟文将不会显示在你的时间轴中',
+                      ? S.of(context).hide
+                      : S.of(context).unhide,
+                  subText: S.of(context).hiding_description,
                   onTap: _onPressHideButton,
                 ),
                 Divider(
@@ -334,7 +335,7 @@ class _UserProfileState extends State<UserProfile>
                 if (relationShip != null)
                   BottomSheetItem(
                     icon: IconFont.report,
-                    text: '投诉',
+                    text: S.of(context).complaint,
                     onTap: () => AppNavigate.push(UserReport(
                       account: _account,
                     )),
@@ -342,9 +343,9 @@ class _UserProfileState extends State<UserProfile>
                 BottomSheetItem(
                   icon: IconFont.block,
                   text: relationShip == null || !relationShip.blocking
-                      ? '屏蔽'
-                      : '取消屏蔽',
-                  subText: '屏蔽后该用户将无法看到你发的嘟文',
+                      ? S.of(context).shield
+                      : S.of(context).unblock,
+                  subText: S.of(context).blocking_description,
                   onTap: _onPressBlockButton,
                 ),
                 Divider(
@@ -353,12 +354,12 @@ class _UserProfileState extends State<UserProfile>
                 ),
                 BottomSheetItem(
                   icon: IconFont.www,
-                  text: '隐藏实例'+StringUtil.accountDomain(_account),
-                  subText: '隐藏后该实例的所有嘟文将不会显示在你的时间轴中',
+                  text: S.of(context).hide_instance(StringUtil.accountDomain(_account)),
+                  subText: S.of(context).hiding_instance_description,
                   onTap: () => DialogUtils.showSimpleAlertDialog(
                       context: context,
                       text:
-                          '你确定要屏蔽@${StringUtil.accountDomain(_account)}实例吗？你将不会在任何公共时间轴或消息中看到该实例的内容，而且该实例的关注者也会被删除',
+                          S.of(context).hide_instance_confirm(StringUtil.accountDomain(_account)),
                       onConfirm: _onPressBlockDomain,
                       popFirst: false),
                 ),
@@ -427,14 +428,14 @@ class _UserProfileState extends State<UserProfile>
                                   child: Text(relationShip == null
                                       ? 'whatever'
                                       : mine.account.id == _account.id
-                                          ? '编辑资料'
+                                          ? S.of(context).edit_information
                                           : relationShip.blocking
-                                              ? '取消屏蔽'
+                                              ? S.of(context).unblock
                                               : relationShip.requested
-                                                  ? '已发送关注请求'
+                                                  ? S.of(context).follow_request_sent
                                                   : relationShip.following
-                                                      ? '取消关注'
-                                                      : '关注'),
+                                                      ? S.of(context).unsubscribe
+                                                      : S.of(context).attention),
                                   onPressed: _onPressButton,
                                 ),
                               )
@@ -489,7 +490,7 @@ class _UserProfileState extends State<UserProfile>
                                   decoration: BoxDecoration(
                                       border: Border.all(),
                                       borderRadius: BorderRadius.circular(12)),
-                                  child: Text('关注了你')),
+                                  child: Text(S.of(context).followed_you)),
                             ),
                             SizedBox(
                               height: 10,
@@ -613,7 +614,7 @@ class _UserProfileState extends State<UserProfile>
                 SizedBox(
                   width: 1,
                 ),
-                Text('嘟文'),
+                Text(S.of(context).toot),
               ],
             ),
           ),
@@ -636,7 +637,7 @@ class _UserProfileState extends State<UserProfile>
                 SizedBox(
                   width: 1,
                 ),
-                Text('关注'),
+                Text(S.of(context).attention),
               ],
             ),
           ),
@@ -659,7 +660,7 @@ class _UserProfileState extends State<UserProfile>
                 SizedBox(
                   width: 1,
                 ),
-                Text('粉丝'),
+                Text(S.of(context).fans),
               ],
             ),
           )
@@ -792,7 +793,7 @@ class _UserProfileState extends State<UserProfile>
       LocalStorageAccount.addOwnerAccount(newAccount);
     }
     if (newAccount == null) {
-      DialogUtils.showInfoDialog(context, '获取用户信息失败，也许服务器开启了权限验证');
+      DialogUtils.showInfoDialog(context, S.of(context).failed_to_obtain_user_information);
     }
     setState(() {
       _account = newAccount ?? _account;
@@ -877,10 +878,10 @@ class _UserProfileState extends State<UserProfile>
                       isScrollable: true,
                       indicatorColor: Theme.of(context).buttonColor,
                       tabs: [
-                        tabText('嘟文'),
-                        tabText('嘟文和回复'),
-                        tabText('已置顶'),
-                        tabText('媒体'),
+                        tabText(S.of(context).toot),
+                        tabText(S.of(context).toot_and_reply),
+                        tabText(S.of(context).pinned),
+                        tabText(S.of(context).media),
                       ],
                       onTap: (index) {
                         setState(() {});

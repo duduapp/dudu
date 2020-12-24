@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/search_api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
@@ -8,21 +9,25 @@ import 'package:dudu/pages/status/new_status.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/app_navigate.dart';
 import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/utils/i18n_util.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
 import 'package:dudu/utils/view/status_action_util.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
+import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
 
 class StatusItemActionW extends StatelessWidget {
   final StatusItemData status;
   final bool subStatus;
   final bool showNum;
-  static const String zan = '赞';
-  static const String shoucang = '收藏';
+  static  String zan = S.of(navGK.currentState.overlay.context).awesome;
+  static  String shoucang = S.of(navGK.currentState.overlay.context).favorites;
 
   const StatusItemActionW({Key key, this.status, this.subStatus, this.showNum = true})
       : super(key: key);
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +36,9 @@ class StatusItemActionW extends StatelessWidget {
     context.select<SettingsProvider, String>((m) => m.get('text_scale'));
     String  zan_or_shoucang =
     context.select<SettingsProvider, String>((m) => m.get('zan_or_shoucang'));
-
-    var zan_icon = zan_or_shoucang == '0' ? IconFont.thumbUp : IconFont.favorite;
-    var zan_text = zan_or_shoucang == '0' ? zan : shoucang;
+    bool isZh = I18nUtil.isZh(context);
+    var zan_icon = isZh ? (zan_or_shoucang == '0' ? IconFont.thumbUp : IconFont.favorite) : IconFont.favorite;
+    var zan_text = isZh ? (zan_or_shoucang == '0' ? zan : shoucang) : S.of(context).favorites ;
 
     Color color = Theme.of(context).accentColor;
     double fontSize = 12 ;
@@ -75,7 +80,7 @@ class StatusItemActionW extends StatelessWidget {
                       width: 3,
                     ),
                     Text(
-                      subStatus ? '':'转评',
+                      subStatus ? '':S.of(context).review,
                       style: TextStyle(fontSize: fontSize, color: color),
                     ),
                     SizedBox(
@@ -125,7 +130,7 @@ class StatusItemActionW extends StatelessWidget {
                     children: <Widget>[
                       SizedBox(width: 3,),
                       Text(
-                        subStatus ? '' :'转嘟',
+                        subStatus ? '' :S.of(context).turn_to,
                         style: TextStyle(
                             fontSize: fontSize ,
 

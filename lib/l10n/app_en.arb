@@ -1,3 +1,1256 @@
 {
+  "@@locale":"en",
 
+  "app_name":"Dudu",
+
+  "toot": "Toot",
+  "toots": "Toots",
+  "@toot": {
+    "x-reviewed": "false"
+  },
+  "tooting": "Tooting...",
+  "an_error_occurred": "An error occurred..",
+  "@an_error_occurred": {
+    "x-reviewed": "false"
+  },
+  "unable_to_connect_to_server": "Unable to connect to server",
+  "@unable_to_connect_to_server": {
+    "x-reviewed": "false"
+  },
+  "something_went_wrong": "Something went wrong, you can try later",
+  "@something_went_wrong": {
+    "x-reviewed": "false"
+  },
+  "day1": "1 day",
+  "@day1": {
+    "x-reviewed": "false"
+  },
+  "minutes5": "5 minutes",
+  "@minutes5": {
+    "x-reviewed": "false"
+  },
+  "minutes30": "30 minutes",
+  "@minutes30": {
+    "x-reviewed": "false"
+  },
+  "hour1": "1 hour",
+  "@hour1": {
+    "x-reviewed": "false"
+  },
+  "hours6": "6 hours",
+  "@hours6": {
+    "x-reviewed": "false"
+  },
+  "days3": "3 days",
+  "@days3": {
+    "x-reviewed": "false"
+  },
+  "days7": "7 days",
+  "@days7": {
+    "x-reviewed": "false"
+  },
+  "private_letters": "Direct Messages",
+  "@private_letters": {
+    "x-reviewed": "false"
+  },
+  "follow_request": "Follow Requests",
+  "@follow_request": {
+    "x-reviewed": "false"
+  },
+  "follow_me": "Follow me",
+  "@follow_me": {
+    "x-reviewed": "false"
+  },
+  "turn_to": "Boost",
+  "@turn_to": {
+    "x-reviewed": "false"
+  },
+  "at_mine": "Mentions",
+  "@at_mine": {
+    "x-reviewed": "false"
+  },
+  "vote": "Poll",
+  "@vote": {
+    "x-reviewed": "false"
+  },
+  "vote_poll": "Vote",
+  "the_poll_you_initiated_or_participated_in_has_been_completed": "The poll you created or voted in has ended",
+  "@the_poll_you_initiated_or_participated_in_has_been_completed": {
+    "x-reviewed": "false"
+  },
+  "update": "Update",
+  "@update": {
+    "x-reviewed": "false"
+  },
+  "turn_off_an_app": "Close App",
+  "@turn_off_an_app": {
+    "x-reviewed": "false"
+  },
+  "new_version_detected": "New version detected",
+  "@new_version_detected": {
+    "x-reviewed": "false"
+  },
+  "copy_the_download_link": "Copy the download link",
+  "@copy_the_download_link": {
+    "x-reviewed": "false"
+  },
+  "download_link_copied": "Download link copied",
+  "@download_link_copied": {
+    "x-reviewed": "false"
+  },
+  "downloading": "Downloading...",
+  "@downloading": {
+    "x-reviewed": "false"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "x-reviewed": "false"
+  },
+  "installation": "installation",
+  "@installation": {
+    "x-reviewed": "false"
+  },
+  "just_warn_the_user": "Just warn the user and will not operate on the user account",
+  "@just_warn_the_user": {
+    "x-reviewed": "false"
+  },
+  "prevent_the_user_from_logging_in": "Prevent the user from logging in, and retain all user content",
+  "@prevent_the_user_from_logging_in": {
+    "x-reviewed": "false"
+  },
+  "toots_posted_by_users_will_not_be_displayed_in_the_public_timeline": "Make user's toots  not be displayed in the public timeline",
+  "@toots_posted_by_users_will_not_be_displayed_in_the_public_timeline": {
+    "x-reviewed": "false"
+  },
+  "deactivate_and_permanently_delete_account_information": "Deactivate and permanently delete account information",
+  "@deactivate_and_permanently_delete_account_information": {
+    "x-reviewed": "false"
+  },
+  "caveat": "None",
+  "@caveat": {
+    "x-reviewed": "false"
+  },
+  "deactivate": "Disable",
+  "@deactivate": {
+    "x-reviewed": "false"
+  },
+  "hide": "Mute",
+  	"@hide": {},
+  	  "silence": "Silence",
+  "hide_user": "Mute {user}",
+  "@hide": {
+    "x-reviewed": "false"
+  },
+  "report_user": "Report {user}",
+  "ban": "Suspend",
+  "@ban": {
+    "x-reviewed": "false"
+  },
+  "perform_management_operations": "Perform management operations",
+  "@perform_management_operations": {
+    "x-reviewed": "false"
+  },
+  "remind_users_via_email": "Remind users via email",
+  "@remind_users_via_email": {
+    "x-reviewed": "false"
+  },
+  "email_to_inform_users": "Email to inform users",
+  "@email_to_inform_users": {
+    "x-reviewed": "false"
+  },
+  "determine": "OK",
+  "@determine": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_you_want": "Are you sure you want ",
+  "@are_you_sure_you_want": {
+    "x-reviewed": "false"
+  },
+  "this_operation_will": "This operation will ",
+  "@this_operation_will": {
+    "x-reviewed": "false"
+  },
+  "increase_instance": "Increase instance",
+  "@increase_instance": {
+    "x-reviewed": "false"
+  },
+  "instance_already_exists": "Instance already exists",
+  "@instance_already_exists": {
+    "x-reviewed": "false"
+  },
+  "instance_url": "Instance URL",
+  "@instance_url": {
+    "x-reviewed": "false"
+  },
+  "please_enter_the_url": "Please enter the URL of the mastodon instance you wish to register or log in. If the URL is accessible, the instance card will be displayed on the \"discovery\" page, where you can register and log in.",
+  "@please_enter_the_url": {
+    "x-reviewed": "false"
+  },
+  "contact_email": "Contact email:",
+  "@contact_email": {
+    "x-reviewed": "false"
+  },
+  "user_number": "User number:",
+  "@user_number": {
+    "x-reviewed": "false"
+  },
+  "number_of_toots": "Number of toots:",
+  "@number_of_toots": {
+    "x-reviewed": "false"
+  },
+  "version": "Version",
+  "@version": {
+    "x-reviewed": "false"
+  },
+  "browse_to_see": "Browse to see",
+  "@browse_to_see": {
+    "x-reviewed": "false"
+  },
+  "log_in": "Log In",
+  "@log_in": {
+    "x-reviewed": "false"
+  },
+  "add_website_instance": "Add Instance",
+  "@add_website_instance": {
+    "x-reviewed": "false"
+  },
+  "find": "Discovery",
+  "@find": {
+    "x-reviewed": "false"
+  },
+  "home": "Home",
+  "@home": {
+    "x-reviewed": "false"
+  },
+  "square": "Square",
+  "@square": {
+    "x-reviewed": "false"
+  },
+  "news": "Notfications",
+  "@news": {
+    "x-reviewed": "false"
+  },
+  "me": "Me",
+  "@me": {
+    "x-reviewed": "false"
+  },
+  "log_in_to_mastodon_account": "Log in to Mastodon account",
+  "@log_in_to_mastodon_account": {
+    "x-reviewed": "false"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "x-reviewed": "false"
+  },
+  "domain_name": "domain name",
+  "@domain_name": {
+    "x-reviewed": "false"
+  },
+  "about_mastodon": "About Mastodon",
+  "@about_mastodon": {
+    "x-reviewed": "false"
+  },
+  "example_recommendation": "Example recommendation",
+  "@example_recommendation": {
+    "x-reviewed": "false"
+  },
+  "you_only_need_to_select_a_node_to_register": "You only need to select a node to register. No matter which node you choose, you can communicate with anyone!",
+  "@you_only_need_to_select_a_node_to_register": {
+    "x-reviewed": "false"
+  },
+  "k_user": "K user",
+  "@k_user": {
+    "x-reviewed": "false"
+  },
+  "user": "Accounts",
+  "@user": {
+    "x-reviewed": "false"
+  },
+  "stable": "stable",
+  "@stable": {
+    "x-reviewed": "false"
+  },
+  "select_node": "Select node",
+  "@select_node": {
+    "x-reviewed": "false"
+  },
+  "play_audio": "Play audio",
+  "@play_audio": {
+    "x-reviewed": "false"
+  },
+  "mute": "Mute",
+  "@mute": {
+    "x-reviewed": "false"
+  },
+  "unmute": "Unmute",
+  "@unmute": {
+    "x-reviewed": "false"
+  },
+  "topic": "Hashtags",
+  "@topic": {
+    "x-reviewed": "false"
+  },
+  "search_for": "Search...",
+  "@search_for": {
+    "x-reviewed": "false"
+  },
+  "about_dudu": "About Dudu",
+  "@about_dudu": {
+    "x-reviewed": "false"
+  },
+  "check_for_updates": "Check for updates",
+  "@check_for_updates": {
+    "x-reviewed": "false"
+  },
+  "copyright_information": "Copyright Information",
+  "@copyright_information": {
+    "x-reviewed": "false"
+  },
+  "official_website": "Official website",
+  "@official_website": {
+    "x-reviewed": "false"
+  },
+  "privacy_agreement": "Privacy agreement",
+  "@privacy_agreement": {
+    "x-reviewed": "false"
+  },
+  "service_agreement": "Service Agreement",
+  "@service_agreement": {
+    "x-reviewed": "false"
+  },
+  "checking_for_new_version": "Checking for new version",
+  "@checking_for_new_version": {
+    "x-reviewed": "false"
+  },
+  "the_current_version_is_the_latest_version": "The current version is the latest version",
+  "@the_current_version_is_the_latest_version": {
+    "x-reviewed": "false"
+  },
+  "account_settings": "Account Preferences",
+  "@account_settings": {
+    "x-reviewed": "false"
+  },
+  "notification_settings": "Notifications",
+  "@notification_settings": {
+    "x-reviewed": "false"
+  },
+  "hidden_user": "Mutes users",
+  "@hidden_user": {
+    "x-reviewed": "false"
+  },
+  "blocked_user": "Blocked users",
+  "@blocked_user": {
+    "x-reviewed": "false"
+  },
+  "hidden_instance": "Hidden instances",
+  "@hidden_instance": {
+    "x-reviewed": "false"
+  },
+  "release": "Publishing",
+  "@release": {
+    "x-reviewed": "false"
+  },
+  "default_visible_range": "Default post privacy",
+  "@default_visible_range": {
+    "x-reviewed": "false"
+  },
+  "public": "Public",
+  "@public": {
+    "x-reviewed": "false"
+  },
+  "private": "Unlisted",
+  "@private": {
+    "x-reviewed": "false"
+  },
+  "followers_only": "Followers only",
+  "@followers_only": {
+    "x-reviewed": "false"
+  },
+  "direct_message": "Direct",
+  "automatically_mark_media_as_sensitive": "Always mark media as sensitive",
+  "@automatically_mark_media_as_sensitive": {
+    "x-reviewed": "false"
+  },
+  "timeline": "Timelines",
+  "@timeline": {
+    "x-reviewed": "false"
+  },
+  "show_preview": "Show media previews",
+  "@show_preview": {
+    "x-reviewed": "false"
+  },
+  "always_show_all_sensitive_media_content": "Always show sensitive content",
+  "@always_show_all_sensitive_media_content": {
+    "x-reviewed": "false"
+  },
+  "always_expand_toots_marked_with_content_warnings": "Always expand toots marked with content warnings",
+  "@always_expand_toots_marked_with_content_warnings": {
+    "x-reviewed": "false"
+  },
+  "filter": "Filters",
+  "@filter": {
+    "x-reviewed": "false"
+  },
+  "public_timeline": "Public timelines",
+  "@public_timeline": {
+    "x-reviewed": "false"
+  },
+  "home_page": "Home",
+  "@home_page": {
+    "x-reviewed": "false"
+  },
+  "dialogue": "Conversations",
+  "@dialogue": {
+    "x-reviewed": "false"
+  },
+  "account_operation": "Account operation (you need to complete the operation in the system default browser)",
+  "@account_operation": {
+    "x-reviewed": "false"
+  },
+  "change_password": "Change Password",
+  "@change_password": {
+    "x-reviewed": "false"
+  },
+  "backup_data": "Backup data",
+  "@backup_data": {
+    "x-reviewed": "false"
+  },
+  "import_data": "Import Data",
+  "@import_data": {
+    "x-reviewed": "false"
+  },
+  "logout": "Logout",
+  "@logout": {
+    "x-reviewed": "false"
+  },
+  "shut_down": "Close",
+  "@shut_down": {
+    "x-reviewed": "false"
+  },
+  "management": "Manage",
+  "@management": {
+    "x-reviewed": "false"
+  },
+  "clear_account_information": "Clear account information",
+  "@clear_account_information": {
+    "x-reviewed": "false"
+  },
+  "click_to_switch_account": "Tap to Switch Account",
+  "@click_to_switch_account": {
+    "x-reviewed": "false"
+  },
+  "add_account": "Add Account",
+  "@add_account": {
+    "x-reviewed": "false"
+  },
+  "currently_used": "Currently Used",
+  "@currently_used": {
+    "x-reviewed": "false"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "x-reviewed": "false"
+  },
+  "bookmark": "Bookmark",
+  "@bookmark": {
+    "x-reviewed": "false"
+  },
+  "modify_picture_background": "Change header",
+  "@modify_picture_background": {
+    "x-reviewed": "false"
+  },
+  "modify_avatar": "change avatar",
+  "@modify_avatar": {
+    "x-reviewed": "false"
+  },
+  "edit_profile": "Edit profile",
+  "@edit_profile": {
+    "x-reviewed": "false"
+  },
+  "nickname": "Display name",
+  "@nickname": {
+    "x-reviewed": "false"
+  },
+  "introduction": "Bio",
+  "@introduction": {
+    "x-reviewed": "false"
+  },
+  "protect_your_account": "Protect your account",
+  "@protect_your_account": {
+    "x-reviewed": "false"
+  },
+  "you_need_to_manually_review_all_follow_requests": "You need to manually review all follow requests",
+  "@you_need_to_manually_review_all_follow_requests": {
+    "x-reviewed": "false"
+  },
+  "profile_additional_information": "Profile metadata",
+  "@profile_additional_information": {
+    "x-reviewed": "false"
+  },
+  "add_information": "Add data",
+  "@add_information": {
+    "x-reviewed": "false"
+  },
+  "label": "label",
+  "@label": {
+    "x-reviewed": "false"
+  },
+  "content": "content",
+  "@content": {
+    "x-reviewed": "false"
+  },
+  "add_new_filter": "Add new filter",
+  "@add_new_filter": {
+    "x-reviewed": "false"
+  },
+  "edit_filter": "Edit filter",
+  "@edit_filter": {
+    "x-reviewed": "false"
+  },
+  "whole_word": "Whole word",
+  "@whole_word": {
+    "x-reviewed": "false"
+  },
+  "if_the_keyword_or_abbreviation_has_only_letters_or_numbers": "If the keyword or abbreviation has only letters or numbers, it will only be applied if it matches the entire word",
+  "@if_the_keyword_or_abbreviation_has_only_letters_or_numbers": {
+    "x-reviewed": "false"
+  },
+  "remove": "Remove",
+  "@remove": {
+    "x-reviewed": "false"
+  },
+  "create": "New",
+  "@create": {
+    "x-reviewed": "false"
+  },
+  "filter_cannot_be_empty": "Filter cannot be empty",
+  "@filter_cannot_be_empty": {
+    "x-reviewed": "false"
+  },
+  "sign_out": "Log Out",
+  "@sign_out": {
+    "x-reviewed": "false"
+  },
+  "general_settings": "General",
+  "@general_settings": {
+    "x-reviewed": "false"
+  },
+  "application_theme": "App Theme",
+  "@application_theme": {
+    "x-reviewed": "false"
+  },
+  "normal_mode": "Light",
+  "@normal_mode": {
+    "x-reviewed": "false"
+  },
+  "dark_mode": "Dark",
+  "@dark_mode": {
+    "x-reviewed": "false"
+  },
+  "darkest_mode": "Black",
+  "@darkest_mode": {},
+  "font_size": "Text Size",
+  "@font_size": {
+    "x-reviewed": "false"
+  },
+  "small": "Small",
+  "@small": {
+    "x-reviewed": "false"
+  },
+  "medium": "Medium",
+  "@medium": {
+    "x-reviewed": "false"
+  },
+  "big": "Big",
+  "@big": {
+    "x-reviewed": "false"
+  },
+  "display_setting": "Display Setting",
+  "@display_setting": {
+    "x-reviewed": "false"
+  },
+  "switch_account": "Switch Account",
+  "@switch_account": {
+    "x-reviewed": "false"
+  },
+  "list_name": "List name",
+  "@list_name": {
+    "x-reviewed": "false"
+  },
+  "new_list": "New list",
+  "@new_list": {
+    "x-reviewed": "false"
+  },
+  "list_name_cannot_be_empty": "List name cannot be empty",
+  "@list_name_cannot_be_empty": {
+    "x-reviewed": "false"
+  },
+  "search_for_followed_users": "Search for followed users",
+  "@search_for_followed_users": {
+    "x-reviewed": "false"
+  },
+  "list": "List",
+  "@list": {
+    "x-reviewed": "false"
+  },
+  "rename_list": "Rename list",
+  "@rename_list": {
+    "x-reviewed": "false"
+  },
+  "favorites": "Favorite",
+  "@favorites": {
+    "x-reviewed": "false"
+  },
+  "timed_beep": "Scheduled Toots",
+  "@timed_beep": {
+    "x-reviewed": "false"
+  },
+  "universal": "General",
+  "@universal": {
+    "x-reviewed": "false"
+  },
+  "like_favorite_switch": "Like/favorite switch",
+  "@like_favorite_switch": {
+    "x-reviewed": "false"
+  },
+  "currently_showing_likes": "Currently showing likes",
+  "@currently_showing_likes": {
+    "x-reviewed": "false"
+  },
+  "currently_showing_favorites": "Currently showing favorites",
+  "@currently_showing_favorites": {
+    "x-reviewed": "false"
+  },
+  "attention": "Following",
+  "@attention": {
+    "x-reviewed": "false"
+  },
+  "fans": "Followers",
+  "@fans": {
+    "x-reviewed": "false"
+  },
+  "new_message_notification": "Enable Notification",
+  "@new_message_notification": {
+    "x-reviewed": "false"
+  },
+  "mention": "Mention",
+  "@mention": {
+    "x-reviewed": "false"
+  },
+  "whether_to_keep_this_edit": "Save as draft?",
+  "@whether_to_keep_this_edit": {
+    "x-reviewed": "false"
+  },
+  "not_retained": "Discard",
+  "@not_retained": {
+    "x-reviewed": "false"
+  },
+  "keep": "Save",
+  "@keep": {
+    "x-reviewed": "false"
+  },
+  "the_timed_beep_must_be_five_minutes_later": "The timed beep must be five minutes later",
+  "@the_timed_beep_must_be_five_minutes_later": {
+    "x-reviewed": "false"
+  },
+  "uploading_file": "Uploading file...",
+  "@uploading_file": {
+    "x-reviewed": "false"
+  },
+  "the_beep_has_been_sent": "The toot has been sent",
+  "@the_beep_has_been_sent": {
+    "x-reviewed": "false"
+  },
+  "failed_to_send_toot": "Failed to send toot!",
+  "@failed_to_send_toot": {
+    "x-reviewed": "false"
+  },
+  "file_upload_failed": "File upload failed",
+  "@file_upload_failed": {
+    "x-reviewed": "false"
+  },
+  "file_size_must_be_less_than_40m": "File size must be less than 40M",
+  "@file_size_must_be_less_than_40m": {
+    "x-reviewed": "false"
+  },
+  "warning_message_for_folded_section": "Warning message",
+  "@warning_message_for_folded_section": {
+    "x-reviewed": "false"
+  },
+  "visible_to_everyone_and_will_appear_on_the_public_timeline": "Visible to everyone and show in  public timeline",
+  "@visible_to_everyone_and_will_appear_on_the_public_timeline": {
+    "x-reviewed": "false"
+  },
+  "visible_to_everyone": "Visible to everyone,but not show in public timeline",
+  "@visible_to_everyone": {
+    "x-reviewed": "false"
+  },
+  "only_visible_to_users_who_follow_you": "Only visible to users who follow you",
+  "@only_visible_to_users_who_follow_you": {
+    "x-reviewed": "false"
+  },
+  "only_the_mentioned_users_can_see": "Only visible to users you mentioned",
+  "@only_the_mentioned_users_can_see": {
+    "x-reviewed": "false"
+  },
+  "choose_a_photo": "Add Photos",
+  "@choose_a_photo": {
+    "x-reviewed": "false"
+  },
+  "select_video": "Add Video",
+  "@select_video": {
+    "x-reviewed": "false"
+  },
+  "select_audio": "Add Audio",
+  "@select_audio": {
+    "x-reviewed": "false"
+  },
+  "beep": "Post a toot",
+  "@beep": {
+    "x-reviewed": "false"
+  },
+  "reply": "Reply",
+  "@reply": {
+    "x-reviewed": "false"
+  },
+  "time_must_be_five_minutes_later": "Time must be five minutes later",
+  "@time_must_be_five_minutes_later": {
+    "x-reviewed": "false"
+  },
+  "edit": "edit",
+  "@edit": {
+    "x-reviewed": "false"
+  },
+  "error_loading_image": "Error loading image",
+  "@error_loading_image": {
+    "x-reviewed": "false"
+  },
+  "no_comment_yet": "No comment yet",
+  "@no_comment_yet": {
+    "x-reviewed": "false"
+  },
+  "not_turning": "No Boost",
+  "@not_turning": {
+    "x-reviewed": "false"
+  },
+  "no_favorite":"No Favorite",
+  "toot_information": "Toot",
+  "@toot_information": {
+    "x-reviewed": "false"
+  },
+  "review": "Reply",
+  "@review": {
+    "x-reviewed": "false"
+  },
+  "list_timeline": "List timeline",
+  "@list_timeline": {
+    "x-reviewed": "false"
+  },
+  "all": "All",
+  "@all": {
+    "x-reviewed": "false"
+  },
+  "classification": "Sort",
+  "@classification": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_you_want_to_delete_the_message_list_forever": "Are you sure you want to delete the message list forever",
+  "@are_you_sure_you_want_to_delete_the_message_list_forever": {
+    "x-reviewed": "false"
+  },
+  "tell_me": "Boosts",
+  "@tell_me": {
+    "x-reviewed": "false"
+  },
+  "mine": "mine",
+  "@mine": {
+    "x-reviewed": "false"
+  },
+  "this_site": "Local",
+  "@this_site": {
+    "x-reviewed": "false"
+  },
+  "cross_station": "Federated",
+  "@cross_station": {
+    "x-reviewed": "false"
+  },
+  "following": "Following",
+  "@following": {
+    "x-reviewed": "false"
+  },
+  "no_longer_follow_this_user": "No longer follow this user",
+  "@no_longer_follow_this_user": {
+    "x-reviewed": "false"
+  },
+  "unsubscribe": "Unfollow",
+  "@unsubscribe": {
+    "x-reviewed": "false"
+  },
+  "unhide": "Unhide",
+  "@unhide": {
+    "x-reviewed": "false"
+  },
+  "hiding_description": "The user's toots will not be displayed in your timeline",
+  "@hiding_description": {
+    "x-reviewed": "false"
+  },
+  "complaint": "Report",
+  "@complaint": {
+    "x-reviewed": "false"
+  },
+  "shield": "Block",
+  "@shield": {
+    "x-reviewed": "false"
+  },
+  "unblock": "Unblock",
+  "@unblock": {
+    "x-reviewed": "false"
+  },
+  "blocking_description": "The user will not be able to see your toots",
+  "@blocking_description": {
+    "x-reviewed": "false"
+  },
+  "hide_instance": "Mute {instance}",
+  "@hide_instance": {
+    "x-reviewed": "false"
+  },
+  "hide_instance_confirm": "Are you sure you want to block {instance}? You will not see the content of this instance in any public timeline or notifications, and the followers of this instance will also be deleted",
+  "hiding_instance_description": "All toots of the instance will not be displayed in your timeline",
+  "@hiding_instance_description": {
+    "x-reviewed": "false"
+  },
+  "edit_information": "Edit",
+  "@edit_information": {
+    "x-reviewed": "false"
+  },
+  "follow_request_sent": "Follow request sent",
+  "@follow_request_sent": {
+    "x-reviewed": "false"
+  },
+  "followed_you": "Follows you",
+  "@followed_you": {
+    "x-reviewed": "false"
+  },
+  "failed_to_obtain_user_information": "Failed to obtain user information, maybe the server has enabled permission verification",
+  "@failed_to_obtain_user_information": {
+    "x-reviewed": "false"
+  },
+  "toot_and_reply": "With Reply",
+  "@toot_and_reply": {
+    "x-reviewed": "false"
+  },
+  "pinned": "Pinned",
+  "@pinned": {
+    "x-reviewed": "false"
+  },
+  "media": "Media",
+  "@media": {
+    "x-reviewed": "false"
+  },
+  "carry_on": "Continue",
+  "@carry_on": {
+    "x-reviewed": "false"
+  },
+  "the_report_will_be_sent_to_your_server_administrator": "The report will be sent to your server moderator. You can fill in the reason for complaining to the user below:",
+  "@the_report_will_be_sent_to_your_server_administrator": {
+    "x-reviewed": "false"
+  },
+  "reason_for_reporting": "Reason for reporting",
+  "@reason_for_reporting": {
+    "x-reviewed": "false"
+  },
+  "this_user_is_from_another_server": "This user is from another server. Do you want to send an anonymous complaint to that server?",
+  "@this_user_is_from_another_server": {
+    "x-reviewed": "false"
+  },
+  "forward_to": "Forward to",
+  "@forward_to": {
+    "x-reviewed": "false"
+  },
+  "back": "Back",
+  "@back": {
+    "x-reviewed": "false"
+  },
+  "web_page": "Web page",
+  "@web_page": {
+    "x-reviewed": "false"
+  },
+  "share_it": "share it",
+  "@share_it": {
+    "x-reviewed": "false"
+  },
+  "open_in_browser": "Open in browser",
+  "@open_in_browser": {
+    "x-reviewed": "false"
+  },
+  "web_link": "🔗Link",
+  "@web_link": {
+    "x-reviewed": "false"
+  },
+  "just": "just",
+  "@just": {
+    "x-reviewed": "false"
+  },
+  "storage_failure": "Storage failure",
+  "@storage_failure": {
+    "x-reviewed": "false"
+  },
+  "picture_file_must_be_less_than_2m": "Picture file must be less than 2M",
+  "@picture_file_must_be_less_than_2m": {
+    "x-reviewed": "false"
+  },
+  "no_storage_permissions": "No storage permissions",
+  "@no_storage_permissions": {
+    "x-reviewed": "false"
+  },
+  "file_saved": "File saved",
+  "@file_saved": {
+    "x-reviewed": "false"
+  },
+  "processing": "Processing...",
+  "@processing": {
+    "x-reviewed": "false"
+  },
+  "completed": "completed",
+  "@completed": {
+    "x-reviewed": "false"
+  },
+  "network_request_error": "Network request error",
+  "@network_request_error": {
+    "x-reviewed": "false"
+  },
+  "your_login_information_has_expired": "Your login information has expired, you can log out and log in again",
+  "@your_login_information_has_expired": {
+    "x-reviewed": "false"
+  },
+  "received_json_information": "Received json information",
+  "@received_json_information": {
+    "x-reviewed": "false"
+  },
+  "you_need_to_log_in_to_perform_this_operation": "You need to log in to the instance to perform this operation.",
+  "@you_need_to_log_in_to_perform_this_operation": {
+    "x-reviewed": "false"
+  },
+  "go_to_login": "Go to login",
+  "@go_to_login": {
+    "x-reviewed": "false"
+  },
+  "add_bookmark": "Add bookmark",
+  "@add_bookmark": {
+    "x-reviewed": "false"
+  },
+  "delete_bookmark": "Delete bookmark",
+  "@delete_bookmark": {
+    "x-reviewed": "false"
+  },
+  "hide_this_conversation": "Mute conversation",
+  "@hide_this_conversation": {
+    "x-reviewed": "false"
+  },
+  "unhide_the_conversation": "Unhide the conversation",
+  "@unhide_the_conversation": {
+    "x-reviewed": "false"
+  },
+  "after_hiding": "Do not receive messages from this conversation",
+  "@after_hiding": {
+    "x-reviewed": "false"
+  },
+  "share_link": "Share link",
+  "@share_link": {
+    "x-reviewed": "false"
+  },
+  "share_toot": "Share content of toot",
+  "@share_toot": {
+    "x-reviewed": "false"
+  },
+  "copy_the_beep": "Copy content of toot",
+  "@copy_the_beep": {
+    "x-reviewed": "false"
+  },
+  "dumb_text_has_been_copied": "Dumb text has been copied",
+  "@dumb_text_has_been_copied": {
+    "x-reviewed": "false"
+  },
+  "follow": "Follow",
+  "@follow": {
+    "x-reviewed": "false"
+  },
+  "follow_user": "Follow {user}",
+  "followed_or_sent_a_follow_request": "Followed or sent a follow request",
+  "@followed_or_sent_a_follow_request": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_to_hide_users": "Are you sure to hide {user}",
+
+  "@are_you_sure_to_hide_users": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_to_block_users": "Are you sure to block {user}",
+  "@are_you_sure_to_block_users": {
+    "x-reviewed": "false"
+  },
+  "block_user": "Block {user}",
+  "collection_example": "Add {instance}",
+  "@collection_example": {
+    "x-reviewed": "false"
+  },
+  "the_instance_will_be_saved_in_your_discover_menu": "The instance will be displayed in your \"discover\" menu",
+  "@the_instance_will_be_saved_in_your_discover_menu": {
+    "x-reviewed": "false"
+  },
+  "added_instance_successfully": "Added instance successfully",
+  "@added_instance_successfully": {
+    "x-reviewed": "false"
+  },
+  "administrator_operate_the_account": "Administrator: moderation for user",
+  "@administrator_operate_the_account": {
+    "x-reviewed": "false"
+  },
+  "top": "Top",
+  "@top": {
+    "x-reviewed": "false"
+  },
+  "unpink": "Unpink",
+  "@unpink": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_you_want_to_delete_this_beep": "Are you sure you want to delete the toot?",
+  "@are_you_sure_you_want_to_delete_this_beep": {
+    "x-reviewed": "false"
+  },
+  "delete_and_re_edit": "Delete and re-edit",
+  "@delete_and_re_edit": {
+    "x-reviewed": "false"
+  },
+  "failed_to_add_bookmark": "Failed to add bookmark",
+  "@failed_to_add_bookmark": {
+    "x-reviewed": "false"
+  },
+  "bookmarked": "Bookmarked",
+  "@bookmarked": {
+    "x-reviewed": "false"
+  },
+  "bookmark_deleted": "Bookmark deleted",
+  "@bookmark_deleted": {
+    "x-reviewed": "false"
+  },
+  "unpinned": "Unpinned",
+  "@unpinned": {
+    "x-reviewed": "false"
+  },
+  "conversation_unhide": "Conversation unhide",
+  "@conversation_unhide": {
+    "x-reviewed": "false"
+  },
+  "conversation_hidden": "Conversation hidden",
+  "@conversation_hidden": {
+    "x-reviewed": "false"
+  },
+  "no_content_yet": "No content yet",
+  "@no_content_yet": {
+    "x-reviewed": "false"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "x-reviewed": "false"
+  },
+  "there_was_an_error_in_the_network_request": "There was an error in the network request, please check the internet and try again",
+  "@there_was_an_error_in_the_network_request": {
+    "x-reviewed": "false"
+  },
+  "this_instance_does_not_open_the_timeline_preview_function": "This instance does not open the \"Timeline Preview\" function, and users who are not in this instance cannot browse the real-time information stream of related public toots. Please log in to access.",
+  "@this_instance_does_not_open_the_timeline_preview_function": {
+    "x-reviewed": "false"
+  },
+  "an_error_occurred_in_the_application": "An error occurred in the application.",
+  "@an_error_occurred_in_the_application": {
+    "x-reviewed": "false"
+  },
+  "collapse_content": "Show Less",
+  "@collapse_content": {
+    "x-reviewed": "false"
+  },
+  "display_more": "Show More",
+  "@display_more": {
+    "x-reviewed": "false"
+  },
+  "registered": "Sign Up",
+  "@registered": {
+    "x-reviewed": "false"
+  },
+  "more": "More",
+  "@more": {
+    "x-reviewed": "false"
+  },
+  "release_refresh": "Release refresh",
+  "@release_refresh": {
+    "x-reviewed": "false"
+  },
+  "complete_refresh": "Complete refresh",
+  "@complete_refresh": {
+    "x-reviewed": "false"
+  },
+  "pull_down_to_refresh": "Pull down to refresh",
+  "@pull_down_to_refresh": {
+    "x-reviewed": "false"
+  },
+  "release_load_more": "Release load more",
+  "@release_load_more": {
+    "x-reviewed": "false"
+  },
+  "no_more_data": "No more data",
+  "@no_more_data": {
+    "x-reviewed": "false"
+  },
+  "there_is_no_custom_emoji_in_this_example": "There is no custom emojis in this instance",
+  "@there_is_no_custom_emoji_in_this_example": {
+    "x-reviewed": "false"
+  },
+  "choice1": "Choice 1",
+  "@choice1": {
+    "x-reviewed": "false"
+  },
+  "choice2": "Choice 2",
+  "@choice2": {
+    "x-reviewed": "false"
+  },
+  "choice3": "Choice 3",
+  "@choice3": {
+    "x-reviewed": "false"
+  },
+  "choice4": "Choice 4",
+  "@choice4": {
+    "x-reviewed": "false"
+  },
+  "add_selection": "Add Choice",
+  "@add_selection": {
+    "x-reviewed": "false"
+  },
+  "multiple_choices": "Multiple choices",
+  "@multiple_choices": {
+    "x-reviewed": "false"
+  },
+  "add_a_text_description_for_the_visually_impaired": "Add a text description for the visually impaired",
+  "@add_a_text_description_for_the_visually_impaired": {
+    "x-reviewed": "false"
+  },
+  "whats_new": "What's new",
+  "@whats_new": {
+    "x-reviewed": "false"
+  },
+  "started_following_you": "{user} followed you",
+  "@started_following_you": {
+    "x-reviewed": "false"
+  },
+  "request_to_follow_you": "{user} requested to follow you",
+  "@request_to_follow_you": {
+    "x-reviewed": "false"
+  },
+  "agree": "agree",
+  "@agree": {
+    "x-reviewed": "false"
+  },
+  "refuse": "reject",
+  "@refuse": {
+    "x-reviewed": "false"
+  },
+  "from": "from ",
+  "@from": {
+    "x-reviewed": "false"
+  },
+  "awesome": "awesome",
+  "@awesome": {
+    "x-reviewed": "false"
+  },
+  "no_description_information": "No description information",
+  "@no_description_information": {
+    "x-reviewed": "false"
+  },
+  "sensitive_content": "Sensitive content",
+  "@sensitive_content": {
+    "x-reviewed": "false"
+  },
+  "hidden_photo_or_video": "Hidden photo or video",
+  "@hidden_photo_or_video": {
+    "x-reviewed": "false"
+  },
+  "language": "Language",
+  "@language": {},
+
+  "clear": "Clear",
+  "@clear": {},
+
+  "favorited_your_toot": "{user} favorited your toot",
+  "boot_your_tool": "{user} boosted your toot",
+  "poll_your_voted_ended": "A poll you have voted in has ended",
+  "poll_your_created_ended": "A poll you created has ended",
+  "seconds_ago":"{num}s",
+  "minutes_ago":"{num}m",
+  "hours_ago":"{num}h",
+  "days_ago":"{num}d",
+  "toot_from":"from {from}",
+  "reply_count":"Reply {num}",
+  "boost_count":"Boost {num}",
+  "favorite_count":"Favorite {num}",
+
+
+    "boosted_toot": "{user} boosted",
+    "@boosted_toot": {
+      "placeholders": {
+        "user": {}
+      }
+    },
+    "delete_account_confirm": "Delete {account}",
+    "@delete_account_confirm": {
+      "placeholders": {
+        "account": {}
+      }
+    },
+    "delete_list": "Delete list",
+    "@delete_list": {},
+    "edit_list": "Edit list",
+    "@edit_list": {},
+    "mentions_you": "{user} mentions you",
+    "@mentions_you": {
+      "placeholders": {
+        "user": {}
+      }
+    },
+    "no_description": "No description",
+    "@no_description": {},
+    "operate_with_account": "You will use {user} to do this",
+    "@operate_with_account": {
+      "placeholders": {
+        "user": {}
+      }
+    },
+    "toot_not_found": "Toot not found",
+    "@toot_not_found": {},
+      "days_left": "{num, plural, =0{{num} day left} =1{{num} day left} other{{num} days left}}",
+      "@days_left": {
+        "placeholders": {
+          "num": {}
+        }
+      },
+      "ended": "closed",
+      "@ended": {},
+      "hours_left": "{num, plural, =0{{num} hour left} =1{{num} hour left} other{{num} hours left}}",
+      "@hours_left": {
+        "placeholders": {
+          "num": {}
+        }
+      },
+      "minutes_left": "{num, plural, =0{{num} minute left} =1{{num} minute left} other{{num} minutes left}}",
+      "@minutes_left": {
+        "placeholders": {
+          "num": {}
+        }
+      },
+      "vote_count": "{count, plural, =0{0 vote} =1{1 vote} other{{count} votes}}",
+      "@vote_count": {
+        "placeholders": {
+          "count": {}
+        }
+      },
+     "version_info": "Version{version}"
 }

@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:convert';
 
 import 'package:dudu/api/accounts_api.dart';
@@ -63,14 +64,14 @@ class _LoginState extends State<Login> {
     try {
       response = await http.post('$hostUrl' + Api.Apps, body: paramsMap);
     } catch (e) {
-      DialogUtils.showSimpleAlertDialog(context: navGK.currentState.overlay.context,text: '无法连接到服务器',onlyInfo: true);
+      DialogUtils.showSimpleAlertDialog(context: navGK.currentState.overlay.context,text: S.of(context).unable_to_connect_to_server,onlyInfo: true);
       return;
     } finally {
       setState(() {
         _clickButton = false;
       });
     }
-    
+
 
 
 
@@ -102,7 +103,7 @@ class _LoginState extends State<Login> {
       await http.post('$hostUrl' + Api.Token, body: paramsMap).then((data) async{
         Token getToken = Token.fromJson(json.decode(data.body));
         String token = '${getToken.tokenType} ${getToken.accessToken}';
-        
+
         Request.closeHttpClient();
 
         LoginedUser user = new LoginedUser();
@@ -110,7 +111,7 @@ class _LoginState extends State<Login> {
         user.host = hostUrl;
         OwnerAccount account = await AccountsApi.getMyAccount();
         if (account == null) {
-          DialogUtils.toastErrorInfo('出现错误，可以稍后试试');
+          DialogUtils.toastErrorInfo(S.of(context).something_went_wrong);
           setState(() {
             isLoading = false;
           });
@@ -118,7 +119,7 @@ class _LoginState extends State<Login> {
 
         LocalAccount localAccount = LocalAccount(hostUrl: hostUrl,token: token,active: true,account: account);
         await LocalStorageAccount.addLocalAccount(localAccount);
-        
+
 
         user = new LoginedUser();
         user.loadFromLocalAccount(localAccount);
@@ -135,7 +136,7 @@ class _LoginState extends State<Login> {
     } catch (e) {
       print(e);
       debugPrint(e.toString());
-      DialogUtils.toastErrorInfo('出现错误，可以稍后试试');
+      DialogUtils.toastErrorInfo(S.of(context).something_went_wrong);
       setState(() {
         isLoading = false;
       });
@@ -167,7 +168,7 @@ class _LoginState extends State<Login> {
         size: 23,
       );
     }
-    return Text('登录Mastodon账号',
+    return Text(S.of(context).log_in_to_mastodon_account,
         style: TextStyle(fontSize: 16, color: Color.fromRGBO(80, 125, 175, 1)));
   }
 
@@ -203,7 +204,7 @@ class _LoginState extends State<Login> {
   Widget loadView() {
 
       return Scaffold(
-        body: LoadingView(text: '正在加载中',),
+        body: LoadingView(text: S.of(context).loading,),
       );
   }
 
@@ -251,7 +252,7 @@ class _LoginState extends State<Login> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text('域名', style: TextStyle(fontSize: 16))
+                                Text(S.of(context).domain_name, style: TextStyle(fontSize: 16))
                               ],
                             ),
                           ),
@@ -301,7 +302,7 @@ class _LoginState extends State<Login> {
                             },
                             child: Container(
                               child: Center(
-                                child: Text('关于Mastodon',
+                                child: Text(S.of(context).about_mastodon,
                                     style:
                                         TextStyle(color: Theme.of(context).primaryColor)),
                               ),
@@ -313,7 +314,7 @@ class _LoginState extends State<Login> {
                             },
                             child: Container(
                               child: Center(
-                                child: Text('实例推荐',
+                                child: Text(S.of(context).example_recommendation,
                                     style:
                                         TextStyle(color: Theme.of(context).primaryColor)),
                               ),

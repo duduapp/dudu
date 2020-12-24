@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/models/task/notification_task.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
@@ -25,13 +26,13 @@ class _SettingNotificationState extends State<SettingNotification> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('新消息通知'),
+        title: Text(S.of(context).new_message_notification),
       ),
       body: Column(
         children: <Widget>[
           ProviderSettingCell(
             providerKey: 'show_notifications',
-            title: '新消息通知',
+            title: S.of(context).new_message_notification,
             type: SettingType.bool,
             onPressed: (value) {
               setState(() {
@@ -50,32 +51,32 @@ class _SettingNotificationState extends State<SettingNotification> {
           if (enableNotification) ...[
             ProviderSettingCell(
               providerKey: 'show_notifications.reblog',
-              title: '转嘟',
+              title: S.of(context).turn_to,
               type: SettingType.bool,
             ),
             ProviderSettingCell(
               providerKey: 'show_notifications.favourite',
-              title: '收藏',
+              title: S.of(context).favorites,
               type: SettingType.bool,
             ),
             ProviderSettingCell(
               providerKey: 'show_notifications.follow_request',
-              title: '关注请求',
+              title: S.of(context).follow_request,
               type: SettingType.bool,
             ),
             ProviderSettingCell(
               providerKey: 'show_notifications.follow',
-              title: '关注',
+              title: S.of(context).follow,
               type: SettingType.bool,
             ),
             ProviderSettingCell(
               providerKey: 'show_notifications.mention',
-              title: '提及',
+              title: S.of(context).mention,
               type: SettingType.bool,
             ),
             ProviderSettingCell(
               providerKey: 'show_notifications.poll',
-              title: '投票',
+              title: S.of(context).vote,
               type: SettingType.bool,
             )
           ]

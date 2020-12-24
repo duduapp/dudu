@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:io';
 
 import 'package:dudu/models/local_account.dart';
@@ -34,7 +35,7 @@ void main() async {
       return Container(
       child: Center(
         child: Text(
-          "出现错误",
+          S.of(navGK.currentState.overlay.context).an_error_occurred,
         ),
       ),
     );

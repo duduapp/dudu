@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/task/update_task.dart';
 import 'package:dudu/pages/webview/inner_browser.dart';
 import 'package:dudu/public.dart';
@@ -27,7 +28,7 @@ class _AboutAppState extends State<AboutApp> {
   _getVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     setState(() {
-      version = packageInfo.version + '版';
+      version = S.of(context).version_info(packageInfo.version);
       appName = packageInfo.appName;
     });
   }
@@ -37,7 +38,7 @@ class _AboutAppState extends State<AboutApp> {
     DeviceUtil.generateAppId();
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('关于嘟嘟'),
+        title: Text(S.of(context).about_dudu),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -47,11 +48,11 @@ class _AboutAppState extends State<AboutApp> {
               height: 20,
             ),
             SettingCell(
-              title: '检查更新',
+              title: S.of(context).check_for_updates,
               onPress: _checkUpdate,
             ),
             SettingCell(
-              title: '版权信息',
+              title: S.of(context).copyright_information,
               onPress: () => showLicensePage(
                   context: context,
                   applicationIcon: appIcon(),
@@ -59,7 +60,7 @@ class _AboutAppState extends State<AboutApp> {
                   applicationVersion: version),
             ),
             SettingCell(
-              title: '官方网站',
+              title: S.of(context).official_website,
               subTitleStyle: TextStyle(fontSize: 12,color: Theme.of(context).buttonColor),
               onPress: () => AppNavigate.push(InnerBrowser('http://dudu.today')),
             ),
@@ -69,9 +70,9 @@ class _AboutAppState extends State<AboutApp> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                InkWell(child: Text('隐私协议',style: TextStyle(color: Colors.blue,fontSize: 12),),onTap: () => AppNavigate.push(InnerBrowser('http://dudu.today/privacy.html')),),
+                InkWell(child: Text(S.of(context).privacy_agreement,style: TextStyle(color: Colors.blue,fontSize: 12),),onTap: () => AppNavigate.push(InnerBrowser('http://dudu.today/privacy.html')),),
                 SizedBox(width: 10,),
-                InkWell(child: Text('服务协议',style: TextStyle(color: Colors.blue,fontSize: 12)),onTap: () => AppNavigate.push(InnerBrowser('http://dudu.today/contract.html')))
+                InkWell(child: Text(S.of(context).service_agreement,style: TextStyle(color: Colors.blue,fontSize: 12)),onTap: () => AppNavigate.push(InnerBrowser('http://dudu.today/contract.html')))
               ],
             )
           ],
@@ -81,11 +82,11 @@ class _AboutAppState extends State<AboutApp> {
   }
 
   _checkUpdate() async{
-    ProgressDialog dialog = await DialogUtils.showProgressDialog('正在检查新版本');
+    ProgressDialog dialog = await DialogUtils.showProgressDialog(S.of(context).checking_for_new_version);
     bool newestVersion = await UpdateTask.check(dialog: dialog);
     dialog.hide();
     if (newestVersion) {
-      DialogUtils.showInfoDialog(context, '当前版本已是最新版本');
+      DialogUtils.showInfoDialog(context, S.of(context).the_current_version_is_the_latest_version);
     }
   }
 
@@ -115,7 +116,7 @@ class _AboutAppState extends State<AboutApp> {
             height: 9,
           ),
           Text(
-            '嘟嘟',
+            S.of(context).app_name,
             style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

@@ -1,8 +1,10 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:flutter/material.dart';
+import 'package:nav_router/nav_router.dart';
 
 class AppConfig {
-  static String ClientName = '嘟嘟';
+  static String get ClientName => S.of(navGK.currentState.overlay.context).app_name;
   static String RedirectUris = 'http://dudu.today/redirect.html';
   static String Scopes = 'read write follow push admin:write:accounts';
   static String website = 'http://dudu.today';

@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 
 import 'dart:io';
 import 'dart:ui';
@@ -108,7 +109,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
                   ),
                   Expanded(
                       child: Text(
-                    media.description ?? ' 没有描述信息',
+                    media.description ?? S.of(context).no_description,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 12),
                   ))
@@ -155,7 +156,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
             ),
             Flexible(
               child: Text(
-                widget.images[0].description ?? '没有描述信息',
+                widget.images[0].description ?? S.of(context).no_description_information,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 style: TextStyle(fontSize: 12),
@@ -167,7 +168,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
       // child: ListTile(
       //   leading: Icon(IconFont.audio,size: 30,),
       //   title: Text(
-      //     widget.images[0].description ?? '没有描述信息',
+      //     widget.images[0].description ?? S.of(context).no_description_information,
       //     overflow: TextOverflow.ellipsis,
       //     maxLines: 2,
       //   ),
@@ -293,7 +294,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
                           color: new Color.fromRGBO(240, 240, 240,
                               0.5) // Specifies the background color and the opacity
                           ),
-                      child: Text(sensitive ? '敏感内容' : '已隐藏的照片或视频')),
+                      child: Text(sensitive ? S.of(context).sensitive_content : S.of(context).hidden_photo_or_video)),
                 ),
               ),
             ),
@@ -382,7 +383,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
 //                  color: Theme.of(context).backgroundColor,
 //                  width: width,
 //                  height: height,
-//                  child: Center(child: Text(!sensitive || !hideImage ? '出现错误..': '',style: TextStyle(color: Theme.of(context).accentColor),),),
+//                  child: Center(child: Text(!sensitive || !hideImage ? S.of(context).an_error_occurred: '',style: TextStyle(color: Theme.of(context).accentColor),),),
 //                );
 //              },
 //              image: CachedNetworkImageProvider(imageUrl,cacheManager: CustomCacheManager()),

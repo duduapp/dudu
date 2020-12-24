@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 
 
 import 'dart:convert';
@@ -39,7 +40,7 @@ class NotificationUtil {
 
   static show({String title,String body,String payload}) {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'channel0', '通知通道', '',
+        'channel0', 'channel name', '',
         importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(

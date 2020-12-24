@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:badges/badges.dart';
 import 'package:dudu/api/notification_api.dart';
 import 'package:dudu/api/timeline_api.dart';
@@ -18,6 +19,7 @@ import 'package:dudu/pages/timeline/notification_display_type_dialog.dart';
 import 'package:dudu/pages/timeline/notification_type_timeline.dart';
 import 'package:dudu/utils/app_navigate.dart';
 import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/utils/i18n_util.dart';
 import 'package:dudu/utils/request.dart';
 import 'package:dudu/utils/string_until.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
@@ -132,7 +134,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                                   controller: _menuController1,
                                   headerBuilder: (menuShowing) {
                                     return DropDownTitle(
-                                      title: '全部',
+                                      title: S.of(context).all,
                                       expand: menuShowing,
                                       showIcon: true,
                                     );
@@ -143,7 +145,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                                   },
                                 )
                               : DropDownTitle(
-                                  title: '全部',
+                                  title: S.of(context).all,
                                 ),
                         ),
                         Badge(
@@ -159,7 +161,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                                   headerKey: _headerKey,
                                   headerBuilder: (menuShowing) {
                                     return DropDownTitle(
-                                      title: '分类',
+                                      title: S.of(context).classification,
                                       expand: menuShowing,
                                       showIcon: true,
                                     );
@@ -169,7 +171,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                                   },
                                 )
                               : DropDownTitle(
-                                  title: '分类',
+                                  title: S.of(context).classification,
                                 ),
                         ),
                       ],
@@ -183,7 +185,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                   itemBuilder: (BuildContext context) =>
                       <PopupMenuEntry<String>>[
                     PopupMenuItem<String>(
-                        value: 'clear', child: new Text('清空')),
+                        value: 'clear', child: new Text(S.of(context).clear)),
                     // PopupMenuItem<String>(
                     //     value: 'choose_type', child: new Text('分类'))
                   ],
@@ -192,7 +194,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                       case 'clear':
                         DialogUtils.showSimpleAlertDialog(
                             context: context,
-                            text: '你确定要永远删除消息列表吗',
+                            text: S.of(context).are_you_sure_you_want_to_delete_the_message_list_forever,
                             onConfirm: _clearNotification);
                         break;
                       case 'choose_type':
@@ -245,8 +247,8 @@ class NotificationTypeList extends StatelessWidget {
   Widget build(BuildContext context) {
     var provider = Provider.of<SettingsProvider>(context);
     String  zan_or_shoucang = provider.get('zan_or_shoucang');
-
-    var zan_icon = zan_or_shoucang == '0' ? IconFont.thumbUp : IconFont.favorite;
+    var isZh = I18nUtil.isZh(context);
+    var zan_icon = isZh ? (zan_or_shoucang == '0' ? IconFont.thumbUp : IconFont.favorite) : IconFont.favorite;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -255,7 +257,7 @@ class NotificationTypeList extends StatelessWidget {
             showBadge: provider.unread[TimelineApi.conversations] != 0,
             child: SettingCell(
               leftIcon: Icon(IconFont.message),
-                title: "私信",
+                title: S.of(context).private_letters,
                 onPress: () => AppNavigate.push(ConversationTimeline()),
                 tail: provider.unread[TimelineApi.conversations] != 0
                     ? Container()
@@ -266,10 +268,22 @@ class NotificationTypeList extends StatelessWidget {
             showBadge: provider.unread[TimelineApi.followRquest] != 0,
             child: SettingCell(
                 leftIcon: Icon(IconFont.follow),
-                title: "关注请求",
+                title: S.of(context).follow_request,
                 onPress: () => AppNavigate.push(
-                    NotificationTypeTimeline(TimelineApi.followRquest,'关注请求')),
+                    NotificationTypeTimeline(TimelineApi.followRquest,S.of(context).follow_request)),
                 tail: provider.unread[TimelineApi.followRquest] != 0
+                    ? Container()
+                    : null),
+          ),
+          Badge(
+            position: BadgePosition.topEnd(top: 20, end: 20),
+            showBadge: provider.unread[TimelineApi.follow] != 0,
+            child: SettingCell(
+                leftIcon: Icon(IconFont.follow),
+                title: S.of(context).follow,
+                onPress: () => AppNavigate.push(
+                    NotificationTypeTimeline(TimelineApi.follow,S.of(context).follow)),
+                tail: provider.unread[TimelineApi.follow] != 0
                     ? Container()
                     : null),
           ),
@@ -278,9 +292,9 @@ class NotificationTypeList extends StatelessWidget {
             showBadge: provider.unread[TimelineApi.mention] != 0,
             child: SettingCell(
                 leftIcon: Icon(IconFont.at),
-                title: "@我的",
+                title: S.of(context).at_mine,
                 onPress: () => AppNavigate.push(
-                    NotificationTypeTimeline(TimelineApi.mention,'@我的')),
+                    NotificationTypeTimeline(TimelineApi.mention,S.of(context).at_mine)),
                 tail: provider.unread[TimelineApi.mention] != 0
                     ? Container()
                     : null),
@@ -290,9 +304,9 @@ class NotificationTypeList extends StatelessWidget {
             showBadge: provider.unread[TimelineApi.reblogNotification] != 0,
             child: SettingCell(
                 leftIcon: Icon(IconFont.reblog),
-                title: "转嘟我的",
+                title: S.of(context).tell_me,
                 onPress: () => AppNavigate.push(
-                    NotificationTypeTimeline(TimelineApi.reblogNotification,'转嘟我的')),
+                    NotificationTypeTimeline(TimelineApi.reblogNotification,S.of(context).tell_me)),
                 tail: provider.unread[TimelineApi.mention] != 0
                     ? Container()
                     : null),
@@ -302,9 +316,9 @@ class NotificationTypeList extends StatelessWidget {
             showBadge: provider.unread[TimelineApi.favoriteNotification] != 0,
             child: SettingCell(
                 leftIcon: Icon(zan_icon),
-                title: StringUtil.getZanString()+'我的',
+                title: isZh ? (StringUtil.getZanString()+S.of(context).mine) : S.of(context).favorites,
                 onPress: () => AppNavigate.push(
-                    NotificationTypeTimeline(TimelineApi.favoriteNotification,StringUtil.getZanString()+'我的')),
+                    NotificationTypeTimeline(TimelineApi.favoriteNotification, isZh ? StringUtil.getZanString()+S.of(context).mine : S.of(context).favorites)),
                 tail: provider.unread[TimelineApi.favoriteNotification] != 0
                     ? Container()
                     : null),
@@ -314,9 +328,9 @@ class NotificationTypeList extends StatelessWidget {
             showBadge: false,
             child: SettingCell(
                 leftIcon: Icon(IconFont.vote),
-                title: '投票',
+                title: S.of(context).vote,
                 onPress: () => AppNavigate.push(
-                    NotificationTypeTimeline(TimelineApi.pollNotification,'投票')),),
+                    NotificationTypeTimeline(TimelineApi.pollNotification,S.of(context).vote)),),
           ),
         ],
       ),

@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/lists_api.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/utils/app_navigate.dart';
@@ -29,7 +30,7 @@ class _ListsAddState extends State<ListsAdd> {
           TextField(
             controller: _controller,
             decoration: InputDecoration(
-                hintText: '列表名',
+                hintText: S.of(context).list_name,
                 focusedBorder: UnderlineInputBorder(
                     borderSide:
                     BorderSide(color: Theme.of(context).buttonColor))),
@@ -45,10 +46,10 @@ class _ListsAddState extends State<ListsAdd> {
               ),
               NormalCancelFlatButton(),
               NormalFlatButton(
-                text: '新建列表',
+                text: S.of(context).new_list,
                 onPressed: () async {
                   if (_controller.text.trim().isEmpty) {
-                    DialogUtils.toastFinishedInfo('列表名不能为空');
+                    DialogUtils.toastFinishedInfo(S.of(context).list_name_cannot_be_empty);
                     return;
                   }
                   AppNavigate.pop();

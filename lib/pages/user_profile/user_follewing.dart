@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
@@ -15,7 +16,7 @@ class UserFollowing extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('正在关注'),
+        title: Text(S.of(context).following),
       ),
       body: ChangeNotifierProvider<ResultListProvider>(
         create: (context) => ResultListProvider(

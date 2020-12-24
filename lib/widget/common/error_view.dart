@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 
 
 import 'dart:io';
@@ -21,22 +22,22 @@ class ErrorView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             SizedBox(height:200,child: Image(image: AssetImage('assets/images/error.png'),)),
-            Text(getErrorString(),style: TextStyle(fontSize: 14),),
+            Text(getErrorString(context),style: TextStyle(fontSize: 14),),
             SizedBox(height: 10,),
-            OutlineButton(child: Text('重试',style: TextStyle(fontWeight: FontWeight.normal,color: Theme.of(context).buttonColor),),onPressed:onClickRetry,)
+            OutlineButton(child: Text(S.of(context).retry,style: TextStyle(fontWeight: FontWeight.normal,color: Theme.of(context).buttonColor),),onPressed:onClickRetry,)
           ],
         ),
       ),
     );
   }
 
-  String getErrorString() {
+  String getErrorString(BuildContext context) {
     if (error is SocketException) {
-      return '网络请求出错，请检查互联网并重试';
+      return S.of(context).there_was_an_error_in_the_network_request;
     }
     if (error is AuthRequiredException) {
-      return '该实例未开放“时间轴预览”功能，非该实例用户无法浏览相关的公共嘟文实时信息流。请登录后访问。';
+      return S.of(context).this_instance_does_not_open_the_timeline_preview_function;
     }
-    return '应用程序出现错误。';
+    return S.of(context).an_error_occurred_in_the_application;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
@@ -53,7 +54,7 @@ class _StatusItemTextState extends State<StatusItemText> {
             child: OutlineButton(
               padding: EdgeInsets.all(0),
               highlightedBorderColor: Theme.of(context).buttonColor,
-              child: Text(showMore ? '折叠内容' : '显示更多',style: TextStyle(fontSize:12,fontWeight: FontWeight.normal),),
+              child: Text(showMore ? S.of(context).collapse_content : S.of(context).display_more,style: TextStyle(fontSize:12,fontWeight: FontWeight.normal),),
               onPressed: _onShowMorePressed,
             ),
           ),

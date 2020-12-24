@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/utils/themes.dart';
 import 'package:flutter/material.dart';
@@ -49,18 +50,32 @@ class App extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
-
       ],
+      locale: Locale(Provider.of<SettingsProvider>(context).settings['language']),
       supportedLocales: [
         const Locale('en', ''), // English, no country code
         const Locale('zh', ''), // Chinese *See Advanced Locales below*
         // ... other locales the app supports
       ],
       theme: ThemeUtil.themes[chooseTheme],
-      title:  '嘟嘟',
+      onGenerateTitle: (context) => S.of(context).app_name,
       debugShowCheckedModeBanner: false,
       navigatorKey: navGK,
-      home: Scaffold(body: HomePage(logined: LoginedUser().account != null,)),
+      home: Home(),
     );
+  }
+}
+
+class Home extends StatelessWidget {
+  const Home({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: HomePage(
+          logined: LoginedUser().account != null,
+        ));
   }
 }

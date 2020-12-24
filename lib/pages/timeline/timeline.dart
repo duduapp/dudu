@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:convert';
 
 import 'package:dudu/api/timeline_api.dart';
@@ -102,13 +103,13 @@ class _TimelineState extends State<Timeline> {
     var title;
     switch (widget.type) {
       case TimelineType.home:
-        title = '首页';
+        title = S.of(context).home;
         break;
       case TimelineType.local:
-        title = '本站';
+        title = S.of(context).this_site;
         break;
       case TimelineType.federated:
-        title = '跨站';
+        title = S.of(context).cross_station;
         break;
     }
     return AccountSwitchTimeline(

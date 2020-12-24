@@ -1,9 +1,11 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/admin_api.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/widget/common/normal_flat_button.dart';
 import 'package:flutter/material.dart';
+import 'package:nav_router/nav_router.dart';
 
 class AccountActionDialog extends StatefulWidget {
   final OwnerAccount account;
@@ -19,11 +21,11 @@ class _AccountActionDialogState extends State<AccountActionDialog> {
   bool sendEmail = false;
   TextEditingController _textEditingController = TextEditingController();
 
-  static Map<int, String> descriptions = {
-    0: '只是警告用户，不会对用户账号进行操作',
-    1: '使用户无法登录，会保留用户所有内容',
-    2: '用户发表的嘟文将不会显示在公共时间轴中',
-    3: '停用并永久删除账号信息'
+  static Map<int, String> get descriptions => {
+    0: S.of(navGK.currentState.overlay.context).just_warn_the_user,
+    1: S.of(navGK.currentState.overlay.context).prevent_the_user_from_logging_in,
+    2: S.of(navGK.currentState.overlay.context).toots_posted_by_users_will_not_be_displayed_in_the_public_timeline,
+    3: S.of(navGK.currentState.overlay.context).deactivate_and_permanently_delete_account_information
   };
 
   static Map<int,String> actions = {
@@ -33,11 +35,11 @@ class _AccountActionDialogState extends State<AccountActionDialog> {
     3: 'suspend'
   };
 
-  static Map<int,String> shortDescription = {
-    0 : '警告',
-    1 : '停用',
-    2 : '隐藏',
-    3 : '封禁'
+  static Map<int,String> get shortDescription => {
+    0 : S.of(navGK.currentState.overlay.context).caveat,
+    1 : S.of(navGK.currentState.overlay.context).deactivate,
+    2 : S.of(navGK.currentState.overlay.context).silence,
+    3 : S.of(navGK.currentState.overlay.context).ban
   };
 
   @override
@@ -53,7 +55,7 @@ class _AccountActionDialogState extends State<AccountActionDialog> {
             Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 3, left: 5),
               child: Text(
-                '在' + widget.account.acct + '执行管理操作',
+                 widget.account.acct + " " + S.of(navGK.currentState.overlay.context).perform_management_operations,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
@@ -72,7 +74,7 @@ class _AccountActionDialogState extends State<AccountActionDialog> {
                         });
                       },
                     ),
-                    Text('警告'),
+                    Text(S.of(navGK.currentState.overlay.context).caveat),
                   ],
                 ),
 
@@ -88,7 +90,7 @@ class _AccountActionDialogState extends State<AccountActionDialog> {
                         });
                       },
                     ),
-                    Text('停用'),
+                    Text(S.of(navGK.currentState.overlay.context).deactivate),
                   ],
                 ),
 
@@ -104,7 +106,7 @@ class _AccountActionDialogState extends State<AccountActionDialog> {
                         });
                       },
                     ),
-                    Text('隐藏'),
+                    Text(S.of(navGK.currentState.overlay.context).silence),
                   ],
                 ),
 
@@ -120,7 +122,7 @@ class _AccountActionDialogState extends State<AccountActionDialog> {
                         });
                       },
                     ),
-                    Text('封禁')
+                    Text(S.of(navGK.currentState.overlay.context).ban)
                   ],
                 ),
 
@@ -132,7 +134,7 @@ class _AccountActionDialogState extends State<AccountActionDialog> {
                 style: TextStyle(
                     color: groupValue == 3
                         ? Colors.red
-                        : Theme.of(context).accentColor),
+                        : Theme.of(navGK.currentState.overlay.context).accentColor),
               ),
               padding: const EdgeInsets.only(left: 10),
             ),
@@ -148,12 +150,12 @@ class _AccountActionDialogState extends State<AccountActionDialog> {
                         sendEmail = value;
                       });
                     }),
-                Text('通过邮件提醒用户')
+                Text(S.of(navGK.currentState.overlay.context).remind_users_via_email)
               ],
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10, bottom: 5),
-              child: Text('邮件告知用户内容'),
+              child: Text(S.of(navGK.currentState.overlay.context).email_to_inform_users),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
@@ -163,7 +165,7 @@ class _AccountActionDialogState extends State<AccountActionDialog> {
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                       borderSide:
-                          BorderSide(color: Theme.of(context).buttonColor)),
+                          BorderSide(color: Theme.of(navGK.currentState.overlay.context).buttonColor)),
                   border: OutlineInputBorder(borderSide: BorderSide()),
                 ),
               ),
@@ -172,13 +174,13 @@ class _AccountActionDialogState extends State<AccountActionDialog> {
               children: [
                 Spacer(),
                 NormalCancelFlatButton(),
-                NormalFlatButton(text: '确定',onPressed: () {
+                NormalFlatButton(text: S.of(navGK.currentState.overlay.context).determine,onPressed: () {
                   AppNavigate.pop();
-                  DialogUtils.showSimpleAlertDialog(context: context,text: '您确定要'+shortDescription[groupValue]+widget.account.acct+'吗，'
-                      '该操作将'+descriptions[groupValue]+'',onConfirm: () async{
+                  DialogUtils.showSimpleAlertDialog(context: context,text: S.of(context).are_you_sure_you_want+shortDescription[groupValue]+' '+widget.account.acct+'?'+
+                      S.of(navGK.currentState.overlay.context).this_operation_will + descriptions[groupValue]+'',onConfirm: () async{
                     var res = await AdminApi.accountAction(accountId: widget.account.id,type: actions[groupValue],sendEmail: sendEmail,text: _textEditingController.text);
                     if (!res) {
-                      DialogUtils.toastErrorInfo('出现错误');
+                      DialogUtils.toastErrorInfo(S.of(navGK.currentState.overlay.context).an_error_occurred);
                     }
                 //    AppNavigate.pop();
                   });

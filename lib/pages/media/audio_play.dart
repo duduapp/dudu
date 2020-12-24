@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
@@ -127,7 +128,7 @@ class _AudioPlayState extends State<AudioPlay> {
   @override
   Widget build(BuildContext context) {
     return MediaDetail(
-      title: '播放音频',
+      title: S.of(context).play_audio,
       onShareClick: () => MediaUtil.shareMedia(widget.media),
       onDownloadClick: () => MediaUtil.downloadMedia(widget.media),
       child: Container(
@@ -218,13 +219,13 @@ class _AudioPlayState extends State<AudioPlay> {
               Icons.headset_off,
               color: Colors.blue,
             ),
-            label: Text('静音', style: TextStyle(color: Colors.blue)),
+            label: Text(S.of(context).mute, style: TextStyle(color: Colors.blue)),
           ),
         if (isMuted)
           FlatButton.icon(
             onPressed: () => mute(false),
             icon: Icon(Icons.headset, color: Colors.blue),
-            label: Text('取消静音', style: TextStyle(color: Colors.blue)),
+            label: Text(S.of(context).unmute, style: TextStyle(color: Colors.blue)),
           ),
       ],
     );

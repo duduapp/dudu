@@ -1,9 +1,11 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/search_api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/search/search_result.dart';
 import 'package:dudu/utils/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:nav_router/nav_router.dart';
 
 import '../../widget/other/search.dart' as customSearch;
 
@@ -55,9 +57,9 @@ class SearchPageDelegate extends customSearch.SearchDelegate  {
           child: Scaffold(
             appBar: TabBar(
               tabs: <Widget>[
-                Tab(text: '嘟文',),
-                Tab(text: '用户',),
-                Tab(text: '话题',),
+                Tab(text: S.of(context).toots,),
+                Tab(text: S.of(context).user,),
+                Tab(text: S.of(context).topic,),
               ],
             ),
             body: TabBarView(
@@ -78,6 +80,6 @@ class SearchPageDelegate extends customSearch.SearchDelegate  {
   }
 
   @override
-  String get searchFieldLabel => '搜索...';
+  String get searchFieldLabel => S.of(navGK.currentState.overlay.context).search_for;
 
 }

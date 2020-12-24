@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/public.dart';
@@ -40,7 +41,7 @@ class _CommonFilterEditState extends State<CommonFilterEdit> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(widget.newFilter?'添加新的过滤器':'编辑过滤器',style: TextStyle(fontSize: 20),),
+            Text(widget.newFilter?S.of(context).add_new_filter:S.of(context).edit_filter,style: TextStyle(fontSize: 20),),
             TextField(
               controller: phraseController,
               maxLines: null,
@@ -59,10 +60,10 @@ class _CommonFilterEditState extends State<CommonFilterEdit> {
                     });
                   },
                 ),
-                Text('整个单词')
+                Text(S.of(context).whole_word)
               ],
             ),
-            Text('如果关键字或缩写只有字母或数字，则只有在匹配整个单词才会应用'),
+            Text(S.of(context).if_the_keyword_or_abbreviation_has_only_letters_or_numbers),
             SizedBox(
               height: 10,
             ),
@@ -72,11 +73,11 @@ class _CommonFilterEditState extends State<CommonFilterEdit> {
                 Spacer(),
                 if (!widget.newFilter)
                   NormalFlatButton(
-                    text: '移除',
+                    text: S.of(context).remove,
                     onPressed: _remove,
                   ),
                 NormalFlatButton(
-                  text: widget.newFilter ?'新建':'更新',
+                  text: widget.newFilter ?S.of(context).create:S.of(context).update,
                   onPressed: _updateOrCreate,
                 )
               ],
@@ -98,7 +99,7 @@ class _CommonFilterEditState extends State<CommonFilterEdit> {
 
   _updateOrCreate() async{
     if (phraseController.text.trim().isEmpty) {
-      DialogUtils.toastFinishedInfo('过滤器不能为空');
+      DialogUtils.toastFinishedInfo(S.of(context).filter_cannot_be_empty);
       return;
     }
     AppNavigate.pop();

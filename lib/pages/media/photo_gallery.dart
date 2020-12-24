@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -152,7 +153,7 @@ class _PhotoGalleryState extends State<PhotoGallery> {
 
   downloadMedia() async {
     var item = widget.galleryItems[currentIndex];
-    DialogUtils.toastDownloadInfo('正在下载中...');
+    DialogUtils.toastDownloadInfo(S.of(context).downloading);
     Response response;
     try {
       response = await Dio()

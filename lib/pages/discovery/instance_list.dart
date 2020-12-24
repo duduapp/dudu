@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -90,7 +91,7 @@ class _InstanceListState extends State<InstanceList> {
                         children: [
                           Icon(IconFont.follow,size: 18,),
                           SizedBox(width: 3,),
-                          Text('添加网站实例',style: TextStyle(fontSize: 13.5,color: Theme.of(context).accentColor),),
+                          Text(S.of(context).add_website_instance,style: TextStyle(fontSize: 13.5,color: Theme.of(context).accentColor),),
                         ],
                       ),
                     ),
@@ -123,12 +124,12 @@ class _InstanceListState extends State<InstanceList> {
         automaticallyImplyLeading: false,
         key: _headerKey,
         title: currentUser == null
-            ? Text('发现')
+            ? Text(S.of(context).find)
             : MKDropDownMenu(
                 controller: _downMenuController,
                 headerBuilder: (menuShowing) {
                   return DropDownTitle(
-                    title: '发现',
+                    title: S.of(context).find,
                     expand: menuShowing,
                     showIcon: true,
                   );

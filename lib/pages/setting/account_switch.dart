@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
@@ -62,7 +63,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                     FlatButton(
                         onPressed: _onBackPressed,
                         child: Text(
-                          manageMode ? '取消' : '关闭',
+                          manageMode ? S.of(context).cancel : S.of(context).shut_down,
                           style: TextStyle(
                               fontSize: 16,
                               color:
@@ -74,7 +75,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                       FlatButton(
                           onPressed: _onManagePressed,
                           child: Text(
-                            '管理',
+                            S.of(context).management,
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Theme.of(context)
@@ -91,7 +92,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
               ),
               Center(
                 child: Text(
-                  manageMode ? '清除账号信息' : '点击来切换账号',
+                  manageMode ? S.of(context).clear_account_information : S.of(context).click_to_switch_account,
                   style: TextStyle(fontSize: 25),
                 ),
               ),
@@ -139,7 +140,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                                   width: 6,
                                 ),
                                 Text(
-                                  '添加账号',
+                                  S.of(context).add_account,
                                   style: TextStyle(
                                       fontSize: 20,
                                       color: Theme.of(context).accentColor),
@@ -168,7 +169,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                 children: <Widget>[
                   BottomSheetItem(
                     text:
-                        '删除账号${StringUtil.accountFullAddress(account.account)}',
+                        S.of(context).delete_account_confirm(StringUtil.accountFullAddress(account.account)),
                     onTap: () => _confirmDelete(account),
                   ),
                   Container(
@@ -176,7 +177,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                     color: Theme.of(context).backgroundColor,
                   ),
                   BottomSheetItem(
-                    text: '取消',
+                    text: S.of(context).cancel,
                     safeArea: true,
                   )
                 ],
@@ -217,7 +218,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                   Spacer(),
                   if (accountInfo.active)
                     Text(
-                      '当前使用',
+                      S.of(context).currently_used,
                       style: TextStyle(color: Theme.of(context).buttonColor),
                     )
                 ],
@@ -229,7 +230,7 @@ class _AccountSwitchState extends State<AccountSwitch> {
                 height: 35,
                 child: RaisedButton(
                   child: Text(
-                    '删除',
+                    S.of(context).delete,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   color: Colors.red,

@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/scheduled_statuses_api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
@@ -27,7 +28,7 @@ class _ScheduledStatusesListState extends State<ScheduledStatusesList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('定时嘟文'),
+        title: Text(S.of(context).timed_beep),
       ),
       body: ChangeNotifierProvider<ResultListProvider>(
           create: (context) => ResultListProvider(

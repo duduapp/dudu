@@ -1,6 +1,8 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/public.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:nav_router/nav_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Storage {
@@ -14,7 +16,7 @@ class Storage {
     try {
       prefs.setString(key, value);
     } catch (e) {
-      debugPrint('存储失败');
+      debugPrint(S.of(navGK.currentState.overlay.context).storage_failure);
     }
   }
 

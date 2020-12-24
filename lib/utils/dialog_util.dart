@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:dudu/widget/common/normal_flat_button.dart';
@@ -50,7 +51,7 @@ class DialogUtils {
             content: Text(msg),
             actions: <Widget>[
               FlatButton(
-                child: Text('确定'),
+                child: Text(S.of(context).determine),
                 onPressed: () => AppNavigate.pop(),
               )
             ],
@@ -97,7 +98,7 @@ class DialogUtils {
             actions: <Widget>[
               if (!onlyInfo)
               NormalFlatButton(
-                text: cancelText ?? '取消',
+                text: cancelText ?? S.of(context).cancel,
                 onPressed: () {
                   if (onCancel != null) {
                     onCancel();
@@ -106,7 +107,7 @@ class DialogUtils {
                 },
               ),
               NormalFlatButton(
-                text: confirmText ?? '确定',
+                text: confirmText ?? S.of(context).determine,
                 onPressed: onConfirmCallback,
               )
             ],

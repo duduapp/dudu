@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/local_account.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/pages/login/login.dart';
@@ -124,7 +125,7 @@ class _AccountSwitchTimelineState extends State<AccountSwitchTimeline> {
                           children: [
                             Icon(Icons.add,color: Theme.of(context).accentColor,),
                             SizedBox(width: 10,),
-                            Text('添加账号',style: TextStyle(fontSize:16,color: Theme.of(context).accentColor,),)
+                            Text(S.of(context).add_account,style: TextStyle(fontSize:16,color: Theme.of(context).accentColor,),)
                           ],
                         ),
                       ),

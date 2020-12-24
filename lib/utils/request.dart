@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -205,7 +206,7 @@ class Request {
     debugPrint(url);
     if (showDialog != null && showDialog == true) {
       dialog =
-          await DialogUtils.showProgressDialog(handlingMessage ?? '处理中...');
+          await DialogUtils.showProgressDialog(handlingMessage ?? S.of(navGK.currentState.overlay.context).processing);
     }
     if (header != null && header.isNotEmpty) {}
     try {
@@ -281,12 +282,12 @@ class Request {
       if (closeDialogDelay != 0)
         dialog?.update(
             customBody: LoadingDialog(
-          text: successMessage ?? '已完成',
+          text: successMessage ?? S.of(navGK.currentState.overlay.context).completed,
           finished: true,
         ));
     } catch (e) {
       dialog?.hide();
-      // DialogUtils.toastErrorInfo('网络请求出错');
+      // DialogUtils.toastErrorInfo(S.of(context).network_request_error);
       RuntimeConfig.error = e;
       return null;
     }
@@ -306,7 +307,7 @@ class Request {
       // if (!RuntimeConfig.dialogOpened) {
       //   DialogUtils.showSimpleAlertDialog(
       //           context: navGK.currentState.overlay.context,
-      //           text: '你的登录信息已失效，你可以退出重新登录',
+      //           text: S.of(context).your_login_information_has_expired,
       //           onlyInfo: true)
       //       .then((val) {
       //     RuntimeConfig.dialogOpened = false;
@@ -363,7 +364,7 @@ class Request {
         debugPrint(options.uri.toString());
         return options; //continue
       }, onResponse: (Response response) {
-        debugPrint('收到了json信息');
+        debugPrint(S.of(navGK.currentState.overlay.context).received_json_information);
         // print(response);
         return response; // continue
       }, onError: (DioError e) {
@@ -391,7 +392,7 @@ class Request {
         debugPrint(options.uri.toString());
         return options; //continue
       }, onResponse: (Response response) {
-        debugPrint('收到了json信息');
+        debugPrint(S.of(navGK.currentState.overlay.context).received_json_information);
         // print(response);
         return response; // continue
       }, onError: (DioError e) {
@@ -432,7 +433,7 @@ class Request {
         debugPrint(options.uri.toString());
         return options; //continue
       }, onResponse: (Response response) {
-        debugPrint('收到了json信息');
+        debugPrint(S.of(navGK.currentState.overlay.context).received_json_information);
         // print(response);
         return response; // continue
       }, onError: (DioError e) {

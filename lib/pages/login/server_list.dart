@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
@@ -13,11 +14,12 @@ class ServerList extends StatefulWidget {
 }
 
 class _ServerListState extends State<ServerList>  {
-  final String noticeString = '您只需选择一个节点即可进行注册。无论选择哪个节点，您都可以与任何人进行交流！';
+  String noticeString;
   List _serverList = [];
 
   @override
   void initState() {
+    noticeString = S.of(context).you_only_need_to_select_a_node_to_register;
     super.initState();
     _getServerList();
   }
@@ -57,10 +59,10 @@ class _ServerListState extends State<ServerList>  {
     List<String> userNum = users.toString().split(".");
     String showUsers = '';
     if (userNum[0] != '0') {
-      showUsers = userNum[0] + 'K用户';
+      showUsers = userNum[0] + S.of(context).k_user;
     } else {
 
-      showUsers = int.parse(userNum[1]).toString() + '用户';
+      showUsers = int.parse(userNum[1]).toString() + S.of(context).user;
     }
 
     return GestureDetector(
@@ -103,7 +105,7 @@ class _ServerListState extends State<ServerList>  {
                         ),
                       ),
                       SizedBox(width: 5),
-                      Text('稳定', style: TextStyle(color: Theme.of(context).buttonColor)),
+                      Text(S.of(context).stable, style: TextStyle(color: Theme.of(context).buttonColor)),
                     ],
                   ),
                   Row(
@@ -170,7 +172,7 @@ class _ServerListState extends State<ServerList>  {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: CustomAppBar(
-        title: Text('选择节点',),
+        title: Text(S.of(context).select_node,),
         toolbarOpacity: 1,
         actions: <Widget>[
 

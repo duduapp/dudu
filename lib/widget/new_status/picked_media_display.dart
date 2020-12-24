@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
@@ -34,7 +35,7 @@ class PickedMediaDisplay extends StatelessWidget {
                 child: TextField(
                   controller: controller,
                   decoration: InputDecoration(
-                    hintText: '为视觉障碍人士添加文字说明',
+                    hintText: S.of(context).add_a_text_description_for_the_visually_impaired,
                   ),
                   maxLength: 450,
                   maxLines: null,
@@ -44,14 +45,14 @@ class PickedMediaDisplay extends StatelessWidget {
               actions: <Widget>[
                 FlatButton(
                   child: Text(
-                    '取消',
+                    S.of(context).cancel,
                     style: TextStyle(color: color),
                   ),
                   onPressed: () => AppNavigate.pop(),
                 ),
                 FlatButton(
                   child: Text(
-                    '确定',
+                    S.of(context).determine,
                     style: TextStyle(color: color, fontWeight: FontWeight.bold),
                   ),
                   onPressed: () {

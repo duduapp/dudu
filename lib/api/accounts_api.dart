@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dio/dio.dart';
 import 'package:dudu/models/json_serializable/filter_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
@@ -70,23 +71,23 @@ class AccountsApi {
 
   static mute(String id) async{
     var api = '$url/$id/mute';
-    return await Request.post(url: api,errMsg: '隐藏用户$id失败',showDialog: false);
+    return await Request.post(url: api,showDialog: false);
   }
 
   static unMute(String id) async{
     var api = '$url/$id/unmute';
-    return await Request.post(url: api,errMsg: '取消隐藏用户$id失败');
+    return await Request.post(url: api);
   }
 
 
   static block(String id) async{
     var api = '$url/$id/block';
-    return await Request.post(url: api,errMsg: '屏蔽用户$id失败',showDialog: false);
+    return await Request.post(url: api,showDialog: false);
   }
 
   static unBlock(String id) async{
     var api = '$url/$id/unblock';
-    return await Request.post(url: api,errMsg: '取消屏蔽用户$id失败');
+    return await Request.post(url: api);
   }
 
   static blockDomain(String domain) async {

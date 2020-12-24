@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/notificate_item.dart';
@@ -38,7 +39,7 @@ class FollowRequestCell extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    StringUtil.displayName(item.account) + '请求关注你',
+                     S.of(context).request_to_follow_you(StringUtil.displayName(item.account)),
                     style: TextStyle(fontSize: 12),
                   ),
                 ),
@@ -48,8 +49,8 @@ class FollowRequestCell extends StatelessWidget {
           Row(
             children: <Widget>[
               Expanded(child: StatusItemAccount(item.account,padding: 0,)),
-              FlatButton(child: Text('同意',style: TextStyle(color: Theme.of(context).buttonColor,fontWeight: FontWeight.normal),),onPressed: () => _acceptRequest(context),),
-              FlatButton(child: Text('拒绝',style: TextStyle(color: Theme.of(context).buttonColor,fontWeight: FontWeight.normal)),onPressed: () => _rejectRequest(context),)
+              FlatButton(child: Text(S.of(context).agree,style: TextStyle(color: Theme.of(context).buttonColor,fontWeight: FontWeight.normal),),onPressed: () => _acceptRequest(context),),
+              FlatButton(child: Text(S.of(context).refuse,style: TextStyle(color: Theme.of(context).buttonColor,fontWeight: FontWeight.normal)),onPressed: () => _rejectRequest(context),)
             ],
 
           )

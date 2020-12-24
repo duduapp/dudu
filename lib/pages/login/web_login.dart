@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 // import 'package:dudu/utils/app_navigate.dart';
 // import 'package:dudu/widget/common/custom_app_bar.dart';
 // import 'package:dudu/widget/common/loading_view.dart';
@@ -32,13 +33,13 @@
 //     return WebviewScaffold(
 //         url: url,
 //         appBar: new CustomAppBar(
-//           title: new Text('登录'),
+//           title: new Text(S.of(context).log_in),
 //           backgroundColor: Color.fromRGBO(40, 44, 55, 1),
 //         ),
 //         withZoom: true,
 //         withLocalStorage: true,
 //       hidden: true,
-//       initialChild: LoadingView(text: '加载中',color: Color.fromRGBO(25, 27, 34, 1),),
+//       initialChild: LoadingView(text: S.of(context).loading,color: Color.fromRGBO(25, 27, 34, 1),),
 //
 //     );
 //   }

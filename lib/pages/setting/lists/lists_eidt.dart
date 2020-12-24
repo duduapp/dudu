@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/lists_api.dart';
 import 'package:dudu/api/search_api.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
@@ -58,7 +59,7 @@ class _ListsEditState extends State<ListsEdit> {
                 focusNode: focusNode,
                 controller: searchController,
                 decoration: InputDecoration(
-                    hintText: '搜索已关注的用户',
+                    hintText: S.of(context).search_for_followed_users,
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none),
               )),

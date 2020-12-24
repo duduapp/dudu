@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dudu/api/search_api.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
@@ -136,7 +137,7 @@ class _StatusTextEditorState extends State<StatusTextEditor> {
           keyboardType: TextInputType.multiline,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.all(15),
-              hintText: '有什么新鲜事',
+              hintText: S.of(context).whats_new,
               counterText: '',
               disabledBorder: InputBorder.none,
               enabledBorder: InputBorder.none,

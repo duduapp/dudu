@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/public.dart';
 import 'package:flutter/material.dart';
@@ -48,12 +49,12 @@ class _NotificationDisplayTypeDialogState
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            typeRow('提及', 'mention'),
-            typeRow('转嘟', 'reblog'),
-            typeRow(SettingsProvider().get('zan_or_shoucang') == '0' ? '赞':'收藏', 'favourite'),
-            typeRow('关注', 'follow'),
-            typeRow('关注请求', 'follow_request'),
-            typeRow('投票', 'poll'),
+            typeRow(S.of(context).mention, 'mention'),
+            typeRow(S.of(context).turn_to, 'reblog'),
+            typeRow(SettingsProvider().get('zan_or_shoucang') == '0' ? '赞':S.of(context).favorites, 'favourite'),
+            typeRow(S.of(context).attention, 'follow'),
+            typeRow(S.of(context).follow_request, 'follow_request'),
+            typeRow(S.of(context).vote, 'poll'),
             Divider(thickness: 0,),
             InkWell(
               onTap: () {
@@ -65,7 +66,7 @@ class _NotificationDisplayTypeDialogState
                 padding: EdgeInsets.only(bottom: 10,top: 5),
                 child: Center(
                   child: Text(
-                    '确定',
+                    S.of(context).determine,
                     style: TextStyle(color: Theme.of(context).buttonColor),
                   ),
                 ),

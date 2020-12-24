@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -173,7 +174,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   BottomSheetItem(
-                    text: '修改图片背景',
+                    text: S.of(context).modify_picture_background,
                     onTap: chooseHeader,
                   ),
                   Container(
@@ -181,7 +182,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                     color: Theme.of(context).backgroundColor,
                   ),
                   BottomSheetItem(
-                    text: '修改头像',
+                    text: S.of(context).modify_avatar,
                     onTap: chooseAvatar,
                   ),
                   Container(
@@ -199,7 +200,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
     var color = Theme.of(context).toggleableActiveColor;
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('编辑个人资料',style: TextStyle(fontSize: 16),),
+        title: Text(S.of(context).edit_profile,style: TextStyle(fontSize: 16),),
         actions: <Widget>[
           isUpdating
               ? Padding(
@@ -211,7 +212,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                     padding:
                         const EdgeInsets.only(right: 15, top: 12, left: 15),
                     child: Text(
-                      '确定',
+                      S.of(context).determine,
                       style: TextStyle(
                           fontSize: 16,
                           color: Theme.of(context).buttonColor),
@@ -256,8 +257,8 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           TextField(
                             controller: nameController,
                             decoration: InputDecoration(
-                                hintText: '昵称',
-                                labelText: '昵称',
+                                hintText: S.of(context).nickname,
+                                labelText: S.of(context).nickname,
                                 helperText: '',
                                 counterText: '',
                                 enabledBorder: OutlineInputBorder(
@@ -274,8 +275,8 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           TextField(
                             controller: noteController,
                             decoration: InputDecoration(
-                                hintText: '简介',
-                                labelText: '简介',
+                                hintText: S.of(context).introduction,
+                                labelText: S.of(context).introduction,
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Theme.of(context)
@@ -315,11 +316,11 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            '保护你的账户（锁嘟）',
+                            S.of(context).protect_your_account,
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                          Text('你需要手动审核所有关注请求')
+                          Text(S.of(context).you_need_to_manually_review_all_follow_requests)
                         ],
                       ),
                     )
@@ -328,7 +329,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 20, 12, 0),
                   child: Text(
-                    '个人资料附加信息',
+                    S.of(context).profile_additional_information,
                     style: TextStyle(color: Colors.grey),
                   ),
                 ),
@@ -337,7 +338,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                   padding: const EdgeInsets.only(right: 12, bottom: 30),
                   child: Align(
                     child: RaisedButton(
-                      child: Text('添加信息'),
+                      child: Text(S.of(context).add_information),
                       onPressed: _addExtra,
                     ),
                     alignment: Alignment.bottomRight,
@@ -371,13 +372,13 @@ class _EditUserProfileState extends State<EditUserProfile> {
     for (int i = 0; i < extraInfoControllers.length; i++) {
       children.add(TextField(
         controller: extraInfoControllers[i][0],
-        decoration: InputDecoration(hintText: '标签', counterText: ''),
+        decoration: InputDecoration(hintText: S.of(context).label, counterText: ''),
         maxLength: 255,
         maxLines: null,
       ));
       children.add(TextField(
         controller: extraInfoControllers[i][1],
-        decoration: InputDecoration(hintText: '内容', counterText: ''),
+        decoration: InputDecoration(hintText: S.of(context).content, counterText: ''),
         maxLength: 255,
         maxLines: null,
       ));

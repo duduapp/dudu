@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 // 下拉刷新和上拉加载
 import 'package:dudu/public.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +94,7 @@ class _RefreshLoadListViewState extends State<RefreshLoadListView> {
       return Container(
         height: 40,
         child: Center(
-          child: Text('没有更多数据了'),
+          child: Text(S.of(context).no_more_data),
         ),
       );
     } else {

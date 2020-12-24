@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/vote.dart';
 import 'package:dudu/public.dart';
@@ -54,7 +55,7 @@ class _HandleVoteDialogState extends State<HandleVoteDialog> {
                     width: 5,
                   ),
                   Text(
-                    '投票',
+                    S.of(context).vote,
                     style: TextStyle(fontSize: 20),
                   )
                 ],
@@ -72,11 +73,11 @@ class _HandleVoteDialogState extends State<HandleVoteDialog> {
                       controller: newVote.option1Controller,
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(left: 10, right: 10),
-                          hintText: '选择1',
+                          hintText: S.of(context).choice1,
                           counterText: '',
                           border: new OutlineInputBorder(
                               borderSide: new BorderSide(color: Colors.teal)),
-                          labelText: '选择1'),
+                          labelText: S.of(context).choice1),
                     ),
                   ),
                   Visibility(
@@ -111,11 +112,11 @@ class _HandleVoteDialogState extends State<HandleVoteDialog> {
                       controller: newVote.option2Controller,
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(left: 10, right: 10),
-                          hintText: '选择2',
+                          hintText: S.of(context).choice2,
                           counterText: "",
                           border: new OutlineInputBorder(
                               borderSide: new BorderSide(color: Colors.teal)),
-                          labelText: '选择2'),
+                          labelText: S.of(context).choice2),
                     ),
                   ),
                   Visibility(
@@ -154,11 +155,11 @@ class _HandleVoteDialogState extends State<HandleVoteDialog> {
                         decoration: InputDecoration(
                             contentPadding:
                                 EdgeInsets.only(left: 10, right: 10),
-                            hintText: '选择3',
+                            hintText: S.of(context).choice3,
                             counterText: "",
                             border: new OutlineInputBorder(
                                 borderSide: new BorderSide(color: Colors.teal)),
-                            labelText: '选择3'),
+                            labelText: S.of(context).choice3),
                       ),
                     ),
                   ),
@@ -188,11 +189,11 @@ class _HandleVoteDialogState extends State<HandleVoteDialog> {
                       controller: newVote.option4Controller,
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(left: 10, right: 10),
-                          hintText: '选择4',
+                          hintText: S.of(context).choice4,
                           counterText: '',
                           border: new OutlineInputBorder(
                               borderSide: new BorderSide(color: Colors.teal)),
-                          labelText: '选择4'),
+                          labelText: S.of(context).choice4),
                     ),
                   ),
                   ClickableIconButton(
@@ -217,14 +218,14 @@ class _HandleVoteDialogState extends State<HandleVoteDialog> {
                       newVote.addOption();
                       setState(() {});
                     },
-                    child: Text('添加选择'),
+                    child: Text(S.of(context).add_selection),
                   ),
                   SizedBox(
                     width: 30,
                   ),
                   DropdownButton(
                     value: newVote.expiresInString,
-                    onChanged: (String newValue) {
+                    onChanged: (dynamic newValue) {
                       newVote.expiresIn = Vote.voteOptionsInSeconds[newValue];
 
                       setState(() {
@@ -255,18 +256,18 @@ class _HandleVoteDialogState extends State<HandleVoteDialog> {
                       },
                     ),
                   ),
-                  Text('多个选择')
+                  Text(S.of(context).multiple_choices)
                 ],
               ),
               Row(
                 children: <Widget>[
                   Spacer(),
                   NormalFlatButton(
-                    text: '取消',
+                    text: S.of(context).cancel,
                     onPressed: () => AppNavigate.pop(),
                   ),
                   NormalFlatButton(
-                    text: '确定',
+                    text: S.of(context).determine,
                     onPressed: canCreate
                         ? () => AppNavigate.pop(param: newVote)
                         : null,

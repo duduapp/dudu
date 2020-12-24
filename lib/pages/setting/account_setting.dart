@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/logined_user.dart';
@@ -27,48 +28,48 @@ class _AccountSettingState extends State<AccountSetting> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('账号设置'),
+        title: Text(S.of(context).account_settings),
       ),
       body: ListView(
         children: <Widget>[
           SettingCell(
             leftIcon: Icon(IconFont.notification),
-            title: '通知设置',
+            title: S.of(context).notification_settings,
             onPress: () => AppNavigate.push(SettingNotification()),
           ),
           SettingCell(
             leftIcon: Icon(IconFont.volumeOff),
-            title: '被隐藏的用户',
+            title: S.of(context).hidden_user,
             onPress: () => AppNavigate.push(CommonBlockList(BlockType.mute)),
           ),
           SettingCell(
             leftIcon: Icon(IconFont.block),
-            title: '被屏蔽的用户',
+            title: S.of(context).blocked_user,
             onPress: () => AppNavigate.push(CommonBlockList(BlockType.block)),
           ),
           SettingCell(
             leftIcon: Icon(IconFont.www),
-            title: '被隐藏的实例',
+            title: S.of(context).hidden_instance,
             onPress: () =>
                 AppNavigate.push(CommonBlockList(BlockType.hideDomain)),
           ),
           Container(
-            child: Text('发布'),
+            child: Text(S.of(context).release),
             padding: EdgeInsets.all(8),
           ),
           ProviderSettingCell(
             providerKey: 'default_post_privacy',
             leftIcon: Icon(IconFont.earth),
-            title: '嘟文默认可见范围',
+            title: S.of(context).default_visible_range,
             type: SettingType.string,
-            displayOptions: ['公开', '不公开', '仅关注者'],
+            displayOptions: [S.of(context).public, S.of(context).private, S.of(context).followers_only],
             options: ['public', 'unlisted', 'private'],
             onPressed: _changePrivacy,
           ),
           ProviderSettingCell(
             providerKey: 'make_media_sensitive',
             leftIcon: Icon(IconFont.eye),
-            title: '自动标记媒体为敏感内容',
+            title: S.of(context).automatically_mark_media_as_sensitive,
             type: SettingType.bool,
             onPressed: (value) {
               var params = {
@@ -78,68 +79,68 @@ class _AccountSettingState extends State<AccountSetting> {
             },
           ),
           Container(
-            child: Text('时间轴'),
+            child: Text(S.of(context).timeline),
             padding: EdgeInsets.all(8),
           ),
           ProviderSettingCell(
             providerKey: 'show_thumbnails',
-            title: '显示预览图',
+            title: S.of(context).show_preview,
             type: SettingType.bool,
           ),
           ProviderSettingCell(
             providerKey: 'always_show_sensitive',
-            title: '总是显示所有敏感媒体内容',
+            title: S.of(context).always_show_all_sensitive_media_content,
             type: SettingType.bool,
           ),
           ProviderSettingCell(
             providerKey: 'always_expand_tools',
-            title: '始终扩展标有内容警告的嘟文',
+            title: S.of(context).always_expand_toots_marked_with_content_warnings,
             type: SettingType.bool,
           ),
           Container(
-            child: Text('过滤器'),
+            child: Text(S.of(context).filter),
             padding: EdgeInsets.all(8),
           ),
           SettingCell(
-            title: '公共时间轴',
+            title: S.of(context).public_timeline,
             onPress: () =>
                 AppNavigate.push(CommonFilterList(FilterType.public)),
           ),
           SettingCell(
-            title: '消息',
+            title: S.of(context).news,
             onPress: () =>
                 AppNavigate.push(CommonFilterList(FilterType.notifications)),
           ),
           SettingCell(
-            title: '主页',
+            title: S.of(context).home_page,
             onPress: () => AppNavigate.push(CommonFilterList(FilterType.home)),
           ),
           SettingCell(
-            title: '对话',
+            title: S.of(context).dialogue,
             onPress: () =>
                 AppNavigate.push(CommonFilterList(FilterType.thread)),
           ),
           Container(
-            child: Text('账号操作（需在系统默认的浏览器中完成操作）'),
+            child: Text(S.of(context).account_operation),
             padding: EdgeInsets.all(8),
           ),
           SettingCell(
-            title: '修改密码',
+            title: S.of(context).change_password,
             onPress: () =>
                 UrlUtil.openUrl(LoginedUser().host+'/auth/edit'),
           ),
           SettingCell(
-            title: '备份数据',
+            title: S.of(context).backup_data,
             onPress: () =>
                 UrlUtil.openUrl(LoginedUser().host+'/settings/export'),
           ),
           SettingCell(
-            title: '导入数据',
+            title: S.of(context).import_data,
             onPress: () =>
                 UrlUtil.openUrl(LoginedUser().host+'/settings/import'),
           ),
           SettingCell(
-            title: '注销账号',
+            title: S.of(context).logout,
             onPress: () =>
                 UrlUtil.openUrl(LoginedUser().host+'/settings/delete'),
           ),

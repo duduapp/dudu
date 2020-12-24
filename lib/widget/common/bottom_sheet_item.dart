@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:io';
 
 import 'package:dudu/public.dart';
@@ -101,7 +102,7 @@ class BottomSheetCancelItem extends StatelessWidget {
               ? EdgeInsets.fromLTRB(12, 12, 12, 20)
               : EdgeInsets.all(12),
           child: Align(
-            child: Text('取消'),
+            child: Text(S.of(context).cancel),
             alignment: Alignment.center,
           ),
         ),

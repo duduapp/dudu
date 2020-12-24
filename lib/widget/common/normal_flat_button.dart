@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 
 
 import 'package:dudu/public.dart';
@@ -28,7 +29,7 @@ class NormalCancelFlatButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NormalFlatButton(
-      text: '取消',
+      text: S.of(context).cancel,
       onPressed: () => AppNavigate.pop(),
     );
   }

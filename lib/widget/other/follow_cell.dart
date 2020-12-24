@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/notificate_item.dart';
 import 'package:dudu/public.dart';
@@ -32,7 +33,7 @@ class FollowCell extends StatelessWidget {
                 ),
                 SizedBox(width: 5,),
                 Expanded(
-                  child: TextWithEmoji(text: StringUtil.displayName(item.account) + '开始关注你了',emojis: item.account.emojis,style: TextStyle(fontSize: 12),),
+                  child: TextWithEmoji(text:  S.of(context).started_following_you(StringUtil.displayName(item.account)),emojis: item.account.emojis,style: TextStyle(fontSize: 12),),
                 ),
               ],
             ),

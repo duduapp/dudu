@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -14,6 +15,7 @@ import 'package:dudu/models/status/picked_media.dart';
 import 'package:dudu/pages/status/picked_media_preview.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/utils/i18n_util.dart';
 import 'package:dudu/utils/media_util.dart';
 import 'package:dudu/utils/themes.dart';
 import 'package:dudu/utils/view/status_action_util.dart';
@@ -223,13 +225,12 @@ class _NewStatusState extends State<NewStatus> {
   _loadFromScheduleInfo(dynamic info) {
     var params;
     if (info.containsKey('params')) {
-        params = info['params'];
-        _controller.text = params['text'];
+      params = info['params'];
+      _controller.text = params['text'];
     } else {
       params = info;
       _controller.text = StringUtil.removeAllHtmlTags(params['content']);
     }
-
 
     _warningController.text = params['spoiler_text'];
     _visibility = params['visibility'];
@@ -253,12 +254,11 @@ class _NewStatusState extends State<NewStatus> {
         }
         expiresIn = 86400;
       }
-      vote = Vote.create(options, expiresIn,
-          poll['multiple']);
+      vote = Vote.create(options, expiresIn, poll['multiple']);
     }
 
     if (info['scheduled_at'] != null)
-    scheduledAt = DateTime.parse(info['scheduled_at']);
+      scheduledAt = DateTime.parse(info['scheduled_at']);
     sensitive = params['sensitive'];
     replyToId = params['in_reply_to_id'];
     counter = _controller.text.length;
@@ -284,7 +284,7 @@ class _NewStatusState extends State<NewStatus> {
     DialogUtils.showSimpleAlertDialog(
         context: context,
         popAfter: true,
-        text: '是否保留本次编辑',
+        text: S.of(context).whether_to_keep_this_edit,
         onCancel: () {
           _clearDraft();
           AppNavigate.pop();
@@ -293,8 +293,8 @@ class _NewStatusState extends State<NewStatus> {
           _saveToDraft();
           AppNavigate.pop();
         },
-        cancelText: '不保留',
-        confirmText: '保留');
+        cancelText: S.of(context).not_retained,
+        confirmText: S.of(context).keep);
   }
 
   _onPressBack() {
@@ -305,19 +305,19 @@ class _NewStatusState extends State<NewStatus> {
     }
   }
 
-
-
   Future<void> _pushNewToot() async {
     if (scheduledAt != null &&
         scheduledAt.difference(DateTime.now()).inSeconds < 300) {
-      DialogUtils.toastErrorInfo('定时嘟文必须是五分钟后');
+      DialogUtils.toastErrorInfo(
+          S.of(context).the_timed_beep_must_be_five_minutes_later);
       return;
     }
 
     var mediaIds = [];
 
     if (medias.isNotEmpty) {
-      var dialog = await DialogUtils.showProgressDialog('上传文件中...');
+      var dialog =
+          await DialogUtils.showProgressDialog(S.of(context).uploading_file);
       dialog.show();
       for (PickedMedia media in medias) {
         if (media.remote != null) {
@@ -375,8 +375,8 @@ class _NewStatusState extends State<NewStatus> {
       Request.post(
               url: Api.status,
               params: paramsMap,
-              dialogMessage: '嘟嘟中...',
-              successMessage: '嘟文已发送')
+              dialogMessage: S.of(context).tooting,
+              successMessage: S.of(context).the_beep_has_been_sent)
           .then((data) {
         if (data != null) {
           if (StatusItemData.fromJson(data).id == null) {
@@ -401,27 +401,28 @@ class _NewStatusState extends State<NewStatus> {
         }
       });
     } on Exception catch (e) {
-      DialogUtils.toastErrorInfo('发送嘟嘟失败！');
+      DialogUtils.toastErrorInfo(S.of(context).failed_to_send_toot);
     }
   }
 
   uploadMedia(PickedMedia media) async {
     File file = await media.local.file;
-    if (!file.path.endsWith('.gif') && media.local.type == picker.AssetType.image) {
+    if (!file.path.endsWith('.gif') &&
+        media.local.type == picker.AssetType.image) {
       file = await MediaUtil.compressImageFile(file);
     }
     if (file != null) {
       String fileName = file.path.split('/').last;
       FormData formData = FormData.fromMap({
         "file": await MultipartFile.fromFile(file.path, filename: fileName),
-        "description" : media.description
+        "description": media.description
       });
       var response;
       try {
         response =
             await Request.requestDio(url: Api.attachMedia, params: formData);
       } on DioError catch (e) {
-        Fluttertoast.showToast(msg: '文件上传失败');
+        Fluttertoast.showToast(msg: S.of(context).file_upload_failed);
         return null;
       }
       String fileId = response['id'];
@@ -460,13 +461,15 @@ class _NewStatusState extends State<NewStatus> {
         requestType: type);
     if (assets == null) return;
     for (picker.AssetEntity entity in assets) {
-      if (entity.type == picker.AssetType.video || entity.type == picker.AssetType.audio) {
+      if (entity.type == picker.AssetType.video ||
+          entity.type == picker.AssetType.audio) {
         // file length will return 0
         var file = Platform.isIOS ? await entity.originFile : await entity.file;
         var fileLength = file.lengthSync();
         print(fileLength);
-        if (fileLength > 40*1024*1024) {
-          DialogUtils.toastFinishedInfo('文件大小必须小于40M');
+        if (fileLength > 40 * 1024 * 1024) {
+          DialogUtils.toastFinishedInfo(
+              S.of(context).file_size_must_be_less_than_40m);
           continue;
         }
       }
@@ -501,7 +504,7 @@ class _NewStatusState extends State<NewStatus> {
           child: TextField(
             controller: _warningController,
             maxLength: 500 - _controller.text.length,
-            onChanged: (value){
+            onChanged: (value) {
               setState(() {
                 textEdited = true;
                 counter = _controller.text.length + value.length > 500
@@ -510,7 +513,7 @@ class _NewStatusState extends State<NewStatus> {
               });
             },
             decoration: InputDecoration(
-                hintText: '折叠部分的警告消息',
+                hintText: S.of(context).warning_message_for_folded_section,
                 counterText: '',
                 disabledBorder: InputBorder.none,
                 enabledBorder: InputBorder.none,
@@ -536,8 +539,10 @@ class _NewStatusState extends State<NewStatus> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 NewStatusPublishLevel(
-                  title: '公开',
-                  description: '所有人可见，并且会出现在公共时间轴上',
+                  title: S.of(context).public,
+                  description: S
+                      .of(context)
+                      .visible_to_everyone_and_will_appear_on_the_public_timeline,
                   leftIcon: Icon(
                     IconFont.earth,
                     size: 26,
@@ -551,8 +556,8 @@ class _NewStatusState extends State<NewStatus> {
                   currentIcon: _articleRange,
                 ),
                 NewStatusPublishLevel(
-                  title: '不公开',
-                  description: '所有人可见，但不会出现在公共时间轴上',
+                  title: S.of(context).private,
+                  description: S.of(context).visible_to_everyone,
                   leftIcon: Icon(
                     IconFont.unlock,
                     size: 26,
@@ -566,8 +571,9 @@ class _NewStatusState extends State<NewStatus> {
                   currentIcon: _articleRange,
                 ),
                 NewStatusPublishLevel(
-                  title: '仅关注者',
-                  description: '只有关注你的用户可以看到',
+                  title: S.of(context).followers_only,
+                  description:
+                      S.of(context).only_visible_to_users_who_follow_you,
                   leftIcon: Icon(
                     IconFont.lock,
                     size: 26,
@@ -581,8 +587,8 @@ class _NewStatusState extends State<NewStatus> {
                   currentIcon: _articleRange,
                 ),
                 NewStatusPublishLevel(
-                  title: '私信',
-                  description: '只有被提及的用户可以看到',
+                  title: S.of(context).direct_message,
+                  description: S.of(context).only_the_mentioned_users_can_see,
                   leftIcon: Icon(
                     IconFont.message,
                     size: 26,
@@ -640,7 +646,7 @@ class _NewStatusState extends State<NewStatus> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 BottomSheetItem(
-                  text: "选择照片",
+                  text: S.of(context).choose_a_photo,
                   onTap: () async => await pickMedia(
                       picker.RequestType.image, 4 - medias.length),
                 ),
@@ -648,21 +654,20 @@ class _NewStatusState extends State<NewStatus> {
                   height: 0,
                 ),
                 BottomSheetItem(
-                  text: "选择视频",
+                  text: S.of(context).select_video,
                   onTap: () async =>
                       await pickMedia(picker.RequestType.video, 1),
                 ),
                 Divider(
                   height: 0,
                 ),
-                if (Platform.isAndroid)
-                  ...[
-                BottomSheetItem(
-                  text: "选择音频",
-                  onTap: () async =>
-                      await pickMedia(picker.RequestType.audio, 1),
-                ),
-              ],
+                if (Platform.isAndroid) ...[
+                  BottomSheetItem(
+                    text: S.of(context).select_audio,
+                    onTap: () async =>
+                        await pickMedia(picker.RequestType.audio, 1),
+                  ),
+                ],
                 Container(
                   height: 8,
                   color: Theme.of(context).backgroundColor,
@@ -735,7 +740,7 @@ class _NewStatusState extends State<NewStatus> {
               child: Container(
                 padding: EdgeInsets.fromLTRB(20, 15, 0, 0),
                 child: Text(
-                  '取消',
+                  S.of(context).cancel,
                   style: TextStyle(fontSize: 15),
                 ),
               ),
@@ -745,7 +750,9 @@ class _NewStatusState extends State<NewStatus> {
                 appbarColor.green - 4, appbarColor.blue - 4, 1),
             title: Column(mainAxisSize: MainAxisSize.min, children: [
               Text(
-                widget.replyTo == null ? '发嘟' : '回复',
+                widget.replyTo == null
+                    ? S.of(context).beep
+                    : S.of(context).reply,
                 style: TextStyle(fontSize: 16),
               ),
               Text(
@@ -773,7 +780,7 @@ class _NewStatusState extends State<NewStatus> {
                         : () {
                             _pushNewToot();
                           },
-                    child: Text('嘟嘟'),
+                    child: Text(S.of(context).toot),
                   ),
                 ),
               )
@@ -806,9 +813,13 @@ class _NewStatusState extends State<NewStatus> {
                             }
                             setState(() {
                               textEdited = true;
-                              counter = value.length + _warningController.text.length > 500
+                              counter = value.length +
+                                          _warningController.text.length >
+                                      500
                                   ? 500
-                                  : value.length + _warningController.text.length; //当500时可能值会变成501
+                                  : value.length +
+                                      _warningController
+                                          .text.length; //当500时可能值会变成501
                             });
                           },
                         ),
@@ -928,7 +939,9 @@ class _NewStatusState extends State<NewStatus> {
                                 scheduledAt = date;
                               });
                             } else {
-                              DialogUtils.toastErrorInfo('时间必须是五分钟后');
+                              DialogUtils.toastErrorInfo(S
+                                  .of(context)
+                                  .time_must_be_five_minutes_later);
                               setState(() {
                                 scheduledAt = null;
                               });
@@ -940,7 +953,7 @@ class _NewStatusState extends State<NewStatus> {
                           },
                               currentTime: scheduledAt ??
                                   DateTime.now().add(Duration(minutes: 10)),
-                              locale: LocaleType.zh);
+                              locale: I18nUtil.isZh(context)? LocaleType.zh : LocaleType.en);
                         },
                         icon: Icon(
                           IconFont.time,
@@ -966,7 +979,8 @@ class _NewStatusState extends State<NewStatus> {
                             cursorPositionWhenUnfocus,
                             emoji);
                         cursorPositionWhenUnfocus += emoji.length;
-                        counter = _controller.text.length + _warningController.text.length;
+                        counter = _controller.text.length +
+                            _warningController.text.length;
                       });
                     }),
                   ),
@@ -1007,14 +1021,14 @@ class _NewStatusState extends State<NewStatus> {
       backgroundColor: color,
       lineColor: color,
       items: [
-        MenuItem(title: '编辑', image: Icon(Icons.edit)),
-        MenuItem(title: '删除', image: Icon(Icons.delete))
+        MenuItem(title: S.of(context).edit, image: Icon(Icons.edit)),
+        MenuItem(title: S.of(context).delete, image: Icon(Icons.delete))
       ],
       onClickMenu: (item) {
-        if (item.menuTitle == '删除') {
+        if (item.menuTitle == S.of(context).delete) {
           vote = null;
           setState(() {});
-        } else if (item.menuTitle == '编辑') {
+        } else if (item.menuTitle == S.of(context).edit) {
           showVoteDialog();
         }
       },

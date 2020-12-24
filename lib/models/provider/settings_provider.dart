@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dudu/api/timeline_api.dart';
 import 'package:dudu/constant/db_key.dart';
 import 'package:dudu/db/db_constant.dart';
@@ -80,6 +82,7 @@ class SettingsProvider extends ChangeNotifier {
         'mention',
         'poll'
       ],
+      'language':Platform.localeName == 'zh' ? 'zh' : 'en',
     };
     LoginedUser user = LoginedUser();
     if (user.account == null) {
@@ -150,6 +153,8 @@ class SettingsProvider extends ChangeNotifier {
           await _getUnreadFromDb(TimelineApi.conversations),
       TimelineApi.followRquest:
           await _getUnreadFromDb(TimelineApi.followRquest),
+      TimelineApi.follow:
+      await _getUnreadFromDb(TimelineApi.follow),
       TimelineApi.mention:
           await _getUnreadFromDb(TimelineApi.mention),
       TimelineApi.reblogNotification:

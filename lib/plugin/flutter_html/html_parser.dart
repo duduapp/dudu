@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:convert';
 
 import 'package:dudu/models/provider/settings_provider.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
+import 'package:nav_router/nav_router.dart';
 
 typedef CustomRender = Widget Function(dom.Node node, List<Widget> children);
 typedef CustomTextStyle = TextStyle Function(
@@ -445,10 +447,10 @@ class HtmlRichTextParser extends StatelessWidget {
 
         if (parseContext.parentElement.children.isEmpty) {
           if (finalText.startsWith('http')) {
-            finalText = '\u{1F517}网页链接';
+            finalText = S.of(buildContext).web_link;
           }
         } else {
-          if (parseContext.parentElement.children[0].text == '\u{1F517}网页链接') {
+          if (parseContext.parentElement.children[0].text == S.of(buildContext).web_link) {
             return;
           }
         }

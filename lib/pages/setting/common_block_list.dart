@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
@@ -86,19 +87,19 @@ class CommonBlockList extends StatelessWidget {
     var refreshEvent;
     switch (type) {
       case BlockType.mute:
-        title = '被隐藏的用户';
+        title = S.of(context).hidden_user;
         url = AccountsApi.muteUrl;
         buildRow = _buildMuteRow;
         refreshEvent = EventBusKey.userUnmuted;
         break;
       case BlockType.block:
-        title = '被屏蔽的用户';
+        title = S.of(context).blocked_user;
         url = AccountsApi.blockUrl;
         buildRow = _buildBlockRow;
         refreshEvent = EventBusKey.userUnblocked;
         break;
       case BlockType.hideDomain:
-        title = '被隐藏的实例';
+        title = S.of(context).hidden_instance;
         url = AccountsApi.blockDomainUrl;
         buildRow = _buildBlockDomainRow;
         refreshEvent = EventBusKey.domainUnblocked;

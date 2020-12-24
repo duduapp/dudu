@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:async';
 
 import 'package:dudu/api/instance_api.dart';
@@ -101,10 +102,10 @@ class _AddInstanceState extends State<AddInstance> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //        Text('增加实例',style: TextStyle(fontSize: 16),),
+            //        Text(S.of(context).increase_instance,style: TextStyle(fontSize: 16),),
             if (InstanceManager.instanceExist(_controller.text))
               Text(
-                '实例已经存在',
+                S.of(context).instance_already_exists,
                 style: TextStyle(color: Colors.red),
               ),
             if (loading)
@@ -119,7 +120,7 @@ class _AddInstanceState extends State<AddInstance> {
             if (requests.containsKey(_controller.text) &&
                 requests[_controller.text] == null)
               Text(
-                '无法连接到服务器',
+                S.of(context).unable_to_connect_to_server,
                 style: TextStyle(color: Colors.red),
               ),
             if (requests.containsKey(_controller.text) &&
@@ -135,14 +136,14 @@ class _AddInstanceState extends State<AddInstance> {
                 controller: _controller,
                 autofocus: true,
                 decoration: InputDecoration(
-                    hintText: '实例网址',
+                    hintText: S.of(context).instance_url,
                     focusedBorder: UnderlineInputBorder(
                         borderSide:
                             BorderSide(color: Theme.of(context).buttonColor)))),
             Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 5),
               child: Text(
-                '请输入你期望注册和登录的长毛象实例网站网址。如果该网址可访问，将在“发现”的页面中显示该实例的卡片，你可以在那里注册、登录。',
+                S.of(context).please_enter_the_url,
                 style: TextStyle(color: Theme.of(context).accentColor,fontSize: 13),
               ),
             ),
@@ -150,11 +151,11 @@ class _AddInstanceState extends State<AddInstance> {
               children: [
                 Spacer(),
                 NormalFlatButton(
-                  text: '取消',
+                  text: S.of(context).cancel,
                   onPressed: () => AppNavigate.pop(),
                 ),
                 NormalFlatButton(
-                  text: '确定',
+                  text: S.of(context).determine,
                   onPressed: requests.containsKey(_controller.text) &&
                           requests[_controller.text] != null
                       ? () {

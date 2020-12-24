@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -36,7 +37,7 @@ class MediaUtil {
     if (Platform.isIOS) {
       var orignalFile = await assets[0].originFile;
       if (orignalFile.lengthSync() > 2 * 1024 * 1024) {
-        DialogUtils.toastFinishedInfo("图片文件必须小于2M");
+        DialogUtils.toastFinishedInfo(S.of(context).picture_file_must_be_less_than_2m);
         return null;
       }
       if (orignalFile.path.endsWith(".gif") || orignalFile.path.endsWith(".GIF")) {
@@ -96,7 +97,7 @@ class MediaUtil {
     if (await Permission.storage.request().isGranted) {
 
     } else {
-      return DialogUtils.toastFinishedInfo('没有存储权限');
+      return DialogUtils.toastFinishedInfo(S.of(navGK.currentState.overlay.context).no_storage_permissions);
     }
 
     var file =
@@ -108,12 +109,12 @@ class MediaUtil {
       //   await PhotoManager.editor.saveImageWithPath(file.path);
 
       await ImageGallerySaver.saveFile(file.path);
-      DialogUtils.toastDownloadInfo('文件已保存');
+      DialogUtils.toastDownloadInfo(S.of(navGK.currentState.overlay.context).file_saved);
       return;
     }
 
 
-    DialogUtils.toastDownloadInfo('正在下载中...');
+    DialogUtils.toastDownloadInfo(S.of(navGK.currentState.overlay.context).downloading);
     file =
         await CustomCacheManager().getSingleFile(attachment.url);
 

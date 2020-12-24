@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/admin_api.dart';
 import 'package:dudu/api/timeline_api.dart';
 import 'package:dudu/constant/icon_font.dart';
@@ -22,6 +23,7 @@ import 'package:dudu/widget/other/app_retain_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -32,7 +34,7 @@ import 'timeline/timeline.dart';
 
 class HomePage extends StatefulWidget {
   final bool logined;
-  const HomePage({Key key,this.logined = true}) : super(key: key);
+  const HomePage({Key key, this.logined = true}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -94,7 +96,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     IconFont.mine
   ];
 
-  List<String> _tabTitles = ['首页', '广场', '发现', '消息', '我'];
+  List<String> get _tabTitles {
+    return [
+      S.of(context).home,
+      S.of(context).square,
+      S.of(context).find,
+      S.of(context).news,
+      S.of(context).me
+    ];
+  }
 
   Icon getTabIcon(int index, Color activeColor, bool logined) {
     if (index == SettingsProvider().homeTabIndex) {
@@ -146,7 +156,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           body: IndexedStack(
             children: <Widget>[
               widget.logined ? HomeTimeline() : Container(),
-              widget.logined ? PublicTimeline(enableFederated: !LoginedUser().host.startsWith('https://help.dudu.today'),) : Container(),
+              widget.logined
+                  ? PublicTimeline(
+                      enableFederated: !LoginedUser()
+                          .host
+                          .startsWith('https://help.dudu.today'),
+                    )
+                  : Container(),
               InstanceList(),
               widget.logined ? NotificationTimeline() : Container(),
               widget.logined ? Setting() : Container()
@@ -313,13 +329,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   icon: getTabIcon(3, activeColor, logined),
                   title: getTabTitle(3, activeColor, logined),
                   showBadge: logined &&
-                          ( //provider.unread[TimelineApi.notification] != 0 ||
-                              provider.unread[TimelineApi.conversations] != 0 ||
-                                  provider.unread[TimelineApi.followRquest] !=
-                                      0 ||
-                                  provider.unread[TimelineApi.mention] != 0 ||
-                                  provider.unread[TimelineApi.reblogNotification] != 0 ||
-                                  provider.unread[TimelineApi.favoriteNotification] != 0) ,
+                      ( //provider.unread[TimelineApi.notification] != 0 ||
+                          provider.unread[TimelineApi.conversations] != 0 ||
+                              provider.unread[TimelineApi.followRquest] != 0 ||
+                              provider.unread[TimelineApi.mention] != 0 ||
+                              provider.unread[TimelineApi.reblogNotification] !=
+                                  0 ||
+                              provider.unread[
+                                      TimelineApi.favoriteNotification] !=
+                                  0),
                   onTap: logined
                       ? () {
                           if (_tabIndex == 3) {

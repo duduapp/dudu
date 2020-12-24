@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
@@ -163,7 +164,7 @@ class StatusItem extends StatelessWidget {
 
     if (item.reblog != null) {
       icon = IconFont.reblog;
-      str = '${StringUtil.displayName(item.account)} 转嘟了';
+      str = S.of(context).boosted_toot(StringUtil.displayName(item.account));
     }
 
     return (icon != null && str != null)

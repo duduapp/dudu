@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/constant/api.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
@@ -114,7 +115,7 @@ class _StatusItemPollState extends State<StatusItemPoll> {
         minWidth: 100,
      //   height: 28,
         child: OutlineButton(
-          child: Text('投票',style: TextStyle(fontSize:12,color: Theme.of(context).buttonColor),),
+          child: Text(S.of(context).vote_poll,style: TextStyle(fontSize:12,color: Theme.of(context).buttonColor),),
           onPressed: vote,
         ),
       ),
@@ -136,14 +137,14 @@ class _StatusItemPollState extends State<StatusItemPoll> {
     return Container(
       margin: EdgeInsets.only(top: 5),
         child: Text(widget.status.poll.expired
-            ? '${widget.status.poll.votesCount}次投票・已结束'
-            : '${widget.status.poll.votesCount}次投票・${getRemainingTime()}',style: TextStyle(fontSize: 10,color: Theme.of(context).accentColor),));
+            ? S.of(context).vote_count(widget.status.poll.votesCount)+ '・' + S.of(context).ended
+            : S.of(context).vote_count(widget.status.poll.votesCount) +'・' + getRemainingTime(),style: TextStyle(fontSize: 10,color: Theme.of(context).accentColor),));
   }
 
   getRemainingTime() {
     var expireAt = DateTime.parse(widget.status.poll.expiresAt);
     var diff = expireAt.difference(DateTime.now());
-    return diff.inDays > 0 ? '剩余${diff.inDays}天': diff.inHours > 0 ? '剩余${diff.inHours}小时' :'剩余${diff.inMinutes}分钟';
+    return diff.inDays > 0 ? S.of(context).days_left(diff.inDays) : diff.inHours > 0 ? S.of(context).hours_left(diff.inHours) : S.of(context).minutes_left(diff.inMinutes);
   }
 
   Widget optionRow(double pententage, String title) {

@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
@@ -9,6 +10,7 @@ import 'package:dudu/pages/setting/lists/lists_page.dart';
 import 'package:dudu/pages/status/scheduled_statuses_list.dart';
 import 'package:dudu/pages/timeline/conversations_timeline.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/i18n_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -49,8 +51,9 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
     String  zan_or_shoucang =
     context.select<SettingsProvider, String>((m) => m.get('zan_or_shoucang'));
 
-    var zan_icon = zan_or_shoucang == '0' ? IconFont.thumbUp : IconFont.favorite;
-    var zan_text = zan_or_shoucang == '0' ? '赞' : '收藏';
+    bool isZh = I18nUtil.isZh(context);
+    var zan_icon = isZh ? (zan_or_shoucang == '0' ? IconFont.thumbUp : IconFont.favorite) : IconFont.favorite;
+    var zan_text = isZh ? (zan_or_shoucang == '0' ? '赞' : S.of(context).favorites) : S.of(context).favorites;
 
     return ListView(
       padding: EdgeInsets.only(top: 0),
@@ -72,29 +75,29 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
           onPress: () => AppNavigate.push(FavouritesList()),
         ),
         SettingCell(
-          title: '书签',
+          title: S.of(context).bookmark,
           leftIcon: Icon(IconFont.bookmark),
           onPress: () => AppNavigate.push(BookmarksList()),
         ),
         SettingCell(
-          title: '列表',
+          title: S.of(context).list,
           leftIcon: Icon(IconFont.list),
           onPress: () => AppNavigate.push(ListsPage()),
         ),
         SettingCell(
-          title: '定时嘟文',
+          title: S.of(context).timed_beep,
           leftIcon: Icon(IconFont.time,size: 22,),
           onPress: () => AppNavigate.push(ScheduledStatusesList()),
         ),
 
         SizedBox(height: 10,),
         SettingCell(
-          title: '账号设置',
+          title: S.of(context).account_settings,
           leftIcon: Icon(IconFont.accountSetting),
           onPress: () => AppNavigate.push(AccountSetting()),
         ),
         SettingCell(
-          title: '通用',
+          title: S.of(context).universal,
           leftIcon: Icon(IconFont.settings),
           onPress: () => AppNavigate.push(GeneralSetting()),
         ),

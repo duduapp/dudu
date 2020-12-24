@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
@@ -35,7 +36,7 @@ class _UserReportState extends State<UserReport> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('投诉@${widget.account.acct}的滥用行为',overflow: TextOverflow.fade,),
+        title: Text(S.of(context).report_user('@'+widget.account.acct),overflow: TextOverflow.fade,),
       ),
       body: Column(
         children: <Widget>[
@@ -53,9 +54,9 @@ class _UserReportState extends State<UserReport> {
             child: Row(
               children: <Widget>[
                 Spacer(),
-                OutlineButton(textColor:Theme.of(context).buttonColor,child: Text('取消'),onPressed: (){AppNavigate.pop();},),
+                OutlineButton(textColor:Theme.of(context).buttonColor,child: Text(S.of(context).cancel),onPressed: (){AppNavigate.pop();},),
                 SizedBox(width: 5,),
-                RaisedButton(textColor:Colors.white,child: Text('继续'),onPressed: () {
+                RaisedButton(textColor:Colors.white,child: Text(S.of(context).carry_on),onPressed: () {
                   AppNavigate.push(UserReportMessage(chooseStatuses: chooseStatues,account: widget.account,));
                 },),
                 SizedBox(width: 20,)
@@ -83,7 +84,7 @@ class _UserReportState extends State<UserReport> {
               flex: 3,
               child: Column(
                 children: <Widget>[
-                  Text(DateUntil.dateTime(itemData.createdAt)),
+                  Text(DateUntil.dateTime(itemData.createdAt,context)),
                   Checkbox(value: chooseStatues.contains(itemData.id),onChanged: (bool) {
                     if (bool) {
                       chooseStatues.add(itemData.id);

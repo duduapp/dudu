@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class EmptyView extends StatelessWidget {
@@ -9,7 +10,7 @@ class EmptyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         color: Theme.of(context).backgroundColor,
-        child: Center(child: Text(text?? '还没有内容')));
+        child: Center(child: Text(text?? S.of(context).no_content_yet)));
   }
 }
 
@@ -24,6 +25,6 @@ class EmptyViewWithHeight extends StatelessWidget {
     return Container(
         height: height,
         color: Theme.of(context).backgroundColor,
-        child: Center(child: Text(text?? '还没有内容')));
+        child: Center(child: Text(text?? S.of(context).no_content_yet)));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dudu/constant/api.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
@@ -43,7 +44,7 @@ class EmojiKeyboard extends StatelessWidget {
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
             ),
-            emptyView: EmptyView(text: '本实例没有自定义表情',),
+            emptyView: EmptyView(text: S.of(context).there_is_no_custom_emoji_in_this_example,),
           );
         },
       ),

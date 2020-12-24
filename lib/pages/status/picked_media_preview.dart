@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 
 
 
@@ -6,6 +7,7 @@ import 'package:dudu/models/status/picked_media.dart';
 import 'package:dudu/utils/app_navigate.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:nav_router/nav_router.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
@@ -47,7 +49,7 @@ class PickedMediaPreview extends StatelessWidget {
         color: Colors.black,
         child: Center(
           child: Text(
-            '图片加载出现错误',
+            S.of(navGK.currentState.overlay.context).error_loading_image,
             style: TextStyle(fontSize: 16, color: Colors.white),
           ),
         ),

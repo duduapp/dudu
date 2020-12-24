@@ -1,5 +1,7 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/i18n_util.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
@@ -24,9 +26,11 @@ class _FavouritesListState extends State<FavouritesList> {
   
   @override
   Widget build(BuildContext context) {
+    var isZh = I18nUtil.isZh(context);
+    var title = isZh ? StringUtil.getZanString() : S.of(context).favorites;
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('我的${StringUtil.getZanString()}'),
+        title: Text(title),
       ),
       body: ChangeNotifierProvider<ResultListProvider>(
           create: (context) => ResultListProvider(

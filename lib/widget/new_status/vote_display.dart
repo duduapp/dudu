@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/vote.dart';
 import 'package:dudu/utils/screen.dart';
@@ -26,7 +27,7 @@ class VoteDisplay extends StatelessWidget {
               Icon(IconFont.vote,color: Colors.blue,),
               SizedBox(width: 5,),
               Text(
-                '投票',
+                S.of(context).vote,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               )
             ],

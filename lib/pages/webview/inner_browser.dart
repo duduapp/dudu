@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:io';
 
 import 'package:dudu/constant/icon_font.dart';
@@ -26,7 +27,7 @@ class InnerBrowser extends StatefulWidget {
 
 class _InnerBrowserState extends State<InnerBrowser> {
   int progress = 0;
-  String title = '网页';
+  String title ;
   String url;
 
   WebViewController _controller;
@@ -34,13 +35,13 @@ class _InnerBrowserState extends State<InnerBrowser> {
 
   @override
   void initState() {
+    super.initState();
     url = widget.url;
+    title = S.of(context).web_page;
     if (widget.appCredential != null) {
       url = '$url/oauth/authorize?scope=read+write+follow+push+admin%3Awrite%3Aaccounts&response_type=code&redirect_uri=${widget.appCredential.redirectUri}&client_id=${widget.appCredential.clientId}';
     }
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
-
-    super.initState();
   }
 
   @override
@@ -78,12 +79,12 @@ class _InnerBrowserState extends State<InnerBrowser> {
               onPressed: () {
                 DialogUtils.showBottomSheet(context: context, widgets: [
                   BottomSheetItem(
-                    text: '分享',
+                    text: S.of(context).share_it,
                     onTap: () => Share.share(url),
                   ),
                   Divider(indent: 0, height: 0),
                   BottomSheetItem(
-                    text: '在浏览器中打开',
+                    text: S.of(context).open_in_browser,
                     onTap: () => UrlUtil.openUrl(widget.url),
                   ),
                   Container(

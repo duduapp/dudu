@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/timeline_api.dart';
 import 'package:dudu/constant/api.dart';
 import 'package:dudu/constant/icon_font.dart';
@@ -50,7 +51,7 @@ class _HomeTimelineState extends State<HomeTimeline> {
           controller: _downMenuController,
           headerBuilder: (menuShowing) {
             return DropDownTitle(
-              title: '首页',
+              title: S.of(context).home,
               expand: menuShowing,
               showIcon: true,
             );

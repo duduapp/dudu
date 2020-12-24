@@ -33,6 +33,11 @@ class TimelineApi {
    return Request.buildGetUrl(notificationUrl, _include_types(['follow_request']));
   }
 
+  static String get follow {
+    return Request.buildGetUrl(notificationUrl, _include_types(['follow']));
+  }
+
+
   static String get mention {
     return Request.buildGetUrl(notificationUrl, _include_types(['mention']));
   }

@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
@@ -15,7 +16,7 @@ class UserFollowers extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('粉丝'),
+        title: Text(S.of(context).fans),
       ),
       body: ChangeNotifierProvider<ResultListProvider>(
         create: (context) => ResultListProvider(

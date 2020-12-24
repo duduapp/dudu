@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
@@ -27,15 +28,15 @@ class SettingHead extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           NoSplashInkWell(
-            child: headerSection(account.statusesCount, '嘟文'),
+            child: headerSection(account.statusesCount, S.of(context).toots),
             onTap: () => AppNavigate.push(UserProfile(account,)),
           ),
           NoSplashInkWell(
-            child: headerSection(account.followingCount, '关注'),
+            child: headerSection(account.followingCount, S.of(context).attention),
             onTap: () => AppNavigate.push(UserFollowing(account.id)),
           ),
           NoSplashInkWell(
-            child: headerSection(account.followersCount, '粉丝'),
+            child: headerSection(account.followersCount, S.of(context).fans),
             onTap: () => AppNavigate.push(UserFollowers(account.id)),
           ),
         ],

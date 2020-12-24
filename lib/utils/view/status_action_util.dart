@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:io';
 
 import 'package:dudu/api/accounts_api.dart';
@@ -21,6 +22,7 @@ import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
@@ -172,15 +174,15 @@ class StatusActionUtil {
     DialogUtils.showBottomSheet(context: modalContext, widgets: [
       BottomSheetItem(
         icon: IconFont.bookmark,
-        text: (data.bookmarked == null || !data.bookmarked) ? '添加书签' : '删除书签',
+        text: (data.bookmarked == null || !data.bookmarked) ? S.of(context).add_bookmark : S.of(context).delete_bookmark,
         onTap: () => onPressBookmark(modalContext, data),
       ),
       Divider(indent: 60, height: 0),
       if (mentioned) ...[
         BottomSheetItem(
           icon: IconFont.volumeOff,
-          text: (data.muted == null || !data.muted) ? '隐藏该对话' : '取消隐藏该对话',
-          subText: '隐藏后将不会从该对话中接收到消息',
+          text: (data.muted == null || !data.muted) ? S.of(context).hide_this_conversation : S.of(context).unhide_the_conversation,
+          subText: S.of(context).after_hiding,
           onTap: () {
             _onPressMuteConversation(data);
           },
@@ -189,7 +191,7 @@ class StatusActionUtil {
       ],
       BottomSheetItem(
         icon: IconFont.link,
-        text: '分享链接',
+        text: S.of(context).share_link,
         onTap: () {
           Share.share(data.url);
         },
@@ -197,7 +199,7 @@ class StatusActionUtil {
       Divider(indent: 60, height: 0),
       BottomSheetItem(
         icon: IconFont.copy,
-        text: '分享嘟文',
+        text: S.of(context).share_toot,
         onTap: () {
           Share.share(StringUtil.removeAllHtmlTags(data.content));
         },
@@ -206,11 +208,11 @@ class StatusActionUtil {
         Divider(indent: 60, height: 0),
         BottomSheetItem(
           icon: IconFont.copy,
-          text: '复制嘟文',
+          text: S.of(context).copy_the_beep,
           onTap: () {
             Clipboard.setData(new ClipboardData(
                 text: StringUtil.removeAllHtmlTags(data.content)));
-            DialogUtils.toastFinishedInfo('嘟文已复制');
+            DialogUtils.toastFinishedInfo(S.of(context).dumb_text_has_been_copied);
           },
         )
       ],
@@ -220,7 +222,7 @@ class StatusActionUtil {
           Divider(indent: 60, height: 0),
           BottomSheetItem(
             icon: IconFont.report,
-            text: '投诉 ',
+            text: S.of(context).complaint,
             onTap: () async {
               var accountLocal =
                   await getAccountInLocal(modalContext, data.account);
@@ -234,10 +236,10 @@ class StatusActionUtil {
           Divider(indent: 60, height: 0),
           BottomSheetItem(
             icon: IconFont.follow,
-            text: '关注 @' + data.account.acct,
+            text: S.of(context).follow_user('@'+data.account.acct),
             onTap: () async {
               var res = await AccountsApi.follow(data.account.id);
-              if (res != null) DialogUtils.toastFinishedInfo('已关注或发送关注请求');
+              if (res != null) DialogUtils.toastFinishedInfo(S.of(context).followed_or_sent_a_follow_request);
             },
           )
         ],
@@ -247,12 +249,12 @@ class StatusActionUtil {
         ),
         BottomSheetItem(
           icon: IconFont.volumeOff,
-          text: '隐藏 @' + data.account.username,
-          subText: '隐藏后该用户的嘟文将不会显示在你的时间轴中',
+          text: S.of(context).hide_user(data.account.username),
+          subText: S.of(context).hiding_description,
           onTap: () {
             DialogUtils.showSimpleAlertDialog(
                 context: context,
-                text: '你确定要隐藏用户 @' + data.account.username + '吗?',
+                text: S.of(context).are_you_sure_to_hide_users('@'+data.account.username),
                 onConfirm: () => _onPressMute(modalContext, data, subStatus));
           },
         ),
@@ -261,22 +263,22 @@ class StatusActionUtil {
           onTap: () {
             DialogUtils.showSimpleAlertDialog(
                 context: context,
-                text: '你确定要屏蔽用户 @' + data.account.username + '吗?',
+                text: S.of(context).are_you_sure_to_block_users('@'+data.account.username),
                 onConfirm: () => _onPressBlock(modalContext, data, subStatus));
           },
           icon: IconFont.block,
-          text: '屏蔽 @' + data.account.username,
-          subText: '屏蔽后该用户将无法看到你发的嘟文',
+          text: S.of(context).block_user('@'+ data.account.username),
+          subText: S.of(context).blocking_description,
         ),
         if (data.account.acct.contains('@')) ...[
           BottomSheetItem(
             icon: IconFont.www,
-            text: '隐藏实例'+StringUtil.accountDomain(data.account),
-            subText: '隐藏后该实例的所有嘟文将不会显示在你的时间轴中',
+            text: S.of(context).hide_instance(StringUtil.accountDomain(data.account)),
+            subText: S.of(context).hiding_instance_description,
             onTap: () => DialogUtils.showSimpleAlertDialog(
                 context: context,
                 text:
-                '你确定要屏蔽@${StringUtil.accountDomain(data.account)}实例吗？你将不会在任何公共时间轴或消息中看到该实例的内容，而且该实例的关注者也会被删除',
+                S.of(context).hide_instance_confirm(StringUtil.accountDomain(data.account)),
                 onConfirm: () {
                   AccountsApi.blockDomain(
                       StringUtil.accountDomain(data.account));
@@ -285,13 +287,13 @@ class StatusActionUtil {
           ),
           BottomSheetItem(
             icon: IconFont.favorite,
-            text: '收藏实例' + StringUtil.accountDomain(data.account),
-            subText: '该实例将被收藏在你的“发现”菜单中',
+            text: S.of(context).collection_example(StringUtil.accountDomain(data.account)),
+            subText: S.of(context).the_instance_will_be_saved_in_your_discover_menu,
             onTap: () async{
               var res = await DialogUtils.showRoundedDialog(
                   context: context, content: AddInstance(StringUtil.accountDomain(data.account)));
               if (res != null) {
-                DialogUtils.toastFinishedInfo('添加实例成功');
+                DialogUtils.toastFinishedInfo(S.of(context).added_instance_successfully);
               }
             },
           ),
@@ -308,7 +310,7 @@ class StatusActionUtil {
               showAdminAccountActionDialog(context, data);
             },
             icon: IconFont.block,
-            text: '管理员: 对账号进行操作',
+            text: S.of(context).administrator_operate_the_account,
           ),
       ],
       if (myAccount != null && myAccount.id == data.account.id)
@@ -316,17 +318,17 @@ class StatusActionUtil {
         if (data.visibility == 'public' || data.visibility == 'unlisted')
           BottomSheetItem(
             icon: Icons.vertical_align_top,
-            text: data.pinned == null || !data.pinned ? '置顶' : '取消置顶',
+            text: data.pinned == null || !data.pinned ? S.of(context).top : S.of(context).unpink,
             onTap: () => onPressPin(data),
           ),
         BottomSheetItem(
           icon: IconFont.delete,
-          text: '删除',
+          text: S.of(context).delete,
           color: Colors.red,
           onTap: () {
             DialogUtils.showSimpleAlertDialog(
                 context: context,
-                text: '确定要删除这条嘟嘟吗?',
+                text: S.of(context).are_you_sure_you_want_to_delete_this_beep,
                 onConfirm: () {
                   _onPressRemove(modalContext, data, subStatus);
                 });
@@ -334,7 +336,7 @@ class StatusActionUtil {
         ),
         BottomSheetItem(
           icon: IconFont.edit,
-          text: '删除并重新编辑',
+          text: S.of(context).delete_and_re_edit,
           color: Colors.red,
           onTap: () {
             _onPressRemove(modalContext, data, subStatus);
@@ -384,15 +386,15 @@ class StatusActionUtil {
   static onPressBookmark(BuildContext context, StatusItemData data) async {
     data = await getStatusInLocal(context, data);
     if (data == null) {
-      //DialogUtils.toastFinishedInfo('添加书签失败');
+      //DialogUtils.toastFinishedInfo(S.of(context).failed_to_add_bookmark);
       return;
     }
     if (!data.bookmarked) {
       StatusApi.bookmark(data.id);
-      DialogUtils.toastFinishedInfo('已添加书签');
+      DialogUtils.toastFinishedInfo(S.of(context).bookmarked);
     } else {
       StatusApi.unBookmark(data.id);
-      DialogUtils.toastFinishedInfo('已删除书签');
+      DialogUtils.toastFinishedInfo(S.of(context).bookmark_deleted);
     }
     data.bookmarked = !data.bookmarked;
     ListViewUtil.handleAllStatuses((e) => e['bookmarked'] = data.bookmarked,
@@ -402,10 +404,10 @@ class StatusActionUtil {
   static onPressPin(StatusItemData data) {
     if (data.pinned != null && data.pinned) {
       StatusApi.unpin(data.id);
-      DialogUtils.toastFinishedInfo('已取消置顶');
+      DialogUtils.toastFinishedInfo(S.of(navGK.currentState.overlay.context).unpinned);
     } else {
       StatusApi.pin(data.id);
-      DialogUtils.toastFinishedInfo('已置顶');
+      DialogUtils.toastFinishedInfo(S.of(navGK.currentState.overlay.context).pinned);
     }
     data.pinned = !data.pinned;
     ListViewUtil.handleAllStatuses((e) => e['pinned'] = data.pinned,
@@ -415,10 +417,10 @@ class StatusActionUtil {
   static _onPressMuteConversation(StatusItemData data) {
     if (data.muted) {
       StatusApi.numuteConversation(data.id);
-      DialogUtils.toastFinishedInfo('已取消隐藏对话');
+      DialogUtils.toastFinishedInfo(S.of(navGK.currentState.overlay.context).conversation_unhide);
     } else {
       StatusApi.muteConversation(data.id);
-      DialogUtils.toastFinishedInfo('已隐藏对话');
+      DialogUtils.toastFinishedInfo(S.of(navGK.currentState.overlay.context).conversation_hidden);
     }
     data.muted = !data.muted;
     ListViewUtil.handleAllStatuses(
@@ -508,7 +510,7 @@ class StatusActionUtil {
       if (!ListViewUtil.loginnedAndPrompt(context)) return null;
       var statusLocal = await SearchApi.resolveStatus(status.url);
       if (statusLocal == null) {
-        DialogUtils.toastErrorInfo('出现错误');
+        DialogUtils.toastErrorInfo(S.of(context).an_error_occurred);
         return null;
       }
       return statusLocal;
@@ -524,7 +526,7 @@ class StatusActionUtil {
       if (!ListViewUtil.loginnedAndPrompt(context)) return null;
       var statusLocal = await SearchApi.resolveAccount(account.url);
       if (statusLocal == null) {
-        DialogUtils.toastErrorInfo('出现错误');
+        DialogUtils.toastErrorInfo(S.of(context).an_error_occurred);
         return null;
       }
       return statusLocal;

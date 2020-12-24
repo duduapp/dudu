@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/pages/setting/filter/common_filter_edit.dart';
@@ -25,16 +26,16 @@ class _CommonFilterListState extends State<CommonFilterList> {
     var title;
     switch (widget.type) {
       case FilterType.home:
-        title = '主页';
+        title = S.of(context).home_page;
         break;
       case FilterType.notifications:
-        title = '消息';
+        title = S.of(context).news;
         break;
       case FilterType.public:
-        title = '公共时间轴';
+        title = S.of(context).public_timeline;
         break;
       case FilterType.thread:
-        title = '对话';
+        title = S.of(context).dialogue;
         break;
     }
     return ChangeNotifierProvider<ResultListProvider>(

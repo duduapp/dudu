@@ -1,4 +1,6 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:nav_router/nav_router.dart';
 
 class Vote {
   var option1Controller = TextEditingController();
@@ -10,28 +12,32 @@ class Vote {
   var option4Enabled = false;
 
   var expiresIn = 86400;
-  var expiresInString = '1天';
+  String get expiresInString => S.of(navGK.currentState.overlay.context).day1;
 
   var multiChoice = false;
 
-  static List<String> voteOptions = [
-    '5分钟',
-    '30分钟',
-    '1小时',
-    '6小时',
-    '1天',
-    '3天',
-    '7天'
+  set expiresInString(String str) {
+    expiresInString = str;
+  }
+
+  static List<String> get voteOptions => [
+    S.of(navGK.currentState.overlay.context).minutes5,
+    S.of(navGK.currentState.overlay.context).minutes30,
+    S.of(navGK.currentState.overlay.context).hour1,
+    S.of(navGK.currentState.overlay.context).hours6,
+    S.of(navGK.currentState.overlay.context).day1,
+    S.of(navGK.currentState.overlay.context).days3,
+    S.of(navGK.currentState.overlay.context).days7
   ];
 
-  static Map<String, int> voteOptionsInSeconds = {
-    '5分钟': 300,
-    '30分钟': 1800,
-    '1小时': 3600,
-    '6小时': 21600,
-    '1天': 86400,
-    '3天': 259200,
-    '7天': 604800
+  static Map<String, int> get voteOptionsInSeconds => {
+    S.of(navGK.currentState.overlay.context).minutes5: 300,
+    S.of(navGK.currentState.overlay.context).minutes30: 1800,
+    S.of(navGK.currentState.overlay.context).hour1: 3600,
+    S.of(navGK.currentState.overlay.context).hours6: 21600,
+    S.of(navGK.currentState.overlay.context).day1: 86400,
+    S.of(navGK.currentState.overlay.context).days3: 259200,
+    S.of(navGK.currentState.overlay.context).days7: 604800
   };
 
   Vote();

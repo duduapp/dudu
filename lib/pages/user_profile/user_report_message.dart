@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/public.dart';
@@ -34,7 +35,7 @@ class _UserReportMessageState extends State<UserReportMessage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('投诉@${widget.account.acct}的滥用行为',overflow: TextOverflow.fade,),
+        title: Text(S.of(context).report_user('@'+widget.account.acct),overflow: TextOverflow.fade,),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -43,7 +44,7 @@ class _UserReportMessageState extends State<UserReportMessage> {
           child: Column(
             children: <Widget>[
               Text(
-                '该报告将发送给您的服务器管理员。你可以在下面填写投诉该用户的理由：',
+                S.of(context).the_report_will_be_sent_to_your_server_administrator,
                 maxLines: null,
               ),
               SizedBox(
@@ -65,21 +66,21 @@ class _UserReportMessageState extends State<UserReportMessage> {
                       borderSide:
                           BorderSide(color: Theme.of(context).buttonColor)),
                   border: OutlineInputBorder(borderSide: BorderSide()),
-                  labelText: '举报原因',
+                  labelText: S.of(context).reason_for_reporting,
                 ),
               ),
               SizedBox(
                 height: 20,
               ),
               if (widget.account.acct != widget.account.username) ...[
-                Text('这名用户来自另一个服务器。是否要向那个服务器发送一条匿名的投诉？',),
+                Text(S.of(context).this_user_is_from_another_server,),
                 SizedBox(height: 20,),
                 Row(
                   children: <Widget>[
                     Checkbox(value: forward,onChanged: (bool) {setState(() {
                       forward = bool;
                     });},),
-                    Text('转发到'+StringUtil.accountDomain(widget.account),)
+                    Text(S.of(context).forward_to+StringUtil.accountDomain(widget.account),)
                   ],
                 )
               ],
@@ -93,7 +94,7 @@ class _UserReportMessageState extends State<UserReportMessage> {
                     Spacer(),
                     OutlineButton(
                       textColor: Theme.of(context).buttonColor,
-                      child: Text('返回'),
+                      child: Text(S.of(context).back),
                       onPressed: () {
                         AppNavigate.pop();
                       },
@@ -103,7 +104,7 @@ class _UserReportMessageState extends State<UserReportMessage> {
                     ),
                     RaisedButton(
                       textColor: Colors.white,
-                      child: Text('投诉'),
+                      child: Text(S.of(context).complaint),
                       onPressed: () async{
                         var res = await AccountsApi.reportUser(widget.account.id, widget.chooseStatuses, _controller.text, forward);
                         if (res != null) {

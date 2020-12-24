@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 
 import 'package:cached_video_player/cached_video_player.dart';
 import 'package:chewie/chewie.dart';
@@ -83,7 +84,7 @@ class _VideoPlayState extends State<VideoPlay> {
 
 
   downloadMedia() async {
-    DialogUtils.toastDownloadInfo('正在下载中...');
+    DialogUtils.toastDownloadInfo(S.of(context).downloading);
     var appDocDir = await getTemporaryDirectory();
     var filename = widget.media.url.split('/').last.split('?').first;
     String savePath = appDocDir.path + filename;

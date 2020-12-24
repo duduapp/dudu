@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/instance/instance_manager.dart';
 import 'package:dudu/models/local_account.dart';
@@ -54,7 +55,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               BottomSheetItem(
-                text: '退出登录',
+                text: S.of(context).sign_out,
                 onTap: () => _onConfirmExit(),
               ),
               Container(
@@ -84,48 +85,56 @@ class _GeneralSettingState extends State<GeneralSetting> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('通用设置'),
+        title: Text(S.of(context).general_settings),
       ),
       body: ListView(
         children: <Widget>[
           ProviderSettingCell(
             providerKey: 'theme',
             leftIcon: Icon(IconFont.theme),
-            title: '应用主题',
+            title: S.of(context).application_theme,
             options: ['0','1','2'],
-            displayOptions: ['普通模式','暗色模式','深色模式'],
+            displayOptions: [S.of(context).normal_mode,S.of(context).dark_mode,S.of(context).darkest_mode],
+            type: SettingType.string,
+          ),
+          ProviderSettingCell(
+            providerKey: 'language',
+            leftIcon: Icon(IconFont.fontSize),
+            title: S.of(context).language,
+            options: ['zh','en'],
+            displayOptions: ['中文','English'],
             type: SettingType.string,
           ),
           ProviderSettingCell(
             providerKey: 'text_scale',
             leftIcon: Icon(IconFont.fontSize),
-            title: '字体大小',
+            title: S.of(context).font_size,
             options: ['0','1','2'],
-            displayOptions: ['小','中','大'],
+            displayOptions: [S.of(context).small,S.of(context).medium,S.of(context).big],
             type: SettingType.string,
           ),
           SettingCell(
             leftIcon: Icon(IconFont.display),
-            title: '显示设置',
+            title: S.of(context).display_setting,
             onPress: () => AppNavigate.push(SettingContent()),
           ),
 
 
           SettingCell(
             leftIcon: Icon(IconFont.about),
-    title: '关于嘟嘟',
+    title: S.of(context).about_dudu,
 
             onPress: () => AppNavigate.push(AboutApp()),
           ),
 
           SizedBox(height: 30,),
           SettingCellText(
-            text: Text('切换账号',style: TextStyle(fontSize: 16),),
+            text: Text(S.of(context).switch_account,style: TextStyle(fontSize: 16),),
             onPressed: () => AppNavigate.push(AccountSwitch(),routeType: RouterType.material),
           ),
           SizedBox(height: 10,),
           SettingCellText(
-            text: Text('退出登录',style: TextStyle(fontSize: 16),),
+            text: Text(S.of(context).sign_out,style: TextStyle(fontSize: 16),),
             onPressed: _onExitPressed,
           ),
         ],

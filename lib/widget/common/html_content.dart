@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
@@ -57,7 +58,7 @@ class _HtmlContentState extends State<HtmlContent> with TickerProviderStateMixin
           useRichText: true//widget.emojis.isEmpty,
         ),
         if (needExpand && widget.content.length > 300)
-          OutlineButton(child: Text(expanded?'折叠内容':'显示更多',style: TextStyle(fontSize: 12),),onPressed: () {setState(() {
+          OutlineButton(child: Text(expanded?S.of(context).collapse_content:S.of(context).display_more,style: TextStyle(fontSize: 12),),onPressed: () {setState(() {
             expanded = !expanded;
           });},)
       ]),

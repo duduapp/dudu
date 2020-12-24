@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/constant/icon_font.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
@@ -73,7 +74,7 @@ class StatusItemAccountW extends StatelessWidget {
                       ),TextSpan(text: " ",style: TextStyle(height: 1))],
 
                       TextSpan(
-                          text: primary? DateUntil.absoluteTime(status.createdAt):DateUntil.dateTime(status.createdAt),
+                          text: primary? DateUntil.absoluteTime(status.createdAt):DateUntil.dateTime(status.createdAt,context),
                           style: TextStyle(
                             height: 1,
                               color: Theme.of(context).accentColor,
@@ -118,7 +119,7 @@ class StatusItemAccountW extends StatelessWidget {
     if (appName != null) {
       spans.addAll([
         TextSpan(
-            text: '来自',
+            text: S.of(context).from,
             style:
                 TextStyle(fontSize: 10, height:1,color: Theme.of(context).accentColor)),
        // TextSpan(text: " ")

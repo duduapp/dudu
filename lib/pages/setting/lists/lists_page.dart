@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/lists_api.dart';
 import 'package:dudu/constant/api.dart';
 import 'package:dudu/constant/icon_font.dart';
@@ -31,7 +32,7 @@ class _ListsPageState extends State<ListsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('列表'),
+        title: Text(S.of(context).list),
         actions: <Widget>[
           IconButton(
             icon: Icon(IconFont.follow,size: 26,),
@@ -76,11 +77,11 @@ class _ListsPageState extends State<ListsPage> {
               offset: Offset(0, 35),
               icon: Icon(IconFont.moreHoriz,size: 28,),
               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                new PopupMenuItem<String>(value: 'edit', child: new Text('编辑列表')),
+                new PopupMenuItem<String>(value: 'edit', child: Text(S.of(context).edit_list)),
                 new PopupMenuItem<String>(
-                    value: 'rename', child: new Text('重命名列表')),
+                    value: 'rename', child: new Text(S.of(context).rename_list)),
                 new PopupMenuItem<String>(
-                    value: 'delete', child: new Text('删除列表')),
+                    value: 'delete', child: new Text(S.of(context).delete_list)),
               ],
               onSelected: (String value) {
                 switch (value) {
@@ -169,7 +170,7 @@ class _ListsRenameState extends State<ListsRename> {
               Spacer(),
               NormalCancelFlatButton(),
               NormalFlatButton(
-                text: '重命名列表',
+                text: S.of(context).rename_list,
                 onPressed: () async {
                   AppNavigate.pop();
                   var data =

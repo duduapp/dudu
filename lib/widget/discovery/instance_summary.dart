@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dudu/constant/icon_font.dart';
@@ -141,7 +142,7 @@ class InstanceSummary extends StatelessWidget {
                           child: !showAction? Container() :IconButton(icon: Icon(IconFont.expandMore,size: 20,), onPressed: () {
                             DialogUtils.showBottomSheet(context: context,widgets: [
                               BottomSheetItem(
-                                text: '删除',
+                                text: S.of(context).delete,
                                 onTap: item.fromServer ? null : () {
                                   InstanceManager.removeInstance(item.detail);
                                   if (onDelete != null) onDelete();
@@ -195,7 +196,7 @@ class InstanceSummary extends StatelessWidget {
                           children: [
                             TextInkWell(
                               onTap: () async{await InstanceManager.login(item.detail);},
-                              text: '登录',
+                              text: S.of(context).log_in,
                               activeColor: Theme.of(context).accentColor,
                             ),
                             TextInkWell(
@@ -203,14 +204,14 @@ class InstanceSummary extends StatelessWidget {
                                 UrlUtil.openUrl(
                                     'https://' + urlWithoutHttpPrefix + '/auth/sign_up');
                               },
-                              text: '注册',
+                              text: S.of(context).registered,
                               activeColor: Theme.of(context).accentColor,
                             ),
                             TextInkWell(
                               onTap:  () {
                                 AppNavigate.push(InnerBrowser('https://' + urlWithoutHttpPrefix + '/about/more'));
                               },
-                              text: '更多',
+                              text: S.of(context).more,
                               activeColor: Theme.of(context).accentColor,
                             ),
                           ],

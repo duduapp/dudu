@@ -1,9 +1,11 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dio/dio.dart';
 import 'package:dudu/api/status_api.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/i18n_util.dart';
 import 'package:dudu/utils/view/list_view_util.dart';
 import 'package:dudu/widget/common/colored_tab_bar.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
@@ -244,7 +246,7 @@ class _StatusDetailState extends State<StatusDetail>
             child: ProviderEasyRefreshListView(
               firstRefresh: false,
               enableLoad: false,
-              emptyView: EmptyViewWithHeight(text: '还没有转评',),
+              emptyView: EmptyViewWithHeight(text: S.of(context).no_comment_yet,),
               loadingView: LoadingView(height: 200,),
             ),
           ),
@@ -255,7 +257,7 @@ class _StatusDetailState extends State<StatusDetail>
             value: providers[1],
             child: ProviderEasyRefreshListView(
               firstRefresh: true,
-              emptyView: EmptyViewWithHeight(text: '还没有转嘟',),
+              emptyView: EmptyViewWithHeight(text: S.of(context).not_turning,),
               loadingView: LoadingView(height: 200,),
             ),
           ),
@@ -266,7 +268,7 @@ class _StatusDetailState extends State<StatusDetail>
             value: providers[2],
             child: ProviderEasyRefreshListView(
               firstRefresh: true,
-              emptyView: EmptyViewWithHeight(text: '还没有${StringUtil.getZanString()}',),
+              emptyView: EmptyViewWithHeight(text: I18nUtil.isZh(context) ? '还没有${StringUtil.getZanString()}': S.of(context).no_favorite,),
               loadingView: LoadingView(height: 200,),
             ),
           ),
@@ -279,10 +281,10 @@ class _StatusDetailState extends State<StatusDetail>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text('嘟文信息'),
+        title: Text(S.of(context).toot_information),
         toolbarHeight: 45,
       ),
-      body: errorMsg != null ? Center(child: Text(errorMsg == 'Record not found' ? '没找到嘟文' : errorMsg)):Column(
+      body: errorMsg != null ? Center(child: Text(errorMsg == 'Record not found' ? S.of(context).toot_not_found : errorMsg)):Column(
         //  alignment: AlignmentDirectional.bottomEnd,
         children: [
           Expanded(
@@ -343,23 +345,21 @@ class _StatusDetailState extends State<StatusDetail>
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        '转评 ' +
-                                            widget.data.repliesCount.toString(),
+                                        S.of(context).reply_count(widget.data.repliesCount),
                                       ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        '转嘟 ' +
-                                            widget.data.reblogsCount.toString(),
+                                        S.of(context).boost_count(widget.data.reblogsCount),
                                       ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        '${StringUtil.getZanString()} ' +
+                                        I18nUtil.isZh(context) ? ('${StringUtil.getZanString()} ' +
                                             widget.data.favouritesCount
-                                                .toString(),
+                                                .toString()) : S.of(context).favorite_count(widget.data.favouritesCount),
                                       ),
                                     ),
                                   ],

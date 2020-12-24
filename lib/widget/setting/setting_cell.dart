@@ -1,4 +1,5 @@
 import 'package:dudu/models/provider/settings_provider.dart';
+import 'package:dudu/public.dart';
 import 'package:dudu/widget/common/no_splash_ink_well.dart';
 import 'package:dudu/widget/dialog/single_choice_dialog.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class SettingCell extends StatelessWidget {
         child: Icon(Icons.remove),
         opacity: 0,
       ),
-        this.tail,
+      this.tail,
       this.onPress,
       this.subTitle,
       this.subTitleStyle})
@@ -27,11 +28,12 @@ class SettingCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget cont;
-    Widget newTail = tail ?? Icon(
-      Icons.keyboard_arrow_right,
-      size: 30,
-      color: Colors.grey,
-    );
+    Widget newTail = tail ??
+        Icon(
+          Icons.keyboard_arrow_right,
+          size: 30,
+          color: Colors.grey,
+        );
     if (subTitle != null) {
       cont = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,11 +47,10 @@ class SettingCell extends StatelessWidget {
         ],
       );
     } else {
-      cont = Text(title, style: TextStyle(fontSize: 15));
+      cont = Container(width:ScreenUtil.width(context) * 0.70,child: Text(title, style: TextStyle(fontSize: 15)));
     }
 
     return Container(
-
       child: NoSplashInkWell(
         onTap: () => onPress(),
         child: Column(
@@ -64,14 +65,14 @@ class SettingCell extends StatelessWidget {
                   leftIcon,
                   SizedBox(width: 10),
                   cont,
-                   Spacer(),
+                  Spacer(),
                   newTail
                 ],
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 40),
-              child: Divider(height:0.5),
+              child: Divider(height: 0.5),
             )
           ],
         ),
@@ -101,7 +102,8 @@ class ProviderSettingCell extends StatefulWidget {
       ),
       this.options,
       this.displayOptions,
-      this.onPressed,this.dialogTitle})
+      this.onPressed,
+      this.dialogTitle})
       : super(key: key);
 
   @override
@@ -178,7 +180,6 @@ class _ProviderSettingCellState extends State<ProviderSettingCell> {
             groupValue: widget.options.indexOf(stringValue),
           );
         });
-
   }
 
   _onPressBool(bool value) {

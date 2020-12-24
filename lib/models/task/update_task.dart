@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -67,8 +68,8 @@ class UpdateTask {
 //          DialogUtils.showSimpleAlertDialog(
 //              context: navGK.currentState.overlay.context,
 //              text: data['text'],
-//              confirmText: '更新',
-//              cancelText: '关闭程序',
+//              confirmText: S.of(context).update,
+//              cancelText: S.of(context).turn_off_an_app,
 //              onConfirm: () async {
 //                DialogUtils.showRoundedDialog(
 //                    context: navGK.currentState.overlay.context,
@@ -147,14 +148,14 @@ class UpdateWindow extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '检测到新版本',
+                    S.of(context).new_version_detected,
                     style: TextStyle(fontSize: 18),
                   ),
 //                NormalFlatButton(
-//                    text: '复制下载链接',
+//                    text: S.of(context).copy_the_download_link,
 //                    onPressed: () {
 //                      Clipboard.setData(new ClipboardData(text: apkUrl));
-//                      DialogUtils.toastFinishedInfo('下载链接已复制');
+//                      DialogUtils.toastFinishedInfo(S.of(context).download_link_copied);
 //                    }),
                 ],
               ),
@@ -166,11 +167,11 @@ class UpdateWindow extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   NormalFlatButton(
-                    text: '关闭程序',
+                    text: S.of(context).turn_off_an_app,
                     onPressed: () => exit(0),
                   ),
                   NormalFlatButton(
-                    text: '更新',
+                    text: S.of(context).update,
                     onPressed: () async {
                       UrlUtil.openUrl(apkUrl);
                     },
@@ -231,7 +232,7 @@ class _ApkDownloadProgressState extends State<ApkDownloadProgress> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text('下载中...'),
+          Text(S.of(context).downloading),
           SizedBox(
             height: 10,
           ),
@@ -250,7 +251,7 @@ class _ApkDownloadProgressState extends State<ApkDownloadProgress> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               NormalFlatButton(
-                text: '取消',
+                text: S.of(context).cancel,
                 onPressed: () {
                   cancelToken.cancel();
                   AppNavigate.pop();
@@ -261,7 +262,7 @@ class _ApkDownloadProgressState extends State<ApkDownloadProgress> {
               ),
               if (download != 0 && download == total)
                 NormalFlatButton(
-                  text: '安装',
+                  text: S.of(context).installation,
                   onPressed: () async {
                     //   var res = await OpenFile.open(savePath);
                   },

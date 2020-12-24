@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 // 下拉刷新和上拉加载
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
@@ -166,10 +167,10 @@ class _ProviderEasyRefreshListViewState
                         primary: widget.scrollController == null ? true : false,
                         controller: _refreshController,
                         header: ClassicHeader(
-                          releaseText: '释放刷新',
-                          refreshingText: '加载中',
-                          completeText: '完成刷新',
-                          idleText: '下拉刷新',
+                          releaseText: S.of(context).release_refresh,
+                          refreshingText: S.of(context).loading,
+                          completeText: S.of(context).complete_refresh,
+                          idleText: S.of(context).pull_down_to_refresh,
                           releaseIcon: Icon(
                             Icons.arrow_upward,
                             color: Colors.grey,
@@ -180,11 +181,11 @@ class _ProviderEasyRefreshListViewState
                               color: Theme.of(context).accentColor),
                         ),
                         footer: ClassicFooter(
-                          loadingText: '加载中...',
+                          loadingText: S.of(context).loading,
                           loadingIcon: null,
-                          idleText: '加载中...',
+                          idleText: S.of(context).loading,
                           idleIcon: null, // 自动加载，所以显示这个
-                          canLoadingText: '释放加载更多',
+                          canLoadingText: S.of(context).release_load_more,
                           noDataText: '',
                         ),
                         enablePullDown: provider.enableRefresh

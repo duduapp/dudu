@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/api/status_api.dart';
 import 'package:dudu/constant/icon_font.dart';
@@ -10,6 +11,7 @@ import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/utils/i18n_util.dart';
 import 'package:dudu/utils/view/status_action_util.dart';
 import 'package:dudu/widget/common/list_row.dart';
 import 'package:dudu/widget/other/follow_cell.dart';
@@ -19,6 +21,7 @@ import 'package:dudu/widget/status/status_item_account.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
 
 import '../compute_util.dart';
@@ -32,50 +35,66 @@ class ListViewUtil {
     };
   }
 
-
   static accountRowFunction() {
     return (int index, List data, ResultListProvider provider) {
       OwnerAccount account = OwnerAccount.fromJson(data[index]);
-      return ListRow(child: StatusItemAccount(account),padding: 0,);
+      return ListRow(
+        child: StatusItemAccount(account),
+        padding: 0,
+      );
     };
   }
 
   static notificationRowFunction() {
-    return  (int index, List data, ResultListProvider provider) {
-      NotificationItem item = NotificationItem.fromJson(data[index]);
-      if (item.type == 'follow') {
-        return FollowCell(
-          item: item,
-        );
-      } else if (item.type == 'favourite') {
-        return StatusItem(
-          item: item.status,
-          refIcon: SettingsProvider().get('zan_or_shoucang') == '0' ? IconFont.thumbUp : IconFont.favorite,
-          refString: '${StringUtil.displayName(item.account)} ${SettingsProvider().get('zan_or_shoucang') == '0' ? '赞' : '收藏'}了你的嘟文',
-          refAccount: item.account,);
-      } else if (item.type == 'mention') {
-        return StatusItem(
-          item: item.status,
-        );
-      } else if (item.type == 'poll') {
-        bool self = item.status.account == LoginedUser().account;
-        return StatusItem(
-          item: item.status,
-          refIcon: IconFont.vote,
-          refString: '你${self ? '创建' : '参与'}的投票已结束',
-        );
-      } else if (item.type == 'reblog') {
-        return StatusItem(
-          item: item.status,
-          refIcon: IconFont.reblog,
-          refString: '${StringUtil.displayName(item.account)} 转嘟了你的嘟文',
-          refAccount: item.account,
-        );
-      } else if (item.type == 'follow_request') {
-        return FollowRequestCell(item: item,);
-      }else {
-        return Container();
-      }
+    return (int index, List data, ResultListProvider provider) {
+      return Builder(builder: (context) {
+        var isZh = I18nUtil.isZh(context);
+        NotificationItem item = NotificationItem.fromJson(data[index]);
+        if (item.type == 'follow') {
+          return FollowCell(
+            item: item,
+          );
+        } else if (item.type == 'favourite') {
+          return StatusItem(
+            item: item.status,
+            refIcon: isZh
+                ? (SettingsProvider().get('zan_or_shoucang') == '0'
+                    ? IconFont.thumbUp
+                    : IconFont.favorite)
+                : IconFont.favorite,
+            refString: isZh
+                ? ('${StringUtil.displayName(item.account)} ${SettingsProvider().get('zan_or_shoucang') == '0' ? '赞' : S.of(context).favorites}了你的嘟文')
+                : S
+                    .of(context)
+                    .favorited_your_toot(StringUtil.displayName(item.account)),
+            refAccount: item.account,
+          );
+        } else if (item.type == 'mention') {
+          return StatusItem(
+            item: item.status,
+          );
+        } else if (item.type == 'poll') {
+          bool self = item.status.account == LoginedUser().account;
+          return StatusItem(
+            item: item.status,
+            refIcon: IconFont.vote,
+            refString: self ? S.of(context).poll_your_created_ended : S.of(context).poll_your_voted_ended,
+          );
+        } else if (item.type == 'reblog') {
+          return StatusItem(
+            item: item.status,
+            refIcon: IconFont.reblog,
+            refString: S.of(context).boot_your_tool(StringUtil.displayName(item.account)),
+            refAccount: item.account,
+          );
+        } else if (item.type == 'follow_request') {
+          return FollowRequestCell(
+            item: item,
+          );
+        } else {
+          return Container();
+        }
+      });
     };
   }
 
@@ -89,7 +108,7 @@ class ListViewUtil {
     };
   }
 
-  static deleteStatus({BuildContext context, StatusItemData status}) async{
+  static deleteStatus({BuildContext context, StatusItemData status}) async {
     ResultListProvider provider;
     try {
       provider = Provider.of<ResultListProvider>(context, listen: false);
@@ -120,18 +139,17 @@ class ListViewUtil {
         provider = SettingsProvider().statusDetailProviders.last;
       }
     }
-    var accountLocal = await StatusActionUtil.getAccountInLocal(context,status.account);
+    var accountLocal =
+        await StatusActionUtil.getAccountInLocal(context, status.account);
     if (accountLocal == null) return;
     var accountId = accountLocal.id;
     AccountsApi.block(accountId);
-
 
     provider.removeByIdWithAnimation(status.id);
     // 防止和上面的语句冲突
     Future.delayed(Duration(seconds: 1), () {
       removeStatusFromProvider(accountId);
     });
-
   }
 
   static muteUser({BuildContext context, StatusItemData status}) async {
@@ -146,19 +164,20 @@ class ListViewUtil {
         provider = SettingsProvider().statusDetailProviders.last;
       }
     }
-    var accountLocal = await StatusActionUtil.getAccountInLocal(context,status.account);
+    var accountLocal =
+        await StatusActionUtil.getAccountInLocal(context, status.account);
     if (accountLocal == null) return;
     var accountId = accountLocal.id;
     AccountsApi.mute(accountId);
 
-   // if (res != null) {
-      provider.removeByIdWithAnimation(status.id);
+    // if (res != null) {
+    provider.removeByIdWithAnimation(status.id);
 
-      // 防止和上面的语句冲突
-      await Future.delayed(Duration(seconds: 1), () {
-        removeStatusFromProvider(accountId);
-      });
-   // }
+    // 防止和上面的语句冲突
+    await Future.delayed(Duration(seconds: 1), () {
+      removeStatusFromProvider(accountId);
+    });
+    // }
   }
 
   static reblogStatusInAllProvider(StatusItemData data) {
@@ -190,15 +209,17 @@ class ListViewUtil {
   }
 
   static sameStatusCondition(StatusItemData data) {
-    return (e) => e['id'] == data.id || (e['reblog'] != null && e['reblog']['id'] == data.id);
+    return (e) =>
+        e['id'] == data.id ||
+        (e['reblog'] != null && e['reblog']['id'] == data.id);
   }
 
-  static handleAllStatuses(handle(dynamic e),bool test(dynamic e)) {
+  static handleAllStatuses(handle(dynamic e), bool test(dynamic e)) {
     for (ResultListProvider provider in getRootProviders()) {
       if (provider != null)
-      for (var row in provider.list.where(test)){
+        for (var row in provider.list.where(test)) {
           handle(row);
-      }
+        }
     }
 
     // notification会包裹status
@@ -212,8 +233,9 @@ class ListViewUtil {
       handle(row);
     }
 
-    for (ResultListProvider provider in SettingsProvider().statusDetailProviders) {
-      for (var row in provider.list.where(test)){
+    for (ResultListProvider provider
+        in SettingsProvider().statusDetailProviders) {
+      for (var row in provider.list.where(test)) {
         handle(row);
       }
     }
@@ -221,14 +243,16 @@ class ListViewUtil {
 
   static removeStatusFromProvider(String accountId) {
     for (ResultListProvider provider
-    in SettingsProvider().statusDetailProviders) {
-      provider.removeWhere(
-              (e) => e.isNotEmpty && e['account']['id'] == accountId);
+        in SettingsProvider().statusDetailProviders) {
+      provider
+          .removeWhere((e) => e.isNotEmpty && e['account']['id'] == accountId);
     }
 
     for (ResultListProvider provider in getRootProviders()) {
       provider.removeWhere((e) =>
-          (e.containsKey('reblog') && e['reblog'] != null && e['reblog'].containsKey('account') &&
+          (e.containsKey('reblog') &&
+              e['reblog'] != null &&
+              e['reblog'].containsKey('account') &&
               e['reblog']['account']['id'] == accountId) ||
           e['account']['id'] == accountId);
     }
@@ -239,7 +263,7 @@ class ListViewUtil {
       SettingsProvider().localProvider,
       SettingsProvider().homeProvider,
       SettingsProvider().federatedProvider,
-    //  SettingsProvider().notificationProvider
+      //  SettingsProvider().notificationProvider
     ];
   }
 
@@ -251,17 +275,26 @@ class ListViewUtil {
       SettingsProvider().notificationProvider
     ]) {
       provider?.removeWhere((e) =>
-      (e.containsKey('reblog') && e['reblog'] != null && e['reblog'].containsKey('id') &&
-          e['reblog']['id'] == statusId) ||
-          e['id'] == statusId || (e.containsKey('status') && e['status'] != null && e['status']['id'] == statusId));
+          (e.containsKey('reblog') &&
+              e['reblog'] != null &&
+              e['reblog'].containsKey('id') &&
+              e['reblog']['id'] == statusId) ||
+          e['id'] == statusId ||
+          (e.containsKey('status') &&
+              e['status'] != null &&
+              e['status']['id'] == statusId));
     }
   }
 
   static bool loginnedAndPrompt(BuildContext context) {
-    if (LoginedUser().account == null || LoginedUser().host.startsWith('https://help.dudu.today')) {
-      DialogUtils.showSimpleAlertDialog(text: '你需要登录实例才能执行该操作。',confirmText: '去登录',onConfirm: () {
-       AppNavigate.popToRoot();
-      });
+    if (LoginedUser().account == null ||
+        LoginedUser().host.startsWith('https://help.dudu.today')) {
+      DialogUtils.showSimpleAlertDialog(
+          text: S.of(context).you_need_to_log_in_to_perform_this_operation,
+          confirmText: S.of(context).go_to_login,
+          onConfirm: () {
+            AppNavigate.popToRoot();
+          });
       return false;
     }
     return true;

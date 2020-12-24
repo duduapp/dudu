@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'dart:convert';
 
 import 'package:dio_http_cache/dio_http_cache.dart';
@@ -136,7 +137,7 @@ class InstanceManager {
     } catch (e) {
       pd.hide();
       DialogUtils.showInfoDialog(
-          navGK.currentState.overlay.context, '无法连接到服务器');
+          navGK.currentState.overlay.context, S.of(navGK.currentState.overlay.context).unable_to_connect_to_server);
       return;
     } finally {
       pd.hide();
@@ -144,7 +145,7 @@ class InstanceManager {
 
     AppCredential model = AppCredential.fromJson(json.decode(response.body));
       if (model.clientId == null) {
-      DialogUtils.toastErrorInfo('出现错误');
+      DialogUtils.toastErrorInfo(S.of(navGK.currentState.overlay.context).an_error_occurred);
       return;
     }
 
@@ -182,7 +183,7 @@ class InstanceManager {
       user.host = hostUrl;
       OwnerAccount account = await AccountsApi.getMyAccount();
       if (account == null) {
-        DialogUtils.toastErrorInfo('出现错误，可以稍后试试');
+        DialogUtils.toastErrorInfo(S.of(navGK.currentState.overlay.context).something_went_wrong);
       }
       var localA = LocalStorageAccount.getLocalAccount(account);
       if (localA != null) {
@@ -217,7 +218,7 @@ class InstanceManager {
       pd.hide();
       print(e);
       debugPrint(e.toString());
-      DialogUtils.toastErrorInfo('出现错误，可以稍后试试');
+      DialogUtils.toastErrorInfo(S.of(navGK.currentState.overlay.context).something_went_wrong);
     } finally {
       pd.hide();
     }

@@ -1,3 +1,5 @@
+import 'package:dudu/l10n/l10n.dart';
+import 'package:nav_router/nav_router.dart';
 
 
 class NotificationType {
@@ -11,13 +13,13 @@ class NotificationType {
 
   static const List<String> allTypes =  ['follow', 'favourite', 'reblog', 'mention', 'poll', 'follow_request'];
 
-  static const Map<String,String> notificationDescription = {
-    message: '私信',
-    followRequest: '关注请求',
-    follow: '关注我的',
-    reblog: '转嘟',
-    mention: '@我的',
-    poll: '投票'
+  static  Map<String,String> get notificationDescription => {
+    message: S.of(navGK.currentState.overlay.context).private_letters,
+    followRequest: S.of(navGK.currentState.overlay.context).follow_request,
+    follow: S.of(navGK.currentState.overlay.context).follow_me,
+    reblog: S.of(navGK.currentState.overlay.context).turn_to,
+    mention: S.of(navGK.currentState.overlay.context).at_mine,
+    poll: S.of(navGK.currentState.overlay.context).vote
   };
 
 }

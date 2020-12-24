@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:badges/badges.dart';
 import 'package:dudu/api/timeline_api.dart';
 import 'package:dudu/constant/api.dart';
@@ -129,7 +130,7 @@ class _PublicTimelineState extends State<PublicTimeline>
                                   controller: _menuController1,
                                   headerBuilder: (menuShowing) {
                                     return DropDownTitle(
-                                      title: '本站',
+                                      title: S.of(context).this_site,
                                       expand: menuShowing,
                                       showIcon: true,
                                     );
@@ -140,7 +141,7 @@ class _PublicTimelineState extends State<PublicTimeline>
                                   },
                                 )
                               : DropDownTitle(
-                                  title: '本站',
+                                  title: S.of(context).this_site,
                                 ),
                         ),
                         (_tabController.index == 1 && widget.url == null)
@@ -149,7 +150,7 @@ class _PublicTimelineState extends State<PublicTimeline>
                                 headerKey: _headerKey,
                                 headerBuilder: (menuShowing) {
                                   return DropDownTitle(
-                                    title: '跨站',
+                                    title: S.of(context).cross_station,
                                     expand: menuShowing,
                                     showIcon: true,
                                   );
@@ -159,7 +160,7 @@ class _PublicTimelineState extends State<PublicTimeline>
                                 },
                               )
                             : DropDownTitle(
-                                title: '跨站',
+                                title: S.of(context).cross_station,
                                 fontColor: widget.enableFederated ? null : Colors.grey,
                               ),
                       ],

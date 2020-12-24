@@ -1,3 +1,4 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/lists_api.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
@@ -17,7 +18,7 @@ class ListTimeline extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar(
-          title: Text('列表时间轴'),
+          title: Text(S.of(context).list_timeline),
         ),
         body: ChangeNotifierProvider<ResultListProvider>(
           create: (context) => ResultListProvider(

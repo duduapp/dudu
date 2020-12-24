@@ -1,26 +1,29 @@
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/constant/storage_key.dart';
 import 'package:dudu/db/tb_cache.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:nav_router/nav_router.dart';
 
 import 'local_storage.dart';
 
 class DateUntil {
-  static String dateTime(String timestamp) {
+  static String dateTime(String timestamp,BuildContext context) {
     DateTime now = new DateTime.now();
     DateTime publicTime = DateTime.parse(timestamp);
     Duration diff = now.difference(publicTime);
     if (diff.inDays > 30) {
       return timestamp.substring(0, timestamp.indexOf('T'));
     } else if (diff.inDays > 0) {
-      return '${diff.inDays}天前';
+      return S.of(context).days_ago(diff.inDays);
     } else if (diff.inHours > 0) {
-      return '${diff.inHours}小时前';
+      return S.of(context).hours_ago(diff.inHours);
     } else if (diff.inMinutes > 0) {
-      return '${diff.inMinutes}分钟前';
+      return S.of(context).minutes_ago(diff.inMinutes);
     } else if (diff.inSeconds > 0) {
-      return '${diff.inSeconds}秒前';
+      return S.of(context).seconds_ago(diff.inSeconds);
     } else {
-      return '刚刚';
+      return S.of(context).seconds_ago(0);//S.of(navGK.currentState.overlay.context).just;
     }
   }
 
