@@ -37,7 +37,7 @@ class _InnerBrowserState extends State<InnerBrowser> {
   void initState() {
     super.initState();
     url = widget.url;
-    title = S.of(context).web_page;
+    title = '';
     if (widget.appCredential != null) {
       url = '$url/oauth/authorize?scope=read+write+follow+push+admin%3Awrite%3Aaccounts&response_type=code&redirect_uri=${widget.appCredential.redirectUri}&client_id=${widget.appCredential.clientId}';
     }
