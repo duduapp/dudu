@@ -4,6 +4,7 @@ import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/status/status_detail.dart';
+import 'package:dudu/pages/status/status_detail_v2.dart';
 import 'package:dudu/pages/user_profile/user_profile.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/provider_util.dart';
@@ -29,7 +30,8 @@ class StatusItem extends StatelessWidget {
       this.refString,
       this.subStatus = false,
       this.refAccount,
-      this.primary = false})
+      this.primary = false,
+      this.lineDivider = false})
       : super(key: key);
   final StatusItemData item;
   final IconData refIcon; // 用户引用status时显示的图标，比如 显示在status上面的（icon,who转嘟了）
@@ -37,6 +39,7 @@ class StatusItem extends StatelessWidget {
   final OwnerAccount refAccount;
   final bool subStatus;
   final bool primary; // 点击status详情页后该status
+  final bool lineDivider;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +75,15 @@ class StatusItem extends StatelessWidget {
                       StatusItemActionW(
                         status: item,
                         subStatus: subStatus,
-                      )
+                      ),
+                      if (lineDivider)
+                        Divider(
+                          height: 0.3,
+                        )
+                      else
+                        SizedBox(
+                          height: 8,
+                        )
                     ],
                   ),
                 )
@@ -80,9 +91,6 @@ class StatusItem extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          height: 8,
-        )
       ]);
     } else {
       StatusItemData data = item.reblog ?? item;
@@ -129,16 +137,20 @@ class StatusItem extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          height: 8,
-        )
+        if (lineDivider)
+          Divider(
+            height: 0.3,
+          )
+        else
+          SizedBox(
+            height: 8,
+          )
       ]);
     }
   }
 
   _onStatusClicked(BuildContext context, bool subStatus) async {
-
-    var res = await AppNavigate.push(StatusDetail(
+    var res = await AppNavigate.push(StatusDetailV2(
         data: item.reblog ?? item, hostUrl: ProviderUtil.hostUrl(context)));
     if (res is Map && res.containsKey('operation')) {
       switch (res['operation']) {
@@ -170,8 +182,9 @@ class StatusItem extends StatelessWidget {
     return (icon != null && str != null)
         ? InkWell(
             onTap: () => AppNavigate.push(UserProfile(
-                refAccount ?? item.account,
-                hostUrl: ProviderUtil.hostUrl(context),)),
+              refAccount ?? item.account,
+              hostUrl: ProviderUtil.hostUrl(context),
+            )),
             child: Container(
               padding: EdgeInsets.only(top: 3, bottom: 8),
               child: Row(

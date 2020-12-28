@@ -1189,9 +1189,9 @@
   "hours_ago":"{num}h",
   "days_ago":"{num}d",
   "toot_from":"from {from}",
-  "reply_count":"Reply {num}",
-  "boost_count":"Boost {num}",
-  "favorite_count":"Favorite {num}",
+  "reply_count":"{num, plural, =0{{num} Reply} =1{{num} Reply} other{{num} Replies}}",
+  "boost_count":"{num, plural, =0{{num} Boost} =1{{num} Boost} other{{num} Boosts}}",
+  "favorite_count":"{num, plural, =0{{num} Favorite} =1{{num} Favorite} other{{num} Favorites}}",
 
 
     "boosted_toot": "{user} boosted",

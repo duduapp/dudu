@@ -730,7 +730,7 @@
                 }
             }
 	},
-	"reply_count":"转评 {num}",
+	"reply_count":"{num, plural, other{{num} 转评}}",
     "@reply_count":{
     	        "placeholders": {
                 "num": {
@@ -738,14 +738,14 @@
                 }
 
     },
-    "boost_count":"转嘟 {num}",
+    "boost_count":"{num, plural, other{{num} 转嘟}}",
     "@boost_count":{
         	        "placeholders": {
                     "num": {
                     }
                     }
     },
-    "favorite_count":"赞 {num}",
+    "favorite_count":"{num, plural, other{{num} 赞}}",
     "@favorite_count":{
         	        "placeholders": {
                     "num": {
