@@ -31,7 +31,9 @@ class StatusItem extends StatelessWidget {
       this.subStatus = false,
       this.refAccount,
       this.primary = false,
-      this.lineDivider = false})
+      this.lineDivider = false,
+      this.topLine = false, // 嘟文关联连接线
+      this.bottomLine = false})
       : super(key: key);
   final StatusItemData item;
   final IconData refIcon; // 用户引用status时显示的图标，比如 显示在status上面的（icon,who转嘟了）
@@ -40,6 +42,8 @@ class StatusItem extends StatelessWidget {
   final bool subStatus;
   final bool primary; // 点击status详情页后该status
   final bool lineDivider;
+  final bool topLine;
+  final bool bottomLine;
 
   @override
   Widget build(BuildContext context) {
@@ -51,43 +55,57 @@ class StatusItem extends StatelessWidget {
           //     StatusActionUtil.showBottomSheetAction(context, item, subStatus),
           child: Ink(
             color: Theme.of(context).primaryColor,
-            padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
+            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
             // margin: EdgeInsets.only(bottom: 8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                  child: Avatar(
-                    width: 40,
-                    height: 40,
-                    account: item.account,
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      SubStatusAccountW(status: item),
-                      StatusItemContent(
-                        item,
-                        subStatus: true,
-                      ),
-                      StatusItemActionW(
-                        status: item,
-                        subStatus: subStatus,
-                      ),
-                      if (lineDivider)
-                        Divider(
-                          height: 0.3,
-                        )
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+
+                  Column(
+                    children: [
+                      if (topLine)
+                        Container(padding: EdgeInsets.only(bottom: 4),height: 8,child: VerticalDivider(thickness: 2.5,),)
                       else
-                        SizedBox(
-                          height: 8,
-                        )
+                        SizedBox(height:8),
+                      Avatar(
+                        width: 40,
+                        height: 40,
+                        account: item.account,
+                      ),
+                       SizedBox(height: 4,),
+                       if (bottomLine)
+                       Expanded(child: Align(alignment: Alignment.center,child: VerticalDivider(thickness: 2.5,)))
                     ],
+                    mainAxisSize: MainAxisSize.max,
                   ),
-                )
-              ],
+                  SizedBox(width: 15,),
+                  Expanded(
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(height: 4,),
+                        SubStatusAccountW(status: item),
+                        StatusItemContent(
+                          item,
+                          subStatus: true,
+                        ),
+                        StatusItemActionW(
+                          status: item,
+                          subStatus: subStatus,
+                        ),
+                        if (lineDivider)
+                          Divider(
+                            height: 0.3,
+                          )
+                        else
+                          SizedBox(
+                            height: 8,
+                          )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -103,7 +121,7 @@ class StatusItem extends StatelessWidget {
             //     StatusActionUtil.showBottomSheetAction(context, data, subStatus),
             child: Container(
               color: Colors.transparent,
-              padding: EdgeInsets.fromLTRB(15, 8, 15, 0),
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
               //margin: EdgeInsets.only(bottom: 8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -113,6 +131,7 @@ class StatusItem extends StatelessWidget {
                     status: data,
                     subStatus: subStatus,
                     primary: primary,
+                    topLine: topLine,
                   ),
 
 //                StatusItemAccount(data.account,

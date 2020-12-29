@@ -50,7 +50,7 @@ class _StatusDetailV2State extends State<StatusDetailV2>
     for (var d in data['ancestors']) {
       d['__sub'] = true;
       d['media_attachments'].forEach((e) => e['id'] = "c##" + e['id']);
-      parent.add(d);
+      parent.insert(0,d);
     }
     // detail.add(status.toJson());
     for (var d in data['descendants']) {
@@ -94,20 +94,29 @@ class _StatusDetailV2State extends State<StatusDetailV2>
 
   Widget _buildParentRow(BuildContext context, int idx) {
     Map row = parent[idx];
-    return _buildStatusItem(StatusItemData.fromJson(row), subStatus: true);
+    return StatusItem(
+      lineDivider: true,
+      item: StatusItemData.fromJson(row),
+      subStatus: true,
+      primary: false,
+      topLine: idx != parent.length - 1,
+      bottomLine: true,
+    );
   }
 
-  Widget _buildRow(BuildContext context, int idx) {
+  Widget _buildChildRow(BuildContext context, int idx) {
     Map row = detail[idx];
-    if (row.containsKey('__sub')) {
-      return _buildStatusItem(
-        StatusItemData.fromJson(row),
-        subStatus: true,
-      );
-    } else {
-      return _buildStatusItem(StatusItemData.fromJson(row),
-          subStatus: false, primary: true);
-    }
+    var status = StatusItemData.fromJson(row);
+    bool topline = idx != 0 && status.inReplyToId == detail[idx - 1]['id'];
+    bool bottomLine = idx != detail.length - 1 && detail[idx + 1]['in_reply_to_id'] == status.id;
+    return StatusItem(
+      lineDivider: true,
+      item: StatusItemData.fromJson(row),
+      subStatus: true,
+      primary: false,
+      topLine: topline,
+      bottomLine: bottomLine,
+    );
   }
 
   Widget _buildStatusItem(StatusItemData data, {bool subStatus, bool primary}) {
@@ -152,6 +161,7 @@ class _StatusDetailV2State extends State<StatusDetailV2>
                               primary: true,
                               subStatus: false,
                               lineDivider: true,
+                              topLine: status.inReplyToId != null,
                             ),
                             Ink(
                               color: Theme.of(context).primaryColor,
@@ -192,7 +202,7 @@ class _StatusDetailV2State extends State<StatusDetailV2>
                       ),
                       SliverList(
                           delegate: SliverChildBuilderDelegate(
-                        _buildRow,
+                        _buildChildRow,
                         childCount: detail.length,
                       )),
                       if (!fetchedData)

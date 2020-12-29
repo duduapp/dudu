@@ -15,8 +15,9 @@ class StatusItemAccountW extends StatelessWidget {
   final StatusItemData status;
   final bool subStatus;
   final bool primary;
+  final bool topLine;
 
-  const StatusItemAccountW({Key key, this.status, this.subStatus,this.primary})
+  const StatusItemAccountW({Key key, this.status, this.subStatus,this.primary,this.topLine = false})
       : super(key: key);
 
   @override
@@ -28,14 +29,22 @@ class StatusItemAccountW extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Avatar(
-          width: headerHeight,
-          height: headerHeight,
-          account: status.account,
+        Column(
+          children: [
+            if (topLine)
+            Container(padding: EdgeInsets.only(bottom: 4),height: 8,child: VerticalDivider(thickness: 3,),)
+            else
+              SizedBox(height: 8,),
+            Avatar(
+              width: headerHeight,
+              height: headerHeight,
+              account: status.account,
+            ),
+          ],
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(left: 13,bottom: 0),
+            padding: const EdgeInsets.only(left: 13,bottom: 0,top: 4),
             child: Container(
               height: headerHeight,
               child: Column(
