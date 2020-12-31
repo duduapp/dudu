@@ -15,7 +15,7 @@ class StatusItemContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
-      StatusItemText(data,navigateToDetail: !primary,),
+      StatusItemText(data,primary: primary,),
       StatusItemMedia(data),
       if (data.poll != null)
       StatusItemPoll(data),

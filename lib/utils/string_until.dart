@@ -1,3 +1,6 @@
+
+import 'dart:core';
+
 import 'package:dudu/l10n/l10n.dart';
 import 'dart:convert';
 import 'dart:math';
@@ -10,6 +13,8 @@ import 'package:nav_router/nav_router.dart';
 
 
 class StringUtil {
+
+
   static String displayName(OwnerAccount item) {
     String displayName = '';
     if (item.displayName == '' || item.displayName.length == 0) {
@@ -61,4 +66,16 @@ class StringUtil {
     if (zan == '0') return '赞';
     else return '收藏';
   }
+
+  static bool estimateChinese(String str) {
+    var reg = new RegExp(r"^[\u4E00-\u9FA5\u0000-\u007F\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b]+$");
+    var reg1 = new RegExp(r"[\u4E00-\u9FA5]"); // must have chinese
+    return reg.hasMatch(str) && reg1.hasMatch(str);
+  }
+
+  static bool isEnglishLetters(String str) {
+    var reg = new RegExp(r"^[\u0000-\u007F]+$");
+    return reg.hasMatch(str);
+  }
+
 }

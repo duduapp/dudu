@@ -10,17 +10,19 @@ class TextInkWell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: padding,
-        child: Text(
-          text,
-          style: TextStyle(
-              fontSize: 13,
-              color: onTap == null
-                  ? Theme.of(context).textTheme.bodyText1.color
-                  : (this.activeColor ?? Theme.of(context).buttonColor)),
+    return Material(
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: padding,
+          child: Text(
+            text,
+            style: TextStyle(
+                fontSize: 13,
+                color: onTap == null
+                    ? Theme.of(context).textTheme.bodyText1.color
+                    : (this.activeColor ?? Theme.of(context).buttonColor)),
+          ),
         ),
       ),
     );

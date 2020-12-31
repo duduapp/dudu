@@ -11,9 +11,9 @@ import 'package:provider/provider.dart';
 
 class StatusItemText extends StatefulWidget {
   final StatusItemData data;
-  final navigateToDetail;
+  final bool primary;
 
-  StatusItemText(this.data,{this.navigateToDetail = false});
+  StatusItemText(this.data,{this.primary = false});
 
   @override
   _StatusItemTextState createState() => _StatusItemTextState();
@@ -47,6 +47,7 @@ class _StatusItemTextState extends State<StatusItemText> {
            widget.data.spoilerText.isEmpty
               ? widget.data.content.trim()
               : widget.data.spoilerText.trim(),statusData: widget.data,emojis: widget.data.emojis,
+              checkToTranslate: widget.primary,
         ),
         if (widget.data.spoilerText.isNotEmpty)
           Padding(
@@ -62,7 +63,7 @@ class _StatusItemTextState extends State<StatusItemText> {
           SizedBox(height: 7,),
         if (showMore)
           HtmlContent(
-             widget.data.content,statusData: widget.data,emojis: widget.data.emojis,
+             widget.data.content,statusData: widget.data,emojis: widget.data.emojis,checkToTranslate: widget.primary,
           )
       ]),
     );

@@ -298,7 +298,7 @@
   "@about_dudu": {
     "x-reviewed": "false"
   },
-  "check_for_updates": "Check for updates",
+  "check_for_updates": "Check for update",
   "@check_for_updates": {
     "x-reviewed": "false"
   },
@@ -1252,5 +1252,9 @@
           "count": {}
         }
       },
-     "version_info": "Version{version}"
+     "version_info": "Version{version}",
+     "translate_by": "Translate by {engine}",
+     "translate_setting": "Translate Setting",
+     "translate_engine": "Translate Engine",
+     "translate_toot": "Translate Toot"
 }

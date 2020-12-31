@@ -730,7 +730,7 @@
                 }
             }
 	},
-	"reply_count":"{num, plural, other{{num} 转评}}",
+	"reply_count":"{num, plural, other{转评 {num}}}",
     "@reply_count":{
     	        "placeholders": {
                 "num": {
@@ -738,7 +738,7 @@
                 }
 
     },
-    "boost_count":"{num, plural, other{{num} 转嘟}}",
+    "boost_count":"{num, plural, other{转嘟 {num}}}",
     "@boost_count":{
         	        "placeholders": {
                     "num": {
@@ -817,5 +817,19 @@
 			"placeholders": {
 				"version": {"type": "String"}
 			}
+		},
+	"translate_setting": "翻译设置",
+	"@translate_setting": {
+	},
+	"translate_engine": "翻译引擎",
+	"@translate_engine": {
+	},
+	"translate_toot": "翻译嘟文",
+	"@translate_toot": {},
+	"translate_by": "翻译结果由{engine}提供",
+	"@translate_by": {
+		"placeholders": {
+			"engine": {"type": "String"}
 		}
+	}
 }

@@ -145,76 +145,81 @@ class _StatusDetailV2State extends State<StatusDetailV2>
               //  alignment: AlignmentDirectional.bottomEnd,
               children: [
                 Expanded(
-                  child: CustomScrollView(
-                    center: centerKey,
-                    slivers: [
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(_buildParentRow,
-                            childCount: parent.length),
-                      ),
-                      SliverToBoxAdapter(
-                        key: centerKey,
-                        child: Column(
-                          children: [
-                            StatusItem(
-                              item: status,
-                              primary: true,
-                              subStatus: false,
-                              lineDivider: true,
-                              topLine: status.inReplyToId != null,
-                            ),
-                            Ink(
-                              color: Theme.of(context).primaryColor,
-                              padding: EdgeInsets.only(left: 15),
-                              child: Row(
-                                children: [
-                                  if (status.repliesCount != 0)
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                                      child: Text(S
-                                          .of(context)
-                                          .reply_count(status.repliesCount),style: TextStyle(color: Theme.of(context).accentColor),),
-                                    ),
-                                  if (status.reblogsCount != 0)
-                                    TextInkWell(
-                                      padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                  child: Scrollbar(
+                    child: CustomScrollView(
+                      physics: ClampingScrollPhysics(),
+                      center: centerKey,
+                      slivers: [
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(_buildParentRow,
+                              childCount: parent.length),
+                        ),
+                        SliverToBoxAdapter(
+                          key: centerKey,
+                          child: Column(
+                            children: [
+                              StatusItem(
+                                item: status,
+                                primary: true,
+                                subStatus: false,
+                                lineDivider: true,
+                                topLine: status.inReplyToId != null,
+                              ),
+                              Container(
+                                color: Theme.of(context).primaryColor,
+                                padding: EdgeInsets.only(left: 15),
+                                child: Row(
+                                  children: [
+                                    if (status.repliesCount != 0)
+                                      TextInkWell(
+                                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                                        onTap: (){},
                                         activeColor: Theme.of(context).accentColor,
-                                        onTap: () => AppNavigate.push(BoostedBy(widget.data, widget.hostUrl)),
                                         text: S
                                             .of(context)
-                                            .boost_count(status.reblogsCount)),
-                                  if (status.favouritesCount != 0)
-                                    TextInkWell(
+                                            .reply_count(status.repliesCount),
+                                      ),
+                                    if (status.reblogsCount != 0)
+                                      TextInkWell(
                                         padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                                        activeColor: Theme.of(context).accentColor,
-                                        onTap: () => AppNavigate.push(FavoriteBy(widget.data, widget.hostUrl)),
-                                        text: I18nUtil.isZh(context)
-                                            ? (widget.data.favouritesCount.toString()) + '${StringUtil.getZanString()} '
-                                            : S.of(context).favorite_count(
-                                                widget.data.favouritesCount)),
-                                ],
+                                          activeColor: Theme.of(context).accentColor,
+                                          onTap: () => AppNavigate.push(BoostedBy(widget.data, widget.hostUrl)),
+                                          text: S
+                                              .of(context)
+                                              .boost_count(status.reblogsCount)),
+                                    if (status.favouritesCount != 0)
+                                      TextInkWell(
+                                          padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                                          activeColor: Theme.of(context).accentColor,
+                                          onTap: () => AppNavigate.push(FavoriteBy(widget.data, widget.hostUrl)),
+                                          text: I18nUtil.isZh(context)
+                                              ?  '${StringUtil.getZanString()} '+ (widget.data.favouritesCount.toString())
+                                              : S.of(context).favorite_count(
+                                                  widget.data.favouritesCount)),
+                                  ],
+                                ),
+                              ),
+                             // Divider(height: 0.3,),
+                              SizedBox(height: 8,)
+                            ],
+                          ),
+                        ),
+                        SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                          _buildChildRow,
+                          childCount: detail.length,
+                        )),
+                        if (!fetchedData)
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: CupertinoActivityIndicator(),
                               ),
                             ),
-                           // Divider(height: 0.3,),
-                            SizedBox(height: 8,)
-                          ],
-                        ),
-                      ),
-                      SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                        _buildChildRow,
-                        childCount: detail.length,
-                      )),
-                      if (!fetchedData)
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: CupertinoActivityIndicator(),
-                            ),
-                          ),
-                        )
-                    ],
+                          )
+                      ],
+                    ),
                   ),
                 ),
                 MediaQuery(

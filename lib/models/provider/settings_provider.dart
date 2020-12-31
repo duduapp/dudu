@@ -82,7 +82,8 @@ class SettingsProvider extends ChangeNotifier {
         'mention',
         'poll'
       ],
-      'language':Platform.localeName == 'zh' ? 'zh' : 'en',
+      'language':Platform.localeName.startsWith('zh') ? 'zh' : 'en',
+      'translate_engine':Platform.localeName.startsWith('zh') ? '1' : '0'
     };
     LoginedUser user = LoginedUser();
     if (user.account == null) {

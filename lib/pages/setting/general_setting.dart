@@ -9,6 +9,7 @@ import 'package:dudu/pages/login/login.dart';
 import 'package:dudu/pages/setting/about_app.dart';
 import 'package:dudu/pages/setting/account_switch.dart';
 import 'package:dudu/pages/setting/setting_content.dart';
+import 'package:dudu/pages/setting/setting_translate.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
@@ -112,6 +113,10 @@ class _GeneralSettingState extends State<GeneralSetting> {
             options: ['0','1','2'],
             displayOptions: [S.of(context).small,S.of(context).medium,S.of(context).big],
             type: SettingType.string,
+          ),
+          SettingCell(
+            title: S.of(context).translate_setting,
+            onPress: () => AppNavigate.push(SettingTranslate()),
           ),
           SettingCell(
             leftIcon: Icon(IconFont.display),

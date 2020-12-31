@@ -49,62 +49,65 @@ class StatusItem extends StatelessWidget {
   Widget build(BuildContext context) {
     if (subStatus != null && subStatus) {
       return Column(children: [
-        NoSplashInkWell(
-          onTap: () => _onStatusClicked(context, true),
-          // onLongPress: () =>
-          //     StatusActionUtil.showBottomSheetAction(context, item, subStatus),
-          child: Ink(
-            color: Theme.of(context).primaryColor,
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-            // margin: EdgeInsets.only(bottom: 8),
-            child: IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
+        Material(
+          color: Theme.of(context).primaryColor,
+          child: InkWell(
+            onTap: () => _onStatusClicked(context, true),
+            // onLongPress: () =>
+            //     StatusActionUtil.showBottomSheetAction(context, item, subStatus),
+            child: Container(
+              color: Colors.transparent,
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              // margin: EdgeInsets.only(bottom: 8),
+              child: IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
 
-                  Column(
-                    children: [
-                      if (topLine)
-                        Container(padding: EdgeInsets.only(bottom: 4),height: 8,child: VerticalDivider(thickness: 2.5,),)
-                      else
-                        SizedBox(height:8),
-                      Avatar(
-                        width: 40,
-                        height: 40,
-                        account: item.account,
-                      ),
-                       SizedBox(height: 4,),
-                       if (bottomLine)
-                       Expanded(child: Align(alignment: Alignment.center,child: VerticalDivider(thickness: 2.5,)))
-                    ],
-                    mainAxisSize: MainAxisSize.max,
-                  ),
-                  SizedBox(width: 15,),
-                  Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(height: 4,),
-                        SubStatusAccountW(status: item),
-                        StatusItemContent(
-                          item,
-                          subStatus: true,
-                        ),
-                        StatusItemActionW(
-                          status: item,
-                          subStatus: subStatus,
-                        ),
-                        if (lineDivider)
-                          Divider(
-                            height: 0.3,
-                          )
+                    Column(
+                      children: [
+                        if (topLine)
+                          Container(padding: EdgeInsets.only(bottom: 4),height: 8,child: VerticalDivider(thickness: 2.5,),)
                         else
-                          SizedBox(
-                            height: 8,
-                          )
+                          SizedBox(height:8),
+                        Avatar(
+                          width: 40,
+                          height: 40,
+                          account: item.account,
+                        ),
+                         SizedBox(height: 4,),
+                         if (bottomLine)
+                         Expanded(child: Align(alignment: Alignment.center,child: VerticalDivider(thickness: 2.5,)))
                       ],
+                      mainAxisSize: MainAxisSize.max,
                     ),
-                  )
-                ],
+                    SizedBox(width: 15,),
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(height: 4,),
+                          SubStatusAccountW(status: item),
+                          StatusItemContent(
+                            item,
+                            subStatus: true,
+                          ),
+                          StatusItemActionW(
+                            status: item,
+                            subStatus: subStatus,
+                          ),
+                          if (lineDivider)
+                            Divider(
+                              height: 0.3,
+                            )
+                          else
+                            SizedBox(
+                              height: 8,
+                            )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
