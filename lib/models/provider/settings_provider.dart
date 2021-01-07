@@ -58,6 +58,7 @@ class SettingsProvider extends ChangeNotifier {
   };
 
   load() async {
+    var langCode = Platform.localeName.substring(0,2);
     settings = {
       'theme' : '0',
       'show_thumbnails': true,
@@ -82,7 +83,7 @@ class SettingsProvider extends ChangeNotifier {
         'mention',
         'poll'
       ],
-      'language':Platform.localeName.startsWith('zh') ? 'zh' : 'en',
+      'language':['zh','en','fr','ru','ar','es','ja'].contains(langCode) ? langCode : 'en',
       'translate_engine':Platform.localeName.startsWith('zh') ? '1' : '0'
     };
     LoginedUser user = LoginedUser();

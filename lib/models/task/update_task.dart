@@ -21,6 +21,7 @@ import 'package:nav_router/nav_router.dart';
 
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UpdateTask {
@@ -59,9 +60,9 @@ class UpdateTask {
 
       if (sha256.convert(utf8.encode(rnd + key)).toString() == auth) {
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
-        String version = packageInfo.version;
-
-        if (version != data['version']) {
+        var version = Version.parse(packageInfo.version);
+        var newestVersion = Version.parse(data['version']);
+        if (version < newestVersion) {
           dialog?.hide();
           RuntimeConfig.updateWindowDisplayed = true;
           // a new version is released
