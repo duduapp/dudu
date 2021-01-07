@@ -446,10 +446,16 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
           medias.add(media);
         }
       }
-      to = PhotoGallery(
-        galleryItems: medias,
-        initialIndex: medias.indexOf(widget.images[index]),
-      );
+      if (widget.images[index].type == 'image') {
+        to = PhotoGallery(
+          galleryItems: medias,
+          initialIndex: medias.indexOf(widget.images[index]),
+        );
+        medias[0].url = 'aa';
+        medias[0].previewUrl = 'aaa';
+      }
+      else
+        return;
     }
 //    Navigator.of(context).push(
 //      PageRouteBuilder(

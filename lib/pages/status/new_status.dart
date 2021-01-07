@@ -738,11 +738,8 @@ class _NewStatusState extends State<NewStatus> {
             leading: InkWell(
               onTap: () => _onPressBack(),
               child: Container(
-                padding: EdgeInsets.fromLTRB(20, 15, 0, 0),
-                child: Text(
-                  S.of(context).cancel,
-                  style: TextStyle(fontSize: 15),
-                ),
+                padding: EdgeInsets.all(14),
+                child: Icon(IconFont.clear,color: Theme.of(context).accentColor,),
               ),
             ),
             titleSpacing: 0,
