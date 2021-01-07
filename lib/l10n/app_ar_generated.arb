@@ -1,0 +1,1348 @@
+{
+  "@@locale": "ar",
+  "app_name": "دودو",
+  "@app_name": {
+    "x-reviewed": "false"
+  },
+  "toot": "بوق",
+  "@toot": {
+    "x-reviewed": "false"
+  },
+  "toots": "توتس",
+  "@toots": {
+    "x-reviewed": "false"
+  },
+  "tooting": "توتينغ ...",
+  "@tooting": {
+    "x-reviewed": "false"
+  },
+  "an_error_occurred": "حدث خطأ..",
+  "@an_error_occurred": {
+    "x-reviewed": "false"
+  },
+  "unable_to_connect_to_server": "غير قادر على الإتصال بالسيرفر",
+  "@unable_to_connect_to_server": {
+    "x-reviewed": "false"
+  },
+  "something_went_wrong": "حدث خطأ ما ، يمكنك المحاولة لاحقًا",
+  "@something_went_wrong": {
+    "x-reviewed": "false"
+  },
+  "day1": "يوم 1",
+  "@day1": {
+    "x-reviewed": "false"
+  },
+  "minutes5": "5 دقائق",
+  "@minutes5": {
+    "x-reviewed": "false"
+  },
+  "minutes30": "30 دقيقة",
+  "@minutes30": {
+    "x-reviewed": "false"
+  },
+  "hour1": "1 ساعة",
+  "@hour1": {
+    "x-reviewed": "false"
+  },
+  "hours6": "6 ساعات",
+  "@hours6": {
+    "x-reviewed": "false"
+  },
+  "days3": "3 أيام",
+  "@days3": {
+    "x-reviewed": "false"
+  },
+  "days7": "7 أيام",
+  "@days7": {
+    "x-reviewed": "false"
+  },
+  "private_letters": "رسالة مباشرة",
+  "@private_letters": {
+    "x-reviewed": "false"
+  },
+  "follow_request": "متابعة الطلبات",
+  "@follow_request": {
+    "x-reviewed": "false"
+  },
+  "follow_me": "اتبعني",
+  "@follow_me": {
+    "x-reviewed": "false"
+  },
+  "turn_to": "تعزيز",
+  "@turn_to": {
+    "x-reviewed": "false"
+  },
+  "at_mine": "يذكر",
+  "@at_mine": {
+    "x-reviewed": "false"
+  },
+  "vote": "تصويت",
+  "@vote": {
+    "x-reviewed": "false"
+  },
+  "vote_poll": "تصويت",
+  "@vote_poll": {
+    "x-reviewed": "false"
+  },
+  "the_poll_you_initiated_or_participated_in_has_been_completed": "انتهى الاستطلاع الذي أنشأته أو صوتت فيه",
+  "@the_poll_you_initiated_or_participated_in_has_been_completed": {
+    "x-reviewed": "false"
+  },
+  "update": "تحديث",
+  "@update": {
+    "x-reviewed": "false"
+  },
+  "turn_off_an_app": "أغلق التطبيق",
+  "@turn_off_an_app": {
+    "x-reviewed": "false"
+  },
+  "new_version_detected": "تم الكشف عن إصدار جديد",
+  "@new_version_detected": {
+    "x-reviewed": "false"
+  },
+  "copy_the_download_link": "انسخ رابط التنزيل",
+  "@copy_the_download_link": {
+    "x-reviewed": "false"
+  },
+  "download_link_copied": "تم نسخ رابط التنزيل",
+  "@download_link_copied": {
+    "x-reviewed": "false"
+  },
+  "downloading": "جارى التحميل...",
+  "@downloading": {
+    "x-reviewed": "false"
+  },
+  "cancel": "إلغاء",
+  "@cancel": {
+    "x-reviewed": "false"
+  },
+  "installation": "التركيب",
+  "@installation": {
+    "x-reviewed": "false"
+  },
+  "just_warn_the_user": "ما عليك سوى تحذير المستخدم ولن تعمل على حساب المستخدم",
+  "@just_warn_the_user": {
+    "x-reviewed": "false"
+  },
+  "prevent_the_user_from_logging_in": "منع المستخدم من تسجيل الدخول والاحتفاظ بجميع محتويات المستخدم",
+  "@prevent_the_user_from_logging_in": {
+    "x-reviewed": "false"
+  },
+  "toots_posted_by_users_will_not_be_displayed_in_the_public_timeline": "اجعل أصابع المستخدم غير معروضة في الجدول الزمني العام",
+  "@toots_posted_by_users_will_not_be_displayed_in_the_public_timeline": {
+    "x-reviewed": "false"
+  },
+  "deactivate_and_permanently_delete_account_information": "قم بإلغاء تنشيط معلومات الحساب وحذفها نهائيًا",
+  "@deactivate_and_permanently_delete_account_information": {
+    "x-reviewed": "false"
+  },
+  "caveat": "لا شيء",
+  "@caveat": {
+    "x-reviewed": "false"
+  },
+  "deactivate": "تعطيل",
+  "@deactivate": {
+    "x-reviewed": "false"
+  },
+  "hide": "كتم الصوت",
+  "@hide": {
+    "x-reviewed": "false"
+  },
+  "silence": "الصمت",
+  "@silence": {
+    "x-reviewed": "false"
+  },
+  "hide_user": "كتم صوت {المستخدم}",
+  "@hide_user": {
+    "x-reviewed": "false"
+  },
+  "report_user": "أبلغ عن مستخدم}",
+  "@report_user": {
+    "x-reviewed": "false"
+  },
+  "ban": "تعليق",
+  "@ban": {
+    "x-reviewed": "false"
+  },
+  "perform_management_operations": "أداء عمليات الإدارة",
+  "@perform_management_operations": {
+    "x-reviewed": "false"
+  },
+  "remind_users_via_email": "تذكير المستخدمين عبر البريد الإلكتروني",
+  "@remind_users_via_email": {
+    "x-reviewed": "false"
+  },
+  "email_to_inform_users": "بريد إلكتروني لإعلام المستخدمين",
+  "@email_to_inform_users": {
+    "x-reviewed": "false"
+  },
+  "determine": "حسنا",
+  "@determine": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_you_want": "هل انت متأكد أنك تريد",
+  "@are_you_sure_you_want": {
+    "x-reviewed": "false"
+  },
+  "this_operation_will": "هذه العملية سوف",
+  "@this_operation_will": {
+    "x-reviewed": "false"
+  },
+  "increase_instance": "زيادة مثيل",
+  "@increase_instance": {
+    "x-reviewed": "false"
+  },
+  "instance_already_exists": "المثيل موجود بالفعل",
+  "@instance_already_exists": {
+    "x-reviewed": "false"
+  },
+  "instance_url": "URL المثيل",
+  "@instance_url": {
+    "x-reviewed": "false"
+  },
+  "please_enter_the_url": "الرجاء إدخال عنوان URL لمثيل mastodon الذي ترغب في تسجيله أو تسجيل الدخول. إذا كان عنوان URL يمكن الوصول إليه ، فسيتم عرض بطاقة المثيل في صفحة \"الاكتشاف\" ، حيث يمكنك التسجيل وتسجيل الدخول.",
+  "@please_enter_the_url": {
+    "x-reviewed": "false"
+  },
+  "contact_email": "تواصل بالبريد الاكتروني:",
+  "@contact_email": {
+    "x-reviewed": "false"
+  },
+  "user_number": "رقم المستخدم:",
+  "@user_number": {
+    "x-reviewed": "false"
+  },
+  "number_of_toots": "عدد البوق:",
+  "@number_of_toots": {
+    "x-reviewed": "false"
+  },
+  "version": "الإصدار",
+  "@version": {
+    "x-reviewed": "false"
+  },
+  "browse_to_see": "تصفح لترى",
+  "@browse_to_see": {
+    "x-reviewed": "false"
+  },
+  "log_in": "تسجيل الدخول",
+  "@log_in": {
+    "x-reviewed": "false"
+  },
+  "add_website_instance": "إضافة مثيل",
+  "@add_website_instance": {
+    "x-reviewed": "false"
+  },
+  "find": "اكتشاف",
+  "@find": {
+    "x-reviewed": "false"
+  },
+  "home": "الصفحة الرئيسية",
+  "@home": {
+    "x-reviewed": "false"
+  },
+  "square": "ميدان",
+  "@square": {
+    "x-reviewed": "false"
+  },
+  "news": "Notfications",
+  "@news": {
+    "x-reviewed": "false"
+  },
+  "me": "أنا",
+  "@me": {
+    "x-reviewed": "false"
+  },
+  "log_in_to_mastodon_account": "قم بتسجيل الدخول إلى حساب Mastodon",
+  "@log_in_to_mastodon_account": {
+    "x-reviewed": "false"
+  },
+  "loading": "جار التحميل...",
+  "@loading": {
+    "x-reviewed": "false"
+  },
+  "domain_name": "اسم النطاق",
+  "@domain_name": {
+    "x-reviewed": "false"
+  },
+  "about_mastodon": "حول Mastodon",
+  "@about_mastodon": {
+    "x-reviewed": "false"
+  },
+  "example_recommendation": "توصية مثال",
+  "@example_recommendation": {
+    "x-reviewed": "false"
+  },
+  "you_only_need_to_select_a_node_to_register": "ما عليك سوى تحديد عقدة للتسجيل. بغض النظر عن العقدة التي تختارها ، يمكنك التواصل مع أي شخص!",
+  "@you_only_need_to_select_a_node_to_register": {
+    "x-reviewed": "false"
+  },
+  "k_user": "مستخدم K.",
+  "@k_user": {
+    "x-reviewed": "false"
+  },
+  "user": "حسابات",
+  "@user": {
+    "x-reviewed": "false"
+  },
+  "stable": "مستقر",
+  "@stable": {
+    "x-reviewed": "false"
+  },
+  "select_node": "حدد العقدة",
+  "@select_node": {
+    "x-reviewed": "false"
+  },
+  "play_audio": "تشغيل الصوت",
+  "@play_audio": {
+    "x-reviewed": "false"
+  },
+  "mute": "كتم الصوت",
+  "@mute": {
+    "x-reviewed": "false"
+  },
+  "unmute": "إعادة الصوت",
+  "@unmute": {
+    "x-reviewed": "false"
+  },
+  "topic": "هاشتاغ",
+  "@topic": {
+    "x-reviewed": "false"
+  },
+  "search_for": "بحث...",
+  "@search_for": {
+    "x-reviewed": "false"
+  },
+  "about_dudu": "حول دودو",
+  "@about_dudu": {
+    "x-reviewed": "false"
+  },
+  "check_for_updates": "فحص التحديثات",
+  "@check_for_updates": {
+    "x-reviewed": "false"
+  },
+  "copyright_information": "معلومات حقوق التأليف والنشر",
+  "@copyright_information": {
+    "x-reviewed": "false"
+  },
+  "official_website": "الموقع الرسمي",
+  "@official_website": {
+    "x-reviewed": "false"
+  },
+  "privacy_agreement": "اتفاقية الخصوصية",
+  "@privacy_agreement": {
+    "x-reviewed": "false"
+  },
+  "service_agreement": "اتفاقية خدمات",
+  "@service_agreement": {
+    "x-reviewed": "false"
+  },
+  "checking_for_new_version": "التحقق من الإصدار الجديد",
+  "@checking_for_new_version": {
+    "x-reviewed": "false"
+  },
+  "the_current_version_is_the_latest_version": "الإصدار الحالي هو أحدث إصدار",
+  "@the_current_version_is_the_latest_version": {
+    "x-reviewed": "false"
+  },
+  "account_settings": "تفضيلات الحساب",
+  "@account_settings": {
+    "x-reviewed": "false"
+  },
+  "notification_settings": "إشعارات",
+  "@notification_settings": {
+    "x-reviewed": "false"
+  },
+  "hidden_user": "كتم صوت المستخدمين",
+  "@hidden_user": {
+    "x-reviewed": "false"
+  },
+  "blocked_user": "مستخدمين محجوبين",
+  "@blocked_user": {
+    "x-reviewed": "false"
+  },
+  "hidden_instance": "حالات مخفية",
+  "@hidden_instance": {
+    "x-reviewed": "false"
+  },
+  "release": "نشر",
+  "@release": {
+    "x-reviewed": "false"
+  },
+  "default_visible_range": "خصوصية المنشور الافتراضية",
+  "@default_visible_range": {
+    "x-reviewed": "false"
+  },
+  "public": "عامة",
+  "@public": {
+    "x-reviewed": "false"
+  },
+  "private": "غير مدرج",
+  "@private": {
+    "x-reviewed": "false"
+  },
+  "followers_only": "المتابعون فقط",
+  "@followers_only": {
+    "x-reviewed": "false"
+  },
+  "direct_message": "مباشرة",
+  "@direct_message": {
+    "x-reviewed": "false"
+  },
+  "automatically_mark_media_as_sensitive": "ضع علامة دائمًا على الوسائط على أنها حساسة",
+  "@automatically_mark_media_as_sensitive": {
+    "x-reviewed": "false"
+  },
+  "timeline": "الجداول الزمنية",
+  "@timeline": {
+    "x-reviewed": "false"
+  },
+  "show_preview": "إظهار معاينات الوسائط",
+  "@show_preview": {
+    "x-reviewed": "false"
+  },
+  "always_show_all_sensitive_media_content": "اعرض دائمًا المحتوى الحساس",
+  "@always_show_all_sensitive_media_content": {
+    "x-reviewed": "false"
+  },
+  "always_expand_toots_marked_with_content_warnings": "قم دائمًا بتوسيع الأسنان التي تم تمييزها بتحذيرات المحتوى",
+  "@always_expand_toots_marked_with_content_warnings": {
+    "x-reviewed": "false"
+  },
+  "filter": "المرشحات",
+  "@filter": {
+    "x-reviewed": "false"
+  },
+  "public_timeline": "الجداول الزمنية العامة",
+  "@public_timeline": {
+    "x-reviewed": "false"
+  },
+  "home_page": "الصفحة الرئيسية",
+  "@home_page": {
+    "x-reviewed": "false"
+  },
+  "dialogue": "المحادثات",
+  "@dialogue": {
+    "x-reviewed": "false"
+  },
+  "account_operation": "تشغيل الحساب (تحتاج إلى إكمال العملية في متصفح النظام الافتراضي)",
+  "@account_operation": {
+    "x-reviewed": "false"
+  },
+  "change_password": "غير كلمة السر",
+  "@change_password": {
+    "x-reviewed": "false"
+  },
+  "backup_data": "نسخ إحتياطي للبيانات",
+  "@backup_data": {
+    "x-reviewed": "false"
+  },
+  "import_data": "بيانات الاستيراد",
+  "@import_data": {
+    "x-reviewed": "false"
+  },
+  "logout": "تسجيل خروج",
+  "@logout": {
+    "x-reviewed": "false"
+  },
+  "shut_down": "قريب",
+  "@shut_down": {
+    "x-reviewed": "false"
+  },
+  "management": "يدير",
+  "@management": {
+    "x-reviewed": "false"
+  },
+  "clear_account_information": "بيانات حساب سليمة",
+  "@clear_account_information": {
+    "x-reviewed": "false"
+  },
+  "click_to_switch_account": "انقر لتبديل الحساب",
+  "@click_to_switch_account": {
+    "x-reviewed": "false"
+  },
+  "add_account": "إضافة حساب",
+  "@add_account": {
+    "x-reviewed": "false"
+  },
+  "currently_used": "المستخدمة حاليا",
+  "@currently_used": {
+    "x-reviewed": "false"
+  },
+  "delete": "حذف",
+  "@delete": {
+    "x-reviewed": "false"
+  },
+  "bookmark": "إشارات مرجعية",
+  "@bookmark": {
+    "x-reviewed": "false"
+  },
+  "modify_picture_background": "تغيير الرأس",
+  "@modify_picture_background": {
+    "x-reviewed": "false"
+  },
+  "modify_avatar": "تغيير الصورة الرمزية",
+  "@modify_avatar": {
+    "x-reviewed": "false"
+  },
+  "edit_profile": "تعديل الملف الشخصي",
+  "@edit_profile": {
+    "x-reviewed": "false"
+  },
+  "nickname": "اسم العرض",
+  "@nickname": {
+    "x-reviewed": "false"
+  },
+  "introduction": "السيرة الذاتية",
+  "@introduction": {
+    "x-reviewed": "false"
+  },
+  "protect_your_account": "حماية حسابك",
+  "@protect_your_account": {
+    "x-reviewed": "false"
+  },
+  "you_need_to_manually_review_all_follow_requests": "تحتاج إلى مراجعة جميع طلبات المتابعة يدويًا",
+  "@you_need_to_manually_review_all_follow_requests": {
+    "x-reviewed": "false"
+  },
+  "profile_additional_information": "البيانات الوصفية للملف الشخصي",
+  "@profile_additional_information": {
+    "x-reviewed": "false"
+  },
+  "add_information": "إضافة البيانات",
+  "@add_information": {
+    "x-reviewed": "false"
+  },
+  "label": "ضع الكلمة المناسبة",
+  "@label": {
+    "x-reviewed": "false"
+  },
+  "content": "المحتوى",
+  "@content": {
+    "x-reviewed": "false"
+  },
+  "add_new_filter": "أضف مرشح جديد",
+  "@add_new_filter": {
+    "x-reviewed": "false"
+  },
+  "edit_filter": "تحرير عامل التصفية",
+  "@edit_filter": {
+    "x-reviewed": "false"
+  },
+  "whole_word": "الكلمة بالكامل",
+  "@whole_word": {
+    "x-reviewed": "false"
+  },
+  "if_the_keyword_or_abbreviation_has_only_letters_or_numbers": "إذا كانت الكلمة الرئيسية أو الاختصار يحتوي على أحرف أو أرقام فقط ، فسيتم تطبيقه فقط إذا كان يتطابق مع الكلمة بأكملها",
+  "@if_the_keyword_or_abbreviation_has_only_letters_or_numbers": {
+    "x-reviewed": "false"
+  },
+  "remove": "إزالة",
+  "@remove": {
+    "x-reviewed": "false"
+  },
+  "create": "جديد",
+  "@create": {
+    "x-reviewed": "false"
+  },
+  "filter_cannot_be_empty": "لا يمكن أن يكون الفلتر فارغًا",
+  "@filter_cannot_be_empty": {
+    "x-reviewed": "false"
+  },
+  "sign_out": "تسجيل خروج",
+  "@sign_out": {
+    "x-reviewed": "false"
+  },
+  "general_settings": "جنرال لواء",
+  "@general_settings": {
+    "x-reviewed": "false"
+  },
+  "application_theme": "سمة التطبيق",
+  "@application_theme": {
+    "x-reviewed": "false"
+  },
+  "normal_mode": "ضوء",
+  "@normal_mode": {
+    "x-reviewed": "false"
+  },
+  "dark_mode": "داكن",
+  "@dark_mode": {
+    "x-reviewed": "false"
+  },
+  "darkest_mode": "أسود",
+  "@darkest_mode": {
+    "x-reviewed": "false"
+  },
+  "font_size": "حجم الخط",
+  "@font_size": {
+    "x-reviewed": "false"
+  },
+  "small": "صغير",
+  "@small": {
+    "x-reviewed": "false"
+  },
+  "medium": "متوسط",
+  "@medium": {
+    "x-reviewed": "false"
+  },
+  "big": "كبير",
+  "@big": {
+    "x-reviewed": "false"
+  },
+  "display_setting": "إعداد عرض",
+  "@display_setting": {
+    "x-reviewed": "false"
+  },
+  "switch_account": "تبديل الحساب",
+  "@switch_account": {
+    "x-reviewed": "false"
+  },
+  "list_name": "اسم القائمة",
+  "@list_name": {
+    "x-reviewed": "false"
+  },
+  "new_list": "قائمة جديدة",
+  "@new_list": {
+    "x-reviewed": "false"
+  },
+  "list_name_cannot_be_empty": "لا يمكن أن يكون اسم القائمة فارغًا",
+  "@list_name_cannot_be_empty": {
+    "x-reviewed": "false"
+  },
+  "search_for_followed_users": "البحث عن المستخدمين المتابعين",
+  "@search_for_followed_users": {
+    "x-reviewed": "false"
+  },
+  "list": "القوائم",
+  "@list": {
+    "x-reviewed": "false"
+  },
+  "rename_list": "إعادة تسمية القائمة",
+  "@rename_list": {
+    "x-reviewed": "false"
+  },
+  "favorites": "المفضلة",
+  "@favorites": {
+    "x-reviewed": "false"
+  },
+  "timed_beep": "مجدولة توتس",
+  "@timed_beep": {
+    "x-reviewed": "false"
+  },
+  "universal": "جنرال لواء",
+  "@universal": {
+    "x-reviewed": "false"
+  },
+  "like_favorite_switch": "مثل / المفضلة التبديل",
+  "@like_favorite_switch": {
+    "x-reviewed": "false"
+  },
+  "currently_showing_likes": "يظهر حاليًا الإعجابات",
+  "@currently_showing_likes": {
+    "x-reviewed": "false"
+  },
+  "currently_showing_favorites": "تظهر حاليا المفضلة",
+  "@currently_showing_favorites": {
+    "x-reviewed": "false"
+  },
+  "attention": "التالية",
+  "@attention": {
+    "x-reviewed": "false"
+  },
+  "fans": "متابعون",
+  "@fans": {
+    "x-reviewed": "false"
+  },
+  "new_message_notification": "تفعيل الإشعارات",
+  "@new_message_notification": {
+    "x-reviewed": "false"
+  },
+  "mention": "أشير",
+  "@mention": {
+    "x-reviewed": "false"
+  },
+  "whether_to_keep_this_edit": "حفظ كمسودة؟",
+  "@whether_to_keep_this_edit": {
+    "x-reviewed": "false"
+  },
+  "not_retained": "تجاهل",
+  "@not_retained": {
+    "x-reviewed": "false"
+  },
+  "keep": "حفظ",
+  "@keep": {
+    "x-reviewed": "false"
+  },
+  "the_timed_beep_must_be_five_minutes_later": "يجب أن يكون صوت التنبيه الموقوت بعد خمس دقائق",
+  "@the_timed_beep_must_be_five_minutes_later": {
+    "x-reviewed": "false"
+  },
+  "uploading_file": "تحميل الملف ...",
+  "@uploading_file": {
+    "x-reviewed": "false"
+  },
+  "the_beep_has_been_sent": "تم إرسال توت",
+  "@the_beep_has_been_sent": {
+    "x-reviewed": "false"
+  },
+  "failed_to_send_toot": "فشل في إرسال toot!",
+  "@failed_to_send_toot": {
+    "x-reviewed": "false"
+  },
+  "file_upload_failed": "فشل تحميل الملف",
+  "@file_upload_failed": {
+    "x-reviewed": "false"
+  },
+  "file_size_must_be_less_than_40m": "يجب أن يكون حجم الملف أقل من 40 ميغا بايت",
+  "@file_size_must_be_less_than_40m": {
+    "x-reviewed": "false"
+  },
+  "warning_message_for_folded_section": "رسالة تحذير",
+  "@warning_message_for_folded_section": {
+    "x-reviewed": "false"
+  },
+  "visible_to_everyone_and_will_appear_on_the_public_timeline": "مرئي للجميع وتظهر في الجدول الزمني العام",
+  "@visible_to_everyone_and_will_appear_on_the_public_timeline": {
+    "x-reviewed": "false"
+  },
+  "visible_to_everyone": "مرئي للجميع ، لكن لا يظهر في المخطط الزمني العام",
+  "@visible_to_everyone": {
+    "x-reviewed": "false"
+  },
+  "only_visible_to_users_who_follow_you": "مرئي فقط للمستخدمين الذين يتابعونك",
+  "@only_visible_to_users_who_follow_you": {
+    "x-reviewed": "false"
+  },
+  "only_the_mentioned_users_can_see": "مرئي فقط للمستخدمين الذين ذكرتهم",
+  "@only_the_mentioned_users_can_see": {
+    "x-reviewed": "false"
+  },
+  "choose_a_photo": "إضافة الصور",
+  "@choose_a_photo": {
+    "x-reviewed": "false"
+  },
+  "select_video": "أضف فيديو",
+  "@select_video": {
+    "x-reviewed": "false"
+  },
+  "select_audio": "أضف الصوت",
+  "@select_audio": {
+    "x-reviewed": "false"
+  },
+  "beep": "انشر بوق",
+  "@beep": {
+    "x-reviewed": "false"
+  },
+  "reply": "الرد",
+  "@reply": {
+    "x-reviewed": "false"
+  },
+  "time_must_be_five_minutes_later": "يجب أن يكون الوقت بعد خمس دقائق",
+  "@time_must_be_five_minutes_later": {
+    "x-reviewed": "false"
+  },
+  "edit": "تعديل",
+  "@edit": {
+    "x-reviewed": "false"
+  },
+  "error_loading_image": "خطأ في تحميل الصورة",
+  "@error_loading_image": {
+    "x-reviewed": "false"
+  },
+  "no_comment_yet": "لا تعليق حتى الان",
+  "@no_comment_yet": {
+    "x-reviewed": "false"
+  },
+  "not_turning": "لا دفعة",
+  "@not_turning": {
+    "x-reviewed": "false"
+  },
+  "no_favorite": "لا مفضلة",
+  "@no_favorite": {
+    "x-reviewed": "false"
+  },
+  "toot_information": "بوق",
+  "@toot_information": {
+    "x-reviewed": "false"
+  },
+  "review": "الرد",
+  "@review": {
+    "x-reviewed": "false"
+  },
+  "list_timeline": "قائمة الجدول الزمني",
+  "@list_timeline": {
+    "x-reviewed": "false"
+  },
+  "all": "الكل",
+  "@all": {
+    "x-reviewed": "false"
+  },
+  "classification": "فرز",
+  "@classification": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_you_want_to_delete_the_message_list_forever": "هل أنت متأكد أنك تريد حذف قائمة الرسائل إلى الأبد",
+  "@are_you_sure_you_want_to_delete_the_message_list_forever": {
+    "x-reviewed": "false"
+  },
+  "tell_me": "التعزيزات",
+  "@tell_me": {
+    "x-reviewed": "false"
+  },
+  "mine": "الخاص بي",
+  "@mine": {
+    "x-reviewed": "false"
+  },
+  "this_site": "محلي",
+  "@this_site": {
+    "x-reviewed": "false"
+  },
+  "cross_station": "متحد",
+  "@cross_station": {
+    "x-reviewed": "false"
+  },
+  "following": "التالية",
+  "@following": {
+    "x-reviewed": "false"
+  },
+  "no_longer_follow_this_user": "لم تعد تتبع هذا المستخدم",
+  "@no_longer_follow_this_user": {
+    "x-reviewed": "false"
+  },
+  "unsubscribe": "الغاء المتابعة",
+  "@unsubscribe": {
+    "x-reviewed": "false"
+  },
+  "unhide": "إظهار",
+  "@unhide": {
+    "x-reviewed": "false"
+  },
+  "hiding_description": "لن يتم عرض أصابع المستخدم في الجدول الزمني الخاص بك",
+  "@hiding_description": {
+    "x-reviewed": "false"
+  },
+  "complaint": "نقل",
+  "@complaint": {
+    "x-reviewed": "false"
+  },
+  "shield": "منع",
+  "@shield": {
+    "x-reviewed": "false"
+  },
+  "unblock": "رفع الحظر",
+  "@unblock": {
+    "x-reviewed": "false"
+  },
+  "blocking_description": "لن يتمكن المستخدم من رؤية بوقك",
+  "@blocking_description": {
+    "x-reviewed": "false"
+  },
+  "hide_instance": "كتم {مثيل}",
+  "@hide_instance": {
+    "x-reviewed": "false"
+  },
+  "hide_instance_confirm": "هل أنت متأكد من أنك تريد حظر {مثيل}؟ لن ترى محتوى هذا المثال في أي مخطط زمني أو إشعارات عامة ، وسيتم أيضًا حذف المتابعين في هذا المثال",
+  "@hide_instance_confirm": {
+    "x-reviewed": "false"
+  },
+  "hiding_instance_description": "لن يتم عرض كافة toots من المثيل في الجدول الزمني الخاص بك",
+  "@hiding_instance_description": {
+    "x-reviewed": "false"
+  },
+  "edit_information": "تعديل",
+  "@edit_information": {
+    "x-reviewed": "false"
+  },
+  "follow_request_sent": "تم إرسال طلب المتابعة",
+  "@follow_request_sent": {
+    "x-reviewed": "false"
+  },
+  "followed_you": "يتبعك",
+  "@followed_you": {
+    "x-reviewed": "false"
+  },
+  "failed_to_obtain_user_information": "فشل الحصول على معلومات المستخدم ، ربما قام الخادم بتمكين التحقق من الإذن",
+  "@failed_to_obtain_user_information": {
+    "x-reviewed": "false"
+  },
+  "toot_and_reply": "مع الرد",
+  "@toot_and_reply": {
+    "x-reviewed": "false"
+  },
+  "pinned": "مثبت",
+  "@pinned": {
+    "x-reviewed": "false"
+  },
+  "media": "وسائل الإعلام",
+  "@media": {
+    "x-reviewed": "false"
+  },
+  "carry_on": "استمر",
+  "@carry_on": {
+    "x-reviewed": "false"
+  },
+  "the_report_will_be_sent_to_your_server_administrator": "سيتم إرسال التقرير إلى وسيط الخادم الخاص بك. يمكنك ملء سبب الشكوى للمستخدم أدناه:",
+  "@the_report_will_be_sent_to_your_server_administrator": {
+    "x-reviewed": "false"
+  },
+  "reason_for_reporting": "سبب الإبلاغ",
+  "@reason_for_reporting": {
+    "x-reviewed": "false"
+  },
+  "this_user_is_from_another_server": "هذا المستخدم من خادم آخر. هل تريد إرسال شكوى مجهولة إلى ذلك الخادم؟",
+  "@this_user_is_from_another_server": {
+    "x-reviewed": "false"
+  },
+  "forward_to": "الي",
+  "@forward_to": {
+    "x-reviewed": "false"
+  },
+  "back": "عودة",
+  "@back": {
+    "x-reviewed": "false"
+  },
+  "web_page": "صفحة ويب",
+  "@web_page": {
+    "x-reviewed": "false"
+  },
+  "share_it": "أنشرها",
+  "@share_it": {
+    "x-reviewed": "false"
+  },
+  "open_in_browser": "افتح في المتصفح",
+  "@open_in_browser": {
+    "x-reviewed": "false"
+  },
+  "web_link": "🔗 رابط",
+  "@web_link": {
+    "x-reviewed": "false"
+  },
+  "just": "مجرد",
+  "@just": {
+    "x-reviewed": "false"
+  },
+  "storage_failure": "فشل التخزين",
+  "@storage_failure": {
+    "x-reviewed": "false"
+  },
+  "picture_file_must_be_less_than_2m": "يجب أن يكون ملف الصورة أقل من 2 ميجا",
+  "@picture_file_must_be_less_than_2m": {
+    "x-reviewed": "false"
+  },
+  "no_storage_permissions": "لا توجد أذونات تخزين",
+  "@no_storage_permissions": {
+    "x-reviewed": "false"
+  },
+  "file_saved": "تم حفظ الملف",
+  "@file_saved": {
+    "x-reviewed": "false"
+  },
+  "processing": "معالجة...",
+  "@processing": {
+    "x-reviewed": "false"
+  },
+  "completed": "منجز",
+  "@completed": {
+    "x-reviewed": "false"
+  },
+  "network_request_error": "خطأ في طلب الشبكة",
+  "@network_request_error": {
+    "x-reviewed": "false"
+  },
+  "your_login_information_has_expired": "انتهت صلاحية معلومات تسجيل الدخول الخاصة بك ، يمكنك تسجيل الخروج وتسجيل الدخول مرة أخرى",
+  "@your_login_information_has_expired": {
+    "x-reviewed": "false"
+  },
+  "received_json_information": "تلقي معلومات json",
+  "@received_json_information": {
+    "x-reviewed": "false"
+  },
+  "you_need_to_log_in_to_perform_this_operation": "تحتاج إلى تسجيل الدخول إلى المثيل لإجراء هذه العملية.",
+  "@you_need_to_log_in_to_perform_this_operation": {
+    "x-reviewed": "false"
+  },
+  "go_to_login": "انتقل إلى تسجيل الدخول",
+  "@go_to_login": {
+    "x-reviewed": "false"
+  },
+  "add_bookmark": "اضافة للمفضلة",
+  "@add_bookmark": {
+    "x-reviewed": "false"
+  },
+  "delete_bookmark": "حذف الإشارة المرجعية",
+  "@delete_bookmark": {
+    "x-reviewed": "false"
+  },
+  "hide_this_conversation": "محادثة صامتة",
+  "@hide_this_conversation": {
+    "x-reviewed": "false"
+  },
+  "unhide_the_conversation": "قم بإلغاء إخفاء المحادثة",
+  "@unhide_the_conversation": {
+    "x-reviewed": "false"
+  },
+  "after_hiding": "لا تتلقى رسائل من هذه المحادثة",
+  "@after_hiding": {
+    "x-reviewed": "false"
+  },
+  "share_link": "رابط المشاركة",
+  "@share_link": {
+    "x-reviewed": "false"
+  },
+  "share_toot": "شارك محتوى توت",
+  "@share_toot": {
+    "x-reviewed": "false"
+  },
+  "copy_the_beep": "نسخ محتوى Toot",
+  "@copy_the_beep": {
+    "x-reviewed": "false"
+  },
+  "dumb_text_has_been_copied": "تم نسخ النص",
+  "@dumb_text_has_been_copied": {
+    "x-reviewed": "false"
+  },
+  "follow": "إتبع",
+  "@follow": {
+    "x-reviewed": "false"
+  },
+  "follow_user": "اتبع المستخدم}",
+  "@follow_user": {
+    "x-reviewed": "false"
+  },
+  "followed_or_sent_a_follow_request": "أتبع أو أرسل طلب متابعة",
+  "@followed_or_sent_a_follow_request": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_to_hide_users": "هل أنت متأكد من إخفاء {user}",
+  "@are_you_sure_to_hide_users": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_to_block_users": "هل أنت متأكد من حظر {user}",
+  "@are_you_sure_to_block_users": {
+    "x-reviewed": "false"
+  },
+  "block_user": "مستخدم محضور}",
+  "@block_user": {
+    "x-reviewed": "false"
+  },
+  "collection_example": "إضافة {مثيل}",
+  "@collection_example": {
+    "x-reviewed": "false"
+  },
+  "the_instance_will_be_saved_in_your_discover_menu": "سيتم عرض المثيل في قائمة \"اكتشاف\"",
+  "@the_instance_will_be_saved_in_your_discover_menu": {
+    "x-reviewed": "false"
+  },
+  "added_instance_successfully": "تمت إضافة النسخة بنجاح",
+  "@added_instance_successfully": {
+    "x-reviewed": "false"
+  },
+  "administrator_operate_the_account": "المسؤول: الإشراف على المستخدم",
+  "@administrator_operate_the_account": {
+    "x-reviewed": "false"
+  },
+  "top": "أعلى",
+  "@top": {
+    "x-reviewed": "false"
+  },
+  "unpink": "غير وردي",
+  "@unpink": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_you_want_to_delete_this_beep": "هل أنت متأكد أنك تريد حذف توت؟",
+  "@are_you_sure_you_want_to_delete_this_beep": {
+    "x-reviewed": "false"
+  },
+  "delete_and_re_edit": "حذف وإعادة التحرير",
+  "@delete_and_re_edit": {
+    "x-reviewed": "false"
+  },
+  "failed_to_add_bookmark": "فشل إضافة إشارة مرجعية",
+  "@failed_to_add_bookmark": {
+    "x-reviewed": "false"
+  },
+  "bookmarked": "مرجعية",
+  "@bookmarked": {
+    "x-reviewed": "false"
+  },
+  "bookmark_deleted": "تم حذف الإشارة المرجعية",
+  "@bookmark_deleted": {
+    "x-reviewed": "false"
+  },
+  "unpinned": "غير مثبت",
+  "@unpinned": {
+    "x-reviewed": "false"
+  },
+  "conversation_unhide": "إظهار المحادثة",
+  "@conversation_unhide": {
+    "x-reviewed": "false"
+  },
+  "conversation_hidden": "المحادثة مخفية",
+  "@conversation_hidden": {
+    "x-reviewed": "false"
+  },
+  "no_content_yet": "لا يوجد محتوى حتى الان",
+  "@no_content_yet": {
+    "x-reviewed": "false"
+  },
+  "retry": "أعد المحاولة",
+  "@retry": {
+    "x-reviewed": "false"
+  },
+  "there_was_an_error_in_the_network_request": "حدث خطأ في طلب الشبكة ، يرجى التحقق من الإنترنت والمحاولة مرة أخرى",
+  "@there_was_an_error_in_the_network_request": {
+    "x-reviewed": "false"
+  },
+  "this_instance_does_not_open_the_timeline_preview_function": "لا يفتح هذا المثيل وظيفة \"Timeline Preview\" ، ولا يمكن للمستخدمين الذين ليسوا في هذه الحالة تصفح دفق المعلومات في الوقت الفعلي للوجوه العامة ذات الصلة. الرجاء تسجيل الدخول للوصول.",
+  "@this_instance_does_not_open_the_timeline_preview_function": {
+    "x-reviewed": "false"
+  },
+  "an_error_occurred_in_the_application": "حدث خطأ في التطبيق.",
+  "@an_error_occurred_in_the_application": {
+    "x-reviewed": "false"
+  },
+  "collapse_content": "عرض أقل",
+  "@collapse_content": {
+    "x-reviewed": "false"
+  },
+  "display_more": "أظهر المزيد",
+  "@display_more": {
+    "x-reviewed": "false"
+  },
+  "registered": "سجل",
+  "@registered": {
+    "x-reviewed": "false"
+  },
+  "more": "أكثر",
+  "@more": {
+    "x-reviewed": "false"
+  },
+  "release_refresh": "الافراج عن التحديث",
+  "@release_refresh": {
+    "x-reviewed": "false"
+  },
+  "complete_refresh": "تحديث كامل",
+  "@complete_refresh": {
+    "x-reviewed": "false"
+  },
+  "pull_down_to_refresh": "للتحديث اسحب للأسفل",
+  "@pull_down_to_refresh": {
+    "x-reviewed": "false"
+  },
+  "release_load_more": "الافراج عن تحميل أكثر",
+  "@release_load_more": {
+    "x-reviewed": "false"
+  },
+  "no_more_data": "لا مزيد من البيانات",
+  "@no_more_data": {
+    "x-reviewed": "false"
+  },
+  "there_is_no_custom_emoji_in_this_example": "لا توجد رموز تعبيرية مخصصة في هذه الحالة",
+  "@there_is_no_custom_emoji_in_this_example": {
+    "x-reviewed": "false"
+  },
+  "choice1": "الاختيار 1",
+  "@choice1": {
+    "x-reviewed": "false"
+  },
+  "choice2": "الاختيار 2",
+  "@choice2": {
+    "x-reviewed": "false"
+  },
+  "choice3": "الاختيار 3",
+  "@choice3": {
+    "x-reviewed": "false"
+  },
+  "choice4": "الاختيار 4",
+  "@choice4": {
+    "x-reviewed": "false"
+  },
+  "add_selection": "إضافة خيار",
+  "@add_selection": {
+    "x-reviewed": "false"
+  },
+  "multiple_choices": "خيارات متعددة",
+  "@multiple_choices": {
+    "x-reviewed": "false"
+  },
+  "add_a_text_description_for_the_visually_impaired": "أضف وصفًا نصيًا للمكفوفين",
+  "@add_a_text_description_for_the_visually_impaired": {
+    "x-reviewed": "false"
+  },
+  "whats_new": "ما هو الجديد",
+  "@whats_new": {
+    "x-reviewed": "false"
+  },
+  "started_following_you": "تابعك {user}",
+  "@started_following_you": {
+    "x-reviewed": "false"
+  },
+  "request_to_follow_you": "طلب {user} متابعتك",
+  "@request_to_follow_you": {
+    "x-reviewed": "false"
+  },
+  "agree": "يوافق على",
+  "@agree": {
+    "x-reviewed": "false"
+  },
+  "refuse": "رفض",
+  "@refuse": {
+    "x-reviewed": "false"
+  },
+  "from": "من عند",
+  "@from": {
+    "x-reviewed": "false"
+  },
+  "awesome": "رائع",
+  "@awesome": {
+    "x-reviewed": "false"
+  },
+  "no_description_information": "لا توجد معلومات وصف",
+  "@no_description_information": {
+    "x-reviewed": "false"
+  },
+  "sensitive_content": "المحتوى الحساس",
+  "@sensitive_content": {
+    "x-reviewed": "false"
+  },
+  "hidden_photo_or_video": "الصورة المخفية أو الفيديو",
+  "@hidden_photo_or_video": {
+    "x-reviewed": "false"
+  },
+  "language": "لغة",
+  "@language": {
+    "x-reviewed": "false"
+  },
+  "clear": "واضح",
+  "@clear": {
+    "x-reviewed": "false"
+  },
+  "favorited_your_toot": "وضع {user} بوقك في المفضلة",
+  "@favorited_your_toot": {
+    "x-reviewed": "false"
+  },
+  "boot_your_tool": "عزز {user} بوقك",
+  "@boot_your_tool": {
+    "x-reviewed": "false"
+  },
+  "poll_your_voted_ended": "انتهى التصويت الذي قمت بالتصويت فيه",
+  "@poll_your_voted_ended": {
+    "x-reviewed": "false"
+  },
+  "poll_your_created_ended": "انتهى الاستطلاع الذي أنشأته",
+  "@poll_your_created_ended": {
+    "x-reviewed": "false"
+  },
+  "seconds_ago": "{عدد} ث",
+  "@seconds_ago": {
+    "x-reviewed": "false"
+  },
+  "minutes_ago": "{عدد} م",
+  "@minutes_ago": {
+    "x-reviewed": "false"
+  },
+  "hours_ago": "{عدد} س",
+  "@hours_ago": {
+    "x-reviewed": "false"
+  },
+  "days_ago": "{عدد} د",
+  "@days_ago": {
+    "x-reviewed": "false"
+  },
+  "toot_from": "من من}",
+  "@toot_from": {
+    "x-reviewed": "false"
+  },
+  "reply_count":"{num, plural, =0{{num} Reply} =1{{num} Reply} other{{num} Replies}}",
+  "boost_count":"{num, plural, =0{{num} Boost} =1{{num} Boost} other{{num} Boosts}}",
+  "favorite_count":"{num, plural, =0{{num} Favorite} =1{{num} Favorite} other{{num} Favorites}}",
+  "boosted_toot": "تم تعزيز {user}",
+  "@boosted_toot": {
+    "placeholders": {
+      "user": {}
+    },
+    "x-reviewed": "false"
+  },
+  "delete_account_confirm": "حذف الحساب}",
+  "@delete_account_confirm": {
+    "placeholders": {
+      "account": {}
+    },
+    "x-reviewed": "false"
+  },
+  "delete_list": "قائمة الحذف",
+  "@delete_list": {
+    "x-reviewed": "false"
+  },
+  "edit_list": "قائمة التحرير",
+  "@edit_list": {
+    "x-reviewed": "false"
+  },
+  "mentions_you": "{user} يشير إليك",
+  "@mentions_you": {
+    "placeholders": {
+      "user": {}
+    },
+    "x-reviewed": "false"
+  },
+  "no_description": "بدون وصف",
+  "@no_description": {
+    "x-reviewed": "false"
+  },
+  "operate_with_account": "سوف تستخدم {user} للقيام بذلك",
+  "@operate_with_account": {
+    "placeholders": {
+      "user": {}
+    },
+    "x-reviewed": "false"
+  },
+  "toot_not_found": "لم يتم العثور على بوق",
+  "@toot_not_found": {
+    "x-reviewed": "false"
+  },
+  "days_left": "{num, plural, =0{{num} day left} =1{{num} day left} other{{num} days left}}",
+  "@days_left": {
+    "placeholders": {
+      "num": {}
+    }
+  },
+  "ended": "closed",
+  "@ended": {},
+  "hours_left": "{num, plural, =0{{num} hour left} =1{{num} hour left} other{{num} hours left}}",
+  "@hours_left": {
+    "placeholders": {
+      "num": {}
+    }
+  },
+  "minutes_left": "{num, plural, =0{{num} minute left} =1{{num} minute left} other{{num} minutes left}}",
+  "@minutes_left": {
+    "placeholders": {
+      "num": {}
+    }
+  },
+  "vote_count": "{count, plural, =0{0 vote} =1{1 vote} other{{count} votes}}",
+  "@vote_count": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "version_info": "الإصدار {version}",
+  "@version_info": {
+    "x-reviewed": "false"
+  },
+  "translate_by": "ترجمة بواسطة {engine}",
+  "@translate_by": {
+    "x-reviewed": "false"
+  },
+  "translate_setting": "إعداد الترجمة",
+  "@translate_setting": {
+    "x-reviewed": "false"
+  },
+  "translate_engine": "محرك الترجمة",
+  "@translate_engine": {
+    "x-reviewed": "false"
+  },
+  "translate_toot": "ترجمة toot",
+  "@translate_toot": {
+    "x-reviewed": "false"
+  }
+}

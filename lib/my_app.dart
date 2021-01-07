@@ -54,7 +54,12 @@ class App extends StatelessWidget {
       locale: Locale(Provider.of<SettingsProvider>(context).settings['language']),
       supportedLocales: [
         const Locale('en', ''), // English, no country code
-        const Locale('zh', ''), // Chinese *See Advanced Locales below*
+        const Locale('zh', ''),
+        const Locale('fr', ''),// Chinese *See Advanced Locales below*
+        const Locale('ru',''),
+        const Locale('ar',''),
+        const Locale('es',''),
+        const Locale('ja',''),
         // ... other locales the app supports
       ],
       theme: ThemeUtil.themes[chooseTheme],

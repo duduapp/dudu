@@ -451,7 +451,7 @@
   "@delete": {
     "x-reviewed": "false"
   },
-  "bookmark": "Bookmark",
+  "bookmark": "Bookmarks",
   "@bookmark": {
     "x-reviewed": "false"
   },
@@ -589,7 +589,7 @@
   "@search_for_followed_users": {
     "x-reviewed": "false"
   },
-  "list": "List",
+  "list": "Lists",
   "@list": {
     "x-reviewed": "false"
   },
@@ -597,7 +597,7 @@
   "@rename_list": {
     "x-reviewed": "false"
   },
-  "favorites": "Favorite",
+  "favorites": "Favorites",
   "@favorites": {
     "x-reviewed": "false"
   },
@@ -967,7 +967,7 @@
   "@copy_the_beep": {
     "x-reviewed": "false"
   },
-  "dumb_text_has_been_copied": "Dumb text has been copied",
+  "dumb_text_has_been_copied": "Text has been copied",
   "@dumb_text_has_been_copied": {
     "x-reviewed": "false"
   },
@@ -1255,6 +1255,6 @@
      "version_info": "Version{version}",
      "translate_by": "Translate by {engine}",
      "translate_setting": "Translate Setting",
-     "translate_engine": "Translate Engine",
-     "translate_toot": "Translate Toot"
+     "translate_engine": "Translate engine",
+     "translate_toot": "Translate toot"
 }

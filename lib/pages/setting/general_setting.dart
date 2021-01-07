@@ -102,8 +102,8 @@ class _GeneralSettingState extends State<GeneralSetting> {
             providerKey: 'language',
             leftIcon: Icon(IconFont.fontSize),
             title: S.of(context).language,
-            options: ['zh','en'],
-            displayOptions: ['中文','English'],
+            options: ['zh','en','fr','ru','ar','es','ja'],
+            displayOptions: ['中文','English','français','русский','العربية','	Español','日本語'],
             type: SettingType.string,
           ),
           ProviderSettingCell(

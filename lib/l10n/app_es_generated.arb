@@ -1,0 +1,1363 @@
+{
+  "@@locale": "es",
+  "app_name": "Dudu",
+  "@app_name": {
+    "x-reviewed": "false"
+  },
+  "toot": "Sonar",
+  "@toot": {
+    "x-reviewed": "false"
+  },
+  "toots": "Toots",
+  "@toots": {
+    "x-reviewed": "false"
+  },
+  "tooting": "Tooting ...",
+  "@tooting": {
+    "x-reviewed": "false"
+  },
+  "an_error_occurred": "Ocurrió un error..",
+  "@an_error_occurred": {
+    "x-reviewed": "false"
+  },
+  "unable_to_connect_to_server": "No se puede conectar al servidor",
+  "@unable_to_connect_to_server": {
+    "x-reviewed": "false"
+  },
+  "something_went_wrong": "Algo salió mal, puedes intentarlo más tarde",
+  "@something_went_wrong": {
+    "x-reviewed": "false"
+  },
+  "day1": "1 día",
+  "@day1": {
+    "x-reviewed": "false"
+  },
+  "minutes5": "5 minutos",
+  "@minutes5": {
+    "x-reviewed": "false"
+  },
+  "minutes30": "30 minutos",
+  "@minutes30": {
+    "x-reviewed": "false"
+  },
+  "hour1": "1 hora",
+  "@hour1": {
+    "x-reviewed": "false"
+  },
+  "hours6": "6 horas",
+  "@hours6": {
+    "x-reviewed": "false"
+  },
+  "days3": "3 días",
+  "@days3": {
+    "x-reviewed": "false"
+  },
+  "days7": "7 días",
+  "@days7": {
+    "x-reviewed": "false"
+  },
+  "private_letters": "Mensajes directos",
+  "@private_letters": {
+    "x-reviewed": "false"
+  },
+  "follow_request": "Seguir solicitudes",
+  "@follow_request": {
+    "x-reviewed": "false"
+  },
+  "follow_me": "Sígueme",
+  "@follow_me": {
+    "x-reviewed": "false"
+  },
+  "turn_to": "Aumentar",
+  "@turn_to": {
+    "x-reviewed": "false"
+  },
+  "at_mine": "Menciones",
+  "@at_mine": {
+    "x-reviewed": "false"
+  },
+  "vote": "Encuesta",
+  "@vote": {
+    "x-reviewed": "false"
+  },
+  "vote_poll": "Votar",
+  "@vote_poll": {
+    "x-reviewed": "false"
+  },
+  "the_poll_you_initiated_or_participated_in_has_been_completed": "La encuesta que creaste o en la que votaste ha finalizado",
+  "@the_poll_you_initiated_or_participated_in_has_been_completed": {
+    "x-reviewed": "false"
+  },
+  "update": "Actualizar",
+  "@update": {
+    "x-reviewed": "false"
+  },
+  "turn_off_an_app": "Cerrar app",
+  "@turn_off_an_app": {
+    "x-reviewed": "false"
+  },
+  "new_version_detected": "Nueva versión detectada",
+  "@new_version_detected": {
+    "x-reviewed": "false"
+  },
+  "copy_the_download_link": "Copia el enlace de descarga",
+  "@copy_the_download_link": {
+    "x-reviewed": "false"
+  },
+  "download_link_copied": "Enlace de descarga copiado",
+  "@download_link_copied": {
+    "x-reviewed": "false"
+  },
+  "downloading": "Descargando ...",
+  "@downloading": {
+    "x-reviewed": "false"
+  },
+  "cancel": "Cancelar",
+  "@cancel": {
+    "x-reviewed": "false"
+  },
+  "installation": "instalación",
+  "@installation": {
+    "x-reviewed": "false"
+  },
+  "just_warn_the_user": "Simplemente advierta al usuario y no operará en la cuenta de usuario",
+  "@just_warn_the_user": {
+    "x-reviewed": "false"
+  },
+  "prevent_the_user_from_logging_in": "Evite que el usuario inicie sesión y conserve todo el contenido del usuario",
+  "@prevent_the_user_from_logging_in": {
+    "x-reviewed": "false"
+  },
+  "toots_posted_by_users_will_not_be_displayed_in_the_public_timeline": "Hacer que los toots del usuario no se muestren en la línea de tiempo pública",
+  "@toots_posted_by_users_will_not_be_displayed_in_the_public_timeline": {
+    "x-reviewed": "false"
+  },
+  "deactivate_and_permanently_delete_account_information": "Desactivar y eliminar permanentemente la información de la cuenta",
+  "@deactivate_and_permanently_delete_account_information": {
+    "x-reviewed": "false"
+  },
+  "caveat": "Ninguna",
+  "@caveat": {
+    "x-reviewed": "false"
+  },
+  "deactivate": "Inhabilitar",
+  "@deactivate": {
+    "x-reviewed": "false"
+  },
+  "hide": "Mudo",
+  "@hide": {
+    "x-reviewed": "false"
+  },
+  "silence": "Silencio",
+  "@silence": {
+    "x-reviewed": "false"
+  },
+  "hide_user": "Silenciar {user}",
+  "@hide_user": {
+    "x-reviewed": "false"
+  },
+  "report_user": "Reportar usuario}",
+  "@report_user": {
+    "x-reviewed": "false"
+  },
+  "ban": "Suspender",
+  "@ban": {
+    "x-reviewed": "false"
+  },
+  "perform_management_operations": "Realizar operaciones de gestión",
+  "@perform_management_operations": {
+    "x-reviewed": "false"
+  },
+  "remind_users_via_email": "Recordar a los usuarios por correo electrónico",
+  "@remind_users_via_email": {
+    "x-reviewed": "false"
+  },
+  "email_to_inform_users": "Correo electrónico para informar a los usuarios",
+  "@email_to_inform_users": {
+    "x-reviewed": "false"
+  },
+  "determine": "Okay",
+  "@determine": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_you_want": "Estas seguro que quieres",
+  "@are_you_sure_you_want": {
+    "x-reviewed": "false"
+  },
+  "this_operation_will": "Esta operación",
+  "@this_operation_will": {
+    "x-reviewed": "false"
+  },
+  "increase_instance": "Incrementar instancia",
+  "@increase_instance": {
+    "x-reviewed": "false"
+  },
+  "instance_already_exists": "La instancia ya existe",
+  "@instance_already_exists": {
+    "x-reviewed": "false"
+  },
+  "instance_url": "URL de instancia",
+  "@instance_url": {
+    "x-reviewed": "false"
+  },
+  "please_enter_the_url": "Ingrese la URL de la instancia de mastodonte que desea registrar o iniciar sesión. Si se puede acceder a la URL, la tarjeta de instancia se mostrará en la página de \"descubrimiento\", donde puede registrarse e iniciar sesión.",
+  "@please_enter_the_url": {
+    "x-reviewed": "false"
+  },
+  "contact_email": "Email de contacto:",
+  "@contact_email": {
+    "x-reviewed": "false"
+  },
+  "user_number": "Número de usuario:",
+  "@user_number": {
+    "x-reviewed": "false"
+  },
+  "number_of_toots": "Número de toots:",
+  "@number_of_toots": {
+    "x-reviewed": "false"
+  },
+  "version": "Versión",
+  "@version": {
+    "x-reviewed": "false"
+  },
+  "browse_to_see": "Navegar para ver",
+  "@browse_to_see": {
+    "x-reviewed": "false"
+  },
+  "log_in": "Iniciar sesión",
+  "@log_in": {
+    "x-reviewed": "false"
+  },
+  "add_website_instance": "Agregar instancia",
+  "@add_website_instance": {
+    "x-reviewed": "false"
+  },
+  "find": "Descubrimiento",
+  "@find": {
+    "x-reviewed": "false"
+  },
+  "home": "Casa",
+  "@home": {
+    "x-reviewed": "false"
+  },
+  "square": "Cuadrado",
+  "@square": {
+    "x-reviewed": "false"
+  },
+  "news": "Notificaciones",
+  "@news": {
+    "x-reviewed": "false"
+  },
+  "me": "Yo",
+  "@me": {
+    "x-reviewed": "false"
+  },
+  "log_in_to_mastodon_account": "Inicie sesión en la cuenta de Mastodon",
+  "@log_in_to_mastodon_account": {
+    "x-reviewed": "false"
+  },
+  "loading": "Cargando...",
+  "@loading": {
+    "x-reviewed": "false"
+  },
+  "domain_name": "nombre de dominio",
+  "@domain_name": {
+    "x-reviewed": "false"
+  },
+  "about_mastodon": "Sobre mastodon",
+  "@about_mastodon": {
+    "x-reviewed": "false"
+  },
+  "example_recommendation": "Recomendación de ejemplo",
+  "@example_recommendation": {
+    "x-reviewed": "false"
+  },
+  "you_only_need_to_select_a_node_to_register": "Solo necesita seleccionar un nodo para registrarse. No importa qué nodo elija, ¡puede comunicarse con cualquiera!",
+  "@you_only_need_to_select_a_node_to_register": {
+    "x-reviewed": "false"
+  },
+  "k_user": "K usuario",
+  "@k_user": {
+    "x-reviewed": "false"
+  },
+  "user": "Cuentas",
+  "@user": {
+    "x-reviewed": "false"
+  },
+  "stable": "estable",
+  "@stable": {
+    "x-reviewed": "false"
+  },
+  "select_node": "Seleccionar nodo",
+  "@select_node": {
+    "x-reviewed": "false"
+  },
+  "play_audio": "Reproducir audio",
+  "@play_audio": {
+    "x-reviewed": "false"
+  },
+  "mute": "Mudo",
+  "@mute": {
+    "x-reviewed": "false"
+  },
+  "unmute": "Activar sonido",
+  "@unmute": {
+    "x-reviewed": "false"
+  },
+  "topic": "Etiquetas",
+  "@topic": {
+    "x-reviewed": "false"
+  },
+  "search_for": "Buscar...",
+  "@search_for": {
+    "x-reviewed": "false"
+  },
+  "about_dudu": "Sobre Dudu",
+  "@about_dudu": {
+    "x-reviewed": "false"
+  },
+  "check_for_updates": "Buscar actualizaciones",
+  "@check_for_updates": {
+    "x-reviewed": "false"
+  },
+  "copyright_information": "informacion registrada",
+  "@copyright_information": {
+    "x-reviewed": "false"
+  },
+  "official_website": "Página web oficial",
+  "@official_website": {
+    "x-reviewed": "false"
+  },
+  "privacy_agreement": "Acuerdo de privacidad",
+  "@privacy_agreement": {
+    "x-reviewed": "false"
+  },
+  "service_agreement": "Acuerdo de servicio",
+  "@service_agreement": {
+    "x-reviewed": "false"
+  },
+  "checking_for_new_version": "Buscando nueva versión",
+  "@checking_for_new_version": {
+    "x-reviewed": "false"
+  },
+  "the_current_version_is_the_latest_version": "La versión actual es la última versión",
+  "@the_current_version_is_the_latest_version": {
+    "x-reviewed": "false"
+  },
+  "account_settings": "Preferencias de cuenta",
+  "@account_settings": {
+    "x-reviewed": "false"
+  },
+  "notification_settings": "Notificaciones",
+  "@notification_settings": {
+    "x-reviewed": "false"
+  },
+  "hidden_user": "Silencia a los usuarios",
+  "@hidden_user": {
+    "x-reviewed": "false"
+  },
+  "blocked_user": "Usuarios bloqueados",
+  "@blocked_user": {
+    "x-reviewed": "false"
+  },
+  "hidden_instance": "Instancias ocultas",
+  "@hidden_instance": {
+    "x-reviewed": "false"
+  },
+  "release": "Publicación",
+  "@release": {
+    "x-reviewed": "false"
+  },
+  "default_visible_range": "Privacidad de publicación predeterminada",
+  "@default_visible_range": {
+    "x-reviewed": "false"
+  },
+  "public": "Público",
+  "@public": {
+    "x-reviewed": "false"
+  },
+  "private": "No incluido en listado",
+  "@private": {
+    "x-reviewed": "false"
+  },
+  "followers_only": "Solo seguidores",
+  "@followers_only": {
+    "x-reviewed": "false"
+  },
+  "direct_message": "Directo",
+  "@direct_message": {
+    "x-reviewed": "false"
+  },
+  "automatically_mark_media_as_sensitive": "Marque siempre los medios como sensibles",
+  "@automatically_mark_media_as_sensitive": {
+    "x-reviewed": "false"
+  },
+  "timeline": "Cronologías",
+  "@timeline": {
+    "x-reviewed": "false"
+  },
+  "show_preview": "Mostrar vistas previas de medios",
+  "@show_preview": {
+    "x-reviewed": "false"
+  },
+  "always_show_all_sensitive_media_content": "Mostrar siempre contenido sensible",
+  "@always_show_all_sensitive_media_content": {
+    "x-reviewed": "false"
+  },
+  "always_expand_toots_marked_with_content_warnings": "Expanda siempre toots marcados con advertencias de contenido",
+  "@always_expand_toots_marked_with_content_warnings": {
+    "x-reviewed": "false"
+  },
+  "filter": "Filtros",
+  "@filter": {
+    "x-reviewed": "false"
+  },
+  "public_timeline": "Cronogramas públicos",
+  "@public_timeline": {
+    "x-reviewed": "false"
+  },
+  "home_page": "Casa",
+  "@home_page": {
+    "x-reviewed": "false"
+  },
+  "dialogue": "Conversaciones",
+  "@dialogue": {
+    "x-reviewed": "false"
+  },
+  "account_operation": "Operación de la cuenta (debe completar la operación en el navegador predeterminado del sistema)",
+  "@account_operation": {
+    "x-reviewed": "false"
+  },
+  "change_password": "Cambia la contraseña",
+  "@change_password": {
+    "x-reviewed": "false"
+  },
+  "backup_data": "Los datos de copia de seguridad",
+  "@backup_data": {
+    "x-reviewed": "false"
+  },
+  "import_data": "Datos de importacion",
+  "@import_data": {
+    "x-reviewed": "false"
+  },
+  "logout": "Cerrar sesión",
+  "@logout": {
+    "x-reviewed": "false"
+  },
+  "shut_down": "Cerca",
+  "@shut_down": {
+    "x-reviewed": "false"
+  },
+  "management": "Gestionar",
+  "@management": {
+    "x-reviewed": "false"
+  },
+  "clear_account_information": "Borrar información de la cuenta",
+  "@clear_account_information": {
+    "x-reviewed": "false"
+  },
+  "click_to_switch_account": "Toca para cambiar de cuenta",
+  "@click_to_switch_account": {
+    "x-reviewed": "false"
+  },
+  "add_account": "Añadir cuenta",
+  "@add_account": {
+    "x-reviewed": "false"
+  },
+  "currently_used": "Usado actualmente",
+  "@currently_used": {
+    "x-reviewed": "false"
+  },
+  "delete": "Eliminar",
+  "@delete": {
+    "x-reviewed": "false"
+  },
+  "bookmark": "Marcadores",
+  "@bookmark": {
+    "x-reviewed": "false"
+  },
+  "modify_picture_background": "Cambiar encabezado",
+  "@modify_picture_background": {
+    "x-reviewed": "false"
+  },
+  "modify_avatar": "Cambiar avatar",
+  "@modify_avatar": {
+    "x-reviewed": "false"
+  },
+  "edit_profile": "Editar perfil",
+  "@edit_profile": {
+    "x-reviewed": "false"
+  },
+  "nickname": "Nombre para mostrar",
+  "@nickname": {
+    "x-reviewed": "false"
+  },
+  "introduction": "Bio",
+  "@introduction": {
+    "x-reviewed": "false"
+  },
+  "protect_your_account": "Protege tu cuenta",
+  "@protect_your_account": {
+    "x-reviewed": "false"
+  },
+  "you_need_to_manually_review_all_follow_requests": "Debe revisar manualmente todas las solicitudes de seguimiento",
+  "@you_need_to_manually_review_all_follow_requests": {
+    "x-reviewed": "false"
+  },
+  "profile_additional_information": "Metadatos de perfil",
+  "@profile_additional_information": {
+    "x-reviewed": "false"
+  },
+  "add_information": "Agregar datos",
+  "@add_information": {
+    "x-reviewed": "false"
+  },
+  "label": "etiqueta",
+  "@label": {
+    "x-reviewed": "false"
+  },
+  "content": "contenido",
+  "@content": {
+    "x-reviewed": "false"
+  },
+  "add_new_filter": "Agregar nuevo filtro",
+  "@add_new_filter": {
+    "x-reviewed": "false"
+  },
+  "edit_filter": "Editar filtro",
+  "@edit_filter": {
+    "x-reviewed": "false"
+  },
+  "whole_word": "Toda palabra",
+  "@whole_word": {
+    "x-reviewed": "false"
+  },
+  "if_the_keyword_or_abbreviation_has_only_letters_or_numbers": "Si la palabra clave o abreviatura solo tiene letras o números, solo se aplicará si coincide con la palabra completa",
+  "@if_the_keyword_or_abbreviation_has_only_letters_or_numbers": {
+    "x-reviewed": "false"
+  },
+  "remove": "Eliminar",
+  "@remove": {
+    "x-reviewed": "false"
+  },
+  "create": "Nuevo",
+  "@create": {
+    "x-reviewed": "false"
+  },
+  "filter_cannot_be_empty": "El filtro no puede estar vacío",
+  "@filter_cannot_be_empty": {
+    "x-reviewed": "false"
+  },
+  "sign_out": "Cerrar sesión",
+  "@sign_out": {
+    "x-reviewed": "false"
+  },
+  "general_settings": "General",
+  "@general_settings": {
+    "x-reviewed": "false"
+  },
+  "application_theme": "Tema de la aplicación",
+  "@application_theme": {
+    "x-reviewed": "false"
+  },
+  "normal_mode": "Ligero",
+  "@normal_mode": {
+    "x-reviewed": "false"
+  },
+  "dark_mode": "Oscuro",
+  "@dark_mode": {
+    "x-reviewed": "false"
+  },
+  "darkest_mode": "Negro",
+  "@darkest_mode": {
+    "x-reviewed": "false"
+  },
+  "font_size": "Tamano del texto",
+  "@font_size": {
+    "x-reviewed": "false"
+  },
+  "small": "Pequeña",
+  "@small": {
+    "x-reviewed": "false"
+  },
+  "medium": "Medio",
+  "@medium": {
+    "x-reviewed": "false"
+  },
+  "big": "Grande",
+  "@big": {
+    "x-reviewed": "false"
+  },
+  "display_setting": "Configuración de pantalla",
+  "@display_setting": {
+    "x-reviewed": "false"
+  },
+  "switch_account": "Cambiar cuenta",
+  "@switch_account": {
+    "x-reviewed": "false"
+  },
+  "list_name": "Lista de nombres",
+  "@list_name": {
+    "x-reviewed": "false"
+  },
+  "new_list": "Lista nueva",
+  "@new_list": {
+    "x-reviewed": "false"
+  },
+  "list_name_cannot_be_empty": "El nombre de la lista no puede estar vacío",
+  "@list_name_cannot_be_empty": {
+    "x-reviewed": "false"
+  },
+  "search_for_followed_users": "Buscar usuarios seguidos",
+  "@search_for_followed_users": {
+    "x-reviewed": "false"
+  },
+  "list": "Liza",
+  "@list": {
+    "x-reviewed": "false"
+  },
+  "rename_list": "Cambiar nombre de lista",
+  "@rename_list": {
+    "x-reviewed": "false"
+  },
+  "favorites": "Favoritos",
+  "@favorites": {
+    "x-reviewed": "false"
+  },
+  "timed_beep": "Toots programados",
+  "@timed_beep": {
+    "x-reviewed": "false"
+  },
+  "universal": "General",
+  "@universal": {
+    "x-reviewed": "false"
+  },
+  "like_favorite_switch": "Me gusta / interruptor favorito",
+  "@like_favorite_switch": {
+    "x-reviewed": "false"
+  },
+  "currently_showing_likes": "Actualmente mostrando me gusta",
+  "@currently_showing_likes": {
+    "x-reviewed": "false"
+  },
+  "currently_showing_favorites": "Mostrando favoritos actualmente",
+  "@currently_showing_favorites": {
+    "x-reviewed": "false"
+  },
+  "attention": "Siguiendo",
+  "@attention": {
+    "x-reviewed": "false"
+  },
+  "fans": "Seguidores",
+  "@fans": {
+    "x-reviewed": "false"
+  },
+  "new_message_notification": "Habilitar la notificación",
+  "@new_message_notification": {
+    "x-reviewed": "false"
+  },
+  "mention": "Mencionar",
+  "@mention": {
+    "x-reviewed": "false"
+  },
+  "whether_to_keep_this_edit": "¿Guardar como borrador?",
+  "@whether_to_keep_this_edit": {
+    "x-reviewed": "false"
+  },
+  "not_retained": "Descarte",
+  "@not_retained": {
+    "x-reviewed": "false"
+  },
+  "keep": "Salvar",
+  "@keep": {
+    "x-reviewed": "false"
+  },
+  "the_timed_beep_must_be_five_minutes_later": "El pitido cronometrado debe ser cinco minutos más tarde.",
+  "@the_timed_beep_must_be_five_minutes_later": {
+    "x-reviewed": "false"
+  },
+  "uploading_file": "Subiendo archivo ...",
+  "@uploading_file": {
+    "x-reviewed": "false"
+  },
+  "the_beep_has_been_sent": "La bocina ha sido enviada",
+  "@the_beep_has_been_sent": {
+    "x-reviewed": "false"
+  },
+  "failed_to_send_toot": "¡No se pudo enviar la bocina!",
+  "@failed_to_send_toot": {
+    "x-reviewed": "false"
+  },
+  "file_upload_failed": "Error al cargar el archivo",
+  "@file_upload_failed": {
+    "x-reviewed": "false"
+  },
+  "file_size_must_be_less_than_40m": "El tamaño del archivo debe ser inferior a 40 M",
+  "@file_size_must_be_less_than_40m": {
+    "x-reviewed": "false"
+  },
+  "warning_message_for_folded_section": "Mensaje de advertencia",
+  "@warning_message_for_folded_section": {
+    "x-reviewed": "false"
+  },
+  "visible_to_everyone_and_will_appear_on_the_public_timeline": "Visible para todos y se muestra en la línea de tiempo pública",
+  "@visible_to_everyone_and_will_appear_on_the_public_timeline": {
+    "x-reviewed": "false"
+  },
+  "visible_to_everyone": "Visible para todos, pero no se muestra en la cronología pública",
+  "@visible_to_everyone": {
+    "x-reviewed": "false"
+  },
+  "only_visible_to_users_who_follow_you": "Solo visible para los usuarios que te siguen",
+  "@only_visible_to_users_who_follow_you": {
+    "x-reviewed": "false"
+  },
+  "only_the_mentioned_users_can_see": "Solo visible para los usuarios que mencionaste",
+  "@only_the_mentioned_users_can_see": {
+    "x-reviewed": "false"
+  },
+  "choose_a_photo": "Agregar fotos",
+  "@choose_a_photo": {
+    "x-reviewed": "false"
+  },
+  "select_video": "Añadir video",
+  "@select_video": {
+    "x-reviewed": "false"
+  },
+  "select_audio": "Agregar audio",
+  "@select_audio": {
+    "x-reviewed": "false"
+  },
+  "beep": "Publicar un toque",
+  "@beep": {
+    "x-reviewed": "false"
+  },
+  "reply": "Respuesta",
+  "@reply": {
+    "x-reviewed": "false"
+  },
+  "time_must_be_five_minutes_later": "El tiempo debe ser cinco minutos más tarde",
+  "@time_must_be_five_minutes_later": {
+    "x-reviewed": "false"
+  },
+  "edit": "editar",
+  "@edit": {
+    "x-reviewed": "false"
+  },
+  "error_loading_image": "Error al cargar la imagen",
+  "@error_loading_image": {
+    "x-reviewed": "false"
+  },
+  "no_comment_yet": "Sin comentarios todavía",
+  "@no_comment_yet": {
+    "x-reviewed": "false"
+  },
+  "not_turning": "Sin impulso",
+  "@not_turning": {
+    "x-reviewed": "false"
+  },
+  "no_favorite": "Sin favorito",
+  "@no_favorite": {
+    "x-reviewed": "false"
+  },
+  "toot_information": "Sonar",
+  "@toot_information": {
+    "x-reviewed": "false"
+  },
+  "review": "Respuesta",
+  "@review": {
+    "x-reviewed": "false"
+  },
+  "list_timeline": "Lista de cronograma",
+  "@list_timeline": {
+    "x-reviewed": "false"
+  },
+  "all": "Todas",
+  "@all": {
+    "x-reviewed": "false"
+  },
+  "classification": "Ordenar",
+  "@classification": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_you_want_to_delete_the_message_list_forever": "¿Está seguro de que desea eliminar la lista de mensajes para siempre?",
+  "@are_you_sure_you_want_to_delete_the_message_list_forever": {
+    "x-reviewed": "false"
+  },
+  "tell_me": "Impulsos",
+  "@tell_me": {
+    "x-reviewed": "false"
+  },
+  "mine": "mía",
+  "@mine": {
+    "x-reviewed": "false"
+  },
+  "this_site": "Local",
+  "@this_site": {
+    "x-reviewed": "false"
+  },
+  "cross_station": "Federado",
+  "@cross_station": {
+    "x-reviewed": "false"
+  },
+  "following": "Siguiendo",
+  "@following": {
+    "x-reviewed": "false"
+  },
+  "no_longer_follow_this_user": "Ya no sigues a este usuario",
+  "@no_longer_follow_this_user": {
+    "x-reviewed": "false"
+  },
+  "unsubscribe": "Dejar de seguir",
+  "@unsubscribe": {
+    "x-reviewed": "false"
+  },
+  "unhide": "Mostrar",
+  "@unhide": {
+    "x-reviewed": "false"
+  },
+  "hiding_description": "Los toots del usuario no se mostrarán en su línea de tiempo",
+  "@hiding_description": {
+    "x-reviewed": "false"
+  },
+  "complaint": "Reporte",
+  "@complaint": {
+    "x-reviewed": "false"
+  },
+  "shield": "Bloquear",
+  "@shield": {
+    "x-reviewed": "false"
+  },
+  "unblock": "Desatascar",
+  "@unblock": {
+    "x-reviewed": "false"
+  },
+  "blocking_description": "El usuario no podrá ver tus toots",
+  "@blocking_description": {
+    "x-reviewed": "false"
+  },
+  "hide_instance": "Silenciar {instance}",
+  "@hide_instance": {
+    "x-reviewed": "false"
+  },
+  "hide_instance_confirm": "¿Está seguro de que desea bloquear {instance}? No verá el contenido de esta instancia en ninguna línea de tiempo pública o notificaciones, y los seguidores de esta instancia también serán eliminados",
+  "@hide_instance_confirm": {
+    "x-reviewed": "false"
+  },
+  "hiding_instance_description": "Todos los toots de la instancia no se mostrarán en su línea de tiempo",
+  "@hiding_instance_description": {
+    "x-reviewed": "false"
+  },
+  "edit_information": "Editar",
+  "@edit_information": {
+    "x-reviewed": "false"
+  },
+  "follow_request_sent": "Seguir solicitud enviada",
+  "@follow_request_sent": {
+    "x-reviewed": "false"
+  },
+  "followed_you": "Te sigue",
+  "@followed_you": {
+    "x-reviewed": "false"
+  },
+  "failed_to_obtain_user_information": "No se pudo obtener la información del usuario, tal vez el servidor haya habilitado la verificación de permisos",
+  "@failed_to_obtain_user_information": {
+    "x-reviewed": "false"
+  },
+  "toot_and_reply": "Con respuesta",
+  "@toot_and_reply": {
+    "x-reviewed": "false"
+  },
+  "pinned": "Fijado",
+  "@pinned": {
+    "x-reviewed": "false"
+  },
+  "media": "Medios de comunicación",
+  "@media": {
+    "x-reviewed": "false"
+  },
+  "carry_on": "Seguir",
+  "@carry_on": {
+    "x-reviewed": "false"
+  },
+  "the_report_will_be_sent_to_your_server_administrator": "El informe se enviará al moderador de su servidor. Puede completar el motivo de la queja al usuario a continuación:",
+  "@the_report_will_be_sent_to_your_server_administrator": {
+    "x-reviewed": "false"
+  },
+  "reason_for_reporting": "Razón de la denuncia",
+  "@reason_for_reporting": {
+    "x-reviewed": "false"
+  },
+  "this_user_is_from_another_server": "Este usuario es de otro servidor. ¿Quiere enviar una queja anónima a ese servidor?",
+  "@this_user_is_from_another_server": {
+    "x-reviewed": "false"
+  },
+  "forward_to": "Reenviar a",
+  "@forward_to": {
+    "x-reviewed": "false"
+  },
+  "back": "atrás",
+  "@back": {
+    "x-reviewed": "false"
+  },
+  "web_page": "página web",
+  "@web_page": {
+    "x-reviewed": "false"
+  },
+  "share_it": "Compártelo",
+  "@share_it": {
+    "x-reviewed": "false"
+  },
+  "open_in_browser": "Abierta en el navegador",
+  "@open_in_browser": {
+    "x-reviewed": "false"
+  },
+  "web_link": "🔗Enlace",
+  "@web_link": {
+    "x-reviewed": "false"
+  },
+  "just": "sólo",
+  "@just": {
+    "x-reviewed": "false"
+  },
+  "storage_failure": "Fallo de almacenamiento",
+  "@storage_failure": {
+    "x-reviewed": "false"
+  },
+  "picture_file_must_be_less_than_2m": "El archivo de imagen debe ser inferior a 2 M",
+  "@picture_file_must_be_less_than_2m": {
+    "x-reviewed": "false"
+  },
+  "no_storage_permissions": "Sin permisos de almacenamiento",
+  "@no_storage_permissions": {
+    "x-reviewed": "false"
+  },
+  "file_saved": "Archivo guardado",
+  "@file_saved": {
+    "x-reviewed": "false"
+  },
+  "processing": "Procesando...",
+  "@processing": {
+    "x-reviewed": "false"
+  },
+  "completed": "terminado",
+  "@completed": {
+    "x-reviewed": "false"
+  },
+  "network_request_error": "Error de solicitud de red",
+  "@network_request_error": {
+    "x-reviewed": "false"
+  },
+  "your_login_information_has_expired": "Su información de inicio de sesión ha caducado, puede cerrar la sesión y volver a iniciarla",
+  "@your_login_information_has_expired": {
+    "x-reviewed": "false"
+  },
+  "received_json_information": "Información json recibida",
+  "@received_json_information": {
+    "x-reviewed": "false"
+  },
+  "you_need_to_log_in_to_perform_this_operation": "Debe iniciar sesión en la instancia para realizar esta operación.",
+  "@you_need_to_log_in_to_perform_this_operation": {
+    "x-reviewed": "false"
+  },
+  "go_to_login": "Ir a iniciar sesión",
+  "@go_to_login": {
+    "x-reviewed": "false"
+  },
+  "add_bookmark": "Añadir marcador",
+  "@add_bookmark": {
+    "x-reviewed": "false"
+  },
+  "delete_bookmark": "Eliminar marcador",
+  "@delete_bookmark": {
+    "x-reviewed": "false"
+  },
+  "hide_this_conversation": "Silenciar Conversación",
+  "@hide_this_conversation": {
+    "x-reviewed": "false"
+  },
+  "unhide_the_conversation": "Mostrar la conversación",
+  "@unhide_the_conversation": {
+    "x-reviewed": "false"
+  },
+  "after_hiding": "No recibir mensajes de esta conversación",
+  "@after_hiding": {
+    "x-reviewed": "false"
+  },
+  "share_link": "Compartir enlace",
+  "@share_link": {
+    "x-reviewed": "false"
+  },
+  "share_toot": "Compartir contenido de toot",
+  "@share_toot": {
+    "x-reviewed": "false"
+  },
+  "copy_the_beep": "Copiar contenido de toot",
+  "@copy_the_beep": {
+    "x-reviewed": "false"
+  },
+  "dumb_text_has_been_copied": "Se ha copiado el texto",
+  "@dumb_text_has_been_copied": {
+    "x-reviewed": "false"
+  },
+  "follow": "Seguir",
+  "@follow": {
+    "x-reviewed": "false"
+  },
+  "follow_user": "Seguir usuario}",
+  "@follow_user": {
+    "x-reviewed": "false"
+  },
+  "followed_or_sent_a_follow_request": "Seguido o enviado una solicitud de seguimiento",
+  "@followed_or_sent_a_follow_request": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_to_hide_users": "¿Estás seguro de ocultar a {user}?",
+  "@are_you_sure_to_hide_users": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_to_block_users": "¿Estás seguro de bloquear a {user}?",
+  "@are_you_sure_to_block_users": {
+    "x-reviewed": "false"
+  },
+  "block_user": "Bloquear {user}",
+  "@block_user": {
+    "x-reviewed": "false"
+  },
+  "collection_example": "Agregar {instance}",
+  "@collection_example": {
+    "x-reviewed": "false"
+  },
+  "the_instance_will_be_saved_in_your_discover_menu": "La instancia se mostrará en su menú \"descubrir\"",
+  "@the_instance_will_be_saved_in_your_discover_menu": {
+    "x-reviewed": "false"
+  },
+  "added_instance_successfully": "Instancia agregada con éxito",
+  "@added_instance_successfully": {
+    "x-reviewed": "false"
+  },
+  "administrator_operate_the_account": "Administrador: moderación para el usuario",
+  "@administrator_operate_the_account": {
+    "x-reviewed": "false"
+  },
+  "top": "Parte superior",
+  "@top": {
+    "x-reviewed": "false"
+  },
+  "unpink": "Unpink",
+  "@unpink": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_you_want_to_delete_this_beep": "¿Está seguro de que desea eliminar la bocina?",
+  "@are_you_sure_you_want_to_delete_this_beep": {
+    "x-reviewed": "false"
+  },
+  "delete_and_re_edit": "Eliminar y volver a editar",
+  "@delete_and_re_edit": {
+    "x-reviewed": "false"
+  },
+  "failed_to_add_bookmark": "No se pudo agregar el marcador",
+  "@failed_to_add_bookmark": {
+    "x-reviewed": "false"
+  },
+  "bookmarked": "Marcado como favorito",
+  "@bookmarked": {
+    "x-reviewed": "false"
+  },
+  "bookmark_deleted": "Marcador eliminado",
+  "@bookmark_deleted": {
+    "x-reviewed": "false"
+  },
+  "unpinned": "Sin fijar",
+  "@unpinned": {
+    "x-reviewed": "false"
+  },
+  "conversation_unhide": "Mostrar conversación",
+  "@conversation_unhide": {
+    "x-reviewed": "false"
+  },
+  "conversation_hidden": "Conversación oculta",
+  "@conversation_hidden": {
+    "x-reviewed": "false"
+  },
+  "no_content_yet": "Sin contenido todavía",
+  "@no_content_yet": {
+    "x-reviewed": "false"
+  },
+  "retry": "Rever",
+  "@retry": {
+    "x-reviewed": "false"
+  },
+  "there_was_an_error_in_the_network_request": "Hubo un error en la solicitud de red, por favor revise Internet e intente nuevamente",
+  "@there_was_an_error_in_the_network_request": {
+    "x-reviewed": "false"
+  },
+  "this_instance_does_not_open_the_timeline_preview_function": "Esta instancia no abre la función \"Vista previa de la línea de tiempo\" y los usuarios que no están en esta instancia no pueden explorar el flujo de información en tiempo real de toots públicos relacionados. Inicie sesión para acceder.",
+  "@this_instance_does_not_open_the_timeline_preview_function": {
+    "x-reviewed": "false"
+  },
+  "an_error_occurred_in_the_application": "Ocurrió un error en la aplicación.",
+  "@an_error_occurred_in_the_application": {
+    "x-reviewed": "false"
+  },
+  "collapse_content": "Muestra menos",
+  "@collapse_content": {
+    "x-reviewed": "false"
+  },
+  "display_more": "Mostrar más",
+  "@display_more": {
+    "x-reviewed": "false"
+  },
+  "registered": "Regístrate",
+  "@registered": {
+    "x-reviewed": "false"
+  },
+  "more": "Más",
+  "@more": {
+    "x-reviewed": "false"
+  },
+  "release_refresh": "Liberar actualización",
+  "@release_refresh": {
+    "x-reviewed": "false"
+  },
+  "complete_refresh": "Actualización completa",
+  "@complete_refresh": {
+    "x-reviewed": "false"
+  },
+  "pull_down_to_refresh": "Tire hacia abajo para refrescar",
+  "@pull_down_to_refresh": {
+    "x-reviewed": "false"
+  },
+  "release_load_more": "Suelte cargar más",
+  "@release_load_more": {
+    "x-reviewed": "false"
+  },
+  "no_more_data": "No mas datos",
+  "@no_more_data": {
+    "x-reviewed": "false"
+  },
+  "there_is_no_custom_emoji_in_this_example": "No hay emojis personalizados en esta instancia",
+  "@there_is_no_custom_emoji_in_this_example": {
+    "x-reviewed": "false"
+  },
+  "choice1": "Opción 1",
+  "@choice1": {
+    "x-reviewed": "false"
+  },
+  "choice2": "Opción 2",
+  "@choice2": {
+    "x-reviewed": "false"
+  },
+  "choice3": "Opción 3",
+  "@choice3": {
+    "x-reviewed": "false"
+  },
+  "choice4": "Opción 4",
+  "@choice4": {
+    "x-reviewed": "false"
+  },
+  "add_selection": "Agregar opción",
+  "@add_selection": {
+    "x-reviewed": "false"
+  },
+  "multiple_choices": "Múltiples opciones",
+  "@multiple_choices": {
+    "x-reviewed": "false"
+  },
+  "add_a_text_description_for_the_visually_impaired": "Agregue una descripción de texto para personas con discapacidad visual",
+  "@add_a_text_description_for_the_visually_impaired": {
+    "x-reviewed": "false"
+  },
+  "whats_new": "Qué hay de nuevo",
+  "@whats_new": {
+    "x-reviewed": "false"
+  },
+  "started_following_you": "{user} te siguió",
+  "@started_following_you": {
+    "x-reviewed": "false"
+  },
+  "request_to_follow_you": "{user} solicitó seguirte",
+  "@request_to_follow_you": {
+    "x-reviewed": "false"
+  },
+  "agree": "de acuerdo",
+  "@agree": {
+    "x-reviewed": "false"
+  },
+  "refuse": "rechazar",
+  "@refuse": {
+    "x-reviewed": "false"
+  },
+  "from": "desde",
+  "@from": {
+    "x-reviewed": "false"
+  },
+  "awesome": "increíble",
+  "@awesome": {
+    "x-reviewed": "false"
+  },
+  "no_description_information": "Sin información de descripción",
+  "@no_description_information": {
+    "x-reviewed": "false"
+  },
+  "sensitive_content": "Contenido sensible",
+  "@sensitive_content": {
+    "x-reviewed": "false"
+  },
+  "hidden_photo_or_video": "Foto o video oculto",
+  "@hidden_photo_or_video": {
+    "x-reviewed": "false"
+  },
+  "language": "Idioma",
+  "@language": {
+    "x-reviewed": "false"
+  },
+  "clear": "Claro",
+  "@clear": {
+    "x-reviewed": "false"
+  },
+  "favorited_your_toot": "{user} marcó como favorito tu sonido",
+  "@favorited_your_toot": {
+    "x-reviewed": "false"
+  },
+  "boot_your_tool": "{user} impulsó tu sonido",
+  "@boot_your_tool": {
+    "x-reviewed": "false"
+  },
+  "poll_your_voted_ended": "Una encuesta en la que ha votado ha finalizado",
+  "@poll_your_voted_ended": {
+    "x-reviewed": "false"
+  },
+  "poll_your_created_ended": "Una encuesta que creaste ha finalizado",
+  "@poll_your_created_ended": {
+    "x-reviewed": "false"
+  },
+  "seconds_ago": "{num} s",
+  "@seconds_ago": {
+    "x-reviewed": "false"
+  },
+  "minutes_ago": "{num} m",
+  "@minutes_ago": {
+    "x-reviewed": "false"
+  },
+  "hours_ago": "{num} h",
+  "@hours_ago": {
+    "x-reviewed": "false"
+  },
+  "days_ago": "{num} d",
+  "@days_ago": {
+    "x-reviewed": "false"
+  },
+  "toot_from": "de {from}",
+  "@toot_from": {
+    "x-reviewed": "false"
+  },
+  "reply_count": "{num, plural, =0{{num} Responder} =1{{num} Responder} other{{num} Respuestas}}",
+  "@reply_count": {
+    "x-reviewed": "false"
+  },
+  "boost_count": "{num, plural, =0{{num} Boost} =1{{num} Boost}  other{{num} Boosts}}",
+  "@boost_count": {
+    "x-reviewed": "false"
+  },
+  "favorite_count": "{num, plural, =0{{num} Favorito} =1{{num} Favorito} other{{num} Favoritos}}",
+  "@favorite_count": {
+    "x-reviewed": "false"
+  },
+  "boosted_toot": "{user} impulsado",
+  "@boosted_toot": {
+    "placeholders": {
+      "user": {}
+    },
+    "x-reviewed": "false"
+  },
+  "delete_account_confirm": "Borrar cuenta}",
+  "@delete_account_confirm": {
+    "placeholders": {
+      "account": {}
+    },
+    "x-reviewed": "false"
+  },
+  "delete_list": "Eliminar lista",
+  "@delete_list": {
+    "x-reviewed": "false"
+  },
+  "edit_list": "Lista de edición",
+  "@edit_list": {
+    "x-reviewed": "false"
+  },
+  "mentions_you": "{user} te menciona",
+  "@mentions_you": {
+    "placeholders": {
+      "user": {}
+    },
+    "x-reviewed": "false"
+  },
+  "no_description": "Sin descripción",
+  "@no_description": {
+    "x-reviewed": "false"
+  },
+  "operate_with_account": "Usarás {user} para hacer esto",
+  "@operate_with_account": {
+    "placeholders": {
+      "user": {}
+    },
+    "x-reviewed": "false"
+  },
+  "toot_not_found": "Toot no encontrado",
+  "@toot_not_found": {
+    "x-reviewed": "false"
+  },
+  "days_left": "{num, plural, =0{{num} día restante} =1{{num} día restante} other{{num} días restantes}}",
+  "@days_left": {
+    "placeholders": {
+      "num": {}
+    },
+    "x-reviewed": "false"
+  },
+  "ended": "cerrado",
+  "@ended": {
+    "x-reviewed": "false"
+  },
+  "hours_left": "{num, plural, =0{{num} hora restante} =1{{num} hora restante}  other{{num} horas restantes}}",
+  "@hours_left": {
+    "placeholders": {
+      "num": {}
+    },
+    "x-reviewed": "false"
+  },
+  "minutes_left": "{num, plural, =0{{num} minuto restante} =1{{num} minuto restante} other{{num} minutos restantes}}",
+  "@minutes_left": {
+    "placeholders": {
+      "num": {}
+    },
+    "x-reviewed": "false"
+  },
+  "vote_count": "{count, plural, =0{0 vote} =1{1 vote} other{{count} votos}}",
+  "@vote_count": {
+    "placeholders": {
+      "count": {}
+    },
+    "x-reviewed": "false"
+  },
+  "version_info": "Versión {version}",
+  "@version_info": {
+    "x-reviewed": "false"
+  },
+  "translate_by": "Traducir por {engine}",
+  "@translate_by": {
+    "x-reviewed": "false"
+  },
+  "translate_setting": "Traducir configuración",
+  "@translate_setting": {
+    "x-reviewed": "false"
+  },
+  "translate_engine": "Motor de traducción",
+  "@translate_engine": {
+    "x-reviewed": "false"
+  },
+  "translate_toot": "Traducir toot",
+  "@translate_toot": {
+    "x-reviewed": "false"
+  }
+}

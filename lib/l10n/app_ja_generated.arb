@@ -1,0 +1,1363 @@
+{
+  "@@locale": "ja",
+  "app_name": "ドゥドゥ",
+  "@app_name": {
+    "x-reviewed": "false"
+  },
+  "toot": "トゥート",
+  "@toot": {
+    "x-reviewed": "false"
+  },
+  "toots": "トゥーツ",
+  "@toots": {
+    "x-reviewed": "false"
+  },
+  "tooting": "テューティング...",
+  "@tooting": {
+    "x-reviewed": "false"
+  },
+  "an_error_occurred": "エラーが発生しました..",
+  "@an_error_occurred": {
+    "x-reviewed": "false"
+  },
+  "unable_to_connect_to_server": "サーバーに接続できません",
+  "@unable_to_connect_to_server": {
+    "x-reviewed": "false"
+  },
+  "something_went_wrong": "何か問題が発生しました。後で試すことができます",
+  "@something_went_wrong": {
+    "x-reviewed": "false"
+  },
+  "day1": "1日",
+  "@day1": {
+    "x-reviewed": "false"
+  },
+  "minutes5": "5分",
+  "@minutes5": {
+    "x-reviewed": "false"
+  },
+  "minutes30": "30分",
+  "@minutes30": {
+    "x-reviewed": "false"
+  },
+  "hour1": "1時間",
+  "@hour1": {
+    "x-reviewed": "false"
+  },
+  "hours6": "6時間",
+  "@hours6": {
+    "x-reviewed": "false"
+  },
+  "days3": "3日",
+  "@days3": {
+    "x-reviewed": "false"
+  },
+  "days7": "7日",
+  "@days7": {
+    "x-reviewed": "false"
+  },
+  "private_letters": "ダイレクトメッセージ",
+  "@private_letters": {
+    "x-reviewed": "false"
+  },
+  "follow_request": "リクエストに従う",
+  "@follow_request": {
+    "x-reviewed": "false"
+  },
+  "follow_me": "フォローしてください",
+  "@follow_me": {
+    "x-reviewed": "false"
+  },
+  "turn_to": "ブースト",
+  "@turn_to": {
+    "x-reviewed": "false"
+  },
+  "at_mine": "言及",
+  "@at_mine": {
+    "x-reviewed": "false"
+  },
+  "vote": "投票",
+  "@vote": {
+    "x-reviewed": "false"
+  },
+  "vote_poll": "投票",
+  "@vote_poll": {
+    "x-reviewed": "false"
+  },
+  "the_poll_you_initiated_or_participated_in_has_been_completed": "作成または投票した投票が終了しました",
+  "@the_poll_you_initiated_or_participated_in_has_been_completed": {
+    "x-reviewed": "false"
+  },
+  "update": "更新",
+  "@update": {
+    "x-reviewed": "false"
+  },
+  "turn_off_an_app": "アプリを閉じる",
+  "@turn_off_an_app": {
+    "x-reviewed": "false"
+  },
+  "new_version_detected": "新しいバージョンが検出されました",
+  "@new_version_detected": {
+    "x-reviewed": "false"
+  },
+  "copy_the_download_link": "ダウンロードリンクをコピーする",
+  "@copy_the_download_link": {
+    "x-reviewed": "false"
+  },
+  "download_link_copied": "コピーされたダウンロードリンク",
+  "@download_link_copied": {
+    "x-reviewed": "false"
+  },
+  "downloading": "ダウンロード中...",
+  "@downloading": {
+    "x-reviewed": "false"
+  },
+  "cancel": "キャンセル",
+  "@cancel": {
+    "x-reviewed": "false"
+  },
+  "installation": "インストール",
+  "@installation": {
+    "x-reviewed": "false"
+  },
+  "just_warn_the_user": "ユーザーに警告するだけで、ユーザーアカウントを操作しません",
+  "@just_warn_the_user": {
+    "x-reviewed": "false"
+  },
+  "prevent_the_user_from_logging_in": "ユーザーがログインできないようにし、すべてのユーザーコンテンツを保持します",
+  "@prevent_the_user_from_logging_in": {
+    "x-reviewed": "false"
+  },
+  "toots_posted_by_users_will_not_be_displayed_in_the_public_timeline": "ユーザーの宣伝が公開タイムラインに表示されないようにする",
+  "@toots_posted_by_users_will_not_be_displayed_in_the_public_timeline": {
+    "x-reviewed": "false"
+  },
+  "deactivate_and_permanently_delete_account_information": "アカウント情報を無効にして完全に削除する",
+  "@deactivate_and_permanently_delete_account_information": {
+    "x-reviewed": "false"
+  },
+  "caveat": "なし",
+  "@caveat": {
+    "x-reviewed": "false"
+  },
+  "deactivate": "無効にする",
+  "@deactivate": {
+    "x-reviewed": "false"
+  },
+  "hide": "ミュート",
+  "@hide": {
+    "x-reviewed": "false"
+  },
+  "silence": "沈黙",
+  "@silence": {
+    "x-reviewed": "false"
+  },
+  "hide_user": "ミュート{ユーザー}",
+  "@hide_user": {
+    "x-reviewed": "false"
+  },
+  "report_user": "レポートユーザー}",
+  "@report_user": {
+    "x-reviewed": "false"
+  },
+  "ban": "サスペンド",
+  "@ban": {
+    "x-reviewed": "false"
+  },
+  "perform_management_operations": "管理操作を実行します",
+  "@perform_management_operations": {
+    "x-reviewed": "false"
+  },
+  "remind_users_via_email": "メールでユーザーに通知する",
+  "@remind_users_via_email": {
+    "x-reviewed": "false"
+  },
+  "email_to_inform_users": "ユーザーに通知するメール",
+  "@email_to_inform_users": {
+    "x-reviewed": "false"
+  },
+  "determine": "OK",
+  "@determine": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_you_want": "よろしいですか",
+  "@are_you_sure_you_want": {
+    "x-reviewed": "false"
+  },
+  "this_operation_will": "この操作は",
+  "@this_operation_will": {
+    "x-reviewed": "false"
+  },
+  "increase_instance": "インスタンスを増やす",
+  "@increase_instance": {
+    "x-reviewed": "false"
+  },
+  "instance_already_exists": "インスタンスはすでに存在します",
+  "@instance_already_exists": {
+    "x-reviewed": "false"
+  },
+  "instance_url": "インスタンスURL",
+  "@instance_url": {
+    "x-reviewed": "false"
+  },
+  "please_enter_the_url": "登録またはログインしたいマストドンインスタンスのURLを入力してください。URLにアクセスできる場合は、インスタンスカードが「検出」ページに表示され、登録してログインできます。",
+  "@please_enter_the_url": {
+    "x-reviewed": "false"
+  },
+  "contact_email": "連絡先メールアドレス：",
+  "@contact_email": {
+    "x-reviewed": "false"
+  },
+  "user_number": "ユーザー番号：",
+  "@user_number": {
+    "x-reviewed": "false"
+  },
+  "number_of_toots": "トゥートの数：",
+  "@number_of_toots": {
+    "x-reviewed": "false"
+  },
+  "version": "バージョン",
+  "@version": {
+    "x-reviewed": "false"
+  },
+  "browse_to_see": "閲覧して見る",
+  "@browse_to_see": {
+    "x-reviewed": "false"
+  },
+  "log_in": "ログインする",
+  "@log_in": {
+    "x-reviewed": "false"
+  },
+  "add_website_instance": "インスタンスの追加",
+  "@add_website_instance": {
+    "x-reviewed": "false"
+  },
+  "find": "発見",
+  "@find": {
+    "x-reviewed": "false"
+  },
+  "home": "ホーム",
+  "@home": {
+    "x-reviewed": "false"
+  },
+  "square": "平方",
+  "@square": {
+    "x-reviewed": "false"
+  },
+  "news": "通知",
+  "@news": {
+    "x-reviewed": "false"
+  },
+  "me": "私",
+  "@me": {
+    "x-reviewed": "false"
+  },
+  "log_in_to_mastodon_account": "マストドンアカウントにログインします",
+  "@log_in_to_mastodon_account": {
+    "x-reviewed": "false"
+  },
+  "loading": "読み込んでいます...",
+  "@loading": {
+    "x-reviewed": "false"
+  },
+  "domain_name": "ドメイン名",
+  "@domain_name": {
+    "x-reviewed": "false"
+  },
+  "about_mastodon": "マストドンについて",
+  "@about_mastodon": {
+    "x-reviewed": "false"
+  },
+  "example_recommendation": "推奨例",
+  "@example_recommendation": {
+    "x-reviewed": "false"
+  },
+  "you_only_need_to_select_a_node_to_register": "登録するノードを選択するだけです。どのノードを選択しても、誰とでも通信できます。",
+  "@you_only_need_to_select_a_node_to_register": {
+    "x-reviewed": "false"
+  },
+  "k_user": "Kユーザー",
+  "@k_user": {
+    "x-reviewed": "false"
+  },
+  "user": "アカウント",
+  "@user": {
+    "x-reviewed": "false"
+  },
+  "stable": "安定",
+  "@stable": {
+    "x-reviewed": "false"
+  },
+  "select_node": "ノードを選択",
+  "@select_node": {
+    "x-reviewed": "false"
+  },
+  "play_audio": "オーディオを再生する",
+  "@play_audio": {
+    "x-reviewed": "false"
+  },
+  "mute": "ミュート",
+  "@mute": {
+    "x-reviewed": "false"
+  },
+  "unmute": "ミュートを解除する",
+  "@unmute": {
+    "x-reviewed": "false"
+  },
+  "topic": "ハッシュタグ",
+  "@topic": {
+    "x-reviewed": "false"
+  },
+  "search_for": "探す...",
+  "@search_for": {
+    "x-reviewed": "false"
+  },
+  "about_dudu": "Duduについて",
+  "@about_dudu": {
+    "x-reviewed": "false"
+  },
+  "check_for_updates": "更新を確認",
+  "@check_for_updates": {
+    "x-reviewed": "false"
+  },
+  "copyright_information": "著作権情報",
+  "@copyright_information": {
+    "x-reviewed": "false"
+  },
+  "official_website": "公式ウェブサイト",
+  "@official_website": {
+    "x-reviewed": "false"
+  },
+  "privacy_agreement": "プライバシー契約",
+  "@privacy_agreement": {
+    "x-reviewed": "false"
+  },
+  "service_agreement": "役務契約",
+  "@service_agreement": {
+    "x-reviewed": "false"
+  },
+  "checking_for_new_version": "新しいバージョンを確認しています",
+  "@checking_for_new_version": {
+    "x-reviewed": "false"
+  },
+  "the_current_version_is_the_latest_version": "現在のバージョンは最新バージョンです",
+  "@the_current_version_is_the_latest_version": {
+    "x-reviewed": "false"
+  },
+  "account_settings": "アカウント設定",
+  "@account_settings": {
+    "x-reviewed": "false"
+  },
+  "notification_settings": "通知",
+  "@notification_settings": {
+    "x-reviewed": "false"
+  },
+  "hidden_user": "ユーザーをミュートします",
+  "@hidden_user": {
+    "x-reviewed": "false"
+  },
+  "blocked_user": "ブロックされたユーザー",
+  "@blocked_user": {
+    "x-reviewed": "false"
+  },
+  "hidden_instance": "非表示のインスタンス",
+  "@hidden_instance": {
+    "x-reviewed": "false"
+  },
+  "release": "出版",
+  "@release": {
+    "x-reviewed": "false"
+  },
+  "default_visible_range": "デフォルトの投稿プライバシー",
+  "@default_visible_range": {
+    "x-reviewed": "false"
+  },
+  "public": "公衆",
+  "@public": {
+    "x-reviewed": "false"
+  },
+  "private": "非公開",
+  "@private": {
+    "x-reviewed": "false"
+  },
+  "followers_only": "フォロワーのみ",
+  "@followers_only": {
+    "x-reviewed": "false"
+  },
+  "direct_message": "直接",
+  "@direct_message": {
+    "x-reviewed": "false"
+  },
+  "automatically_mark_media_as_sensitive": "メディアを常に機密としてマークする",
+  "@automatically_mark_media_as_sensitive": {
+    "x-reviewed": "false"
+  },
+  "timeline": "タイムライン",
+  "@timeline": {
+    "x-reviewed": "false"
+  },
+  "show_preview": "メディアプレビューを表示する",
+  "@show_preview": {
+    "x-reviewed": "false"
+  },
+  "always_show_all_sensitive_media_content": "常に機密コンテンツを表示する",
+  "@always_show_all_sensitive_media_content": {
+    "x-reviewed": "false"
+  },
+  "always_expand_toots_marked_with_content_warnings": "コンテンツの警告が表示されたトゥートを常に展開する",
+  "@always_expand_toots_marked_with_content_warnings": {
+    "x-reviewed": "false"
+  },
+  "filter": "フィルター",
+  "@filter": {
+    "x-reviewed": "false"
+  },
+  "public_timeline": "公開タイムライン",
+  "@public_timeline": {
+    "x-reviewed": "false"
+  },
+  "home_page": "ホーム",
+  "@home_page": {
+    "x-reviewed": "false"
+  },
+  "dialogue": "会話",
+  "@dialogue": {
+    "x-reviewed": "false"
+  },
+  "account_operation": "アカウント操作（システムのデフォルトブラウザで操作を完了する必要があります）",
+  "@account_operation": {
+    "x-reviewed": "false"
+  },
+  "change_password": "パスワードを変更する",
+  "@change_password": {
+    "x-reviewed": "false"
+  },
+  "backup_data": "バックアップデータ",
+  "@backup_data": {
+    "x-reviewed": "false"
+  },
+  "import_data": "データのインポート",
+  "@import_data": {
+    "x-reviewed": "false"
+  },
+  "logout": "ログアウト",
+  "@logout": {
+    "x-reviewed": "false"
+  },
+  "shut_down": "閉じる",
+  "@shut_down": {
+    "x-reviewed": "false"
+  },
+  "management": "管理する",
+  "@management": {
+    "x-reviewed": "false"
+  },
+  "clear_account_information": "アカウント情報をクリアする",
+  "@clear_account_information": {
+    "x-reviewed": "false"
+  },
+  "click_to_switch_account": "タップしてアカウントを切り替えます",
+  "@click_to_switch_account": {
+    "x-reviewed": "false"
+  },
+  "add_account": "アカウントを追加する",
+  "@add_account": {
+    "x-reviewed": "false"
+  },
+  "currently_used": "現在使用中",
+  "@currently_used": {
+    "x-reviewed": "false"
+  },
+  "delete": "削除",
+  "@delete": {
+    "x-reviewed": "false"
+  },
+  "bookmark": "ブックマーク",
+  "@bookmark": {
+    "x-reviewed": "false"
+  },
+  "modify_picture_background": "ヘッダーを変える",
+  "@modify_picture_background": {
+    "x-reviewed": "false"
+  },
+  "modify_avatar": "アバターを変更する",
+  "@modify_avatar": {
+    "x-reviewed": "false"
+  },
+  "edit_profile": "プロファイル編集",
+  "@edit_profile": {
+    "x-reviewed": "false"
+  },
+  "nickname": "表示名",
+  "@nickname": {
+    "x-reviewed": "false"
+  },
+  "introduction": "バイオ",
+  "@introduction": {
+    "x-reviewed": "false"
+  },
+  "protect_your_account": "アカウントを保護する",
+  "@protect_your_account": {
+    "x-reviewed": "false"
+  },
+  "you_need_to_manually_review_all_follow_requests": "すべてのフォローリクエストを手動で確認する必要があります",
+  "@you_need_to_manually_review_all_follow_requests": {
+    "x-reviewed": "false"
+  },
+  "profile_additional_information": "プロファイルメタデータ",
+  "@profile_additional_information": {
+    "x-reviewed": "false"
+  },
+  "add_information": "データを追加する",
+  "@add_information": {
+    "x-reviewed": "false"
+  },
+  "label": "ラベル",
+  "@label": {
+    "x-reviewed": "false"
+  },
+  "content": "コンテンツ",
+  "@content": {
+    "x-reviewed": "false"
+  },
+  "add_new_filter": "新しいフィルターを追加する",
+  "@add_new_filter": {
+    "x-reviewed": "false"
+  },
+  "edit_filter": "フィルタを編集する",
+  "@edit_filter": {
+    "x-reviewed": "false"
+  },
+  "whole_word": "単語全体",
+  "@whole_word": {
+    "x-reviewed": "false"
+  },
+  "if_the_keyword_or_abbreviation_has_only_letters_or_numbers": "キーワードまたは略語に文字または数字のみが含まれている場合、単語全体に一致する場合にのみ適用されます",
+  "@if_the_keyword_or_abbreviation_has_only_letters_or_numbers": {
+    "x-reviewed": "false"
+  },
+  "remove": "削除する",
+  "@remove": {
+    "x-reviewed": "false"
+  },
+  "create": "新着",
+  "@create": {
+    "x-reviewed": "false"
+  },
+  "filter_cannot_be_empty": "フィルタを空にすることはできません",
+  "@filter_cannot_be_empty": {
+    "x-reviewed": "false"
+  },
+  "sign_out": "ログアウト",
+  "@sign_out": {
+    "x-reviewed": "false"
+  },
+  "general_settings": "一般",
+  "@general_settings": {
+    "x-reviewed": "false"
+  },
+  "application_theme": "アプリのテーマ",
+  "@application_theme": {
+    "x-reviewed": "false"
+  },
+  "normal_mode": "光",
+  "@normal_mode": {
+    "x-reviewed": "false"
+  },
+  "dark_mode": "闇",
+  "@dark_mode": {
+    "x-reviewed": "false"
+  },
+  "darkest_mode": "ブラック",
+  "@darkest_mode": {
+    "x-reviewed": "false"
+  },
+  "font_size": "文字サイズ",
+  "@font_size": {
+    "x-reviewed": "false"
+  },
+  "small": "小さい",
+  "@small": {
+    "x-reviewed": "false"
+  },
+  "medium": "中",
+  "@medium": {
+    "x-reviewed": "false"
+  },
+  "big": "大きい",
+  "@big": {
+    "x-reviewed": "false"
+  },
+  "display_setting": "表示設定",
+  "@display_setting": {
+    "x-reviewed": "false"
+  },
+  "switch_account": "アカウントの切り替え",
+  "@switch_account": {
+    "x-reviewed": "false"
+  },
+  "list_name": "リスト名",
+  "@list_name": {
+    "x-reviewed": "false"
+  },
+  "new_list": "新しいリスト",
+  "@new_list": {
+    "x-reviewed": "false"
+  },
+  "list_name_cannot_be_empty": "リスト名を空にすることはできません",
+  "@list_name_cannot_be_empty": {
+    "x-reviewed": "false"
+  },
+  "search_for_followed_users": "フォローしているユーザーを検索する",
+  "@search_for_followed_users": {
+    "x-reviewed": "false"
+  },
+  "list": "リスト",
+  "@list": {
+    "x-reviewed": "false"
+  },
+  "rename_list": "リストの名前を変更する",
+  "@rename_list": {
+    "x-reviewed": "false"
+  },
+  "favorites": "お気に入り",
+  "@favorites": {
+    "x-reviewed": "false"
+  },
+  "timed_beep": "スケジュールされたトゥーツ",
+  "@timed_beep": {
+    "x-reviewed": "false"
+  },
+  "universal": "一般",
+  "@universal": {
+    "x-reviewed": "false"
+  },
+  "like_favorite_switch": "いいね/お気に入りスイッチ",
+  "@like_favorite_switch": {
+    "x-reviewed": "false"
+  },
+  "currently_showing_likes": "現在いいねを表示しています",
+  "@currently_showing_likes": {
+    "x-reviewed": "false"
+  },
+  "currently_showing_favorites": "現在お気に入りを表示しています",
+  "@currently_showing_favorites": {
+    "x-reviewed": "false"
+  },
+  "attention": "以下",
+  "@attention": {
+    "x-reviewed": "false"
+  },
+  "fans": "フォロワー",
+  "@fans": {
+    "x-reviewed": "false"
+  },
+  "new_message_notification": "通知を有効にする",
+  "@new_message_notification": {
+    "x-reviewed": "false"
+  },
+  "mention": "言及する",
+  "@mention": {
+    "x-reviewed": "false"
+  },
+  "whether_to_keep_this_edit": "下書きとして保存？",
+  "@whether_to_keep_this_edit": {
+    "x-reviewed": "false"
+  },
+  "not_retained": "破棄",
+  "@not_retained": {
+    "x-reviewed": "false"
+  },
+  "keep": "保存する",
+  "@keep": {
+    "x-reviewed": "false"
+  },
+  "the_timed_beep_must_be_five_minutes_later": "ビープ音のタイミングは5分後でなければなりません",
+  "@the_timed_beep_must_be_five_minutes_later": {
+    "x-reviewed": "false"
+  },
+  "uploading_file": "ファイルをアップロードしています...",
+  "@uploading_file": {
+    "x-reviewed": "false"
+  },
+  "the_beep_has_been_sent": "トゥートが送信されました",
+  "@the_beep_has_been_sent": {
+    "x-reviewed": "false"
+  },
+  "failed_to_send_toot": "tootの送信に失敗しました！",
+  "@failed_to_send_toot": {
+    "x-reviewed": "false"
+  },
+  "file_upload_failed": "ファイルのアップロードに失敗しました",
+  "@file_upload_failed": {
+    "x-reviewed": "false"
+  },
+  "file_size_must_be_less_than_40m": "ファイルサイズは40M未満である必要があります",
+  "@file_size_must_be_less_than_40m": {
+    "x-reviewed": "false"
+  },
+  "warning_message_for_folded_section": "警告メッセージ",
+  "@warning_message_for_folded_section": {
+    "x-reviewed": "false"
+  },
+  "visible_to_everyone_and_will_appear_on_the_public_timeline": "すべての人に表示され、公開タイムラインに表示されます",
+  "@visible_to_everyone_and_will_appear_on_the_public_timeline": {
+    "x-reviewed": "false"
+  },
+  "visible_to_everyone": "すべての人に表示されますが、公開タイムラインには表示されません",
+  "@visible_to_everyone": {
+    "x-reviewed": "false"
+  },
+  "only_visible_to_users_who_follow_you": "あなたをフォローしているユーザーにのみ表示されます",
+  "@only_visible_to_users_who_follow_you": {
+    "x-reviewed": "false"
+  },
+  "only_the_mentioned_users_can_see": "あなたが言及したユーザーにのみ表示されます",
+  "@only_the_mentioned_users_can_see": {
+    "x-reviewed": "false"
+  },
+  "choose_a_photo": "写真を追加",
+  "@choose_a_photo": {
+    "x-reviewed": "false"
+  },
+  "select_video": "ビデオを追加",
+  "@select_video": {
+    "x-reviewed": "false"
+  },
+  "select_audio": "オーディオを追加",
+  "@select_audio": {
+    "x-reviewed": "false"
+  },
+  "beep": "トゥートを投稿する",
+  "@beep": {
+    "x-reviewed": "false"
+  },
+  "reply": "応答",
+  "@reply": {
+    "x-reviewed": "false"
+  },
+  "time_must_be_five_minutes_later": "時間は5分後でなければなりません",
+  "@time_must_be_five_minutes_later": {
+    "x-reviewed": "false"
+  },
+  "edit": "編集",
+  "@edit": {
+    "x-reviewed": "false"
+  },
+  "error_loading_image": "画像の読み込みエラー",
+  "@error_loading_image": {
+    "x-reviewed": "false"
+  },
+  "no_comment_yet": "コメントはまだありません",
+  "@no_comment_yet": {
+    "x-reviewed": "false"
+  },
+  "not_turning": "ブーストなし",
+  "@not_turning": {
+    "x-reviewed": "false"
+  },
+  "no_favorite": "お気に入りなし",
+  "@no_favorite": {
+    "x-reviewed": "false"
+  },
+  "toot_information": "トゥート",
+  "@toot_information": {
+    "x-reviewed": "false"
+  },
+  "review": "応答",
+  "@review": {
+    "x-reviewed": "false"
+  },
+  "list_timeline": "リストのタイムライン",
+  "@list_timeline": {
+    "x-reviewed": "false"
+  },
+  "all": "すべて",
+  "@all": {
+    "x-reviewed": "false"
+  },
+  "classification": "ソート",
+  "@classification": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_you_want_to_delete_the_message_list_forever": "メッセージリストを完全に削除してもよろしいですか",
+  "@are_you_sure_you_want_to_delete_the_message_list_forever": {
+    "x-reviewed": "false"
+  },
+  "tell_me": "ブースト",
+  "@tell_me": {
+    "x-reviewed": "false"
+  },
+  "mine": "私の",
+  "@mine": {
+    "x-reviewed": "false"
+  },
+  "this_site": "地元",
+  "@this_site": {
+    "x-reviewed": "false"
+  },
+  "cross_station": "連合",
+  "@cross_station": {
+    "x-reviewed": "false"
+  },
+  "following": "以下",
+  "@following": {
+    "x-reviewed": "false"
+  },
+  "no_longer_follow_this_user": "このユーザーをフォローしなくなりました",
+  "@no_longer_follow_this_user": {
+    "x-reviewed": "false"
+  },
+  "unsubscribe": "フォロー解除",
+  "@unsubscribe": {
+    "x-reviewed": "false"
+  },
+  "unhide": "再表示",
+  "@unhide": {
+    "x-reviewed": "false"
+  },
+  "hiding_description": "ユーザーの宣伝はタイムラインに表示されません",
+  "@hiding_description": {
+    "x-reviewed": "false"
+  },
+  "complaint": "報告する",
+  "@complaint": {
+    "x-reviewed": "false"
+  },
+  "shield": "ブロック",
+  "@shield": {
+    "x-reviewed": "false"
+  },
+  "unblock": "ブロックを解除する",
+  "@unblock": {
+    "x-reviewed": "false"
+  },
+  "blocking_description": "ユーザーはあなたのトゥートを見ることができなくなります",
+  "@blocking_description": {
+    "x-reviewed": "false"
+  },
+  "hide_instance": "ミュート{インスタンス}",
+  "@hide_instance": {
+    "x-reviewed": "false"
+  },
+  "hide_instance_confirm": "{インスタンス}をブロックしてもよろしいですか？このインスタンスのコンテンツは公開タイムラインや通知には表示されず、このインスタンスのフォロワーも削除されます",
+  "@hide_instance_confirm": {
+    "x-reviewed": "false"
+  },
+  "hiding_instance_description": "インスタンスのすべてのトゥートがタイムラインに表示されるわけではありません",
+  "@hiding_instance_description": {
+    "x-reviewed": "false"
+  },
+  "edit_information": "編集",
+  "@edit_information": {
+    "x-reviewed": "false"
+  },
+  "follow_request_sent": "送信されたリクエストに従ってください",
+  "@follow_request_sent": {
+    "x-reviewed": "false"
+  },
+  "followed_you": "あなたについていきます",
+  "@followed_you": {
+    "x-reviewed": "false"
+  },
+  "failed_to_obtain_user_information": "ユーザー情報の取得に失敗しました。サーバーで権限の確認が有効になっている可能性があります",
+  "@failed_to_obtain_user_information": {
+    "x-reviewed": "false"
+  },
+  "toot_and_reply": "返信あり",
+  "@toot_and_reply": {
+    "x-reviewed": "false"
+  },
+  "pinned": "固定",
+  "@pinned": {
+    "x-reviewed": "false"
+  },
+  "media": "メディア",
+  "@media": {
+    "x-reviewed": "false"
+  },
+  "carry_on": "継続する",
+  "@carry_on": {
+    "x-reviewed": "false"
+  },
+  "the_report_will_be_sent_to_your_server_administrator": "レポートはサーバーモデレーターに送信されます。ユーザーに不満を言う理由を以下に記入してください。",
+  "@the_report_will_be_sent_to_your_server_administrator": {
+    "x-reviewed": "false"
+  },
+  "reason_for_reporting": "報告の理由",
+  "@reason_for_reporting": {
+    "x-reviewed": "false"
+  },
+  "this_user_is_from_another_server": "このユーザーは別のサーバーのユーザーです。そのサーバーに匿名の苦情を送信しますか？",
+  "@this_user_is_from_another_server": {
+    "x-reviewed": "false"
+  },
+  "forward_to": "転送する",
+  "@forward_to": {
+    "x-reviewed": "false"
+  },
+  "back": "バック",
+  "@back": {
+    "x-reviewed": "false"
+  },
+  "web_page": "ウェブページ",
+  "@web_page": {
+    "x-reviewed": "false"
+  },
+  "share_it": "共有する",
+  "@share_it": {
+    "x-reviewed": "false"
+  },
+  "open_in_browser": "ブラウザで開く",
+  "@open_in_browser": {
+    "x-reviewed": "false"
+  },
+  "web_link": "🔗リンク",
+  "@web_link": {
+    "x-reviewed": "false"
+  },
+  "just": "ただ",
+  "@just": {
+    "x-reviewed": "false"
+  },
+  "storage_failure": "ストレージ障害",
+  "@storage_failure": {
+    "x-reviewed": "false"
+  },
+  "picture_file_must_be_less_than_2m": "画像ファイルは2M未満である必要があります",
+  "@picture_file_must_be_less_than_2m": {
+    "x-reviewed": "false"
+  },
+  "no_storage_permissions": "ストレージ権限がありません",
+  "@no_storage_permissions": {
+    "x-reviewed": "false"
+  },
+  "file_saved": "保存されたファイル",
+  "@file_saved": {
+    "x-reviewed": "false"
+  },
+  "processing": "処理...",
+  "@processing": {
+    "x-reviewed": "false"
+  },
+  "completed": "完了",
+  "@completed": {
+    "x-reviewed": "false"
+  },
+  "network_request_error": "ネットワーク要求エラー",
+  "@network_request_error": {
+    "x-reviewed": "false"
+  },
+  "your_login_information_has_expired": "ログイン情報の有効期限が切れています。ログアウトして再度ログインできます",
+  "@your_login_information_has_expired": {
+    "x-reviewed": "false"
+  },
+  "received_json_information": "受信したjson情報",
+  "@received_json_information": {
+    "x-reviewed": "false"
+  },
+  "you_need_to_log_in_to_perform_this_operation": "この操作を実行するには、インスタンスにログインする必要があります。",
+  "@you_need_to_log_in_to_perform_this_operation": {
+    "x-reviewed": "false"
+  },
+  "go_to_login": "ログインに移動",
+  "@go_to_login": {
+    "x-reviewed": "false"
+  },
+  "add_bookmark": "ブックマークを追加",
+  "@add_bookmark": {
+    "x-reviewed": "false"
+  },
+  "delete_bookmark": "ブックマークを削除する",
+  "@delete_bookmark": {
+    "x-reviewed": "false"
+  },
+  "hide_this_conversation": "会話をミュートする",
+  "@hide_this_conversation": {
+    "x-reviewed": "false"
+  },
+  "unhide_the_conversation": "会話を再表示する",
+  "@unhide_the_conversation": {
+    "x-reviewed": "false"
+  },
+  "after_hiding": "この会話からのメッセージを受信しない",
+  "@after_hiding": {
+    "x-reviewed": "false"
+  },
+  "share_link": "共有リンク",
+  "@share_link": {
+    "x-reviewed": "false"
+  },
+  "share_toot": "tootのコンテンツを共有する",
+  "@share_toot": {
+    "x-reviewed": "false"
+  },
+  "copy_the_beep": "tootの内容をコピーする",
+  "@copy_the_beep": {
+    "x-reviewed": "false"
+  },
+  "dumb_text_has_been_copied": "テキストがコピーされました",
+  "@dumb_text_has_been_copied": {
+    "x-reviewed": "false"
+  },
+  "follow": "フォローする",
+  "@follow": {
+    "x-reviewed": "false"
+  },
+  "follow_user": "{user}をフォローする",
+  "@follow_user": {
+    "x-reviewed": "false"
+  },
+  "followed_or_sent_a_follow_request": "フォローまたはフォローリクエストを送信",
+  "@followed_or_sent_a_follow_request": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_to_hide_users": "{user}を非表示にしてよろしいですか",
+  "@are_you_sure_to_hide_users": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_to_block_users": "{user}をブロックしてもよろしいですか",
+  "@are_you_sure_to_block_users": {
+    "x-reviewed": "false"
+  },
+  "block_user": "ユーザをブロックする}",
+  "@block_user": {
+    "x-reviewed": "false"
+  },
+  "collection_example": "{インスタンス}を追加",
+  "@collection_example": {
+    "x-reviewed": "false"
+  },
+  "the_instance_will_be_saved_in_your_discover_menu": "インスタンスは「検出」メニューに表示されます",
+  "@the_instance_will_be_saved_in_your_discover_menu": {
+    "x-reviewed": "false"
+  },
+  "added_instance_successfully": "インスタンスが正常に追加されました",
+  "@added_instance_successfully": {
+    "x-reviewed": "false"
+  },
+  "administrator_operate_the_account": "管理者：ユーザーのモデレート",
+  "@administrator_operate_the_account": {
+    "x-reviewed": "false"
+  },
+  "top": "上",
+  "@top": {
+    "x-reviewed": "false"
+  },
+  "unpink": "ピンクを外す",
+  "@unpink": {
+    "x-reviewed": "false"
+  },
+  "are_you_sure_you_want_to_delete_this_beep": "トゥートを削除してもよろしいですか？",
+  "@are_you_sure_you_want_to_delete_this_beep": {
+    "x-reviewed": "false"
+  },
+  "delete_and_re_edit": "削除して再編集する",
+  "@delete_and_re_edit": {
+    "x-reviewed": "false"
+  },
+  "failed_to_add_bookmark": "ブックマークの追加に失敗しました",
+  "@failed_to_add_bookmark": {
+    "x-reviewed": "false"
+  },
+  "bookmarked": "ブックマーク",
+  "@bookmarked": {
+    "x-reviewed": "false"
+  },
+  "bookmark_deleted": "ブックマークが削除されました",
+  "@bookmark_deleted": {
+    "x-reviewed": "false"
+  },
+  "unpinned": "固定解除",
+  "@unpinned": {
+    "x-reviewed": "false"
+  },
+  "conversation_unhide": "会話の再表示",
+  "@conversation_unhide": {
+    "x-reviewed": "false"
+  },
+  "conversation_hidden": "隠された会話",
+  "@conversation_hidden": {
+    "x-reviewed": "false"
+  },
+  "no_content_yet": "まだコンテンツはありません",
+  "@no_content_yet": {
+    "x-reviewed": "false"
+  },
+  "retry": "リトライ",
+  "@retry": {
+    "x-reviewed": "false"
+  },
+  "there_was_an_error_in_the_network_request": "ネットワークリクエストにエラーがありました。インターネットを確認して、もう一度お試しください",
+  "@there_was_an_error_in_the_network_request": {
+    "x-reviewed": "false"
+  },
+  "this_instance_does_not_open_the_timeline_preview_function": "このインスタンスは「タイムラインプレビュー」機能を開かず、このインスタンスにいないユーザーは、関連する公開情報のリアルタイム情報ストリームを閲覧できません。アクセスするにはログインしてください。",
+  "@this_instance_does_not_open_the_timeline_preview_function": {
+    "x-reviewed": "false"
+  },
+  "an_error_occurred_in_the_application": "アプリケーションでエラーが発生しました。",
+  "@an_error_occurred_in_the_application": {
+    "x-reviewed": "false"
+  },
+  "collapse_content": "表示を減らす",
+  "@collapse_content": {
+    "x-reviewed": "false"
+  },
+  "display_more": "もっと見せる",
+  "@display_more": {
+    "x-reviewed": "false"
+  },
+  "registered": "サインアップ",
+  "@registered": {
+    "x-reviewed": "false"
+  },
+  "more": "もっと",
+  "@more": {
+    "x-reviewed": "false"
+  },
+  "release_refresh": "リリースリフレッシュ",
+  "@release_refresh": {
+    "x-reviewed": "false"
+  },
+  "complete_refresh": "完全な更新",
+  "@complete_refresh": {
+    "x-reviewed": "false"
+  },
+  "pull_down_to_refresh": "プルダウンして更新",
+  "@pull_down_to_refresh": {
+    "x-reviewed": "false"
+  },
+  "release_load_more": "より多くの負荷を解放します",
+  "@release_load_more": {
+    "x-reviewed": "false"
+  },
+  "no_more_data": "これ以上のデータはありません",
+  "@no_more_data": {
+    "x-reviewed": "false"
+  },
+  "there_is_no_custom_emoji_in_this_example": "このインスタンスにはカスタム絵文字はありません",
+  "@there_is_no_custom_emoji_in_this_example": {
+    "x-reviewed": "false"
+  },
+  "choice1": "選択肢1",
+  "@choice1": {
+    "x-reviewed": "false"
+  },
+  "choice2": "選択肢2",
+  "@choice2": {
+    "x-reviewed": "false"
+  },
+  "choice3": "選択肢3",
+  "@choice3": {
+    "x-reviewed": "false"
+  },
+  "choice4": "選択肢4",
+  "@choice4": {
+    "x-reviewed": "false"
+  },
+  "add_selection": "選択肢を追加",
+  "@add_selection": {
+    "x-reviewed": "false"
+  },
+  "multiple_choices": "複数の選択肢",
+  "@multiple_choices": {
+    "x-reviewed": "false"
+  },
+  "add_a_text_description_for_the_visually_impaired": "視覚障害者向けのテキスト説明を追加します",
+  "@add_a_text_description_for_the_visually_impaired": {
+    "x-reviewed": "false"
+  },
+  "whats_new": "新着情報",
+  "@whats_new": {
+    "x-reviewed": "false"
+  },
+  "started_following_you": "{user}があなたをフォローしました",
+  "@started_following_you": {
+    "x-reviewed": "false"
+  },
+  "request_to_follow_you": "{user}があなたをフォローするようリクエストしました",
+  "@request_to_follow_you": {
+    "x-reviewed": "false"
+  },
+  "agree": "同意する",
+  "@agree": {
+    "x-reviewed": "false"
+  },
+  "refuse": "拒否する",
+  "@refuse": {
+    "x-reviewed": "false"
+  },
+  "from": "から",
+  "@from": {
+    "x-reviewed": "false"
+  },
+  "awesome": "驚くばかり",
+  "@awesome": {
+    "x-reviewed": "false"
+  },
+  "no_description_information": "説明情報なし",
+  "@no_description_information": {
+    "x-reviewed": "false"
+  },
+  "sensitive_content": "デリケートなコンテンツ",
+  "@sensitive_content": {
+    "x-reviewed": "false"
+  },
+  "hidden_photo_or_video": "隠された写真またはビデオ",
+  "@hidden_photo_or_video": {
+    "x-reviewed": "false"
+  },
+  "language": "言語",
+  "@language": {
+    "x-reviewed": "false"
+  },
+  "clear": "晴れ",
+  "@clear": {
+    "x-reviewed": "false"
+  },
+  "favorited_your_toot": "{user}があなたのトゥートをお気に入りに追加しました",
+  "@favorited_your_toot": {
+    "x-reviewed": "false"
+  },
+  "boot_your_tool": "{user}があなたの宣伝を後押し",
+  "@boot_your_tool": {
+    "x-reviewed": "false"
+  },
+  "poll_your_voted_ended": "投票した投票が終了しました",
+  "@poll_your_voted_ended": {
+    "x-reviewed": "false"
+  },
+  "poll_your_created_ended": "作成した投票が終了しました",
+  "@poll_your_created_ended": {
+    "x-reviewed": "false"
+  },
+  "seconds_ago": "{num} s",
+  "@seconds_ago": {
+    "x-reviewed": "false"
+  },
+  "minutes_ago": "{num} m",
+  "@minutes_ago": {
+    "x-reviewed": "false"
+  },
+  "hours_ago": "{num} h",
+  "@hours_ago": {
+    "x-reviewed": "false"
+  },
+  "days_ago": "{num} d",
+  "@days_ago": {
+    "x-reviewed": "false"
+  },
+  "toot_from": "from {from}",
+  "@toot_from": {
+    "x-reviewed": "false"
+  },
+  "reply_count": "{num、plural、=0{{num}返信} =1{{num}返信} other{{num}返信}}",
+  "@reply_count": {
+    "x-reviewed": "false"
+  },
+  "boost_count": "{num、plural、= 0 {{num}Boost} =1{{num} Boost} other{{num} Boost}}",
+  "@boost_count": {
+    "x-reviewed": "false"
+  },
+  "favorite_count": "{num、plural、=0{{num}お気に入り} =1{{num}お気に入り} other{{num}お気に入り}}",
+  "@favorite_count": {
+    "x-reviewed": "false"
+  },
+  "boosted_toot": "{ユーザー}ブースト",
+  "@boosted_toot": {
+    "placeholders": {
+      "user": {}
+    },
+    "x-reviewed": "false"
+  },
+  "delete_account_confirm": "アカウントを削除する}",
+  "@delete_account_confirm": {
+    "placeholders": {
+      "account": {}
+    },
+    "x-reviewed": "false"
+  },
+  "delete_list": "リストを削除",
+  "@delete_list": {
+    "x-reviewed": "false"
+  },
+  "edit_list": "リストの編集",
+  "@edit_list": {
+    "x-reviewed": "false"
+  },
+  "mentions_you": "{ユーザー}があなたに言及している",
+  "@mentions_you": {
+    "placeholders": {
+      "user": {}
+    },
+    "x-reviewed": "false"
+  },
+  "no_description": "説明なし",
+  "@no_description": {
+    "x-reviewed": "false"
+  },
+  "operate_with_account": "これを行うには{user}を使用します",
+  "@operate_with_account": {
+    "placeholders": {
+      "user": {}
+    },
+    "x-reviewed": "false"
+  },
+  "toot_not_found": "トゥートが見つかりません",
+  "@toot_not_found": {
+    "x-reviewed": "false"
+  },
+  "days_left": "{num、plural、=0{{num}残り日} =1{{num}残り日} other{{num}日残り}}",
+  "@days_left": {
+    "placeholders": {
+      "num": {}
+    },
+    "x-reviewed": "false"
+  },
+  "ended": "閉まっている",
+  "@ended": {
+    "x-reviewed": "false"
+  },
+  "hours_left": "{num、plural、=0{{num}残り時間} =1{{num}残り時間} other{{num}時間残り}}",
+  "@hours_left": {
+    "placeholders": {
+      "num": {}
+    },
+    "x-reviewed": "false"
+  },
+  "minutes_left": "{num、plural、=0{{num}残り分} =1{{num}残り分} other{{num}残り分}}",
+  "@minutes_left": {
+    "placeholders": {
+      "num": {}
+    },
+    "x-reviewed": "false"
+  },
+  "vote_count": "{カウント、複数形、=0{0投票} =1{1投票} other{{カウント}投票}}",
+  "@vote_count": {
+    "placeholders": {
+      "count": {}
+    },
+    "x-reviewed": "false"
+  },
+  "version_info": "バージョン{バージョン}",
+  "@version_info": {
+    "x-reviewed": "false"
+  },
+  "translate_by": "{engine}による翻訳",
+  "@translate_by": {
+    "x-reviewed": "false"
+  },
+  "translate_setting": "翻訳設定",
+  "@translate_setting": {
+    "x-reviewed": "false"
+  },
+  "translate_engine": "翻訳エンジン",
+  "@translate_engine": {
+    "x-reviewed": "false"
+  },
+  "translate_toot": "tootを翻訳する",
+  "@translate_toot": {
+    "x-reviewed": "false"
+  }
+}

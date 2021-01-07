@@ -59,11 +59,11 @@ class _HtmlContentState extends State<HtmlContent>
 
   _checkToShowTranslate() {
     if (widget.checkToTranslate) {
-      var langCode = Localizations.localeOf(context).languageCode;
+  //    var langCode = Localizations.localeOf(context).languageCode;
       var systemLocal = Platform.localeName;
-      showTranslate = (langCode.startsWith('zh') &&
+      showTranslate = (systemLocal.startsWith('zh') &&
               !StringUtil.estimateChinese(widget.content)) ||
-          (langCode.startsWith('en') &&
+          (systemLocal.startsWith('en') &&
               !StringUtil.isEnglishLetters(widget.content)) ||
           !(systemLocal.startsWith('zh') || systemLocal.startsWith('en'));
       setState(() {});
