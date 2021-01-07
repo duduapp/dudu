@@ -84,7 +84,7 @@ class _NewStatusState extends State<NewStatus> {
     _controller = RichTextController({
       RegExp(r"#[\u4E00-\u9FCC_a-zA-Z]+", unicode: true, multiLine: true):
           TextStyle(color: AppConfig.buttonColor),
-      RegExp(r"\B@[@\.a-zA-Z0-9-_]+\b"): TextStyle(color: AppConfig.buttonColor)
+      RegExp(r"(^|\s)@[@\.a-zA-Z0-9-_]+\b"): TextStyle(color: AppConfig.buttonColor)
     }, onMatch: (List<String> matches) {});
     super.initState();
     // 隐藏登录弹出页
