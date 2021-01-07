@@ -7,8 +7,8 @@ class TranslateUtil {
   static List<String> engineName = ['Google','Google.cn'];
   static List engineUrl = ['https://translate.google.com','https://translate.google.cn','https://youdao.com'];
 
-  static Future<String> translateByGoogleCn(String str) async{
-    var url = 'http://translate.google.cn/translate_a/single?client=gtx&dt=t&dj=1&ie=UTF-8&sl=auto&tl='+Platform.localeName+'&q='+str;
+  static Future<String> translateByGoogleCn(String str,String toLang) async{
+    var url = 'http://translate.google.cn/translate_a/single?client=gtx&dt=t&dj=1&ie=UTF-8&sl=auto&tl='+toLang+'&q='+str;
     var res = await Request.get(url:url);
     if (res != null) {
       try {
@@ -29,18 +29,18 @@ class TranslateUtil {
     return null;
   }
 
-  static Future<String> translateByGoogle(String str) async{
+  static Future<String> translateByGoogle(String str,String toLang) async{
     var translator = GoogleTranslator();
     var locale = Platform.localeName;
     if (locale.contains('_')) {
       locale = locale.substring(0,locale.indexOf('_'));
     }
-    var res = await translator.translate(str, to: locale);
+    var res = await translator.translate(str, to: toLang);
     return res.text;
   }
 
   // do not use now
-  static Future<String> translateByYoudao(String str) async{
+  static Future<String> translateByYoudao(String str,String toLang) async{
     var res = Request.get(url: 'http://fanyi.youdao.com/translate?&doctype=json&type=AUTO&i='+str);
     if (res != null) {
 

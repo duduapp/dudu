@@ -41,7 +41,6 @@ class _HtmlContentState extends State<HtmlContent>
   bool needExpand = false;
   bool isTranslating = false;
   String translateResult;
-  bool showTranslate = false;
 
   @override
   void initState() {
@@ -52,23 +51,23 @@ class _HtmlContentState extends State<HtmlContent>
       needExpand = true;
     }
 
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _checkToShowTranslate());
+    // WidgetsBinding.instance
+    //     .addPostFrameCallback((_) => _checkToShowTranslate());
     super.initState();
   }
 
-  _checkToShowTranslate() {
-    if (widget.checkToTranslate) {
-  //    var langCode = Localizations.localeOf(context).languageCode;
-      var systemLocal = Platform.localeName;
-      showTranslate = (systemLocal.startsWith('zh') &&
-              !StringUtil.estimateChinese(widget.content)) ||
-          (systemLocal.startsWith('en') &&
-              !StringUtil.isEnglishLetters(widget.content)) ||
-          !(systemLocal.startsWith('zh') || systemLocal.startsWith('en'));
-      setState(() {});
-    }
-  }
+  // _checkToShowTranslate() {
+  //   if (widget.checkToTranslate) {
+  // //    var langCode = Localizations.localeOf(context).languageCode;
+  //     var systemLocal = Platform.localeName;
+  //     showTranslate = (systemLocal.startsWith('zh') &&
+  //             !StringUtil.estimateChinese(widget.content)) ||
+  //         (systemLocal.startsWith('en') &&
+  //             !StringUtil.isEnglishLetters(widget.content)) ||
+  //         !(systemLocal.startsWith('zh') || systemLocal.startsWith('en'));
+  //     setState(() {});
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +104,7 @@ class _HtmlContentState extends State<HtmlContent>
               });
             },
           ),
-        if (showTranslate && translateResult == null)
+        if (widget.checkToTranslate && translateResult == null)
           TextInkWell(
             text: S.of(context).translate_toot,
             onTap: _startTranslate,
@@ -137,10 +136,10 @@ class _HtmlContentState extends State<HtmlContent>
     var engine = SettingsProvider().get('translate_engine');
     if (engine == '0')
       translateResult = await TranslateUtil.translateByGoogle(
-          StringUtil.removeAllHtmlTags(widget.content));
+          StringUtil.removeAllHtmlTags(widget.content),Localizations.localeOf(context).languageCode);
     else
       translateResult = await TranslateUtil.translateByGoogleCn(
-          StringUtil.removeAllHtmlTags(widget.content));
+          StringUtil.removeAllHtmlTags(widget.content),Localizations.localeOf(context).languageCode);
     setState(() {
       isTranslating = false;
     });
