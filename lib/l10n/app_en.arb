@@ -1256,5 +1256,6 @@
      "translate_by": "Translate by {engine}",
      "translate_setting": "Translate Setting",
      "translate_engine": "Translate engine",
-     "translate_toot": "Translate toot"
+     "translate_toot": "Translate toot",
+     "red_dot_notfication": "Red dot notification"
 }

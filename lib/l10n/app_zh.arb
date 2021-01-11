@@ -831,5 +831,7 @@
 		"placeholders": {
 			"engine": {"type": "String"}
 		}
-	}
+	},
+	"red_dot_notfication": "红点通知",
+	"@red_dot_notfication": {}
 }

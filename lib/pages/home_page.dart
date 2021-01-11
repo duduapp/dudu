@@ -237,7 +237,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   _bottomMenu(int _tabIndex, bool logined) {
     SettingsProvider provider = Provider.of<SettingsProvider>(context);
     Color activeColor = Theme.of(context).toggleableActiveColor;
-
+    var showBadge = provider.get('red_dot_notfication');
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -254,7 +254,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 BottomNaviBar(
                   icon: getTabIcon(0, activeColor, logined),
                   title: getTabTitle(0, activeColor, logined),
-                  showBadge: logined && provider.unread[TimelineApi.home] != 0,
+                  showBadge: showBadge && logined && provider.unread[TimelineApi.home] != 0,
                   onTap: logined
                       ? () {
                           if (_tabIndex == 0) {
@@ -280,7 +280,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 BottomNaviBar(
                   icon: getTabIcon(1, activeColor, logined),
                   title: getTabTitle(1, activeColor, logined),
-                  showBadge: logined && provider.unread[TimelineApi.local] != 0,
+                  showBadge: showBadge && logined && provider.unread[TimelineApi.local] != 0,
                   onTap: logined
                       ? () {
                           if (_tabIndex == 1) {
@@ -328,16 +328,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 BottomNaviBar(
                   icon: getTabIcon(3, activeColor, logined),
                   title: getTabTitle(3, activeColor, logined),
-                  showBadge: logined &&
+                  showBadge: showBadge && logined &&
                       ( //provider.unread[TimelineApi.notification] != 0 ||
                           provider.unread[TimelineApi.conversations] != 0 ||
                               provider.unread[TimelineApi.followRquest] != 0 ||
+                              provider.unread[TimelineApi.follow] != 0 ||
                               provider.unread[TimelineApi.mention] != 0 ||
                               provider.unread[TimelineApi.reblogNotification] !=
                                   0 ||
                               provider.unread[
                                       TimelineApi.favoriteNotification] !=
-                                  0),
+                                  0 || provider.unread[TimelineApi.pollNotification] != 0),
                   onTap: logined
                       ? () {
                           if (_tabIndex == 3) {

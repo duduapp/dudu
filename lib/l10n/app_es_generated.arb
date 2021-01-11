@@ -1359,5 +1359,9 @@
   "translate_toot": "Traducir toot",
   "@translate_toot": {
     "x-reviewed": "false"
+  },
+  "red_dot_notfication": "Notificación de punto rojo",
+  "@red_dot_notfication": {
+    "x-reviewed": "false"
   }
 }

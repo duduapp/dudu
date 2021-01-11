@@ -8355,6 +8355,31 @@
           "state": "frozen"
         }
       ]
+    },
+    "red_dot_notfication": {
+      "value": "Red dot notification",
+      "targets": [
+        {
+          "id": "fr",
+          "state": "frozen"
+        },
+        {
+          "id": "ru",
+          "state": "frozen"
+        },
+        {
+          "id": "ar",
+          "state": "frozen"
+        },
+        {
+          "id": "es",
+          "state": "frozen"
+        },
+        {
+          "id": "ja",
+          "state": "frozen"
+        }
+      ]
     }
   }
 }

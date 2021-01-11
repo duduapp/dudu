@@ -1252,9 +1252,9 @@
   "@toot_from": {
     "x-reviewed": "false"
   },
-  "reply_count":"{num, plural, =0{{num} Reply} =1{{num} Reply} other{{num} Replies}}",
-  "boost_count":"{num, plural, =0{{num} Boost} =1{{num} Boost} other{{num} Boosts}}",
-  "favorite_count":"{num, plural, =0{{num} Favorite} =1{{num} Favorite} other{{num} Favorites}}",
+  "reply_count": "{num, plural, =0{{num} Reply} =1{{num} Reply} other{{num} Replies}}",
+  "boost_count": "{num, plural, =0{{num} Boost} =1{{num} Boost} other{{num} Boosts}}",
+  "favorite_count": "{num, plural, =0{{num} Favorite} =1{{num} Favorite} other{{num} Favorites}}",
   "boosted_toot": "تم تعزيز {user}",
   "@boosted_toot": {
     "placeholders": {
@@ -1343,6 +1343,10 @@
   },
   "translate_toot": "ترجمة toot",
   "@translate_toot": {
+    "x-reviewed": "false"
+  },
+  "red_dot_notfication": "إشعار النقطة الحمراء",
+  "@red_dot_notfication": {
     "x-reviewed": "false"
   }
 }

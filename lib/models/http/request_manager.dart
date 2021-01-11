@@ -33,6 +33,15 @@ class RequestManager {
         _updateLatestId(provider, url, latestId);
       }
     }
+    if (url == TimelineApi.notification) {
+      _updateUnread(provider, TimelineApi.conversations, 0);
+      _updateUnread(provider, TimelineApi.followRquest, 0);
+      _updateUnread(provider, TimelineApi.follow, 0);
+      _updateUnread(provider, TimelineApi.mention, 0);
+      _updateUnread(provider, TimelineApi.reblogNotification, 0);
+      _updateUnread(provider, TimelineApi.favoriteNotification, 0);
+      _updateUnread(provider, TimelineApi.pollNotification, 0);
+    }
     return response;
   }
 

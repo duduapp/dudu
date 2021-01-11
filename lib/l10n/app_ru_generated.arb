@@ -1359,5 +1359,9 @@
   "translate_toot": "Перевести toot",
   "@translate_toot": {
     "x-reviewed": "false"
+  },
+  "red_dot_notfication": "Уведомление о красной точке",
+  "@red_dot_notfication": {
+    "x-reviewed": "false"
   }
 }

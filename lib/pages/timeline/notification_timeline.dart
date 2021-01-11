@@ -61,7 +61,10 @@ class _NotificationTimelineState extends State<NotificationTimeline>
 
   @override
   void initState() {
-    _tabController = TabController(initialIndex: RuntimeConfig.notificationTimeline ?? 0 ,length: 2, vsync: this);
+    _tabController = TabController(
+        initialIndex: RuntimeConfig.notificationTimeline ?? 0,
+        length: 2,
+        vsync: this);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -89,6 +92,7 @@ class _NotificationTimelineState extends State<NotificationTimeline>
   @override
   Widget build(BuildContext context) {
     var settings = Provider.of<SettingsProvider>(context);
+    var showBadge = settings.get('red_dot_notfication');
     return Scaffold(
       appBar: PreferredSize(
         child: CustomAppBar(
@@ -123,12 +127,13 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                       labelPadding: EdgeInsets.all(0),
                       indicatorSize: TabBarIndicatorSize.label,
                       labelStyle: TextStyle(fontWeight: FontWeight.normal),
-                      unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
+                      unselectedLabelStyle:
+                          TextStyle(fontWeight: FontWeight.normal),
                       tabs: [
                         Badge(
                           position: BadgePosition.topEnd(top: 5, end: 18),
                           showBadge: false,
-                         //     settings.unread[TimelineApi.notification] != 0,
+                          //     settings.unread[TimelineApi.notification] != 0,
                           child: _tabController.index == 0
                               ? MKDropDownMenu(
                                   controller: _menuController1,
@@ -150,11 +155,22 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                         ),
                         Badge(
                           position: BadgePosition.topEnd(top: 5, end: 18),
-                          showBadge:
-                              settings.unread[TimelineApi.conversations] != 0 ||
+                          showBadge: showBadge &&
+                              (settings.unread[TimelineApi.conversations] !=
+                                      0 ||
                                   settings.unread[TimelineApi.followRquest] !=
                                       0 ||
-                                  settings.unread[TimelineApi.mention] != 0,
+                                  settings.unread[TimelineApi.mention] != 0 ||
+                                  settings.unread[TimelineApi.follow] != 0 ||
+                                  settings.unread[
+                                          TimelineApi.pollNotification] !=
+                                      0 ||
+                                  settings.unread[
+                                          TimelineApi.reblogNotification] !=
+                                      0 ||
+                                  settings.unread[
+                                          TimelineApi.favoriteNotification] !=
+                                      0),
                           child: _tabController.index == 1
                               ? MKDropDownMenu(
                                   controller: _menuController2,
@@ -194,7 +210,9 @@ class _NotificationTimelineState extends State<NotificationTimeline>
                       case 'clear':
                         DialogUtils.showSimpleAlertDialog(
                             context: context,
-                            text: S.of(context).are_you_sure_you_want_to_delete_the_message_list_forever,
+                            text: S
+                                .of(context)
+                                .are_you_sure_you_want_to_delete_the_message_list_forever,
                             onConfirm: _clearNotification);
                         break;
                       case 'choose_type':
@@ -246,17 +264,21 @@ class NotificationTypeList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<SettingsProvider>(context);
-    String  zan_or_shoucang = provider.get('zan_or_shoucang');
+    String zan_or_shoucang = provider.get('zan_or_shoucang');
     var isZh = I18nUtil.isZh(context);
-    var zan_icon = isZh ? (zan_or_shoucang == '0' ? IconFont.thumbUp : IconFont.favorite) : IconFont.favorite;
+    var zan_icon = isZh
+        ? (zan_or_shoucang == '0' ? IconFont.thumbUp : IconFont.favorite)
+        : IconFont.favorite;
+    var showBadge = provider.get('red_dot_notfication');
     return SingleChildScrollView(
       child: Column(
         children: [
           Badge(
             position: BadgePosition.topEnd(top: 20, end: 20),
-            showBadge: provider.unread[TimelineApi.conversations] != 0,
+            showBadge:
+                showBadge && provider.unread[TimelineApi.conversations] != 0,
             child: SettingCell(
-              leftIcon: Icon(IconFont.message),
+                leftIcon: Icon(IconFont.message),
                 title: S.of(context).private_letters,
                 onPress: () => AppNavigate.push(ConversationTimeline()),
                 tail: provider.unread[TimelineApi.conversations] != 0
@@ -265,72 +287,82 @@ class NotificationTypeList extends StatelessWidget {
           ),
           Badge(
             position: BadgePosition.topEnd(top: 20, end: 20),
-            showBadge: provider.unread[TimelineApi.followRquest] != 0,
+            showBadge:
+                showBadge && provider.unread[TimelineApi.followRquest] != 0,
             child: SettingCell(
                 leftIcon: Icon(IconFont.follow),
                 title: S.of(context).follow_request,
-                onPress: () => AppNavigate.push(
-                    NotificationTypeTimeline(TimelineApi.followRquest,S.of(context).follow_request)),
+                onPress: () => AppNavigate.push(NotificationTypeTimeline(
+                    TimelineApi.followRquest, S.of(context).follow_request)),
                 tail: provider.unread[TimelineApi.followRquest] != 0
                     ? Container()
                     : null),
           ),
           Badge(
             position: BadgePosition.topEnd(top: 20, end: 20),
-            showBadge: provider.unread[TimelineApi.follow] != 0,
+            showBadge: showBadge && provider.unread[TimelineApi.follow] != 0,
             child: SettingCell(
                 leftIcon: Icon(IconFont.follow),
                 title: S.of(context).follow,
-                onPress: () => AppNavigate.push(
-                    NotificationTypeTimeline(TimelineApi.follow,S.of(context).follow)),
+                onPress: () => AppNavigate.push(NotificationTypeTimeline(
+                    TimelineApi.follow, S.of(context).follow)),
                 tail: provider.unread[TimelineApi.follow] != 0
                     ? Container()
                     : null),
           ),
           Badge(
             position: BadgePosition.topEnd(top: 20, end: 20),
-            showBadge: provider.unread[TimelineApi.mention] != 0,
+            showBadge: showBadge && provider.unread[TimelineApi.mention] != 0,
             child: SettingCell(
                 leftIcon: Icon(IconFont.at),
                 title: S.of(context).at_mine,
-                onPress: () => AppNavigate.push(
-                    NotificationTypeTimeline(TimelineApi.mention,S.of(context).at_mine)),
+                onPress: () => AppNavigate.push(NotificationTypeTimeline(
+                    TimelineApi.mention, S.of(context).at_mine)),
                 tail: provider.unread[TimelineApi.mention] != 0
                     ? Container()
                     : null),
           ),
           Badge(
             position: BadgePosition.topEnd(top: 20, end: 20),
-            showBadge: provider.unread[TimelineApi.reblogNotification] != 0,
+            showBadge: showBadge &&
+                provider.unread[TimelineApi.reblogNotification] != 0,
             child: SettingCell(
                 leftIcon: Icon(IconFont.reblog),
                 title: S.of(context).tell_me,
-                onPress: () => AppNavigate.push(
-                    NotificationTypeTimeline(TimelineApi.reblogNotification,S.of(context).tell_me)),
+                onPress: () => AppNavigate.push(NotificationTypeTimeline(
+                    TimelineApi.reblogNotification, S.of(context).tell_me)),
                 tail: provider.unread[TimelineApi.mention] != 0
                     ? Container()
                     : null),
           ),
           Badge(
             position: BadgePosition.topEnd(top: 20, end: 20),
-            showBadge: provider.unread[TimelineApi.favoriteNotification] != 0,
+            showBadge: showBadge &&
+                provider.unread[TimelineApi.favoriteNotification] != 0,
             child: SettingCell(
                 leftIcon: Icon(zan_icon),
-                title: isZh ? (StringUtil.getZanString()+S.of(context).mine) : S.of(context).favorites,
-                onPress: () => AppNavigate.push(
-                    NotificationTypeTimeline(TimelineApi.favoriteNotification, isZh ? StringUtil.getZanString()+S.of(context).mine : S.of(context).favorites)),
+                title: isZh
+                    ? (StringUtil.getZanString() + S.of(context).mine)
+                    : S.of(context).favorites,
+                onPress: () => AppNavigate.push(NotificationTypeTimeline(
+                    TimelineApi.favoriteNotification,
+                    isZh
+                        ? StringUtil.getZanString() + S.of(context).mine
+                        : S.of(context).favorites)),
                 tail: provider.unread[TimelineApi.favoriteNotification] != 0
                     ? Container()
                     : null),
           ),
           Badge(
             position: BadgePosition.topEnd(top: 20, end: 20),
-            showBadge: false,
+            showBadge:
+                showBadge && provider.unread[TimelineApi.pollNotification] != 0,
             child: SettingCell(
-                leftIcon: Icon(IconFont.vote),
-                title: S.of(context).vote,
-                onPress: () => AppNavigate.push(
-                    NotificationTypeTimeline(TimelineApi.pollNotification,S.of(context).vote)),),
+              leftIcon: Icon(IconFont.vote),
+              title: S.of(context).vote,
+              onPress: () => AppNavigate.push(NotificationTypeTimeline(
+                  TimelineApi.pollNotification, S.of(context).vote)),
+            ),
           ),
         ],
       ),

@@ -9,6 +9,7 @@ class TimelineApi {
   static const String federated = '/api/v1/timelines/public';
 
   static String get notification {
+    return notificationUrl;
     var displayType = SettingsProvider().settings['notification_display_type'];
     var notificationTypes = [
       'follow',

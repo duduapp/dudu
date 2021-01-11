@@ -84,7 +84,8 @@ class SettingsProvider extends ChangeNotifier {
         'poll'
       ],
       'language':['zh','en','fr','ru','ar','es','ja'].contains(langCode) ? langCode : 'en',
-      'translate_engine':Platform.localeName.startsWith('zh') ? '1' : '0'
+      'translate_engine':Platform.localeName.startsWith('zh') ? '1' : '0',
+      'red_dot_notfication': true
     };
     LoginedUser user = LoginedUser();
     if (user.account == null) {
@@ -162,7 +163,9 @@ class SettingsProvider extends ChangeNotifier {
       TimelineApi.reblogNotification:
           await _getUnreadFromDb(TimelineApi.reblogNotification),
       TimelineApi.favoriteNotification:
-          await _getUnreadFromDb(TimelineApi.favoriteNotification)
+          await _getUnreadFromDb(TimelineApi.favoriteNotification),
+      TimelineApi.pollNotification:
+          await _getUnreadFromDb(TimelineApi.pollNotification)
     };
 
     for (var key in unread.keys) {

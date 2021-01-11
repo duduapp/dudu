@@ -80,7 +80,7 @@ class _PublicTimelineState extends State<PublicTimeline>
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<SettingsProvider>(context);
-
+    var showBadge = provider.get('red_dot_notfication');
     return Scaffold(
       appBar: PreferredSize(
         child: CustomAppBar(
@@ -124,7 +124,7 @@ class _PublicTimelineState extends State<PublicTimeline>
                       tabs: [
                         Badge(
                           position: BadgePosition.topEnd(top: 5,end: 18),
-                          showBadge: provider.unread[TimelineApi.local] != 0 && widget.url == null,
+                          showBadge: showBadge && provider.unread[TimelineApi.local] != 0 && widget.url == null,
                           child: (_tabController.index == 0 && widget.url == null)
                               ? MKDropDownMenu(
                                   controller: _menuController1,

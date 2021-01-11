@@ -1359,5 +1359,9 @@
   "translate_toot": "tootを翻訳する",
   "@translate_toot": {
     "x-reviewed": "false"
+  },
+  "red_dot_notfication": "赤い点の通知",
+  "@red_dot_notfication": {
+    "x-reviewed": "false"
   }
 }
