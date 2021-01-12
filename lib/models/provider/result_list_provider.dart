@@ -210,7 +210,13 @@ class ResultListProvider extends ChangeNotifier {
     }
 
     if (dataHandler != null) {
-      data = dataHandler(data);
+      try {
+        data = dataHandler(data);
+      } catch (e) {
+        error = Exception('error');
+        notifyListeners();
+        return false;
+      }
     }
 
     addData(data, refresh);
