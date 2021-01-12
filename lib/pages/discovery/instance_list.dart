@@ -14,6 +14,7 @@ import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/discovery/add_instance.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
+import 'package:dudu/utils/themes.dart';
 import 'package:dudu/widget/common/app_bar_title.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/common/loading_view.dart';
@@ -89,9 +90,9 @@ class _InstanceListState extends State<InstanceList> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(IconFont.follow,size: 18,),
+                          Icon(IconFont.follow,size: 18,color: Theme.of(context).buttonColor,),
                           SizedBox(width: 3,),
-                          Text(S.of(context).add_website_instance,style: TextStyle(fontSize: 13.5,color: Theme.of(context).accentColor),),
+                          Text(S.of(context).add_website_instance,style: TextStyle(fontSize: 13.5,color: Theme.of(context).buttonColor),),
                         ],
                       ),
                     ),

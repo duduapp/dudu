@@ -69,7 +69,7 @@ class _InnerBrowserState extends State<InnerBrowser> {
               Text(title, style: TextStyle(fontSize: 16),),
               Text(url ?? '', style: TextStyle(fontSize: 12, color: Theme
                   .of(context)
-                  .accentColor),)
+                  .buttonColor),)
             ],
           ),
           elevation: 0,

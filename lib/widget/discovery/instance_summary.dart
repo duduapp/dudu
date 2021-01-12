@@ -128,7 +128,7 @@ class InstanceSummary extends StatelessWidget {
                               Spacer(),
                               Text(urlWithoutHttpPrefix,
                                   style: TextStyle(
-                                      color: Theme.of(context).accentColor,
+                                      color: Theme.of(context).buttonColor,
                                       height: 1,
                                       fontSize: 11)),
                               SizedBox(height: 3,),
@@ -197,7 +197,7 @@ class InstanceSummary extends StatelessWidget {
                             TextInkWell(
                               onTap: () async{await InstanceManager.login(item.detail);},
                               text: S.of(context).log_in,
-                              activeColor: Theme.of(context).accentColor,
+                           //   activeColor: Theme.of(context).accentColor,
                             ),
                             TextInkWell(
                               onTap: restrictedMode ? (){} :() {
@@ -205,14 +205,14 @@ class InstanceSummary extends StatelessWidget {
                                     'https://' + urlWithoutHttpPrefix + '/auth/sign_up');
                               },
                               text: S.of(context).registered,
-                              activeColor: Theme.of(context).accentColor,
+                            //  activeColor: Theme.of(context).accentColor,
                             ),
                             TextInkWell(
                               onTap:  () {
                                 AppNavigate.push(InnerBrowser('https://' + urlWithoutHttpPrefix + '/about/more'));
                               },
                               text: S.of(context).more,
-                              activeColor: Theme.of(context).accentColor,
+                         //     activeColor: Theme.of(context).accentColor,
                             ),
                           ],
                         ),
