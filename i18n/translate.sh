@@ -12,4 +12,5 @@ attranslate "${COMMON_ARGS[@]}" --targetFile=../lib/l10n/app_ru_generated.arb --
 attranslate "${COMMON_ARGS[@]}" --targetFile=../lib/l10n/app_ar_generated.arb --targetLng=ar --manualReview=true
 attranslate "${COMMON_ARGS[@]}" --targetFile=../lib/l10n/app_es_generated.arb --targetLng=es --manualReview=true
 attranslate "${COMMON_ARGS[@]}" --targetFile=../lib/l10n/app_ja_generated.arb --targetLng=ja --manualReview=true
+attranslate "${COMMON_ARGS[@]}" --targetFile=../lib/l10n/app_de_generated.arb --targetLng=de --manualReview=true
 #attranslate "${COMMON_ARGS[@]}" --targetFile=$BASE_DIR/intl_de.arb --targetLng=de

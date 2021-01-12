@@ -60,6 +60,7 @@ class App extends StatelessWidget {
         const Locale('ar',''),
         const Locale('es',''),
         const Locale('ja',''),
+        const Locale('de',''),
         // ... other locales the app supports
       ],
       theme: ThemeUtil.themes[chooseTheme],
