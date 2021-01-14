@@ -34,13 +34,11 @@ class StatusItemMedia extends StatefulWidget {
 }
 
 class _StatusItemMediaState extends State<StatusItemMedia> {
-  bool sensitive;
   bool hideImage;
 
   @override
   void initState() {
-    sensitive = widget.data.sensitive;
-    if (sensitive)
+    if (widget.data.sensitive)
       hideImage = true;
     else
       hideImage = false;
@@ -54,10 +52,22 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
     super.initState();
   }
 
+
+  @override
+  void didUpdateWidget(covariant StatusItemMedia oldWidget) {
+    if (widget.data.sensitive)
+      hideImage = true;
+    else
+      hideImage = false;
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   Widget build(BuildContext context) {
     bool showThumbnails =
         context.select<SettingsProvider, bool>((m) => m.get('show_thumbnails'));
+
+
 
     if (showThumbnails) {
       var mediaLength = widget.data.mediaAttachments.length;
@@ -294,7 +304,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
                           color: new Color.fromRGBO(240, 240, 240,
                               0.5) // Specifies the background color and the opacity
                           ),
-                      child: Text(sensitive ? S.of(context).sensitive_content : S.of(context).hidden_photo_or_video)),
+                      child: Text(this.widget.data.sensitive ? S.of(context).sensitive_content : S.of(context).hidden_photo_or_video)),
                 ),
               ),
             ),
@@ -315,7 +325,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
     }
     return NoSplashInkWell(
       onTap: () {
-        if (sensitive && hideImage == true) {
+        if (widget.data.sensitive && hideImage == true) {
           setState(() {
             hideImage = false;
           });
