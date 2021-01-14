@@ -461,8 +461,6 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
           galleryItems: medias,
           initialIndex: medias.indexOf(widget.images[index]),
         );
-        medias[0].url = 'aa';
-        medias[0].previewUrl = 'aaa';
       }
       else
         return;
