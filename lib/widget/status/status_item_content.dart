@@ -16,7 +16,7 @@ class StatusItemContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
       StatusItemText(data,primary: primary,),
-      StatusItemMedia(data),
+      StatusItemMedia(data,subStatus: subStatus),
       if (data.poll != null)
       StatusItemPoll(data),
       if (primary)
