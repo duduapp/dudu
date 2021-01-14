@@ -9720,6 +9720,35 @@
           "state": "frozen"
         }
       ]
+    },
+    "need_login_before_operate": {
+      "value": "Please \"register\" and \"login\" on the discovery page first",
+      "targets": [
+        {
+          "id": "fr",
+          "state": "frozen"
+        },
+        {
+          "id": "ru",
+          "state": "frozen"
+        },
+        {
+          "id": "ar",
+          "state": "frozen"
+        },
+        {
+          "id": "es",
+          "state": "frozen"
+        },
+        {
+          "id": "ja",
+          "state": "frozen"
+        },
+        {
+          "id": "de",
+          "state": "frozen"
+        }
+      ]
     }
   }
 }

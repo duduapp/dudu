@@ -16,6 +16,7 @@ import 'package:dudu/pages/timeline/notification_timeline.dart';
 import 'package:dudu/pages/timeline/public_timeline.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/account_util.dart';
+import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/filter_util.dart';
 import 'package:dudu/widget/common/bottom_navigation_item.dart';
 import 'package:dudu/widget/home/bottom_navi_bar.dart';
@@ -268,7 +269,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             });
                           }
                         }
-                      : null,
+                      : () => DialogUtils.showInfoDialog(context, S.of(context).need_login_before_operate),
                   onDoubleTap: logined
                       ? () {
                           provider.homeProvider.refreshController
@@ -302,7 +303,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             SettingsProvider().setHomeTabIndex(1);
                           }
                         }
-                      : null,
+                      : () => DialogUtils.showInfoDialog(context, S.of(context).need_login_before_operate),
                   onDoubleTap: logined
                       ? () {
                           if (SettingsProvider().publicTabIndex == 0) {
@@ -350,7 +351,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             SettingsProvider().setHomeTabIndex(3);
                           }
                         }
-                      : null,
+                      : () => DialogUtils.showInfoDialog(context, S.of(context).need_login_before_operate),
                   onDoubleTap: logined
                       ? () {
                           provider.notificationProvider.refreshController
@@ -367,7 +368,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       ? () {
                           SettingsProvider().setHomeTabIndex(4);
                         }
-                      : null,
+                      : () => DialogUtils.showInfoDialog(context, S.of(context).need_login_before_operate),
                 ),
               ],
             ),

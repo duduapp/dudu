@@ -1348,5 +1348,9 @@
   "red_dot_notfication": "إشعار النقطة الحمراء",
   "@red_dot_notfication": {
     "x-reviewed": "false"
+  },
+  "need_login_before_operate": "يرجى \"التسجيل\" و \"تسجيل الدخول\" على صفحة الاكتشاف أولاً",
+  "@need_login_before_operate": {
+    "x-reviewed": "false"
   }
 }

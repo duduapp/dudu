@@ -1363,5 +1363,9 @@
   "red_dot_notfication": "Notification de point rouge",
   "@red_dot_notfication": {
     "x-reviewed": "false"
+  },
+  "need_login_before_operate": "Veuillez d'abord «vous inscrire» et «vous connecter» sur la page de découverte",
+  "@need_login_before_operate": {
+    "x-reviewed": "false"
   }
 }

@@ -1363,5 +1363,9 @@
   "red_dot_notfication": "Notificación de punto rojo",
   "@red_dot_notfication": {
     "x-reviewed": "false"
+  },
+  "need_login_before_operate": "Primero, \"regístrese\" e \"inicie sesión\" en la página de descubrimiento",
+  "@need_login_before_operate": {
+    "x-reviewed": "false"
   }
 }

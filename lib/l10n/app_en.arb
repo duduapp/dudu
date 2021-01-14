@@ -1257,5 +1257,6 @@
      "translate_setting": "Translate Setting",
      "translate_engine": "Translate engine",
      "translate_toot": "Translate toot",
-     "red_dot_notfication": "Red dot notification"
+     "red_dot_notfication": "Red dot notification",
+     "need_login_before_operate": "Please \"register\" and \"login\" on the discovery page first"
 }

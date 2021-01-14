@@ -1363,5 +1363,9 @@
   "red_dot_notfication": "赤い点の通知",
   "@red_dot_notfication": {
     "x-reviewed": "false"
+  },
+  "need_login_before_operate": "まずは発見ページで「登録」・「ログイン」してください",
+  "@need_login_before_operate": {
+    "x-reviewed": "false"
   }
 }

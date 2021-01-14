@@ -833,5 +833,7 @@
 		}
 	},
 	"red_dot_notfication": "红点通知",
-	"@red_dot_notfication": {}
+	"@red_dot_notfication": {},
+	"need_login_before_operate": "请先在发现页面“注册”和“登录”",
+	"@need_login_before_operate": {}
 }

@@ -1363,5 +1363,9 @@
   "red_dot_notfication": "Уведомление о красной точке",
   "@red_dot_notfication": {
     "x-reviewed": "false"
+  },
+  "need_login_before_operate": "Пожалуйста, сначала «зарегистрируйтесь» и «войдите в систему» на странице открытия",
+  "@need_login_before_operate": {
+    "x-reviewed": "false"
   }
 }
