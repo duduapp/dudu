@@ -1,6 +1,5 @@
-import 'package:dudu/l10n/l10n.dart';
-import 'package:dio/dio.dart';
 import 'package:dudu/api/status_api.dart';
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/provider/result_list_provider.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
@@ -8,19 +7,10 @@ import 'package:dudu/pages/status/boosted_by.dart';
 import 'package:dudu/pages/status/favorite_by.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/i18n_util.dart';
-import 'package:dudu/utils/view/list_view_util.dart';
 import 'package:dudu/widget/button/text_ink_well.dart';
-import 'package:dudu/widget/common/colored_tab_bar.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
-import 'package:dudu/widget/common/empty_view.dart';
-import 'package:dudu/widget/common/loading_view.dart';
-import 'package:dudu/widget/common/measure_size.dart';
-import 'package:dudu/widget/common/normal_flat_button.dart';
-import 'package:dudu/widget/listview/provider_easyrefresh_listview.dart';
 import 'package:dudu/widget/status/status_item.dart';
 import 'package:dudu/widget/status/status_item_action_w.dart';
-import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
-    as extend;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -47,10 +37,15 @@ class _StatusDetailV2State extends State<StatusDetailV2>
         await StatusApi.getContext(data: widget.data, hostUrl: widget.hostUrl);
     detail.clear();
     fetchedData = true;
+    if (data.containsKey('error')) {
+      errorMsg = data['error'];
+      setState(() {});
+      return;
+    }
     for (var d in data['ancestors']) {
       d['__sub'] = true;
       d['media_attachments'].forEach((e) => e['id'] = "c##" + e['id']);
-      parent.insert(0,d);
+      parent.insert(0, d);
     }
     // detail.add(status.toJson());
     for (var d in data['descendants']) {
@@ -108,7 +103,8 @@ class _StatusDetailV2State extends State<StatusDetailV2>
     Map row = detail[idx];
     var status = StatusItemData.fromJson(row);
     bool topline = idx != 0 && status.inReplyToId == detail[idx - 1]['id'];
-    bool bottomLine = idx != detail.length - 1 && detail[idx + 1]['in_reply_to_id'] == status.id;
+    bool bottomLine = idx != detail.length - 1 &&
+        detail[idx + 1]['in_reply_to_id'] == status.id;
     return StatusItem(
       lineDivider: true,
       item: StatusItemData.fromJson(row),
@@ -172,35 +168,48 @@ class _StatusDetailV2State extends State<StatusDetailV2>
                                   children: [
                                     if (status.repliesCount != 0)
                                       TextInkWell(
-                                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                                        onTap: (){},
-                                        activeColor: Theme.of(context).accentColor,
+                                        padding: const EdgeInsets.fromLTRB(
+                                            10, 10, 10, 10),
+                                        onTap: () {},
+                                        activeColor:
+                                            Theme.of(context).accentColor,
                                         text: S
                                             .of(context)
                                             .reply_count(status.repliesCount),
                                       ),
                                     if (status.reblogsCount != 0)
                                       TextInkWell(
-                                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                                          activeColor: Theme.of(context).accentColor,
-                                          onTap: () => AppNavigate.push(BoostedBy(widget.data, widget.hostUrl)),
-                                          text: S
-                                              .of(context)
-                                              .boost_count(status.reblogsCount)),
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 10, 10, 10),
+                                          activeColor:
+                                              Theme.of(context).accentColor,
+                                          onTap: () => AppNavigate.push(
+                                              BoostedBy(
+                                                  widget.data, widget.hostUrl)),
+                                          text: S.of(context).boost_count(
+                                              status.reblogsCount)),
                                     if (status.favouritesCount != 0)
                                       TextInkWell(
-                                          padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                                          activeColor: Theme.of(context).accentColor,
-                                          onTap: () => AppNavigate.push(FavoriteBy(widget.data, widget.hostUrl)),
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 10, 10, 10),
+                                          activeColor:
+                                              Theme.of(context).accentColor,
+                                          onTap: () => AppNavigate.push(
+                                              FavoriteBy(
+                                                  widget.data, widget.hostUrl)),
                                           text: I18nUtil.isZh(context)
-                                              ?  '${StringUtil.getZanString()} '+ (widget.data.favouritesCount.toString())
+                                              ? '${StringUtil.getZanString()} ' +
+                                                  (widget.data.favouritesCount
+                                                      .toString())
                                               : S.of(context).favorite_count(
                                                   widget.data.favouritesCount)),
                                   ],
                                 ),
                               ),
-                             // Divider(height: 0.3,),
-                              SizedBox(height: 8,)
+                              // Divider(height: 0.3,),
+                              SizedBox(
+                                height: 8,
+                              )
                             ],
                           ),
                         ),
