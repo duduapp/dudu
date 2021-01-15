@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
@@ -11,8 +9,6 @@ import 'package:dudu/plugin/flutter_html/flutter_html.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/provider_util.dart';
 import 'package:dudu/utils/translate_util.dart';
-import 'package:dudu/utils/url_util.dart';
-import 'package:dudu/utils/view/status_action_util.dart';
 import 'package:dudu/widget/button/text_ink_well.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +100,9 @@ class _HtmlContentState extends State<HtmlContent>
               });
             },
           ),
-        if (widget.checkToTranslate && translateResult == null)
+        if (widget.checkToTranslate &&
+            translateResult == null &&
+            StringUtil.removeAllHtmlTags(widget.content).trim().isNotEmpty)
           TextInkWell(
             text: S.of(context).translate_toot,
             onTap: _startTranslate,
@@ -136,10 +134,12 @@ class _HtmlContentState extends State<HtmlContent>
     var engine = SettingsProvider().get('translate_engine');
     if (engine == '0')
       translateResult = await TranslateUtil.translateByGoogle(
-          StringUtil.removeAllHtmlTags(widget.content),Localizations.localeOf(context).languageCode);
+          StringUtil.removeAllHtmlTags(widget.content),
+          Localizations.localeOf(context).languageCode);
     else
       translateResult = await TranslateUtil.translateByGoogleCn(
-          StringUtil.removeAllHtmlTags(widget.content),Localizations.localeOf(context).languageCode);
+          StringUtil.removeAllHtmlTags(widget.content),
+          Localizations.localeOf(context).languageCode);
     setState(() {
       isTranslating = false;
     });
