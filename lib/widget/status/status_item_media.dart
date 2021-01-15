@@ -55,7 +55,7 @@ class _StatusItemMediaState extends State<StatusItemMedia> {
 
   @override
   void didUpdateWidget(covariant StatusItemMedia oldWidget) {
-    if (widget.data.sensitive)
+    if (widget.data.sensitive && !SettingsProvider().get('always_show_sensitive'))
       hideImage = true;
     else
       hideImage = false;

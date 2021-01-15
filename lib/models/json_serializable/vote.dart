@@ -11,43 +11,49 @@ class Vote {
   var option3Enabled = false;
   var option4Enabled = false;
 
+  var _expiresInString;
+
   var expiresIn = 86400;
-  String get expiresInString => S.of(navGK.currentState.overlay.context).day1;
+  String get expiresInString {
+    if (_expiresInString != null) {
+      return _expiresInString;
+    }
+    return S.of(navGK.currentState.overlay.context).day1;
+  }
 
   var multiChoice = false;
 
   set expiresInString(String str) {
-    expiresInString = str;
+    _expiresInString = str;
   }
 
   static List<String> get voteOptions => [
-    S.of(navGK.currentState.overlay.context).minutes5,
-    S.of(navGK.currentState.overlay.context).minutes30,
-    S.of(navGK.currentState.overlay.context).hour1,
-    S.of(navGK.currentState.overlay.context).hours6,
-    S.of(navGK.currentState.overlay.context).day1,
-    S.of(navGK.currentState.overlay.context).days3,
-    S.of(navGK.currentState.overlay.context).days7
-  ];
+        S.of(navGK.currentState.overlay.context).minutes5,
+        S.of(navGK.currentState.overlay.context).minutes30,
+        S.of(navGK.currentState.overlay.context).hour1,
+        S.of(navGK.currentState.overlay.context).hours6,
+        S.of(navGK.currentState.overlay.context).day1,
+        S.of(navGK.currentState.overlay.context).days3,
+        S.of(navGK.currentState.overlay.context).days7
+      ];
 
   static Map<String, int> get voteOptionsInSeconds => {
-    S.of(navGK.currentState.overlay.context).minutes5: 300,
-    S.of(navGK.currentState.overlay.context).minutes30: 1800,
-    S.of(navGK.currentState.overlay.context).hour1: 3600,
-    S.of(navGK.currentState.overlay.context).hours6: 21600,
-    S.of(navGK.currentState.overlay.context).day1: 86400,
-    S.of(navGK.currentState.overlay.context).days3: 259200,
-    S.of(navGK.currentState.overlay.context).days7: 604800
-  };
+        S.of(navGK.currentState.overlay.context).minutes5: 300,
+        S.of(navGK.currentState.overlay.context).minutes30: 1800,
+        S.of(navGK.currentState.overlay.context).hour1: 3600,
+        S.of(navGK.currentState.overlay.context).hours6: 21600,
+        S.of(navGK.currentState.overlay.context).day1: 86400,
+        S.of(navGK.currentState.overlay.context).days3: 259200,
+        S.of(navGK.currentState.overlay.context).days7: 604800
+      };
 
   Vote();
 
-  Vote.create(List<String> options,int expiresIn,bool multiChoose) {
+  Vote.create(List<String> options, int expiresIn, bool multiChoose) {
     if (options.length == 0) {
     } else {
       option1Controller.text = options[0];
-      if (options.length >= 2)
-        option2Controller.text = options[1];
+      if (options.length >= 2) option2Controller.text = options[1];
       if (options.length >= 3) {
         option3Controller.text = options[2];
         option3Enabled = true;
@@ -58,11 +64,11 @@ class Vote {
       }
     }
     this.expiresIn = expiresIn;
-    this.expiresInString =voteOptionsInSeconds.keys.firstWhere(
-            (k) => voteOptionsInSeconds[k] == expiresIn, orElse: () => null);
+    this.expiresInString = voteOptionsInSeconds.keys.firstWhere(
+        (k) => voteOptionsInSeconds[k] == expiresIn,
+        orElse: () => null);
     this.multiChoice = multiChoose;
   }
-
 
   // 把option4的数据移到option3
   removeOption3() {
@@ -127,11 +133,11 @@ class Vote {
       ..option2Controller = option2Controller
       ..option3Controller = option3Controller
       ..option4Controller = option4Controller
-        ..option3Enabled = option3Enabled
-        ..option4Enabled = option4Enabled
-        ..expiresIn = expiresIn
-        ..expiresInString = expiresInString
-        ..multiChoice = multiChoice;
+      ..option3Enabled = option3Enabled
+      ..option4Enabled = option4Enabled
+      ..expiresIn = expiresIn
+      ..expiresInString = expiresInString
+      ..multiChoice = multiChoice;
 //    return Vote(
 //        option1Controller: this.option1Controller,
 //        option2Controller: this.option2Controller,
