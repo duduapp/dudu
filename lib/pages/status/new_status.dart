@@ -1,10 +1,8 @@
-import 'package:dudu/l10n/l10n.dart';
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/media_attachment.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
@@ -12,17 +10,14 @@ import 'package:dudu/models/json_serializable/vote.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/models/status/picked_media.dart';
-import 'package:dudu/pages/status/picked_media_preview.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/i18n_util.dart';
 import 'package:dudu/utils/media_util.dart';
-import 'package:dudu/utils/themes.dart';
 import 'package:dudu/utils/view/status_action_util.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/common/sized_icon_button.dart';
-import 'package:dudu/widget/dialog/loading_dialog.dart';
 import 'package:dudu/widget/new_status/emoji_widget.dart';
 import 'package:dudu/widget/new_status/handle_vote_dialog.dart';
 import 'package:dudu/widget/new_status/picked_media_display.dart';
@@ -34,7 +29,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:popup_menu/popup_menu.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 import 'package:provider/provider.dart';
 import 'package:rich_text_controller/rich_text_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,7 +47,7 @@ class NewStatus extends StatefulWidget {
   _NewStatusState createState() => _NewStatusState();
 }
 
-class _NewStatusState extends State<NewStatus> {
+class _NewStatusState extends State<NewStatus> with WidgetsBindingObserver {
   TextEditingController _controller;
   final TextEditingController _warningController = new TextEditingController();
   OwnerAccount _myAcc;
@@ -80,11 +74,20 @@ class _NewStatusState extends State<NewStatus> {
   int counter = 0;
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+    } else if (state == AppLifecycleState.paused) {
+      _saveToDraft();
+    }
+  }
+
+  @override
   void initState() {
     _controller = RichTextController({
       RegExp(r"#[\u4E00-\u9FCC_a-zA-Z]+", unicode: true, multiLine: true):
           TextStyle(color: AppConfig.buttonColor),
-      RegExp(r"(^|\s)@[@\.a-zA-Z0-9-_]+\b"): TextStyle(color: AppConfig.buttonColor)
+      RegExp(r"(^|\s)@[@\.a-zA-Z0-9-_]+\b"):
+          TextStyle(color: AppConfig.buttonColor)
     }, onMatch: (List<String> matches) {});
     super.initState();
     // 隐藏登录弹出页
@@ -118,6 +121,7 @@ class _NewStatusState extends State<NewStatus> {
         });
       }
     });
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       if (widget.replyTo == null &&
@@ -739,7 +743,10 @@ class _NewStatusState extends State<NewStatus> {
               onTap: () => _onPressBack(),
               child: Container(
                 padding: EdgeInsets.all(14),
-                child: Icon(IconFont.clear,color: Theme.of(context).accentColor,),
+                child: Icon(
+                  IconFont.clear,
+                  color: Theme.of(context).accentColor,
+                ),
               ),
             ),
             titleSpacing: 0,
@@ -950,7 +957,9 @@ class _NewStatusState extends State<NewStatus> {
                           },
                               currentTime: scheduledAt ??
                                   DateTime.now().add(Duration(minutes: 10)),
-                              locale: I18nUtil.isZh(context)? LocaleType.zh : LocaleType.en);
+                              locale: I18nUtil.isZh(context)
+                                  ? LocaleType.zh
+                                  : LocaleType.en);
                         },
                         icon: Icon(
                           IconFont.time,
