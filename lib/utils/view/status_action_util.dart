@@ -280,6 +280,7 @@ class StatusActionUtil {
           subText: S.of(context).blocking_description,
         ),
         if (data.account.acct.contains('@')) ...[
+          Divider(indent: 60, height: 0),
           BottomSheetItem(
             icon: IconFont.www,
             text: S
@@ -296,6 +297,7 @@ class StatusActionUtil {
                 },
                 popFirst: false),
           ),
+          Divider(indent: 60, height: 0),
           BottomSheetItem(
             icon: IconFont.favorite,
             text: S

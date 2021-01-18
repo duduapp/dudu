@@ -350,7 +350,7 @@ class _UserProfileState extends State<UserProfile>
                   indent: 60,
                   height: 0,
                 ),
-                if (relationShip != null)
+                if (relationShip != null) ...[
                   BottomSheetItem(
                     icon: IconFont.report,
                     text: S.of(context).complaint,
@@ -358,6 +358,11 @@ class _UserProfileState extends State<UserProfile>
                       account: _account,
                     )),
                   ),
+                  Divider(
+                    indent: 60,
+                    height: 0,
+                  ),
+                ],
                 BottomSheetItem(
                   icon: IconFont.block,
                   text: relationShip == null || !relationShip.blocking
