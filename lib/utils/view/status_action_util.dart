@@ -1,10 +1,10 @@
-import 'package:dudu/l10n/l10n.dart';
 import 'dart:io';
 
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/api/search_api.dart';
 import 'package:dudu/api/status_api.dart';
 import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/logined_user.dart';
@@ -17,7 +17,6 @@ import 'package:dudu/pages/user_profile/user_report.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/utils/dialog_util.dart';
-import 'package:dudu/utils/url_util.dart';
 import 'package:dudu/widget/common/bottom_sheet_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -174,14 +173,18 @@ class StatusActionUtil {
     DialogUtils.showBottomSheet(context: modalContext, widgets: [
       BottomSheetItem(
         icon: IconFont.bookmark,
-        text: (data.bookmarked == null || !data.bookmarked) ? S.of(context).add_bookmark : S.of(context).delete_bookmark,
+        text: (data.bookmarked == null || !data.bookmarked)
+            ? S.of(context).add_bookmark
+            : S.of(context).delete_bookmark,
         onTap: () => onPressBookmark(modalContext, data),
       ),
       Divider(indent: 60, height: 0),
       if (mentioned) ...[
         BottomSheetItem(
           icon: IconFont.volumeOff,
-          text: (data.muted == null || !data.muted) ? S.of(context).hide_this_conversation : S.of(context).unhide_the_conversation,
+          text: (data.muted == null || !data.muted)
+              ? S.of(context).hide_this_conversation
+              : S.of(context).unhide_the_conversation,
           subText: S.of(context).after_hiding,
           onTap: () {
             _onPressMuteConversation(data);
@@ -212,12 +215,12 @@ class StatusActionUtil {
           onTap: () {
             Clipboard.setData(new ClipboardData(
                 text: StringUtil.removeAllHtmlTags(data.content)));
-            DialogUtils.toastFinishedInfo(S.of(context).dumb_text_has_been_copied);
+            DialogUtils.toastFinishedInfo(
+                S.of(context).dumb_text_has_been_copied);
           },
         )
       ],
       if (myAccount != null && myAccount.id != data.account.id) ...[
-
         if (sameInstance(context)) ...[
           Divider(indent: 60, height: 0),
           BottomSheetItem(
@@ -236,10 +239,12 @@ class StatusActionUtil {
           Divider(indent: 60, height: 0),
           BottomSheetItem(
             icon: IconFont.follow,
-            text: S.of(context).follow_user('@'+data.account.acct),
+            text: S.of(context).follow_user('@' + data.account.acct),
             onTap: () async {
               var res = await AccountsApi.follow(data.account.id);
-              if (res != null) DialogUtils.toastFinishedInfo(S.of(context).followed_or_sent_a_follow_request);
+              if (res != null)
+                DialogUtils.toastFinishedInfo(
+                    S.of(context).followed_or_sent_a_follow_request);
             },
           )
         ],
@@ -254,7 +259,9 @@ class StatusActionUtil {
           onTap: () {
             DialogUtils.showSimpleAlertDialog(
                 context: context,
-                text: S.of(context).are_you_sure_to_hide_users('@'+data.account.username),
+                text: S
+                    .of(context)
+                    .are_you_sure_to_hide_users('@' + data.account.username),
                 onConfirm: () => _onPressMute(modalContext, data, subStatus));
           },
         ),
@@ -263,22 +270,26 @@ class StatusActionUtil {
           onTap: () {
             DialogUtils.showSimpleAlertDialog(
                 context: context,
-                text: S.of(context).are_you_sure_to_block_users('@'+data.account.username),
+                text: S
+                    .of(context)
+                    .are_you_sure_to_block_users('@' + data.account.username),
                 onConfirm: () => _onPressBlock(modalContext, data, subStatus));
           },
           icon: IconFont.block,
-          text: S.of(context).block_user('@'+ data.account.username),
+          text: S.of(context).block_user('@' + data.account.username),
           subText: S.of(context).blocking_description,
         ),
         if (data.account.acct.contains('@')) ...[
           BottomSheetItem(
             icon: IconFont.www,
-            text: S.of(context).hide_instance(StringUtil.accountDomain(data.account)),
+            text: S
+                .of(context)
+                .hide_instance(StringUtil.accountDomain(data.account)),
             subText: S.of(context).hiding_instance_description,
             onTap: () => DialogUtils.showSimpleAlertDialog(
                 context: context,
-                text:
-                S.of(context).hide_instance_confirm(StringUtil.accountDomain(data.account)),
+                text: S.of(context).hide_instance_confirm(
+                    StringUtil.accountDomain(data.account)),
                 onConfirm: () {
                   AccountsApi.blockDomain(
                       StringUtil.accountDomain(data.account));
@@ -287,13 +298,18 @@ class StatusActionUtil {
           ),
           BottomSheetItem(
             icon: IconFont.favorite,
-            text: S.of(context).collection_example(StringUtil.accountDomain(data.account)),
-            subText: S.of(context).the_instance_will_be_saved_in_your_discover_menu,
-            onTap: () async{
+            text: S
+                .of(context)
+                .collection_example(StringUtil.accountDomain(data.account)),
+            subText:
+                S.of(context).the_instance_will_be_saved_in_your_discover_menu,
+            onTap: () async {
               var res = await DialogUtils.showRoundedDialog(
-                  context: context, content: AddInstance(StringUtil.accountDomain(data.account)));
+                  context: context,
+                  content: AddInstance(StringUtil.accountDomain(data.account)));
               if (res != null) {
-                DialogUtils.toastFinishedInfo(S.of(context).added_instance_successfully);
+                DialogUtils.toastFinishedInfo(
+                    S.of(context).added_instance_successfully);
               }
             },
           ),
@@ -301,7 +317,6 @@ class StatusActionUtil {
             indent: 60,
             height: 0,
           )
-
         ],
         if (LoginedUser().isAdmin &&
             data.account.url.contains(LoginedUser().host))
@@ -313,12 +328,13 @@ class StatusActionUtil {
             text: S.of(context).administrator_operate_the_account,
           ),
       ],
-      if (myAccount != null && myAccount.id == data.account.id)
-      ...[
+      if (myAccount != null && myAccount.id == data.account.id) ...[
         if (data.visibility == 'public' || data.visibility == 'unlisted')
           BottomSheetItem(
             icon: Icons.vertical_align_top,
-            text: data.pinned == null || !data.pinned ? S.of(context).top : S.of(context).unpink,
+            text: data.pinned == null || !data.pinned
+                ? S.of(context).top
+                : S.of(context).unpink,
             onTap: () => onPressPin(data),
           ),
         BottomSheetItem(
@@ -404,10 +420,12 @@ class StatusActionUtil {
   static onPressPin(StatusItemData data) {
     if (data.pinned != null && data.pinned) {
       StatusApi.unpin(data.id);
-      DialogUtils.toastFinishedInfo(S.of(navGK.currentState.overlay.context).unpinned);
+      DialogUtils.toastFinishedInfo(
+          S.of(navGK.currentState.overlay.context).unpinned);
     } else {
       StatusApi.pin(data.id);
-      DialogUtils.toastFinishedInfo(S.of(navGK.currentState.overlay.context).pinned);
+      DialogUtils.toastFinishedInfo(
+          S.of(navGK.currentState.overlay.context).pinned);
     }
     data.pinned = !data.pinned;
     ListViewUtil.handleAllStatuses((e) => e['pinned'] = data.pinned,
@@ -417,10 +435,12 @@ class StatusActionUtil {
   static _onPressMuteConversation(StatusItemData data) {
     if (data.muted) {
       StatusApi.numuteConversation(data.id);
-      DialogUtils.toastFinishedInfo(S.of(navGK.currentState.overlay.context).conversation_unhide);
+      DialogUtils.toastFinishedInfo(
+          S.of(navGK.currentState.overlay.context).conversation_unhide);
     } else {
       StatusApi.muteConversation(data.id);
-      DialogUtils.toastFinishedInfo(S.of(navGK.currentState.overlay.context).conversation_hidden);
+      DialogUtils.toastFinishedInfo(
+          S.of(navGK.currentState.overlay.context).conversation_hidden);
     }
     data.muted = !data.muted;
     ListViewUtil.handleAllStatuses(
@@ -504,9 +524,16 @@ class StatusActionUtil {
     return true;
   }
 
+  static bool isLocalStatus(StatusItemData data) {
+    if (data.url.startsWith(LoginedUser().host)) {
+      return true;
+    }
+    return false;
+  }
+
   static Future<StatusItemData> getStatusInLocal(
       BuildContext context, StatusItemData status) async {
-    if (!sameInstance(context)) {
+    if (!isLocalStatus(status) && !sameInstance(context)) {
       if (!ListViewUtil.loginnedAndPrompt(context)) return null;
       var statusLocal = await SearchApi.resolveStatus(status.url);
       if (statusLocal == null) {
