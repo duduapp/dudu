@@ -93,6 +93,35 @@
         }
       ]
     },
+    "publish_toot": {
+      "value": "Toot",
+      "targets": [
+        {
+          "id": "fr",
+          "state": "frozen"
+        },
+        {
+          "id": "ru",
+          "state": "frozen"
+        },
+        {
+          "id": "ar",
+          "state": "frozen"
+        },
+        {
+          "id": "es",
+          "state": "frozen"
+        },
+        {
+          "id": "ja",
+          "state": "frozen"
+        },
+        {
+          "id": "de",
+          "state": "frozen"
+        }
+      ]
+    },
     "tooting": {
       "value": "Tooting...",
       "targets": [

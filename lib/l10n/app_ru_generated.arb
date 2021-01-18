@@ -1,6 +1,6 @@
 {
   "@@locale": "ru",
-  "app_name": "Дуду",
+  "app_name": "Dudu",
   "@app_name": {
     "x-reviewed": "false"
   },
@@ -10,6 +10,10 @@
   },
   "toots": "Toots",
   "@toots": {
+    "x-reviewed": "false"
+  },
+  "publish_toot": "Гудок",
+  "@publish_toot": {
     "x-reviewed": "false"
   },
   "tooting": "Верно подмечено...",

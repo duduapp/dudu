@@ -1,6 +1,6 @@
-import 'package:dudu/l10n/l10n.dart';
 import 'dart:convert';
 
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/utils/screen.dart';
 import 'package:dudu/widget/status/text_with_emoji.dart';
@@ -8,7 +8,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
-import 'package:nav_router/nav_router.dart';
 
 typedef CustomRender = Widget Function(dom.Node node, List<Widget> children);
 typedef CustomTextStyle = TextStyle Function(
@@ -51,8 +50,6 @@ class LinkTextSpan extends TextSpan {
               ..onTap = () {
                 onLinkTap(url, node);
               });
-
-
 }
 
 class LinkBlock extends Container {
@@ -308,7 +305,7 @@ class HtmlRichTextParser extends StatelessWidget {
       }
       children.add(w);
     });
-   // _mergeLinkTextSpan(children);
+    // _mergeLinkTextSpan(children);
     return Column(
       children: children,
     );
@@ -322,7 +319,8 @@ class HtmlRichTextParser extends StatelessWidget {
         if (c is LinkTextSpan) {
           if (c.children[0].text.startsWith('http')) {
             var linkChildren = (merged[key1] as BlockText).child.text.children;
-            linkChildren.removeWhere((element) => linkChildren.indexOf(element) != 0);
+            linkChildren
+                .removeWhere((element) => linkChildren.indexOf(element) != 0);
           }
         }
       });
@@ -423,7 +421,7 @@ class HtmlRichTextParser extends StatelessWidget {
             child: RichText(
               textAlign: TextAlign.left,
               text: span,
-              textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
+              textScaleFactor: ScreenUtil.htmlTextScaleFromSetting(textScale),
             ),
           );
           parseContext.rootWidgetList.add(blockText);
@@ -431,7 +429,7 @@ class HtmlRichTextParser extends StatelessWidget {
           parseContext.rootWidgetList.add(BlockText(
               child: RichText(
             text: span,
-            textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
+            textScaleFactor: ScreenUtil.htmlTextScaleFromSetting(textScale),
           )));
         }
 
@@ -450,7 +448,8 @@ class HtmlRichTextParser extends StatelessWidget {
             finalText = S.of(buildContext).web_link;
           }
         } else {
-          if (parseContext.parentElement.children[0].text == S.of(buildContext).web_link) {
+          if (parseContext.parentElement.children[0].text ==
+              S.of(buildContext).web_link) {
             return;
           }
         }
@@ -486,11 +485,11 @@ class HtmlRichTextParser extends StatelessWidget {
 
           BlockText blockText = BlockText(
             margin: EdgeInsets.only(
-                          top: 8.0,
+                top: 8.0,
                 bottom: 8.0,
                 left: parseContext.indentLevel * indentSize),
             child: RichText(
-              textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
+              textScaleFactor: ScreenUtil.htmlTextScaleFromSetting(textScale),
               maxLines: 9999,
               textWidthBasis: TextWidthBasis.parent,
               text: TextSpan(
@@ -629,7 +628,8 @@ class HtmlRichTextParser extends StatelessWidget {
                       left: parseContext.indentLevel * indentSize, top: 10.0),
                   child: RichText(
                     text: span,
-                    textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
+                    textScaleFactor:
+                        ScreenUtil.htmlTextScaleFromSetting(textScale),
                   ),
                 );
                 parseContext.rootWidgetList.add(blockElement);
@@ -856,10 +856,10 @@ class HtmlRichTextParser extends StatelessWidget {
 //                          bottom: 8.0,
                           left: parseContext.indentLevel * indentSize)
                   : EdgeInsets.zero,
-                  padding: EdgeInsets.only(top: 5,bottom: 4), // Space Location
+              padding: EdgeInsets.only(top: 5, bottom: 4), // Space Location
               decoration: decoration,
               child: RichText(
-                textScaleFactor: ScreenUtil.scaleFromSetting(textScale),
+                textScaleFactor: ScreenUtil.htmlTextScaleFromSetting(textScale),
                 maxLines: 9999,
                 textWidthBasis: TextWidthBasis.parent,
                 textAlign: textAlign,

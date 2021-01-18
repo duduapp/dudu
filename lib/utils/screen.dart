@@ -44,4 +44,8 @@ class ScreenUtil {
   static scaleFromSetting(String textScale) {
     return 1.0 + 0.12 * double.parse(textScale);
   }
+
+  static htmlTextScaleFromSetting(String textScale) {
+    return 0.9 + 0.14 * double.parse(textScale);
+  }
 }

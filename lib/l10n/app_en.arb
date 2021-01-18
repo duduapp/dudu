@@ -8,6 +8,7 @@
   "@toot": {
     "x-reviewed": "false"
   },
+  "publish_toot": "Toot",
   "tooting": "Tooting...",
   "an_error_occurred": "An error occurred..",
   "@an_error_occurred": {

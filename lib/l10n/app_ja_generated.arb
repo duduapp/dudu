@@ -1,6 +1,6 @@
 {
   "@@locale": "ja",
-  "app_name": "ドゥドゥ",
+  "app_name": "嘟嘟",
   "@app_name": {
     "x-reviewed": "false"
   },
@@ -10,6 +10,10 @@
   },
   "toots": "トゥーツ",
   "@toots": {
+    "x-reviewed": "false"
+  },
+  "publish_toot": "トゥート",
+  "@publish_toot": {
     "x-reviewed": "false"
   },
   "tooting": "テューティング...",

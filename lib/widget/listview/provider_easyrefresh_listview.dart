@@ -22,7 +22,7 @@ class ProviderEasyRefreshListView extends StatefulWidget {
       this.emptyWidget,
       this.refreshController,
       this.usingGrid = false,
-        this.gridDelegate,
+      this.gridDelegate,
       this.scrollController,
       this.cacheExtent,
       this.enableLoad = true,
@@ -92,7 +92,6 @@ class _ProviderEasyRefreshListViewState
       textScale = Storage.getInt("mastodon.text_scale");
     });
 
-
     eventBus.on(widget.type, (arg) {
       _scrollController.jumpTo(0);
     });
@@ -153,8 +152,7 @@ class _ProviderEasyRefreshListViewState
                     onNotification: (ScrollNotification notification) {
                       double progress = notification.metrics.maxScrollExtent -
                           notification.metrics.pixels;
-                      if (progress < 2000  &&
-                          provider.enableLoad) {
+                      if (progress < 2000 && provider.enableLoad) {
                         requestLoadSize = provider.list.length;
                         provider.load();
 
@@ -237,9 +235,7 @@ class _ProviderEasyRefreshListViewState
                                         },
                                         itemCount: provider.list.length +
                                             widget.addToSliverCount,
-                                        gridDelegate: widget.gridDelegate
-
-                                      )
+                                        gridDelegate: widget.gridDelegate)
                                     : ListView.builder(
                                         //      key: listKey,
                                         itemCount: provider.list.length +
@@ -250,8 +246,7 @@ class _ProviderEasyRefreshListViewState
                                         },
                                       ),
                       ),
-                    )
-                    );
+                    ));
           }),
         );
       },

@@ -1,8 +1,8 @@
-import 'package:dudu/l10n/l10n.dart';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/json_serializable/media_attachment.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/cache_manager.dart';
@@ -195,7 +195,7 @@ class _PhotoGalleryState extends State<PhotoGallery> {
       //  childSize: const Size(300, 300),
       initialScale: PhotoViewComputedScale.contained,
       minScale: PhotoViewComputedScale.contained * 1,
-      maxScale: PhotoViewComputedScale.contained * 3.0,
+      maxScale: PhotoViewComputedScale.contained * 4.0,
       // heroAttributes: PhotoViewHeroAttributes(tag: item.id),
     );
   }

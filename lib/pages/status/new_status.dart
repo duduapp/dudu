@@ -784,7 +784,7 @@ class _NewStatusState extends State<NewStatus> with WidgetsBindingObserver {
                         : () {
                             _pushNewToot();
                           },
-                    child: Text(S.of(context).toot),
+                    child: Text(S.of(context).publish_toot),
                   ),
                 ),
               )

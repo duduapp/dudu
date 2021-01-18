@@ -1,6 +1,6 @@
 {
   "@@locale": "ar",
-  "app_name": "دودو",
+  "app_name": "Dudu",
   "@app_name": {
     "x-reviewed": "false"
   },
@@ -10,6 +10,10 @@
   },
   "toots": "توتس",
   "@toots": {
+    "x-reviewed": "false"
+  },
+  "publish_toot": "بوق",
+  "@publish_toot": {
     "x-reviewed": "false"
   },
   "tooting": "توتينغ ...",

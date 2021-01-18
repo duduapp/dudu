@@ -12,6 +12,10 @@
   "@toots": {
     "x-reviewed": "false"
   },
+  "publish_toot": "Blasen",
+  "@publish_toot": {
+    "x-reviewed": "false"
+  },
   "tooting": "Tooting ...",
   "@tooting": {
     "x-reviewed": "false"
