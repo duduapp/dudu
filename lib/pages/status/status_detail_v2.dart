@@ -31,6 +31,7 @@ class _StatusDetailV2State extends State<StatusDetailV2>
   List detail = [];
   String errorMsg;
   bool fetchedData = false;
+  ResultListProvider provider; // fake provider
 
   _fetchData() async {
     var data =
@@ -77,13 +78,15 @@ class _StatusDetailV2State extends State<StatusDetailV2>
     });
 
     //  detail = [status.toJson()];
-
+    provider = ResultListProvider(requestUrl: null, buildRow: null);
+    SettingsProvider().statusDetailProviders.add(provider);
     _fetchData();
     super.initState();
   }
 
   @override
   void dispose() {
+    SettingsProvider().statusDetailProviders.remove(provider);
     super.dispose();
   }
 
