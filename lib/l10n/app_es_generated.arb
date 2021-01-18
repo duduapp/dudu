@@ -904,7 +904,7 @@
   "@web_page": {
     "x-reviewed": "false"
   },
-  "share_it": "Compártelo",
+  "share_it": "Compartir",
   "@share_it": {
     "x-reviewed": "false"
   },
@@ -1366,6 +1366,10 @@
   },
   "need_login_before_operate": "Primero, \"regístrese\" e \"inicie sesión\" en la página de descubrimiento",
   "@need_login_before_operate": {
+    "x-reviewed": "false"
+  },
+  "maybe_incomplete_user_information": "Es posible que la siguiente información no se muestre por completo, haga clic en la esquina superior derecha y ábrala en el navegador para ver el contenido completo",
+  "@maybe_incomplete_user_information": {
     "x-reviewed": "false"
   }
 }

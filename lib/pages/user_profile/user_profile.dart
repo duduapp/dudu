@@ -1,8 +1,8 @@
-import 'package:dudu/l10n/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/json_serializable/media_attachment.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/local_account.dart';
@@ -15,6 +15,7 @@ import 'package:dudu/pages/status/new_status.dart';
 import 'package:dudu/pages/user_profile/user_follewers.dart';
 import 'package:dudu/pages/user_profile/user_follewing.dart';
 import 'package:dudu/pages/user_profile/user_report.dart';
+import 'package:dudu/pages/webview/inner_browser.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/utils/cache_manager.dart';
@@ -91,22 +92,26 @@ class _UserProfileState extends State<UserProfile>
     providers.addAll([
       ResultListProvider(
         requestUrl: AccountsApi.statusUrl(
-            account:widget.account, hostUrl:widget.hostUrl,
+            account: widget.account,
+            hostUrl: widget.hostUrl,
             param: 'exclude_replies=true'),
         buildRow: ListViewUtil.statusRowFunction(),
         dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('status_'),
         enableRefresh: false,
       ),
       ResultListProvider(
-          requestUrl:
-              AccountsApi.statusUrl(account:widget.account, hostUrl:widget.hostUrl,),
+          requestUrl: AccountsApi.statusUrl(
+            account: widget.account,
+            hostUrl: widget.hostUrl,
+          ),
           buildRow: ListViewUtil.statusRowFunction(),
           dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('replies_'),
           enableRefresh: false,
           firstRefresh: false),
       ResultListProvider(
         requestUrl: AccountsApi.statusUrl(
-            account:widget.account, hostUrl:widget.hostUrl,
+            account: widget.account,
+            hostUrl: widget.hostUrl,
             param: 'pinned=true'),
         buildRow: ListViewUtil.statusRowFunction(),
         dataHandler: ListViewUtil.dataHandlerPrefixIdFunction('pinned_'),
@@ -115,7 +120,8 @@ class _UserProfileState extends State<UserProfile>
       ),
       ResultListProvider(
           requestUrl: AccountsApi.statusUrl(
-              account:widget.account, hostUrl:widget.hostUrl,
+              account: widget.account,
+              hostUrl: widget.hostUrl,
               param: 'only_media=true'),
           buildRow: _buildGridItem,
           enableRefresh: false,
@@ -305,6 +311,18 @@ class _UserProfileState extends State<UserProfile>
                   height: 0,
                 )
               ],
+              if (_isRemoteCachedAccount()) ...[
+                BottomSheetItem(
+                    text: S.of(context).open_in_browser,
+                    icon: IconFont.earth,
+                    onTap: () {
+                      AppNavigate.push(InnerBrowser(widget.account.url));
+                    }),
+                Divider(
+                  indent: 60,
+                  height: 0,
+                )
+              ],
               if (_account != null && mine.account.id != _account.id) ...[
                 if (relationShip == null ||
                     !relationShip.blocking && !relationShip.requested) ...[
@@ -354,12 +372,14 @@ class _UserProfileState extends State<UserProfile>
                 ),
                 BottomSheetItem(
                   icon: IconFont.www,
-                  text: S.of(context).hide_instance(StringUtil.accountDomain(_account)),
+                  text: S
+                      .of(context)
+                      .hide_instance(StringUtil.accountDomain(_account)),
                   subText: S.of(context).hiding_instance_description,
                   onTap: () => DialogUtils.showSimpleAlertDialog(
                       context: context,
-                      text:
-                          S.of(context).hide_instance_confirm(StringUtil.accountDomain(_account)),
+                      text: S.of(context).hide_instance_confirm(
+                          StringUtil.accountDomain(_account)),
                       onConfirm: _onPressBlockDomain,
                       popFirst: false),
                 ),
@@ -367,7 +387,6 @@ class _UserProfileState extends State<UserProfile>
                   indent: 60,
                   height: 0,
                 ),
-
               ],
               Container(
                 height: 8,
@@ -391,7 +410,7 @@ class _UserProfileState extends State<UserProfile>
           if (!_getSliverExpandHeight) {
             setState(() {
               _getSliverExpandHeight = true;
-              _sliverExpandHeight = size.height + 10;
+              _sliverExpandHeight = size.height + 15;
             });
           }
         },
@@ -432,10 +451,16 @@ class _UserProfileState extends State<UserProfile>
                                           : relationShip.blocking
                                               ? S.of(context).unblock
                                               : relationShip.requested
-                                                  ? S.of(context).follow_request_sent
+                                                  ? S
+                                                      .of(context)
+                                                      .follow_request_sent
                                                   : relationShip.following
-                                                      ? S.of(context).unsubscribe
-                                                      : S.of(context).attention),
+                                                      ? S
+                                                          .of(context)
+                                                          .unsubscribe
+                                                      : S
+                                                          .of(context)
+                                                          .attention),
                                   onPressed: _onPressButton,
                                 ),
                               )
@@ -508,6 +533,17 @@ class _UserProfileState extends State<UserProfile>
                             SizedBox(
                               height: 10,
                             ),
+                            if (_isRemoteCachedAccount())
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: Text(
+                                  S
+                                      .of(context)
+                                      .maybe_incomplete_user_information,
+                                  style: TextStyle(
+                                      color: Theme.of(context).accentColor),
+                                ),
+                              ),
                             headerFollowsAndFollowers()
                           ],
                           SizedBox(
@@ -597,6 +633,14 @@ class _UserProfileState extends State<UserProfile>
     );
   }
 
+  _isRemoteCachedAccount() {
+    if (!widget.account.url.startsWith(LoginedUser().host) &&
+        widget.account.avatar.startsWith(LoginedUser().host)) {
+      return true;
+    }
+    return false;
+  }
+
   Widget headerFollowsAndFollowers() {
     return DefaultTextStyle(
       style: TextStyle(
@@ -627,8 +671,7 @@ class _UserProfileState extends State<UserProfile>
           ),
           InkWell(
             onTap: () async {
-              if (widget.hostUrl != null)
-                return null;
+              if (widget.hostUrl != null) return null;
               AppNavigate.push(UserFollowing(_account.id));
             },
             child: Row(
@@ -650,8 +693,7 @@ class _UserProfileState extends State<UserProfile>
           ),
           InkWell(
             onTap: () async {
-              if (widget.hostUrl != null)
-                return;
+              if (widget.hostUrl != null) return;
               AppNavigate.push(UserFollowers(_account.id));
             },
             child: Row(
@@ -777,15 +819,15 @@ class _UserProfileState extends State<UserProfile>
 
   Future<void> _onRefreshPage({bool firstRefresh = false}) async {
     if (!firstRefresh) providers[_tabController.index]?.refresh();
-    var newAccount = await AccountsApi.getAccount(
-        widget.account, hostUrl: widget.hostUrl,
-        cancelToken: cancelToken);
-    if (newAccount != null && newAccount.id == LoginedUser().account.id && widget.hostUrl == null) {
+    var newAccount = await AccountsApi.getAccount(widget.account,
+        hostUrl: widget.hostUrl, cancelToken: cancelToken);
+    if (newAccount != null &&
+        newAccount.id == LoginedUser().account.id &&
+        widget.hostUrl == null) {
       AccountUtil.updateAccount(newAccount);
     }
-    var newRelationShip = await AccountsApi.getRelationShip(
-        widget.account, hostUrl: widget.hostUrl,
-        cancelToken: cancelToken);
+    var newRelationShip = await AccountsApi.getRelationShip(widget.account,
+        hostUrl: widget.hostUrl, cancelToken: cancelToken);
     if (newAccount != null &&
         newRelationShip != null &&
         mounted) if (newAccount.acct == mine.account.acct) {
@@ -793,7 +835,8 @@ class _UserProfileState extends State<UserProfile>
       LocalStorageAccount.addOwnerAccount(newAccount);
     }
     if (newAccount == null) {
-      DialogUtils.showInfoDialog(context, S.of(context).failed_to_obtain_user_information);
+      DialogUtils.showInfoDialog(
+          context, S.of(context).failed_to_obtain_user_information);
     }
     setState(() {
       _account = newAccount ?? _account;

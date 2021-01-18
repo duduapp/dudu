@@ -904,7 +904,7 @@
   "@web_page": {
     "x-reviewed": "false"
   },
-  "share_it": "أنشرها",
+  "share_it": "شارك",
   "@share_it": {
     "x-reviewed": "false"
   },
@@ -1351,6 +1351,10 @@
   },
   "need_login_before_operate": "يرجى \"التسجيل\" و \"تسجيل الدخول\" على صفحة الاكتشاف أولاً",
   "@need_login_before_operate": {
+    "x-reviewed": "false"
+  },
+  "maybe_incomplete_user_information": "قد لا يتم عرض المعلومات التالية بشكل كامل ، انقر فوق الزاوية اليمنى العليا وافتحها في المتصفح لعرض المحتوى الكامل",
+  "@maybe_incomplete_user_information": {
     "x-reviewed": "false"
   }
 }

@@ -6561,7 +6561,7 @@
       ]
     },
     "share_it": {
-      "value": "share it",
+      "value": "Share",
       "targets": [
         {
           "id": "fr",
@@ -9723,6 +9723,35 @@
     },
     "need_login_before_operate": {
       "value": "Please \"register\" and \"login\" on the discovery page first",
+      "targets": [
+        {
+          "id": "fr",
+          "state": "frozen"
+        },
+        {
+          "id": "ru",
+          "state": "frozen"
+        },
+        {
+          "id": "ar",
+          "state": "frozen"
+        },
+        {
+          "id": "es",
+          "state": "frozen"
+        },
+        {
+          "id": "ja",
+          "state": "frozen"
+        },
+        {
+          "id": "de",
+          "state": "frozen"
+        }
+      ]
+    },
+    "maybe_incomplete_user_information": {
+      "value": "The following information may not be displayed completely, click on the upper right corner and open it in the browser to view the complete content",
       "targets": [
         {
           "id": "fr",

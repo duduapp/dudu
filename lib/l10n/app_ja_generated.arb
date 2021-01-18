@@ -904,7 +904,7 @@
   "@web_page": {
     "x-reviewed": "false"
   },
-  "share_it": "共有する",
+  "share_it": "シェア",
   "@share_it": {
     "x-reviewed": "false"
   },
@@ -1366,6 +1366,10 @@
   },
   "need_login_before_operate": "まずは発見ページで「登録」・「ログイン」してください",
   "@need_login_before_operate": {
+    "x-reviewed": "false"
+  },
+  "maybe_incomplete_user_information": "以下の情報が完全に表示されない場合があります。右上隅をクリックしてブラウザで開き、完全なコンテンツを表示してください。",
+  "@maybe_incomplete_user_information": {
     "x-reviewed": "false"
   }
 }

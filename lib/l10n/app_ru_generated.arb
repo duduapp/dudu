@@ -904,7 +904,7 @@
   "@web_page": {
     "x-reviewed": "false"
   },
-  "share_it": "Поделиться этим",
+  "share_it": "Поделиться",
   "@share_it": {
     "x-reviewed": "false"
   },
@@ -1366,6 +1366,10 @@
   },
   "need_login_before_operate": "Пожалуйста, сначала «зарегистрируйтесь» и «войдите в систему» на странице открытия",
   "@need_login_before_operate": {
+    "x-reviewed": "false"
+  },
+  "maybe_incomplete_user_information": "Следующая информация может отображаться не полностью, щелкните в правом верхнем углу и откройте ее в браузере, чтобы просмотреть все содержимое.",
+  "@maybe_incomplete_user_information": {
     "x-reviewed": "false"
   }
 }

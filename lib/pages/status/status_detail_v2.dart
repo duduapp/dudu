@@ -38,6 +38,7 @@ class _StatusDetailV2State extends State<StatusDetailV2>
         await StatusApi.getContext(data: widget.data, hostUrl: widget.hostUrl);
     detail.clear();
     fetchedData = true;
+    if (data == null) return;
     if (data.containsKey('error')) {
       errorMsg = data['error'];
       setState(() {});

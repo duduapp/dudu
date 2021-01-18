@@ -835,5 +835,7 @@
 	"red_dot_notfication": "红点通知",
 	"@red_dot_notfication": {},
 	"need_login_before_operate": "请先在发现页面“注册”和“登录”",
-	"@need_login_before_operate": {}
+	"@need_login_before_operate": {},
+	"maybe_incomplete_user_information": "以下信息可能显示不全,点击右上角，在浏览器打开来查看完整内容",
+	"@maybe_incomplete_user_information": {}
 }

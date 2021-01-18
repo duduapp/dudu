@@ -875,7 +875,7 @@
   "@web_page": {
     "x-reviewed": "false"
   },
-  "share_it": "share it",
+  "share_it": "Share",
   "@share_it": {
     "x-reviewed": "false"
   },
@@ -1258,5 +1258,6 @@
      "translate_engine": "Translate engine",
      "translate_toot": "Translate toot",
      "red_dot_notfication": "Red dot notification",
-     "need_login_before_operate": "Please \"register\" and \"login\" on the discovery page first"
+     "need_login_before_operate": "Please \"register\" and \"login\" on the discovery page first",
+     "maybe_incomplete_user_information": "The following information may not be displayed completely, click on the upper right corner and open it in the browser to view the complete content"
 }
