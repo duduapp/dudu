@@ -444,6 +444,10 @@
   "@logout": {
     "x-reviewed": "false"
   },
+  "delete_account": "حذف الحساب",
+  "@delete_account": {
+    "x-reviewed": "false"
+  },
   "shut_down": "قريب",
   "@shut_down": {
     "x-reviewed": "false"
@@ -1188,7 +1192,7 @@
   "@refuse": {
     "x-reviewed": "false"
   },
-  "from": "من عند",
+  "from": " من عند",
   "@from": {
     "x-reviewed": "false"
   },

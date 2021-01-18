@@ -444,6 +444,10 @@
   "@logout": {
     "x-reviewed": "false"
   },
+  "delete_account": "Konto löschen",
+  "@delete_account": {
+    "x-reviewed": "false"
+  },
   "shut_down": "Schließen",
   "@shut_down": {
     "x-reviewed": "false"

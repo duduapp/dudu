@@ -3225,6 +3225,35 @@
         }
       ]
     },
+    "delete_account": {
+      "value": "Delete account",
+      "targets": [
+        {
+          "id": "fr",
+          "state": "frozen"
+        },
+        {
+          "id": "ru",
+          "state": "frozen"
+        },
+        {
+          "id": "ar",
+          "state": "frozen"
+        },
+        {
+          "id": "es",
+          "state": "frozen"
+        },
+        {
+          "id": "ja",
+          "state": "frozen"
+        },
+        {
+          "id": "de",
+          "state": "frozen"
+        }
+      ]
+    },
     "shut_down": {
       "value": "Close",
       "targets": [

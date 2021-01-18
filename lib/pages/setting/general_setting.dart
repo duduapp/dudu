@@ -112,8 +112,8 @@ class _GeneralSettingState extends State<GeneralSetting> {
             displayOptions: [
               '中文',
               'English',
-              'français',
-              'русский',
+              'Français',
+              'Pусский',
               'العربية',
               '	Español',
               '日本語',

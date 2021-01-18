@@ -1,6 +1,6 @@
-import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/accounts_api.dart';
 import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/pages/setting/common_block_list.dart';
@@ -21,7 +21,7 @@ class _AccountSettingState extends State<AccountSetting> {
   @override
   void initState() {
     super.initState();
-  //  LoginedUser().requestPreference(); #有些可以获取，有些却不能写入，只在登录时请求
+    //  LoginedUser().requestPreference(); #有些可以获取，有些却不能写入，只在登录时请求
   }
 
   @override
@@ -62,7 +62,11 @@ class _AccountSettingState extends State<AccountSetting> {
             leftIcon: Icon(IconFont.earth),
             title: S.of(context).default_visible_range,
             type: SettingType.string,
-            displayOptions: [S.of(context).public, S.of(context).private, S.of(context).followers_only],
+            displayOptions: [
+              S.of(context).public,
+              S.of(context).private,
+              S.of(context).followers_only
+            ],
             options: ['public', 'unlisted', 'private'],
             onPressed: _changePrivacy,
           ),
@@ -94,7 +98,8 @@ class _AccountSettingState extends State<AccountSetting> {
           ),
           ProviderSettingCell(
             providerKey: 'always_expand_tools',
-            title: S.of(context).always_expand_toots_marked_with_content_warnings,
+            title:
+                S.of(context).always_expand_toots_marked_with_content_warnings,
             type: SettingType.bool,
           ),
           Container(
@@ -126,23 +131,22 @@ class _AccountSettingState extends State<AccountSetting> {
           ),
           SettingCell(
             title: S.of(context).change_password,
-            onPress: () =>
-                UrlUtil.openUrl(LoginedUser().host+'/auth/edit'),
+            onPress: () => UrlUtil.openUrl(LoginedUser().host + '/auth/edit'),
           ),
           SettingCell(
             title: S.of(context).backup_data,
             onPress: () =>
-                UrlUtil.openUrl(LoginedUser().host+'/settings/export'),
+                UrlUtil.openUrl(LoginedUser().host + '/settings/export'),
           ),
           SettingCell(
             title: S.of(context).import_data,
             onPress: () =>
-                UrlUtil.openUrl(LoginedUser().host+'/settings/import'),
+                UrlUtil.openUrl(LoginedUser().host + '/settings/import'),
           ),
           SettingCell(
-            title: S.of(context).logout,
+            title: S.of(context).delete_account,
             onPress: () =>
-                UrlUtil.openUrl(LoginedUser().host+'/settings/delete'),
+                UrlUtil.openUrl(LoginedUser().host + '/settings/delete'),
           ),
           SizedBox(
             height: 30,

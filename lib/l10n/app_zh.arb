@@ -235,6 +235,8 @@
 	"@import_data": {},
 	"logout": "注销账号",
 	"@logout": {},
+	"delete_account": "注销账号",
+	"@delete_account": {},
 	"shut_down": "关闭",
 	"@shut_down": {},
 	"management": "管理",

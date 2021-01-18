@@ -444,6 +444,10 @@
   "@logout": {
     "x-reviewed": "false"
   },
+  "delete_account": "アカウントを削除する",
+  "@delete_account": {
+    "x-reviewed": "false"
+  },
   "shut_down": "閉じる",
   "@shut_down": {
     "x-reviewed": "false"
@@ -1232,19 +1236,19 @@
   "@poll_your_created_ended": {
     "x-reviewed": "false"
   },
-  "seconds_ago": "{num} s",
+  "seconds_ago": "{num}秒前",
   "@seconds_ago": {
     "x-reviewed": "false"
   },
-  "minutes_ago": "{num} m",
+  "minutes_ago": "{num}分前",
   "@minutes_ago": {
     "x-reviewed": "false"
   },
-  "hours_ago": "{num} h",
+  "hours_ago": "{num}時間前",
   "@hours_ago": {
     "x-reviewed": "false"
   },
-  "days_ago": "{num} d",
+  "days_ago": "{num}日前",
   "@days_ago": {
     "x-reviewed": "false"
   },
