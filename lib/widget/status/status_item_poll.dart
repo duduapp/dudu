@@ -1,11 +1,11 @@
-import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/constant/api.dart';
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/json_serializable/article_item.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
 import 'package:dudu/public.dart';
+import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/request.dart';
 import 'package:dudu/utils/view/status_action_util.dart';
-
 import 'package:flutter/material.dart';
 
 class StatusItemPoll extends StatefulWidget {
@@ -20,12 +20,10 @@ class _StatusItemPollState extends State<StatusItemPoll> {
   var choices = <int>[];
   var radioGroup = "";
 
-
   @override
   void initState() {
     super.initState();
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -33,23 +31,27 @@ class _StatusItemPollState extends State<StatusItemPoll> {
       return Container();
     } else {
       return MediaQuery(
-        data: MediaQuery.of(context).copyWith(textScaleFactor: ScreenUtil.scaleFromSetting(SettingsProvider().get('text_scale'))),
+        data: MediaQuery.of(context).copyWith(
+            textScaleFactor: ScreenUtil.scaleFromSetting(
+                SettingsProvider().get('text_scale'))),
         child: Container(
           padding: EdgeInsets.only(bottom: 6),
-          child: (widget.status.poll.voted ?? true)  || widget.status.poll.expired ? resultPoll() : votablePoll(),
+          child:
+              (widget.status.poll.voted ?? true) || widget.status.poll.expired
+                  ? resultPoll()
+                  : votablePoll(),
         ),
       );
     }
-
-
-
   }
 
   Widget resultPoll() {
     var rows = <Widget>[];
     for (dynamic option in widget.status.poll.options) {
       rows.add(optionRow(
-          widget.status.poll.votesCount == 0 ? 0 : option['votes_count'] / widget.status.poll.votesCount,
+          widget.status.poll.votesCount == 0
+              ? 0
+              : option['votes_count'] / widget.status.poll.votesCount,
           option['title']));
     }
     return Column(
@@ -59,92 +61,122 @@ class _StatusItemPollState extends State<StatusItemPoll> {
 
   Widget votablePoll() {
     var rows = <Widget>[];
-      widget.status.poll.options.asMap().forEach((key, value) {
-        if (widget.status.poll.multiple) {
-          rows.add(CheckboxListTile(
-            title: Text(value['title'],style: TextStyle(fontSize: 12),),
-            value: choices.contains(key),
-            onChanged: (value) {
-              if (value) {
-                setState(() {
-                  choices.add(key);
-                });
-
-              } else {
-                setState(() {
-                  choices.removeWhere((element) => element == key);
-                });
-
-              }
-            },
-            controlAffinity: ListTileControlAffinity.leading,
-          ));
-        } else {
-
-          rows.add(SizedBox(
-            //height: 32,
-            child: RadioListTile(
-              dense: true,
-              value: key.toString(),
-              title: Text(value['title'],style: TextStyle(fontSize: 12),),
-              groupValue: radioGroup,
-              onChanged: (value) {
-                setState(() {
-                  setState(() {
-                    radioGroup = value;
-                  });
-                  choices.clear();
-                  choices.add(key);
-                });
-
-              },
-              selected: choices.contains(key),
+    widget.status.poll.options.asMap().forEach((key, value) {
+      if (widget.status.poll.multiple) {
+        rows.add(CheckboxListTile(
+          title: Text(
+            value['title'],
+            style: TextStyle(fontSize: 12),
+          ),
+          value: choices.contains(key),
+          onChanged: (value) {
+            if (value) {
+              setState(() {
+                choices.add(key);
+              });
+            } else {
+              setState(() {
+                choices.removeWhere((element) => element == key);
+              });
+            }
+          },
+          controlAffinity: ListTileControlAffinity.leading,
+        ));
+      } else {
+        rows.add(SizedBox(
+          //height: 32,
+          child: RadioListTile(
+            dense: true,
+            value: key.toString(),
+            title: Text(
+              value['title'],
+              style: TextStyle(fontSize: 12),
             ),
-          ));
-        }
-      });
-
+            groupValue: radioGroup,
+            onChanged: (value) {
+              setState(() {
+                setState(() {
+                  radioGroup = value;
+                });
+                choices.clear();
+                choices.add(key);
+              });
+            },
+            selected: choices.contains(key),
+          ),
+        ));
+      }
+    });
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-      Column(children: rows,),
-      SizedBox(height: 5,),
-      ButtonTheme(
-        minWidth: 100,
-     //   height: 28,
-        child: OutlineButton(
-          child: Text(S.of(context).vote_poll,style: TextStyle(fontSize:12,color: Theme.of(context).buttonColor),),
-          onPressed: vote,
+        Column(
+          children: rows,
         ),
-      ),
+        SizedBox(
+          height: 5,
+        ),
+        ButtonTheme(
+          minWidth: 100,
+          //   height: 28,
+          child: OutlineButton(
+            child: Text(
+              S.of(context).vote_poll,
+              style:
+                  TextStyle(fontSize: 12, color: Theme.of(context).buttonColor),
+            ),
+            onPressed: vote,
+          ),
+        ),
         pollInfo()
-    ],);
+      ],
+    );
   }
 
-  vote() async{
+  vote() async {
     Map<String, dynamic> paramsMap = Map();
     paramsMap['choices'] = choices;
     var local = await StatusActionUtil.getStatusInLocal(context, widget.status);
     if (local == null) return;
-    var response = await Request.post(url:'${Api.poll}/${local.poll.id}/votes',params: paramsMap,showDialog: true);
-    if (response != null)
-    StatusActionUtil.updateStatusVote(widget.status, response, context);
+    var response = await Request.post(
+        url: '${Api.poll}/${local.poll.id}/votes',
+        params: paramsMap,
+        showDialog: true);
+    if (response.containsKey('error')) {
+      DialogUtils.toastErrorInfo(response['error']);
+      return;
+    }
+    if (response != null) {
+      StatusActionUtil.updateStatusVote(widget.status, response, context);
+      setState(() {});
+    }
   }
 
   Widget pollInfo() {
     return Container(
-      margin: EdgeInsets.only(top: 5),
-        child: Text(widget.status.poll.expired
-            ? S.of(context).vote_count(widget.status.poll.votesCount)+ '・' + S.of(context).ended
-            : S.of(context).vote_count(widget.status.poll.votesCount) +'・' + getRemainingTime(),style: TextStyle(fontSize: 10,color: Theme.of(context).accentColor),));
+        margin: EdgeInsets.only(top: 5),
+        child: Text(
+          widget.status.poll.expired
+              ? S.of(context).vote_count(widget.status.poll.votesCount) +
+                  '・' +
+                  S.of(context).ended
+              : S.of(context).vote_count(widget.status.poll.votesCount) +
+                  '・' +
+                  getRemainingTime(),
+          style: TextStyle(fontSize: 10, color: Theme.of(context).accentColor),
+        ));
   }
 
   getRemainingTime() {
     var expireAt = DateTime.parse(widget.status.poll.expiresAt);
     var diff = expireAt.difference(DateTime.now());
-    return diff.inDays > 0 ? S.of(context).days_left(diff.inDays) : diff.inHours > 0 ? S.of(context).hours_left(diff.inHours) : S.of(context).minutes_left(diff.inMinutes);
+    return diff.inDays > 0
+        ? S.of(context).days_left(diff.inDays)
+        : diff.inHours > 0
+            ? S.of(context).hours_left(diff.inHours)
+            : S.of(context).minutes_left(diff.inMinutes);
   }
 
   Widget optionRow(double pententage, String title) {
@@ -179,7 +211,13 @@ class _StatusItemPollState extends State<StatusItemPoll> {
                     SizedBox(
                       width: 5,
                     ),
-                    Flexible(child: Text(title,overflow: TextOverflow.ellipsis,maxLines: 1,style: TextStyle(fontSize: 12),))
+                    Flexible(
+                        child: Text(
+                      title,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(fontSize: 12),
+                    ))
                   ],
                 ),
               )

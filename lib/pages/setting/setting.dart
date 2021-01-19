@@ -72,6 +72,7 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
 
     return SmartRefresher(
       header: ClassicHeader(
+        height: 100,
         releaseText: S.of(context).release_refresh,
         refreshingText: S.of(context).loading,
         completeText: S.of(context).complete_refresh,
