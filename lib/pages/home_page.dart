@@ -1,10 +1,8 @@
-import 'package:dudu/l10n/l10n.dart';
-import 'package:dudu/api/admin_api.dart';
 import 'package:dudu/api/timeline_api.dart';
 import 'package:dudu/constant/icon_font.dart';
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/provider/settings_provider.dart';
-import 'package:dudu/models/runtime_config.dart';
 import 'package:dudu/models/task/check_role_task.dart';
 import 'package:dudu/models/task/get_emoji_task.dart';
 import 'package:dudu/models/task/notification_task.dart';
@@ -18,20 +16,15 @@ import 'package:dudu/public.dart';
 import 'package:dudu/utils/account_util.dart';
 import 'package:dudu/utils/dialog_util.dart';
 import 'package:dudu/utils/filter_util.dart';
-import 'package:dudu/widget/common/bottom_navigation_item.dart';
 import 'package:dudu/widget/home/bottom_navi_bar.dart';
 import 'package:dudu/widget/other/app_retain_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'setting/setting.dart';
 import 'status/new_status.dart';
-import 'timeline/notifications.dart';
-import 'timeline/timeline.dart';
 
 class HomePage extends StatefulWidget {
   final bool logined;
@@ -255,7 +248,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 BottomNaviBar(
                   icon: getTabIcon(0, activeColor, logined),
                   title: getTabTitle(0, activeColor, logined),
-                  showBadge: showBadge && logined && provider.unread[TimelineApi.home] != 0,
+                  showBadge: showBadge &&
+                      logined &&
+                      provider.unread[TimelineApi.home] != 0,
                   onTap: logined
                       ? () {
                           if (_tabIndex == 0) {
@@ -269,7 +264,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             });
                           }
                         }
-                      : () => DialogUtils.showInfoDialog(context, S.of(context).need_login_before_operate),
+                      : () => DialogUtils.showInfoDialog(
+                          context, S.of(context).need_login_before_operate),
                   onDoubleTap: logined
                       ? () {
                           provider.homeProvider.refreshController
@@ -281,7 +277,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 BottomNaviBar(
                   icon: getTabIcon(1, activeColor, logined),
                   title: getTabTitle(1, activeColor, logined),
-                  showBadge: showBadge && logined && provider.unread[TimelineApi.local] != 0,
+                  showBadge: showBadge &&
+                      logined &&
+                      provider.unread[TimelineApi.local] != 0,
                   onTap: logined
                       ? () {
                           if (_tabIndex == 1) {
@@ -303,7 +301,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             SettingsProvider().setHomeTabIndex(1);
                           }
                         }
-                      : () => DialogUtils.showInfoDialog(context, S.of(context).need_login_before_operate),
+                      : () => DialogUtils.showInfoDialog(
+                          context, S.of(context).need_login_before_operate),
                   onDoubleTap: logined
                       ? () {
                           if (SettingsProvider().publicTabIndex == 0) {
@@ -329,7 +328,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 BottomNaviBar(
                   icon: getTabIcon(3, activeColor, logined),
                   title: getTabTitle(3, activeColor, logined),
-                  showBadge: showBadge && logined &&
+                  showBadge: showBadge &&
+                      logined &&
                       ( //provider.unread[TimelineApi.notification] != 0 ||
                           provider.unread[TimelineApi.conversations] != 0 ||
                               provider.unread[TimelineApi.followRquest] != 0 ||
@@ -339,7 +339,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                   0 ||
                               provider.unread[
                                       TimelineApi.favoriteNotification] !=
-                                  0 || provider.unread[TimelineApi.pollNotification] != 0),
+                                  0 ||
+                              provider.unread[TimelineApi.pollNotification] !=
+                                  0),
                   onTap: logined
                       ? () {
                           if (_tabIndex == 3) {
@@ -351,7 +353,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             SettingsProvider().setHomeTabIndex(3);
                           }
                         }
-                      : () => DialogUtils.showInfoDialog(context, S.of(context).need_login_before_operate),
+                      : () => DialogUtils.showInfoDialog(
+                          context, S.of(context).need_login_before_operate),
                   onDoubleTap: logined
                       ? () {
                           provider.notificationProvider.refreshController
@@ -366,9 +369,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   title: getTabTitle(4, activeColor, logined),
                   onTap: logined
                       ? () {
-                          SettingsProvider().setHomeTabIndex(4);
+                          if (_tabIndex == 4) {
+                            SettingsProvider().settingController.requestRefresh(
+                                duration: Duration(milliseconds: 100));
+                          } else {
+                            SettingsProvider().setHomeTabIndex(4);
+                          }
                         }
-                      : () => DialogUtils.showInfoDialog(context, S.of(context).need_login_before_operate),
+                      : () => DialogUtils.showInfoDialog(
+                          context, S.of(context).need_login_before_operate),
                 ),
               ],
             ),

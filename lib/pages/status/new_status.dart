@@ -82,6 +82,15 @@ class _NewStatusState extends State<NewStatus> with WidgetsBindingObserver {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    _warningController.dispose();
+    focusNode.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   void initState() {
     _controller = RichTextController({
       RegExp(r"#[\u4E00-\u9FCC_a-zA-Z]+", unicode: true, multiLine: true):

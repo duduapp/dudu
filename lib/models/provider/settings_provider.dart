@@ -4,7 +4,6 @@ import 'package:dudu/api/timeline_api.dart';
 import 'package:dudu/constant/db_key.dart';
 import 'package:dudu/db/db_constant.dart';
 import 'package:dudu/db/tb_cache.dart';
-import 'package:dudu/models/http/request_manager.dart';
 import 'package:dudu/models/json_serializable/filter_item.dart';
 import 'package:dudu/models/json_serializable/owner_account.dart';
 import 'package:dudu/models/local_account.dart';
@@ -16,6 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_router/nav_router.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 enum SettingType { bool, string, string_list }
 
@@ -41,9 +41,10 @@ class SettingsProvider extends ChangeNotifier {
   ResultListProvider localProvider;
   ResultListProvider notificationProvider;
   ResultListProvider federatedProvider;
+  RefreshController settingController;
 
   Map<String, int> unread = {};
-  Map<String,String> latestIds = {};
+  Map<String, String> latestIds = {};
 
   LoginedUser currentUser;
 
@@ -58,9 +59,9 @@ class SettingsProvider extends ChangeNotifier {
   };
 
   load() async {
-    var langCode = Platform.localeName.substring(0,2);
+    var langCode = Platform.localeName.substring(0, 2);
     settings = {
-      'theme' : '0',
+      'theme': '0',
       'show_thumbnails': true,
       'always_show_sensitive': false,
       'always_expand_tools': false,
@@ -83,8 +84,10 @@ class SettingsProvider extends ChangeNotifier {
         'mention',
         'poll'
       ],
-      'language':['zh','en','fr','ru','ar','es','ja'].contains(langCode) ? langCode : 'en',
-      'translate_engine':Platform.localeName.startsWith('zh') ? '1' : '0',
+      'language': ['zh', 'en', 'fr', 'ru', 'ar', 'es', 'ja'].contains(langCode)
+          ? langCode
+          : 'en',
+      'translate_engine': Platform.localeName.startsWith('zh') ? '1' : '0',
       'red_dot_notfication': true
     };
     LoginedUser user = LoginedUser();
@@ -111,29 +114,29 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   _loadFromStorage() async {
-
     currentUser = LoginedUser();
-    storageKey = StringUtil.accountFullAddress(currentUser.account) + '.settings';
-    var keys =  Storage.getStringList(storageKey);
+    storageKey =
+        StringUtil.accountFullAddress(currentUser.account) + '.settings';
+    var keys = Storage.getStringList(storageKey);
     if (keys == null) {
       await Storage.saveStringList(storageKey, settings.keys.toList());
       return;
     }
     for (String key in keys) {
-      var type =  Storage.getString('$storageKey.$key.type');
+      var type = Storage.getString('$storageKey.$key.type');
       var settingType = SettingType.values
           .firstWhere((e) => describeEnum(e) == type, orElse: () => null);
       if (settingType != null) {
         dynamic value;
         switch (settingType) {
           case SettingType.bool:
-            value =  Storage.getBool('$storageKey.$key.value');
+            value = Storage.getBool('$storageKey.$key.value');
             break;
           case SettingType.string:
-            value =  Storage.getString('$storageKey.$key.value');
+            value = Storage.getString('$storageKey.$key.value');
             break;
           case SettingType.string_list:
-            value =  Storage.getStringList('$storageKey.$key.value');
+            value = Storage.getStringList('$storageKey.$key.value');
             break;
         }
         if (value != null) {
@@ -149,17 +152,15 @@ class SettingsProvider extends ChangeNotifier {
     unread = {
       TimelineApi.home: await _getUnreadFromDb(TimelineApi.home),
       TimelineApi.local: await _getUnreadFromDb(TimelineApi.local),
-  //    TimelineApi.federated: await _getUnreadFromDb(TimelineApi.federated),
-  //     TimelineApi.notification:
-  //     await _getUnreadFromDb(TimelineApi.notification),
+      //    TimelineApi.federated: await _getUnreadFromDb(TimelineApi.federated),
+      //     TimelineApi.notification:
+      //     await _getUnreadFromDb(TimelineApi.notification),
       TimelineApi.conversations:
           await _getUnreadFromDb(TimelineApi.conversations),
       TimelineApi.followRquest:
           await _getUnreadFromDb(TimelineApi.followRquest),
-      TimelineApi.follow:
-      await _getUnreadFromDb(TimelineApi.follow),
-      TimelineApi.mention:
-          await _getUnreadFromDb(TimelineApi.mention),
+      TimelineApi.follow: await _getUnreadFromDb(TimelineApi.follow),
+      TimelineApi.mention: await _getUnreadFromDb(TimelineApi.mention),
       TimelineApi.reblogNotification:
           await _getUnreadFromDb(TimelineApi.reblogNotification),
       TimelineApi.favoriteNotification:
@@ -177,13 +178,15 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   _loadTabIndex() async {
-    var cache = await TbCacheHelper.getCache(currentUser.fullAddress, DbKey.homeTabIndex);
+    var cache = await TbCacheHelper.getCache(
+        currentUser.fullAddress, DbKey.homeTabIndex);
     if (cache != null) {
       try {
         homeTabIndex = int.parse(cache.content);
       } catch (e) {}
     }
-    var cachePublic = await TbCacheHelper.getCache(currentUser.fullAddress, DbKey.publicTabIndex);
+    var cachePublic = await TbCacheHelper.getCache(
+        currentUser.fullAddress, DbKey.publicTabIndex);
     if (cachePublic != null) {
       try {
         publicTabIndex = int.parse(cachePublic.content);
@@ -200,14 +203,20 @@ class SettingsProvider extends ChangeNotifier {
   setHomeTabIndex(int idx) {
     homeTabIndex = idx;
     if (currentUser != null)
-    TbCacheHelper.setCache(TbCache(account: LoginedUser().fullAddress,tag: DbKey.homeTabIndex,content: homeTabIndex.toString()));
+      TbCacheHelper.setCache(TbCache(
+          account: LoginedUser().fullAddress,
+          tag: DbKey.homeTabIndex,
+          content: homeTabIndex.toString()));
     notifyListeners();
   }
 
   setPublicTabIndex(int idx) {
     publicTabIndex = idx;
     if (currentUser != null)
-      TbCacheHelper.setCache(TbCache(account: LoginedUser().fullAddress,tag: DbKey.publicTabIndex,content: publicTabIndex.toString()));
+      TbCacheHelper.setCache(TbCache(
+          account: LoginedUser().fullAddress,
+          tag: DbKey.publicTabIndex,
+          content: publicTabIndex.toString()));
     //notifyListeners();
   }
 
