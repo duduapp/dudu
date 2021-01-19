@@ -1,10 +1,10 @@
-import 'package:dudu/l10n/l10n.dart';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:dudu/constant/db_key.dart';
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/models/logined_user.dart';
 import 'package:dudu/models/runtime_config.dart';
 import 'package:dudu/pages/timeline/timeline.dart';
@@ -16,21 +16,19 @@ import 'package:dudu/widget/common/normal_flat_button.dart';
 import 'package:dudu/widget/flutter_framework/progress_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:nav_router/nav_router.dart';
-
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pub_semver/pub_semver.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class UpdateTask {
   static const logined = 10;
   static const notLogin = 12;
-  
+
   static String key = "gityp34dkg" +
       TimelineType.federated.toString().split(".")[1].substring(0, 5);
-  static Future<bool> check({ProgressDialog dialog}) async {
+  static Future<bool> check(BuildContext context,
+      {ProgressDialog dialog}) async {
     debugPrint('checking update');
     if (RuntimeConfig.updateWindowDisplayed) return false;
     var rnd = StringUtil.getRandomString(20);
@@ -83,9 +81,14 @@ class UpdateTask {
 //              },
 //              popAfter: false,
 //              barrierDismissible: false,);
+          var langCode = Localizations.localeOf(context).languageCode;
           await DialogUtils.showRoundedDialog(
               content: UpdateWindow(
-                prompt: data['text'],
+                prompt: data.containsKey(langCode + '_text')
+                    ? data[langCode + '_text']
+                    : (data.containsKey('en_text')
+                        ? data['en_text']
+                        : data['text']),
                 apkUrl: data['apk_url'],
               ),
               context: navGK.currentState.overlay.context,
@@ -102,11 +105,10 @@ class UpdateTask {
     }
   }
 
-  static checkUpdateIfNeed() async {
-
+  static checkUpdateIfNeed(BuildContext context) async {
     if (!DateUntil.hasMarkedTimeDaily(StorageKey.lastCheckUpdateTime) &&
         !(await DateUntil.hasMarkedTimeToday('', DbKey.lastCheckUpdateTime)))
-      check();
+      check(context);
   }
 
   // one day to send on request

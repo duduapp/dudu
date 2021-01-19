@@ -61,18 +61,33 @@ class _AboutAppState extends State<AboutApp> {
             ),
             SettingCell(
               title: S.of(context).official_website,
-              subTitleStyle: TextStyle(fontSize: 12,color: Theme.of(context).buttonColor),
-              onPress: () => AppNavigate.push(InnerBrowser('http://dudu.today')),
+              subTitleStyle:
+                  TextStyle(fontSize: 12, color: Theme.of(context).buttonColor),
+              onPress: () =>
+                  AppNavigate.push(InnerBrowser('http://dudu.today')),
             ),
-
-            SizedBox(height: 150,),
-
+            SizedBox(
+              height: 150,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                InkWell(child: Text(S.of(context).privacy_agreement,style: TextStyle(color: Colors.blue,fontSize: 12),),onTap: () => AppNavigate.push(InnerBrowser('http://dudu.today/privacy.html')),),
-                SizedBox(width: 10,),
-                InkWell(child: Text(S.of(context).service_agreement,style: TextStyle(color: Colors.blue,fontSize: 12)),onTap: () => AppNavigate.push(InnerBrowser('http://dudu.today/contract.html')))
+                InkWell(
+                  child: Text(
+                    S.of(context).privacy_agreement,
+                    style: TextStyle(color: Colors.blue, fontSize: 12),
+                  ),
+                  onTap: () => AppNavigate.push(
+                      InnerBrowser('http://dudu.today/privacy.html')),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                InkWell(
+                    child: Text(S.of(context).service_agreement,
+                        style: TextStyle(color: Colors.blue, fontSize: 12)),
+                    onTap: () => AppNavigate.push(
+                        InnerBrowser('http://dudu.today/contract.html')))
               ],
             )
           ],
@@ -81,12 +96,14 @@ class _AboutAppState extends State<AboutApp> {
     );
   }
 
-  _checkUpdate() async{
-    ProgressDialog dialog = await DialogUtils.showProgressDialog(S.of(context).checking_for_new_version);
-    bool newestVersion = await UpdateTask.check(dialog: dialog);
+  _checkUpdate() async {
+    ProgressDialog dialog = await DialogUtils.showProgressDialog(
+        S.of(context).checking_for_new_version);
+    bool newestVersion = await UpdateTask.check(context, dialog: dialog);
     dialog.hide();
     if (newestVersion) {
-      DialogUtils.showInfoDialog(context, S.of(context).the_current_version_is_the_latest_version);
+      DialogUtils.showInfoDialog(
+          context, S.of(context).the_current_version_is_the_latest_version);
     }
   }
 

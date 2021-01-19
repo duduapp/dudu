@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      UpdateTask.checkUpdateIfNeed();
+      UpdateTask.checkUpdateIfNeed(context);
       RegisterHelpTask.start();
       if (LoginedUser().account != null) {
         CheckRoleTask.checkUserRole();
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    UpdateTask.checkUpdateIfNeed();
+    UpdateTask.checkUpdateIfNeed(context);
 
     if (LoginedUser().account != null) {
       CheckRoleTask.checkUserRole();
