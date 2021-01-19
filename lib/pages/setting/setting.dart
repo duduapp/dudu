@@ -52,8 +52,10 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
   refresh() async {
     if (LoginedUser().account != null) {
       var newAccount = await AccountsApi.getAccount(LoginedUser().account);
-      AccountUtil.updateAccount(newAccount);
-      setState(() {});
+      if (newAccount != null) {
+        AccountUtil.updateAccount(newAccount);
+        setState(() {});
+      }
     }
   }
 

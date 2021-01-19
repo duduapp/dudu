@@ -43,8 +43,7 @@ class DBProvider {
             TbCache(
                     account: '',
                     tag: 'http://api.idudu.fans/static/instances',
-                    content:
-                        'help.dudu.today\nmastodon.online\nmstdn.social\nmao.mastodonhub.com\n')
+                    content: 'help.dudu.today\nmastodon.online\nmstdn.social\n')
                 .toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace);
 
