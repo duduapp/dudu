@@ -106,11 +106,32 @@ class SettingsProvider extends ChangeNotifier {
     }
   }
 
+  setHomeProvider(ResultListProvider provider) {
+    homeProvider = provider;
+  }
+
+  setLocalProvider(ResultListProvider provider) {
+    localProvider = provider;
+  }
+
+  setFederatedProvider(ResultListProvider provider) {
+    federatedProvider = provider;
+  }
+
+  setNotificationProvider(ResultListProvider provider) {
+    notificationProvider = provider;
+  }
+
+  setSettingController(RefreshController controller) {
+    settingController = controller;
+  }
+
   _clearRootProviders() {
     homeProvider = null;
     localProvider = null;
     notificationProvider = null;
     federatedProvider = null;
+    settingController = null;
   }
 
   _loadFromStorage() async {

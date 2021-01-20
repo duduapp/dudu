@@ -39,7 +39,7 @@ class _SettingState extends State<Setting> with AutomaticKeepAliveClientMixin {
   void initState() {
     super.initState();
     _refreshController = RefreshController();
-    SettingsProvider().settingController = _refreshController;
+    SettingsProvider().setSettingController(_refreshController);
   }
 
   @override

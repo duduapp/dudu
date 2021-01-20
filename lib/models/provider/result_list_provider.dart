@@ -10,7 +10,6 @@ import 'package:dudu/models/runtime_config.dart';
 import 'package:dudu/public.dart';
 import 'package:dudu/utils/compute_util.dart';
 import 'package:dudu/utils/filter_util.dart';
-import 'package:dudu/utils/request.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -19,7 +18,6 @@ import '../logined_user.dart';
 
 typedef ResultListDataHandler = Function(dynamic data);
 typedef RowBuilder = Function(int idx, List data, ResultListProvider provider);
-
 
 class ResultListProvider extends ChangeNotifier {
   String requestUrl;
@@ -54,7 +52,6 @@ class ResultListProvider extends ChangeNotifier {
   RefreshController refreshController;
   ScrollController scrollController;
 
-
   /// map key 的优先级高于 data handler
   ResultListProvider(
       {@required this.requestUrl,
@@ -71,22 +68,24 @@ class ResultListProvider extends ChangeNotifier {
       bool firstRefresh = true,
       bool showLoading = true, // 给list 第一次赋值，刷新后用结果值
       this.enableCache = false,
-    this.tag}) {
-  if (listenBlockEvent) {
-  _addEvent(EventBusKey.blockAccount, (arg) {
-  var accountId = arg['account_id'];
-  list.removeWhere((element) => element['account']['id'] == accountId);
-  notifyListeners();
-  });
-  _addEvent(EventBusKey.muteAccount, (arg) {
-  var accountId = arg['account_id'];
+      this.tag}) {
+    if (listenBlockEvent) {
+      _addEvent(EventBusKey.blockAccount, (arg) {
+        var accountId = arg['account_id'];
+        list.removeWhere((element) => element['account']['id'] == accountId);
+        notifyListeners();
+      });
+      _addEvent(EventBusKey.muteAccount, (arg) {
+        var accountId = arg['account_id'];
 
-  list.removeWhere((element) => element['account']['id'] == accountId);
-  notifyListeners();
-  });
-  }
+        list.removeWhere((element) => element['account']['id'] == accountId);
+        notifyListeners();
+      });
+    }
 
-  if (firstRefresh) refresh(showLoading: showLoading);
+    refreshController = RefreshController();
+
+    if (firstRefresh) refresh(showLoading: showLoading);
   }
 
   reConstructFilterList() {
@@ -161,7 +160,9 @@ class ResultListProvider extends ChangeNotifier {
   Future<bool> _startRequest(String url, {bool refresh = false}) async {
     var now = DateTime.now();
     // 防止重复请求
-    if (url == lastRequestUrl && !refresh && now.difference(latestRequestTime).inSeconds < 11) {
+    if (url == lastRequestUrl &&
+        !refresh &&
+        now.difference(latestRequestTime).inSeconds < 11) {
       return false;
     } else {
       lastRequestUrl = url;
@@ -177,8 +178,6 @@ class ResultListProvider extends ChangeNotifier {
     if (!mounted) {
       return false;
     }
-
-
 
     //只有列表为空时，才显示错误，为了更好的用户体验
     if (response == null && list.isEmpty) {
@@ -281,7 +280,7 @@ class ResultListProvider extends ChangeNotifier {
     if (cache == null) {
       await refresh(showLoading: true);
     } else {
-      var jsonResult = await compute(parseJsonString,cache.content);
+      var jsonResult = await compute(parseJsonString, cache.content);
       addData(jsonResult, true);
     }
 
@@ -290,33 +289,33 @@ class ResultListProvider extends ChangeNotifier {
   }
 
   Future<double> getCachePosition() async {
-    var scrollPositionCache = await TbCacheHelper.getCache(LoginedUser().fullAddress,tag+'/sp');
-    TbCacheHelper.removeCache(LoginedUser().fullAddress,tag+'/sp');
+    var scrollPositionCache =
+        await TbCacheHelper.getCache(LoginedUser().fullAddress, tag + '/sp');
+    TbCacheHelper.removeCache(LoginedUser().fullAddress, tag + '/sp');
     if (scrollPositionCache != null) {
       return double.parse(scrollPositionCache.content);
     }
-    return 0;
+    return 0.0;
   }
 
-  saveDataToCache() async{
+  saveDataToCache() async {
     if (list.isEmpty) return; // when request is not completed,this can be empty
     await TbCacheHelper.setCache(TbCache(
-        account: LoginedUser().fullAddress,
-        tag: tag,
-        content: json.encode(list),));
-    if (scrollController.hasClients)
-    await TbCacheHelper.setCache(TbCache(
       account: LoginedUser().fullAddress,
-      tag: tag+'/sp',
-      content: scrollController.position.pixels.toString()
+      tag: tag,
+      content: json.encode(list),
     ));
+    if (scrollController.hasClients)
+      await TbCacheHelper.setCache(TbCache(
+          account: LoginedUser().fullAddress,
+          tag: tag + '/sp',
+          content: scrollController.position.pixels.toString()));
   }
 
   removeCache() {
     TbCacheHelper.removeCache(LoginedUser().fullAddress, tag);
-    TbCacheHelper.removeCache(LoginedUser().fullAddress,tag+'/sp');
+    TbCacheHelper.removeCache(LoginedUser().fullAddress, tag + '/sp');
   }
-
 
   removeByIdWithAnimation(String id) {
     var idx = _indexOfId(id);
@@ -416,6 +415,7 @@ class ResultListProvider extends ChangeNotifier {
   @override
   void dispose() {
     _mounted = false;
+    refreshController?.dispose();
     events.forEach((key, value) {
       eventBus.off(key, value);
     });

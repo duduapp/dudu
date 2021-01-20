@@ -1,22 +1,17 @@
-import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/api/timeline_api.dart';
-import 'package:dudu/constant/api.dart';
 import 'package:dudu/constant/icon_font.dart';
-import 'package:dudu/models/local_account.dart';
-import 'package:dudu/pages/login/login.dart';
+import 'package:dudu/l10n/l10n.dart';
 import 'package:dudu/pages/search/search_page_delegate.dart';
 import 'package:dudu/pages/status/new_status.dart';
 import 'package:dudu/utils/app_navigate.dart';
 import 'package:dudu/widget/common/app_bar_title.dart';
-import 'package:dudu/widget/common/colored_tab_bar.dart';
 import 'package:dudu/widget/common/custom_app_bar.dart';
 import 'package:dudu/widget/setting/account_list_header.dart';
-import 'package:dudu/widget/setting/account_row_top.dart';
 import 'package:dudu/widget/timeline/timeline_content.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mk_drop_down_menu/mk_drop_down_menu.dart';
 import 'package:nav_router/nav_router.dart';
+
 import '../../widget/other/search.dart' as customSearch;
 
 class HomeTimeline extends StatefulWidget {
@@ -74,17 +69,15 @@ class _HomeTimelineState extends State<HomeTimeline> {
             },
           ),
           IconButton(
-            icon: Icon(
-              IconFont.follow,
-            //  color: Theme.of(context).buttonColor,
-              size: 26,
-            ),
-            onPressed: () {
-              OverlayUtil.hideAllOverlay();
-              AppNavigate.push(NewStatus(),
-                  routeType: RouterType.material);
-    }
-          )
+              icon: Icon(
+                IconFont.follow,
+                //  color: Theme.of(context).buttonColor,
+                size: 26,
+              ),
+              onPressed: () {
+                OverlayUtil.hideAllOverlay();
+                AppNavigate.push(NewStatus(), routeType: RouterType.material);
+              })
         ],
       ),
       body: TimelineContent(

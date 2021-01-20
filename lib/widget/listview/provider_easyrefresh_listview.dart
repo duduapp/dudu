@@ -20,7 +20,6 @@ class ProviderEasyRefreshListView extends StatefulWidget {
       {Key key,
       this.type,
       this.emptyWidget,
-      this.refreshController,
       this.usingGrid = false,
       this.gridDelegate,
       this.scrollController,
@@ -46,7 +45,6 @@ class ProviderEasyRefreshListView extends StatefulWidget {
   final bool useAnimatedList;
   final bool firstRefresh;
   final bool showLoading;
-  final RefreshController refreshController;
   final Widget emptyView;
   final Widget loadingView;
   final SliverGridDelegate gridDelegate;
@@ -84,9 +82,6 @@ class _ProviderEasyRefreshListViewState
   @override
   void initState() {
     super.initState();
-
-    _refreshController =
-        widget.refreshController ?? RefreshController(initialRefresh: false);
 
     setState(() {
       textScale = Storage.getInt("mastodon.text_scale");
@@ -163,7 +158,7 @@ class _ProviderEasyRefreshListViewState
                       child: SmartRefresher(
                         physics: ClampingScrollPhysics(),
                         primary: widget.scrollController == null ? true : false,
-                        controller: _refreshController,
+                        controller: provider.refreshController,
                         header: ClassicHeader(
                           releaseText: S.of(context).release_refresh,
                           refreshingText: S.of(context).loading,
@@ -200,11 +195,11 @@ class _ProviderEasyRefreshListViewState
                         cacheExtent: widget.cacheExtent ?? null,
                         onRefresh: () async {
                           await provider.refresh();
-                          _refreshController.refreshCompleted();
+                          provider.refreshController.refreshCompleted();
                         },
                         onLoading: () async {
                           await provider.load();
-                          _refreshController.loadComplete();
+                          provider.refreshController.loadComplete();
                         },
                         child: provider.noResults
                             ? (widget.emptyView ?? EmptyView())

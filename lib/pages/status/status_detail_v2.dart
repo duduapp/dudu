@@ -25,8 +25,7 @@ class StatusDetailV2 extends StatefulWidget {
   _StatusDetailV2State createState() => _StatusDetailV2State();
 }
 
-class _StatusDetailV2State extends State<StatusDetailV2>
-    with SingleTickerProviderStateMixin {
+class _StatusDetailV2State extends State<StatusDetailV2> {
   StatusItemData status;
   List parent = [];
   List detail = [];
