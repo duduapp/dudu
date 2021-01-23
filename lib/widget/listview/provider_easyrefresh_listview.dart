@@ -77,8 +77,6 @@ class _ProviderEasyRefreshListViewState
   Function onTextScaleChanged;
   int requestLoadSize = 0;
 
-  RefreshController _refreshController;
-
   @override
   void initState() {
     super.initState();
@@ -130,7 +128,7 @@ class _ProviderEasyRefreshListViewState
             }
 
             if (provider.finishLoad) {
-              _refreshController.loadNoData();
+              provider.refreshController.loadNoData();
             }
 
             if (!firstRefreshed && widget.firstRefresh) {
