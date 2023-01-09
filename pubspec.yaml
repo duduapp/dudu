@@ -23,23 +23,31 @@ dependencies:
   cupertino_icons: ^0.1.2
   dio: ^3.0.10
   json_serializable: ^3.0.0
-  cached_network_image: ^2.3.2+1
+  cached_network_image: 2.3.2+1
   shared_preferences: ^0.5.1+1
   flutter_spinkit: ^4.1.2+1
   fluttertoast: ^7.1.1
   url_launcher: ^5.5.0
   nav_router:
-    path: ../nav_router/
+    git:
+      url: https://github.com/duduapp/nav_router.git
+      ref: master
   popup_menu: ^1.0.5
   progress_indicators: ^0.1.5
   photo_view:
-    path: ../photo_view/
+    git:
+      url: https://github.com/duduapp/photo_view.git
+      ref: master
   image_gallery_saver: ^1.5.0
   chewie:
-    path: ../chewie/
+    git:
+      url: https://github.com/duduapp/chewie.git
+      ref: master
   path_provider: ^1.6.9
   like_button:
-    path: ../like_button/
+    git:
+      url: https://github.com/duduapp/like_button.git
+      ref: master
   flutter_datetime_picker: ^1.4.0
  # theme_provider: ^0.4.0+1
   provider: ^4.3.1
@@ -53,31 +61,43 @@ dependencies:
   package_info: ^0.4.1
   crypto: ^2.1.4
  # open_file: ^3.0.1
-  pull_to_refresh: ^1.6.2
+  pull_to_refresh: 1.6.2
   share: ^0.6.4+3
   share_extend: ^1.1.9
   webview_flutter:
-    path: ../plugins/packages/webview_flutter/
+    git:
+      url: https://github.com/duduapp/plugins.git
+      ref: progress-tracking
+      path: packages/webview_flutter/
   gzx_dropdown_menu :
-    path: ../gzx_dropdown_menu/
+    git:
+      url: https://github.com/duduapp/gzx_dropdown_menu.git
+      ref: master
   dio_http_cache: ^0.2.8
   #flutter_webview_plugin: ^0.3.11 #登录账号用
   uuid: ^2.2.2
   permission_handler: ^5.0.1+1
   wechat_assets_picker:
-    path: ../flutter_wechat_assets_picker/
+    git:
+      url: https://github.com/duduapp/flutter_wechat_assets_picker.git
+      ref: master
   audioplayer: ^0.8.1
   cached_video_player: ^1.0.3
   sqflite: 1.3.0+1
   mk_drop_down_menu:
-    path: ../mk_drop_down_menu/
+    git:
+      url: https://github.com/duduapp/mk_drop_down_menu.git
+      ref: master
   auto_size_text: ^2.1.0
   modal_bottom_sheet: ^0.2.2
   validators: ^2.0.1
   badges: ^1.1.4
   translator:
-    path: ../google-translator/
+    git:
+      url: https://github.com/duduapp/google-translator.git
+      ref: master
   pub_semver: ^1.4.4
+  html: 0.14.0+4
 
 
 
