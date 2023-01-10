@@ -27,7 +27,6 @@ fvm flutter pub get
 fvm flutter run
 ```
 
-
 ## Screenshot
 
 <img align="left" src='https://user-images.githubusercontent.com/3364975/211486575-da56da32-61b8-494e-8429-0064d3ce7b49.png' width=200>
