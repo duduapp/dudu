@@ -41,7 +41,7 @@ fvm flutter run
 <img align="center" src='https://user-images.githubusercontent.com/3364975/211487672-b245cd07-85d3-4bd2-8e34-6fe6c256ce33.png' width=200 height=432>
 
 ## Apk 下载
-Apk最由Github Action生成的，详情查看workflow文件. [Apk File](https://github.com/duduapp/dudu/suites/10277838575/artifacts/504778979)
+Apk最由Github Action生成的，详情查看workflow文件. [Apk 文件](https://github.com/duduapp/dudu/suites/10277838575/artifacts/504778979)
 
 
 ## 关于国际化
@@ -50,4 +50,6 @@ Apk最由Github Action生成的，详情查看workflow文件. [Apk File](https:/
 
 
 ## License
-这个项目 forked 了[Fastodon](https://github.com/mahaaoo/Fastodon), 这部分代码是 [MIT](./LICENSE)协议。
+[MIT](./LICENSE)
+
+这个项目 forked 了[Fastodon](https://github.com/mahaaoo/Fastodon)
