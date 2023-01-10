@@ -43,6 +43,8 @@ fvm flutter run
 ## Apk 下载
 Apk最由Github Action生成的，详情查看workflow文件. [Apk 文件](https://github.com/duduapp/dudu/suites/10277838575/artifacts/504778979)
 
+## App Store
+[App Store](https://apps.apple.com/cn/app/%E5%98%9F%E5%98%9F%E9%95%BF%E6%AF%9B%E8%B1%A1/id1531987827)
 
 ## 关于国际化
 里面除了中文和英文其它都是机器翻译
